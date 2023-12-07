@@ -3,6 +3,7 @@ const cors = require("cors");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
+const routes = require('./routes/auth/registration/userRoute.js')
 const sequelize = require('./database/sequelize.js');
 
 const Teacher = require('./models/registration/user/teachersModel.js');
@@ -32,5 +33,6 @@ async function initializeDatabase() {
 initializeDatabase();
 app.use(cors());
 app.use(cookieParser());
+app.use("/", routes);
 const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`BACK_END_SERVICE_PORT: ${port}`));
