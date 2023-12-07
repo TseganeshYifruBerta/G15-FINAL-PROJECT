@@ -1,8 +1,8 @@
 // teacher.model.js
-const { DataTypes } = require('sequelize');
-const sequelize = require('../../../database/sequelize');
+const { DataTypes } = require("sequelize");
+const sequelize = require("../../../database/sequelize");
 
-const Teacher = sequelize.define('Teacher', {
+const Teacher = sequelize.define("Teacher", {
   fullName: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -17,15 +17,19 @@ const Teacher = sequelize.define('Teacher', {
     allowNull: false,
   },
   confirmPassword: {
-    type: DataTypes.VIRTUAL, 
+    type: DataTypes.VIRTUAL,
     allowNull: false,
     validate: {
       isConfirmed(value) {
         if (value !== this.password) {
-          throw new Error('Passwords do not match');
+          throw new Error("Passwords do not match");
         }
       },
     },
+  },
+  section: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
 });
 
