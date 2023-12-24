@@ -1,11 +1,11 @@
-const Student = require("../../../models/registration/user/studentsModel.js");
+const Student = require("../../models/registration/user/studentsModel.js");
 const nodemailer = require("nodemailer");
 const speakeasy = require("speakeasy");
 const { v4: uuidv4 } = require("uuid");
 const {
   studentData,
-} = require("../../UserDataUploaderController/StudentsDataUploaderController");
-const otpModel = require("../../../services/registration/otpGeneration.js");
+} = require("../UserDataUploaderController/StudentsDataUploaderController.js");
+const otpModel = require("../../services/registration/otpGeneration.js");
 
 const createStudent = async (req, res) => {
   const { name, email, userId, password, confirmPassword, section } = req.body;
