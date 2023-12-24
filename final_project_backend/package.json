@@ -21,7 +21,8 @@
     "path": "^0.12.7",
     "sequelize": "^6.35.1",
     "speakeasy": "^2.0.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "jsonwebtoken":"^9.0.2"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

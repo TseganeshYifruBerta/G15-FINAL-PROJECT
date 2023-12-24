@@ -1,4 +1,4 @@
-const Student = require("../../../models/registration/user/studentsModel.js");
+const Student = require("../../models/registration/user/studentsModel");
 const jwt = require("jsonwebtoken");
 const crypto = require('crypto')
 const generateSecretKey = () => {
