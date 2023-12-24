@@ -4,6 +4,7 @@ import { MdNumbers } from "react-icons/md";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { TbUserQuestion } from "react-icons/tb";
 import { RiLockPasswordLine } from "react-icons/ri";
+import { useGetStudentsSignUpApiQuery } from '@/store/signup/students-signup-api';
 
 interface FormValues {
     username: string;
@@ -88,101 +89,119 @@ interface FormValues {
   );
   const SignupForm: React.FC<InjectedFormProps<FormValues>> = (props) => {
     const { handleSubmit } = props;
-  
+  const {data:signUpStatus, isLoading, isError} = useGetStudentsSignUpApiQuery("")
+  console.log(signUpStatus)
+  if(isLoading){
+    return (
+      <div>Loading</div>
+    )
+  }
+  if (signUpStatus){
+    return <div>SignUpStatus</div>;
+  }
     return (
       <form onSubmit={handleSubmit}>
-         <div className="mb-2">
-                  <label htmlFor="username" className="flex text-gray-600 text-xs"> <BiSolidUserRectangle className = "mr-2"/>
-                    User Name
-                  </label>
-                  <Field
-                    type="text"
-                    name="username"
-                    component = {renderTextAreaField}
-                    id="username"
-                    className="border-b-2 border-gray-300 px-3 py-0 rounded focus:outline-none focus:ring-2 focus:ring-[#7983FB] text-gray-600 text-xs font-bold w-full"
-                    
-                  />
-                   
-                </div>
-                <div className="mb-2">
-                  <label htmlFor="idno" className="flex text-gray-600 text-xs"> <MdNumbers className= "mr-2"/>
-                    ID.no
-                  </label>
-                  <Field
-                    name= "idno"
-                    type="text"
-                    id="idno"
-                    component = {renderTextAreaField}
-                    className="border-b-2 border-gray-300 px-3 py-0 rounded focus:outline-none focus:ring-2 focus:ring-[#7983FB] text-gray-600 text-xs font-bold w-full"
-                  />
-                </div>
-                <div className="mb-2">
-                  <label htmlFor="email" className="flex text-gray-600 text-xs"> <MdOutlineMailOutline className= "mr-2"/>
-                    Email
-                  </label>
-                  <Field
-                    type="email"
-                    id="email"
-                    name="email"
-                    component = {renderTextAreaField}
-                    className="border-b-2 border-gray-300 px-3 py-0 rounded focus:outline-none focus:ring-2 focus:ring-[#7983FB] text-gray-600 text-xs font-bold w-full"
-                  />
-                </div>
-                <div className="mb-2">
-                  <label htmlFor="section" className="flex text-gray-600 text-xs"> <TbUserQuestion className= "mr-2" />
-                    Section
-                  </label>
-                  <Field
-                    id="section"
-                    name="section"
-                    component={renderSelectField}
-                    className="border-b-2 border-gray-300 px-3 py-0 rounded focus:outline-none focus:ring-2 focus:ring-[#7983FB] w-full"
-                
-                  >
-                    <option value=""></option>
-                    <option className = "text-gray-600 text-xs" value="student">Student</option>
-                    <option className = "text-gray-600 text-xs" value="teacher">Teacher</option>
-                  </Field>
-                </div>
-                <div className="mb-2">
-                  <label htmlFor="password" className="flex text-gray-600 text-xs"> <RiLockPasswordLine className= "mr-2" />
-                    Password
-                  </label>
-                  <Field
-                    name = "password"
-                    type="password"
-                    component = {renderTextAreaField}
-                    id="password"
-                    className="border-b-2 border-gray-300 px-3 py-0 rounded focus:outline-none focus:ring-2 focus:ring-[#7983FB] w-full  text-xs"
-                  />
-                </div>
-                <div className="mb-2">
-                  <label htmlFor="confirmPassword" className="flex text-gray-600 text-xs"> <RiLockPasswordLine className= "mr-2"/>
-                    Confirm Password
-                  </label>
-                  <Field
-                    name ="confirmPassword"
-                    type="password"
-                    id="confirmPassword"
-                    component = {renderTextAreaField}
-                    className="border-b-2 border-gray-300 px-3 py-0 rounded focus:outline-none focus:ring-2 focus:ring-[#7983FB] text-xs w-full"
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="flex items-center text-gray-600 text-xs font-bold">
-                    <input type="checkbox" className="mr-2" />
-                    Remember me
-                  </label>
-                </div>
-                <button
-                  type="submit"
-                  className="bg-[#7983FB]  text-white py-2 px-4 rounded hover:bg-blue-600 w-full"
-                >
-                  Sign in
-                </button>
-              </form>
-            );
+        <div className="mb-2">
+          <label htmlFor="username" className="flex text-gray-600 text-xs">
+            {" "}
+            <BiSolidUserRectangle className="mr-2" />
+            User Name
+          </label>
+          <Field
+            type="text"
+            name="username"
+            component={renderTextAreaField}
+            id="username"
+            className="border-b-2 border-gray-300 px-3 py-0 rounded focus:outline-none focus:ring-2 focus:ring-[#7983FB] text-gray-600 text-xs font-bold w-full"
+          />
+        </div>
+        <div className="mb-2">
+          <label htmlFor="idno" className="flex text-gray-600 text-xs">
+            {" "}
+            <MdNumbers className="mr-2" />
+            ID.no
+          </label>
+          <Field
+            name="idno"
+            type="text"
+            id="idno"
+            component={renderTextAreaField}
+            className="border-b-2 border-gray-300 px-3 py-0 rounded focus:outline-none focus:ring-2 focus:ring-[#7983FB] text-gray-600 text-xs font-bold w-full"
+          />
+        </div>
+        <div className="mb-2">
+          <label htmlFor="email" className="flex text-gray-600 text-xs">
+            {" "}
+            <MdOutlineMailOutline className="mr-2" />
+            Email
+          </label>
+          <Field
+            type="email"
+            id="email"
+            name="email"
+            component={renderTextAreaField}
+            className="border-b-2 border-gray-300 px-3 py-0 rounded focus:outline-none focus:ring-2 focus:ring-[#7983FB] text-gray-600 text-xs font-bold w-full"
+          />
+        </div>
+        <div className="mb-2">
+          <label htmlFor="email" className="flex text-gray-600 text-xs">
+            {" "}
+            <MdOutlineMailOutline className="mr-2" />
+            Section
+          </label>
+          <Field
+            type="text"
+            id="email"
+            name="email"
+            component={renderTextAreaField}
+            className="border-b-2 border-gray-300 px-3 py-0 rounded focus:outline-none focus:ring-2 focus:ring-[#7983FB] text-gray-600 text-xs font-bold w-full"
+          />
+        </div>
+        <div className="mb-2">
+          <label htmlFor="password" className="flex text-gray-600 text-xs">
+            {" "}
+            <RiLockPasswordLine className="mr-2" />
+            Password
+          </label>
+          <Field
+            name="password"
+            type="password"
+            component={renderTextAreaField}
+            id="password"
+            className="border-b-2 border-gray-300 px-3 py-0 rounded focus:outline-none focus:ring-2 focus:ring-[#7983FB] w-full  text-xs"
+          />
+        </div>
+        <div className="mb-2">
+          <label
+            htmlFor="confirmPassword"
+            className="flex text-gray-600 text-xs"
+          >
+            {" "}
+            <RiLockPasswordLine className="mr-2" />
+            Confirm Password
+          </label>
+          <Field
+            name="confirmPassword"
+            type="password"
+            id="confirmPassword"
+            component={renderTextAreaField}
+            className="border-b-2 border-gray-300 px-3 py-0 rounded focus:outline-none focus:ring-2 focus:ring-[#7983FB] text-xs w-full"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="flex items-center text-gray-600 text-xs font-bold">
+            <input type="checkbox" className="mr-2" />
+            Remember me
+          </label>
+        </div>
+        <button
+          type="submit"
+          className="bg-[#7983FB]  text-white py-2 px-4 rounded hover:bg-blue-600 w-full"
+        >
+          Sign in
+        </button>
+      </form>
+    );
         };
         
         export default reduxForm<FormValues>({
