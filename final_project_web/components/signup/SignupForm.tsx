@@ -6,100 +6,100 @@ import { TbUserQuestion } from "react-icons/tb";
 import { RiLockPasswordLine } from "react-icons/ri";
 import Link from "next/link";
 
-interface FormValues {
-  username: string;
-  idno: string;
-  email: string;
-  section: string;
-  password: string;
-  confirmPassword: string;
-}
-
-const validate = (values: FormValues) => {
-  const errors: Partial<FormValues> = {};
-
-  if (!values.username) {
-    errors.username = "Username is required";
+  interface FormValues {
+    username: string;
+    idno: string;
+    email: string;
+    section: string;
+    password: string;
+    confirmPassword: string;
   }
 
-  if (!values.idno) {
-    errors.idno = "ID.no is required";
-  }
+  const validate = (values: FormValues) => {
+    const errors: Partial<FormValues> = {};
 
-  if (!values.email) {
-    errors.email = "Email is required";
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
-    errors.email = "Invalid email address";
-  }
+    if (!values.username) {
+      errors.username = "Username is required";
+    }
 
-  if (!values.section) {
-    errors.section = "Section is required";
-  }
+    if (!values.idno) {
+      errors.idno = "ID.no is required";
+    }
 
-  if (!values.password) {
-    errors.password = "Password is required";
-  }
+    if (!values.email) {
+      errors.email = "Email is required";
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+      errors.email = "Invalid email address";
+    }
 
-  if (!values.confirmPassword) {
-    errors.confirmPassword = "Confirm Password is required";
-  } else if (values.confirmPassword !== values.password) {
-    errors.confirmPassword = "Passwords do not match";
-  }
+    if (!values.section) {
+      errors.section = "Section is required";
+    }
 
-  return errors;
-};
+    if (!values.password) {
+      errors.password = "Password is required";
+    }
 
-const renderTextAreaField = ({
-  input,
-  label,
-  meta: { touched, error },
-}: any) => (
-  <div>
-    <label htmlFor={input.name} className="flex text-gray-600 text-xs">
-      {label}
-    </label>
+    if (!values.confirmPassword) {
+      errors.confirmPassword = "Confirm Password is required";
+    } else if (values.confirmPassword !== values.password) {
+      errors.confirmPassword = "Passwords do not match";
+    }
+
+    return errors;
+  };
+
+  const renderTextAreaField = ({
+    input,
+    label,
+    meta: { touched, error },
+  }: any) => (
     <div>
-      <input
-        {...input}
-        type={
-          input.name === "password" || input.name === "confirmPassword"
-            ? "password"
-            : "text"
-        }
-        className="border-b-2 border-gray-300 px-3 py-0 rounded focus:outline-none focus:ring-2 focus:ring-[#7983FB] w-full text-gray-600 text-xs font-bold"
-      />
-      {touched && error && (
-        <span className="text-red-500 text-xs">{error}</span>
-      )}
+      <label htmlFor={input.name} className="flex text-gray-600 text-xs">
+        {label}
+      </label>
+      <div>
+        <input
+          {...input}
+          type={
+            input.name === "password" || input.name === "confirmPassword"
+              ? "password"
+              : "text"
+          }
+          className="border-b-2 border-gray-300 px-3 py-0 rounded focus:outline-none focus:ring-2 focus:ring-[#7983FB] w-full text-gray-600 text-xs font-bold"
+        />
+        {touched && error && (
+          <span className="text-red-500 text-xs">{error}</span>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
 
-const renderSelectField = ({
-  input,
-  label,
-  meta: { touched, error },
-  children,
-}: any) => (
-  <div>
-    <label htmlFor={input.name} className="flex text-gray-600 text-xs">
-      {label}
-    </label>
+  const renderSelectField = ({
+    input,
+    label,
+    meta: { touched, error },
+    children,
+  }: any) => (
     <div>
-      <select
-        {...input}
-        className="border-b-2 border-gray-300 px-3 py-0 rounded focus:outline-none focus:ring-2 focus:ring-[#7983FB] w-full text-gray-600 text-xs font-bold"
-      >
-        {children}
-      </select>
-      {touched && error && (
-        <span className="text-red-500 text-xs">{error}</span>
-      )}
+      <label htmlFor={input.name} className="flex text-gray-600 text-xs">
+        {label}
+      </label>
+      <div>
+        <select
+          {...input}
+          className="border-b-2 border-gray-300 px-3 py-0 rounded focus:outline-none focus:ring-2 focus:ring-[#7983FB] w-full text-gray-600 text-xs font-bold"
+        >
+          {children}
+        </select>
+        {touched && error && (
+          <span className="text-red-500 text-xs">{error}</span>
+        )}
+      </div>
     </div>
-  </div>
-);
-const SignupForm: React.FC<InjectedFormProps<FormValues>> = (props) => {
-  const { handleSubmit } = props;
+  );
+  const SignupForm: React.FC<InjectedFormProps<FormValues>> = (props) => {
+    const { handleSubmit } = props;
 
   return (
     <form onSubmit={handleSubmit}>
