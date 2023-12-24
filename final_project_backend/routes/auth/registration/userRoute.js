@@ -8,6 +8,12 @@ const {
 const {
   createTeacher,
 } = require("../../../controller/UserRegistrationController/teacherController");
+const {
+  studentLogin,
+} = require("../../../controller/UserLoginController/studentsController");
+const {
+  teacherLogin,
+} = require("../../../controller/UserLoginController/teachersController");
 const uploadStudentsFile = require("../../../controller/UserDataUploaderController/StudentsDataUploaderController");
 const uploadTeachersFile = require("../../../controller/UserDataUploaderController/TeachersdataUploaderController");
 const studentsUpload = multer({ dest: "uploads/student" });
