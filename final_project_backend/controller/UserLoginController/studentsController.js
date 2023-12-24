@@ -19,7 +19,8 @@ const studentLogin = async (req, res) => {
       return res.status(401).json({ message: "Invalid password" });
     }
     const secretKey = generateSecretKey();
-    const token = jwt.sign({ userId }, secretKey);
+    const token = jwt.sign({email}, secretKey, { expiresIn: tokenExpiration });
+    const tokenExpiration = '2d'; 
 
     res.status(200).json({ token });
   } catch (error) {
