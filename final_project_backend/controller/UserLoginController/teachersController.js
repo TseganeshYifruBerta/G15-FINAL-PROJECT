@@ -1,4 +1,5 @@
 const Teacher = require("../../models/registration/user/teachersModel.js");
+
 const jwt = require("jsonwebtoken")
 const crypto = require('crypto')
 const generateSecretKey = () => {
