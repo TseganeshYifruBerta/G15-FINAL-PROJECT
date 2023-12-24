@@ -30,4 +30,10 @@ router.post(
   uploadTeachersFile.uploadTeachersFile
 );
 
+// Student login route
+router.post("/login/students", studentLogin);
+
+// Teacher login route
+router.post("/login/teachers", teacherLogin);
+
 module.exports = router;
