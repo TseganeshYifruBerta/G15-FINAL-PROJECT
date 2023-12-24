@@ -18,7 +18,8 @@ const teacherLogin = async (req, res) => {
       return res.status(401).json({ message: "Invalid password" });
     }
     const secretKey = generateSecretKey();
-    const token = jwt.sign({email}, secretKey);
+    const token = jwt.sign({email}, secretKey, { expiresIn: tokenExpiration });
+    const tokenExpiration = '2d'; 
     res.status(200).json({token});
   } catch (error) {
     res.status(500).json({ message: "An error occurred while logging in" });
