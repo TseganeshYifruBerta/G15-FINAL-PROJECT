@@ -5,6 +5,7 @@ import { MdOutlineMailOutline } from "react-icons/md";
 import { TbUserQuestion } from "react-icons/tb";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { useGetStudentsSignUpApiQuery } from '@/store/signup/students-signup-api';
+import Link from 'next/link';
 
 interface FormValues {
     username: string;
@@ -89,16 +90,16 @@ interface FormValues {
   );
   const SignupForm: React.FC<InjectedFormProps<FormValues>> = (props) => {
     const { handleSubmit } = props;
-  const {data:signUpStatus, isLoading, isError} = useGetStudentsSignUpApiQuery("")
-  console.log(signUpStatus)
-  if(isLoading){
-    return (
-      <div>Loading</div>
-    )
-  }
-  if (signUpStatus){
-    return <div>SignUpStatus</div>;
-  }
+  // const {data:signUpStatus, isLoading, isError} = useGetStudentsSignUpApiQuery("")
+  // console.log(signUpStatus)
+  // if(isLoading){
+  //   return (
+  //     <div>Loading</div>
+  //   )
+  // }
+  // if (signUpStatus){
+  //   return <div>SignUpStatus</div>;
+  // }
     return (
       <form onSubmit={handleSubmit}>
         <div className="mb-2">
@@ -194,12 +195,14 @@ interface FormValues {
             Remember me
           </label>
         </div>
-        <button
-          type="submit"
-          className="bg-[#7983FB]  text-white py-2 px-4 rounded hover:bg-blue-600 w-full"
-        >
-          Sign in
-        </button>
+        <Link href={'/signin'}>
+          <button
+            type="submit"
+            className="bg-[#7983FB]  text-white py-2 px-4 rounded hover:bg-blue-600 w-full"
+          >
+            Sign in
+          </button>
+        </Link>
       </form>
     );
         };

@@ -1,10 +1,22 @@
 import Link from "next/link";
-
+import Image from "next/image";
 const ChooseRole: React.FC = () => {
   return (
     <div className="w-2/3 bg-white p-8 shadow-md flex flex-col -ml-16">
       <div className="text-center">
-        <h1 className="text-4xl font-bold mb-8">Choose Your Role</h1>
+        <div className="mb-4 flex justify-center">
+          <div>
+            <Image
+              src="/images/profile.png"
+              alt=""
+              width={80}
+              height={80}
+              className="rounded-full"
+            />
+            <h1 className="text-2xl font-semibold">LOGIN</h1>
+          </div>
+        </div>
+        <h1 className="text-2xl font-bold mb-8">Choose Your Role</h1>
         <div className="flex justify-center space-x-4">
           <Link
             href="/signin/students"
