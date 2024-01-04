@@ -18,7 +18,13 @@ const uploadStudentsFile = require("../../../controller/UserDataUploaderControll
 const uploadTeachersFile = require("../../../controller/UserDataUploaderController/TeachersdataUploaderController");
 const studentsUpload = multer({ dest: "uploads/student" });
 const teachersUpload = multer({ dest: "uploads/teacher" });
+const pythonUpload = multer({ dest: "uploads/python" });
 
+const {
+  submitQuestionWithTestCases,
+} = require("../../../controller/QuestionUploaderController/questionController");
+const { execute } =
+  require("../../../controller/codeExecution/codeExecution");
 // student route
 router.post("/register/students", createStudent);
 router.post(
@@ -26,7 +32,6 @@ router.post(
   studentsUpload.single("studentsExcelFile"),
   uploadStudentsFile.uploadStudentsFile
 );
-
 
 // teacher route
 router.post("/register/teachers", createTeacher);
@@ -41,5 +46,7 @@ router.post("/login/students", studentLogin);
 
 // Teacher login route
 router.post("/login/teachers", teacherLogin);
+router.post("/question", submitQuestionWithTestCases);
+router.post("/submit",  execute);
 
 module.exports = router;
