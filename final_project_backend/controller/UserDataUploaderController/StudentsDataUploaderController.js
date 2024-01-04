@@ -1,4 +1,5 @@
 const exceljs = require("exceljs");
+const StudentUploadData = require("../../models/upload/upload");
 
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../../database/sequelize");
@@ -37,7 +38,7 @@ async function uploadStudentsFile(req, res) {
         dataToStore.push(student);
       }
     });
-    const existingStudents = await Data.findAll({
+    const existingStudents = await StudentUploadData.findAll({
       where: {
         name: dataToStore.map((student) => student.name),
       },
@@ -47,7 +48,7 @@ async function uploadStudentsFile(req, res) {
         .status(400)
         .send(`${existingStudents} are already exist in the system`);
     } else {
-      await Data.bulkCreate(dataToStore);
+      await StudentUploadData.bulkCreate(dataToStore);
       res.send("Data uploaded and stored successfully");
     }
   } catch (error) {
