@@ -30,38 +30,9 @@ const createStudent = async (req, res) => {
           "User ID must be in UGR/XXXX/XX or ATR/XXXX/XX or ETR/XXXX/XX  format",
       });
     }
-    const secret = speakeasy.generateSecret({ length: 20 });
-    const otp = speakeasy.totp({
-      secret: secret.base32,
-      encoding: "base32",
-      digits: 6,
-      step: 60,
-    });
+    
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      port: 587,
-      secure: false,
-      auth: {
-        user: "your_email_here",
-        pass: "password",
-      },
-    });
-
-    try {
-      await transporter.sendMail({
-        from: "your_email_here",
-        to: `${email}`,
-        subject: "Email Verification",
-        text: `Please use the following verification token to verify your email: ${otp}`,
-        html: `<p>Please use the following verification token to verify your email: <strong>${otp}</strong></p>`,
-      });
-      console.log("Verification email sent successfully");
-      await otpModel.create({ email, otp });
-    } catch (error) {
-      console.error("Error sending verification email:", error);
-      throw new Error("Failed to send verification email");
-    }
+   
 
     const newStudent = await Student.create({
       id: Id,
