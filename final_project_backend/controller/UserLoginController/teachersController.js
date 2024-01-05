@@ -1,7 +1,7 @@
 const Teacher = require("../../models/registration/user/teachersModel.js");
-const jwt = require("jsonwebtoken");
-const TeacherLogin = require("../../models/login/user/teachersModel.js");
-const crypto = require("crypto");
+
+const jwt = require("jsonwebtoken")
+const crypto = require('crypto')
 const generateSecretKey = () => {
   const secretLength = 32; // Adjust the length as per your requirements
   return crypto.randomBytes(secretLength).toString("hex");
