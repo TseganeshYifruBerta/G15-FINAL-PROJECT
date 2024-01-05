@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../../../database/sequelize");
-const Teacher = require("./teacher.model");
+const Teacher = require("../../registration/user/teachersModel");
 
 const TeacherLogin = sequelize.define("TeacherLogin", {
   email: {

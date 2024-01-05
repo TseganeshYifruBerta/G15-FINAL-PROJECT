@@ -24,6 +24,8 @@ const submitQuestionWithTestCases = async (req, res) => {
         return await TestCase.create({
           nums: testCase.input.nums,
           target: testCase.input.target,
+          word: testCase.input.word,
+
           output: formattedOutput,
           labQuestionId: newQuestion.id, // Associate the test case with the new LabQuestion
         });
