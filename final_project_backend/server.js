@@ -4,6 +4,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 const routes = require('./routes/auth/registration/userRoute.js')
+const route = require('./routes/questionRoute/questionRoute')
 const sequelize = require('./database/sequelize.js');
 
 const Teacher = require('./models/registration/user/teachersModel.js');

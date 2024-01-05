@@ -1,4 +1,3 @@
-const Question = require("../../models/question_testcase_submission/question");
 const TestCase = require("../../models/question_testcase_submission/testCase");
 const { spawn } = require("child_process");
 const fs = require("fs");
@@ -6,7 +5,9 @@ const path = require("path");
 
 const getQuestionById = async (questionId) => {
   try {
-    const question = await TestCase.findByPk(questionId);
+    const question = await TestCase.findAll({
+      where: { labQuestionId: questionId },
+    });
     return question;
   } catch (error) {
     console.error("Error fetching question by ID:", error);
@@ -14,24 +15,22 @@ const getQuestionById = async (questionId) => {
   }
 };
 
-const runPythonCode = (pythonCode, nums,target) => {
+const runPythonCode = (pythonCode, nums, target) => {
   return new Promise((resolve, reject) => {
     const tempFilePath = path.join(__dirname, "tempkol.py");
     const functionNameMatch = pythonCode.match(/def\s+(\w+)\s*\(/);
     const functionName = functionNameMatch
       ? functionNameMatch[1]
       : "UnknownFunction";
-    const functionCall = `${functionName}(${JSON.stringify(nums)}, ${target})`;;
+    const functionCall = `${functionName}(${JSON.stringify(nums)}, ${target})`;
     const pythonScript = `${pythonCode}\n\nprint(${functionCall})`;
     fs.writeFile(tempFilePath, pythonScript, (err) => {
       if (err) {
         reject(err);
       } else {
-        const pythonProcess = spawn("python", [tempFilePath, nums,target]);
+        const pythonProcess = spawn("python", [tempFilePath, nums, target]);
 
         let result = "";
-       
-        
 
         pythonProcess.stdout.on("data", (data) => {
           result += data.toString();
@@ -64,26 +63,32 @@ const execute = async (req, res) => {
   const { questionId, pythonCode } = req.body;
 
   try {
-    console.log("Fetching test cases for question ID:", questionId);
     const testCases = await getQuestionById(questionId);
-    console.log("Fetched test cases:", testCases);
 
-    const nums = JSON.parse(testCases.dataValues.nums);
-    const target = testCases.dataValues.target;
-    const args = [nums, target];
-    const results = await runPythonCode(pythonCode, nums,target);
-    const testResults = {
-      input: {
-        nums: JSON.parse(testCases.dataValues.nums),
-        target: testCases.dataValues.target,
-      },
-      expectedOutput: testCases.dataValues.output,
-      actualOutput: results,
-      passed:
-        JSON.stringify(results) === (JSON.stringify(testCases.dataValues.output)),
-    };
+    const allTestResults = [];
 
-    res.json({ testResults });
+    for (const testCase of testCases) {
+      const { nums, target, output } = testCase.dataValues;
+      const num = JSON.parse(nums);
+
+      const results = await runPythonCode(pythonCode, num, target);
+
+      const testResults = {
+        input: {
+          nums: nums,
+          target: target,
+        },
+        expectedOutput: JSON.parse(output),
+        actualOutput: JSON.parse(results)[0],
+        passed:
+          JSON.stringify(JSON.parse(output)) ===
+          JSON.stringify(JSON.parse(results)[0]),
+      };
+
+      allTestResults.push(testResults);
+    }
+
+    res.json({ allTestResults });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ error: "Failed to fetch question or test cases" });

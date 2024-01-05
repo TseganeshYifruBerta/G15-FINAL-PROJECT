@@ -1,5 +1,5 @@
 const exceljs = require("exceljs");
-const StudentUploadData = require("../../models/upload/upload");
+const StudentUploadData = require("../../models/userUpload/studentUploads");
 
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../../database/sequelize");
