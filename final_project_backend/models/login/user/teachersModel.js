@@ -12,6 +12,10 @@ const TeacherLogin = sequelize.define("TeacherLogin", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  token: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
 // Define associations between TeacherLogin and Teacher models
