@@ -1,6 +1,6 @@
 const Teacher = require("../../models/registration/user/teachersModel.js");
 const jwt = require("jsonwebtoken");
-const TeachersLogin = require("../../models/login/user/teachersModel.js");
+const TeacherLogin = require("../../models/login/user/teachersModel.js");
 const crypto = require("crypto");
 const generateSecretKey = () => {
   const secretLength = 32; // Adjust the length as per your requirements
@@ -24,7 +24,11 @@ const teacherLogin = async (req, res) => {
     const token = jwt.sign({ email }, secretKey, {
       expiresIn: tokenExpiration,
     });
+<<<<<<< HEAD
     const loggedInTeacher = await TeachersLogin.create({
+=======
+    const loggedInTeacher = await TeacherLogin.create({
+>>>>>>> 5cbcf60 (minor fixes on login controller and model)
       email,
       password,
       token,
