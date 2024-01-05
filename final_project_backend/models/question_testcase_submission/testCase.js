@@ -5,12 +5,15 @@ const sequelize = require("../../database/sequelize"); // Assuming your Sequeliz
 const TestCase = sequelize.define("TestCase", {
   nums: {
     type: DataTypes.JSON,
-    allowNull: false,
+    allowNull: true,
   },
   target: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
   },
+  word: { 
+    type: DataTypes.STRING,
+     allowNull: true },
   output: {
     type: DataTypes.JSON,
     allowNull: false,
