@@ -23,6 +23,10 @@ const pythonUpload = multer({ dest: "uploads/python" });
 const {
   submitQuestionWithTestCases,
 } = require("../../../controller/QuestionUploaderController/questionController");
+const {
+  getAllQuestions,
+} = require("../../../controller/QuestionUploaderController/questionController");
+
 const { execute } =
   require("../../../controller/codeExecution/codeExecution");
 // student route
@@ -48,5 +52,7 @@ router.post("/login/students", studentLogin);
 router.post("/login/teachers", teacherLogin);
 router.post("/question", submitQuestionWithTestCases);
 router.post("/submit",  execute);
+router.get("/getAllQuestions", getAllQuestions);
+
 
 module.exports = router;
