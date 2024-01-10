@@ -17,6 +17,11 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "pages/questions/uploadquestion.tsx"
+  ],
   "exclude": ["node_modules"]
 }
