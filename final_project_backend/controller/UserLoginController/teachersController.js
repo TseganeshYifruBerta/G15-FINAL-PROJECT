@@ -24,15 +24,8 @@ const teacherLogin = async (req, res) => {
     const token = jwt.sign({ email }, secretKey, {
       expiresIn: tokenExpiration,
     });
-<<<<<<< HEAD
-    const loggedInTeacher = await TeachersLogin.create({
-=======
+
     const loggedInTeacher = await TeacherLogin.create({
-<<<<<<< HEAD
->>>>>>> 5cbcf60 (minor fixes on login controller and model)
-=======
->>>>>>> 5163ddd (fix conflic)
->>>>>>> 0b33dec (main rebase)
       email,
       password,
       token,
