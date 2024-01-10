@@ -1,7 +1,7 @@
 const Teacher = require("../../models/registration/user/teachersModel.js");
-
-const jwt = require("jsonwebtoken")
-const crypto = require('crypto')
+const jwt = require("jsonwebtoken");
+const TeachersLogin = require("../../models/login/user/teachersModel.js");
+const crypto = require("crypto");
 const generateSecretKey = () => {
   const secretLength = 32; // Adjust the length as per your requirements
   return crypto.randomBytes(secretLength).toString("hex");
@@ -24,7 +24,7 @@ const teacherLogin = async (req, res) => {
     const token = jwt.sign({ email }, secretKey, {
       expiresIn: tokenExpiration,
     });
-    const loggedInTeacher = await TeacherLogin.create({
+    const loggedInTeacher = await TeachersLogin.create({
       email,
       password,
       token,
