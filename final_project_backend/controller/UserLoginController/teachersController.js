@@ -24,7 +24,6 @@ const teacherLogin = async (req, res) => {
     const token = jwt.sign({ email }, secretKey, {
       expiresIn: tokenExpiration,
     });
-
     const loggedInTeacher = await TeacherLogin.create({
       email,
       password,
