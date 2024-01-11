@@ -1,50 +1,51 @@
-// controllers/questionController.js
-const  examQuestion  = require("../../models/exam/testcase"); // Import the LabQuestion and TestCase models
-const TestCase = require('../../models/exam/solution')
-// Controller function to submit a question along with its test cases
-const submitQuestionWithTestCasesAndSolution = async (req, res) => {
-const { title, difficulty, description, example, testCases,tag } = req.body;
+const Question = require("../../models/exam/createExam");
+const TestCase = require("../../models/exam/solution");
+const Solution = require("../../models/exam/testcase");
+
+const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
+  const { title, difficulty, questions, example, testcases, solution } = req.body;
 
   try {
-    // Create a new LabQuestion
-    const newExamQuestion = await examQuestion.create({
+    // Create a new question
+    const newQuestion = await Question.create({
       title,
       difficulty,
-      description,
+      questions,
       example,
-      tag
     });
 
-    // Create and associate test cases with the new LabQuestion
-    // Create and associate test cases with the new LabQuestion
+    // Create and associate test cases with the new question
     const createdTestCases = await Promise.all(
-      testCases.map(async (testCase) => {
-        const formattedOutput = Array.isArray(testCase.output
-          )
-          ? testCase.output
-          : [testCase.output]; // Ensure output is an array
+      testcases.map(async (testcase) => {
+        const formattedOutput = Array.isArray(testcase.output)
+          ? testcase.output
+          : [testcase.output]; // Ensure output is an array
         return await TestCase.create({
-          nums: testCase.input.nums,
-          target: testCase.input.target,
+          input: testcase.input,
           output: formattedOutput,
-          labQuestionId: newExamQuestion.id, // Associate the test case with the new LabQuestion
+          questionId: newQuestion.id,
         });
       })
     );
-   
+
+    // Create a new solution
+    const newSolution = await Solution.create({
+      content: solution,
+      questionId: newQuestion.id,
+    });
+
     res.status(201).json({
-      message: "Question and test cases submitted successfully",
+      message: "Question, test cases, and solution submitted successfully",
       question: newQuestion,
       testCases: createdTestCases,
+      solution: newSolution,
     });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Error submitting question and test cases",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Error submitting question, test cases, and solution",
+      error: error.message,
+    });
   }
 };
 
-module.exports = { submitQuestionWithTestCases };
+module.exports = { submitExamQuestionWithTestCaseAndSolution };
