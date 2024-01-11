@@ -21,10 +21,15 @@ const submitQuestionWithTestCases = async (req, res) => {
         const formattedOutput = Array.isArray(testCase.output)
           ? testCase.output
           : [testCase.output]; // Ensure output is an array
+          const formattedInput = Array.isArray(testCase.input)
+            ? testCase.input
+            : [testCase.input.score]; 
         return await TestCase.create({
-          nums: testCase.input.nums,
-          target: testCase.input.target,
-          word: testCase.input.word,
+          // nums: testCase.input.nums,
+          // target: testCase.input.target,
+          
+          input:formattedInput,
+
 
           output: formattedOutput,
           labQuestionId: newQuestion.id, // Associate the test case with the new LabQuestion
@@ -48,20 +53,4 @@ const submitQuestionWithTestCases = async (req, res) => {
 };
 module.exports = { submitQuestionWithTestCases };
 
-const getAllQuestions = async (
-  req,
-  res
-) => {
-  try {
-    const questions = await Question.findAll();
-    if (!questions) {
-      return res.sendStatus(400);
-    }
-    return res.status(200).json(questions);
-  } catch (error) {
-    console.log(error);
-    return res.sendStatus(400);
-  }
-};
-module.exports = { getAllQuestions };
 

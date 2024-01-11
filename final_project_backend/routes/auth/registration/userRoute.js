@@ -25,7 +25,7 @@ const {
 } = require("../../../controller/QuestionUploaderController/questionController");
 const {
   getAllQuestions,
-} = require("../../../controller/QuestionUploaderController/questionController");
+} = require("../../../controller/QuestionUploaderController/fetch_all_question");
 
 const { execute } =
   require("../../../controller/codeExecution/codeExecution");
