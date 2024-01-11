@@ -3,16 +3,13 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../../database/sequelize");
 
 const TestCase = sequelize.define("TestCase", {
-    nums: {
-        type: DataTypes.JSON,
-        allowNull: false,
-      },
+   
   input: {
-    type: DataTypes.STRING,
+    type: DataTypes.JSON,
     allowNull: false,
   },
   output: {
-    type: DataTypes.STRING,
+    type: DataTypes.JSON,
     allowNull: false,
   },
 });
