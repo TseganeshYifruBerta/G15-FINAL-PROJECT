@@ -15,20 +15,20 @@ const getQuestionById = async (questionId) => {
   }
 };
 
-const runPythonCode = (pythonCode, nums, target) => {
+const runPythonCode = (pythonCode, nums) => {
   return new Promise((resolve, reject) => {
     const tempFilePath = path.join(__dirname, "tempkol.py");
     const functionNameMatch = pythonCode.match(/def\s+(\w+)\s*\(/);
     const functionName = functionNameMatch
       ? functionNameMatch[1]
       : "UnknownFunction";
-    const functionCall = `${functionName}(${JSON.stringify(nums)}, ${target})`;
+    const functionCall = `${functionName}(${JSON.stringify(nums)})`;
     const pythonScript = `${pythonCode}\n\nprint(${functionCall})`;
     fs.writeFile(tempFilePath, pythonScript, (err) => {
       if (err) {
         reject(err);
       } else {
-        const pythonProcess = spawn("python", [tempFilePath, nums, target]);
+        const pythonProcess = spawn("python", [tempFilePath, nums]);
 
         let result = "";
 
@@ -68,24 +68,40 @@ const execute = async (req, res) => {
     const allTestResults = [];
 
     for (const testCase of testCases) {
-      const { nums, target, output } = testCase.dataValues;
-      const num = JSON.parse(nums);
+      const { input, output } = testCase.dataValues;
+      let nums,  score, results;
 
-      const results = await runPythonCode(pythonCode, num, target);
+      if (typeof input === "object") {
+        // If input is an object, assume it contains 'nums' and 'target'
+        
+        // target = input.target;
+        results = await runPythonCode(pythonCode, nums);
+
+        
+      } else {
+        // If input is a string, assume it contains 'word'
+      
+        const inputData = JSON.parse(input);
+        score = inputData[0].score;
+
+        results = await runPythonCode(pythonCode,score);
+
+      }
+
+      // const results = await runPythonCode(pythonCode, nums || word, target);
 
       const testResults = {
         input: {
           nums: nums,
-          target: target,
+          score: score,
+          // target: target,
         },
-        expectedOutput: JSON.parse(output),
-        actualOutput: JSON.parse(results)[0],
-        passed:
-          JSON.stringify(JSON.parse(output)) ===
-          JSON.stringify(JSON.parse(results)[0]),
+        expectedOutput: JSON.parse(output)[0],
+        actualOutput: results,
+        passed: JSON.parse(output)[0] === results,
       };
 
-      allTestResults.push(testResults);
+      allTestResults.push(testResults); 
     }
 
     res.json({ allTestResults });

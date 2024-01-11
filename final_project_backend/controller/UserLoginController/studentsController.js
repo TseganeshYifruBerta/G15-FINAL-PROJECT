@@ -26,13 +26,13 @@ const studentLogin = async (req, res) => {
     const token = jwt.sign({ email }, secretKey, {
       expiresIn: tokenExpiration,
     });
-    const loggedInStudent = await StudentsLogin.create({
-      userId,
-      password,
-      token,
-    });
+    // const loggedInStudent = await StudentsLogin.create({
+    //   userId,
+    //   password,
+    //   token,
+    // });
 
-    res.status(200).json({ loggedInStudent });
+    res.status(200).json({ token });
   } catch (error) {
     res.status(500).json({ message: "An error occurred while logging in" });
   }

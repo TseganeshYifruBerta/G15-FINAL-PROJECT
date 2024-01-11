@@ -3,7 +3,7 @@ const StudentUploadData = require("../../models/userUpload/studentUploads");
 
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../../database/sequelize");
-const studentData = sequelize.define("StudentsUploadedData", {
+const studentData = sequelize.define("StudentsUploadedDatas", {
   name: {
     type: Sequelize.STRING,
   },
