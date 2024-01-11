@@ -9,33 +9,7 @@ const StudentsLoginBox : React.FC = () => {
     const [id, setid] = useState("");
     const [password, setpassword] = useState("");
     const [count, setcount] = useState(0);
-    // Fetch login status
-    const {
-      data: signinstatus,
-      isLoading,
-      isError,
-    } = useGetStudentsSignInStatusQuery({
-      password: password,
-      id: id,
-    });
-
-    const loginHandle = async () => {
-      setcount(count + 1);
-      if (isLoading) {
-        return <div>loading</div>;
-      }
-
-      if (isError) {
-        return <div>Error</div>;
-      }
-
-      if (signinstatus.success) {
-        router.push("/");
-      } else {
-        // Handle incorrect email or password
-        // Display a warning message or update state to show a message in the UI
-      }
-    };
+    
     return (
       <div className="w-2/3 bg-white p-8 shadow-md flex flex-col -ml-16">
         <div className="mb-4 flex justify-center">
@@ -74,13 +48,10 @@ const StudentsLoginBox : React.FC = () => {
             />
           </div>
         </div>
-        {count != 0 && signinstatus && signinstatus.success === false && (
-          <p className="text-red-500">Email or password is incorrect.</p>
-        )}
+       
         <div>
-          <Link href={``}>
+          <Link href={"/home"}>
             <button
-              onClick={loginHandle}
               className="w-full bg-primary text-white px-4 py-2"
             >
               Sign In
