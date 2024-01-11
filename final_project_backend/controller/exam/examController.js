@@ -1,17 +1,18 @@
 // controllers/questionController.js
-const  Question  = require("../../models/question_testcase_submission/question"); // Import the LabQuestion and TestCase models
-const TestCase = require('../../models/question_testcase_submission/testCase')
+const  examQuestion  = require("../../models/exam/testcase"); // Import the LabQuestion and TestCase models
+const TestCase = require('../../models/exam/solution')
 // Controller function to submit a question along with its test cases
-const submitQuestionWithTestCases = async (req, res) => {
-const { title, difficulty, description, example, testCases } = req.body;
+const submitQuestionWithTestCasesAndSolution = async (req, res) => {
+const { title, difficulty, description, example, testCases,tag } = req.body;
 
   try {
     // Create a new LabQuestion
-    const newQuestion = await Question.create({
+    const newExamQuestion = await examQuestion.create({
       title,
       difficulty,
       description,
       example,
+      tag
     });
 
     // Create and associate test cases with the new LabQuestion
@@ -26,7 +27,7 @@ const { title, difficulty, description, example, testCases } = req.body;
           nums: testCase.input.nums,
           target: testCase.input.target,
           output: formattedOutput,
-          labQuestionId: newQuestion.id, // Associate the test case with the new LabQuestion
+          labQuestionId: newExamQuestion.id, // Associate the test case with the new LabQuestion
         });
       })
     );
