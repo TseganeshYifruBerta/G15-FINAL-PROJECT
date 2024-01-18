@@ -12,10 +12,9 @@ const UploadForm: React.FC<UploadFormProps> = ({
 }) =>{
     const [content, setContent] = useState("");
   var addinput = `${label} (use JSON format)
-     {"nums": [2, 7, 11, 15],
-        "target": 9}`;
+     {"score": "9"}`;
   var addoutput = `${label} (use JSON format) 
-    {"output": [0, 9, 8]}`;
+    {"output": "8"}`;
   let add;
 if (!(label === "input")){
 addinput = label

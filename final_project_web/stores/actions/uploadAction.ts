@@ -4,10 +4,9 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 const backendURL = "http://localhost:5000";
 export interface testCasesProps {
   input: {
-    nums: number[];
-    target: number;
+    score: string
   };
-  output: number[];
+  output: string;
 }
 interface QuestionArgs {
   title: string;

@@ -16,7 +16,7 @@ const initialState: QuestionState = {
     updatedAt: "",
     createdAt: "",
   },
-  testCases: [{ input: { nums: [0, 8, 9], target: 9 }, output: [0, 9, 8] }],
+  testCases: [{ input : {score: "9"}, output: "9"}],
   loading: false,
   success: false,
   error: null,

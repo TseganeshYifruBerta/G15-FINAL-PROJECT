@@ -9,7 +9,7 @@ interface QuestionSetProps {
 const QuestionSetNav: React.FC<QuestionSetProps> = ({number, title, difficulty, tag}) => {
     return (
       <Link href={"/question/id"}>
-        <div className="border-2 border-primary p-4 m-4 flex flex-wrap justify-between">
+        <div className="border-2  p-2 m-2 flex flex-wrap justify-between">
           <div>{number}</div>
           <div>{title}</div>
           <div>{difficulty}</div>

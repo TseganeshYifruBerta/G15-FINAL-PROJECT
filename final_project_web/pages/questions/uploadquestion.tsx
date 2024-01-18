@@ -54,6 +54,7 @@ const RegisterScreen: React.FC = () => {
 
     try {
       await dispatch(registerQuestion(data));
+      router.push('/questions')
       console.log("Form submitted successfully");
     } catch (error) {
       console.error("Error during registration:", error);
