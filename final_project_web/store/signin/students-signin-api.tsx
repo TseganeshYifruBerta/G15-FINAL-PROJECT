@@ -8,7 +8,7 @@ export const studentsSignInApi = createApi({
   endpoints: (builder) => ({
     getStudentsSignInStatus: builder.query({
       query: ({ email, password }) => ({
-        url: "/",
+        url: "/http://localhost:5500/login/students",
         method: "POST",
         body: { email, password }, // Add the email and password to the request body
       }),

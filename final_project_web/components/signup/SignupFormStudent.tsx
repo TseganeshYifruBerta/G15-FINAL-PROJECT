@@ -4,8 +4,8 @@ import { BiSolidUserRectangle } from 'react-icons/bi';
 import { MdNumbers, MdOutlineMailOutline } from 'react-icons/md';
 import { TbUserQuestion } from 'react-icons/tb';
 import { RiLockPasswordLine } from 'react-icons/ri';
-import { register, RegisterFormData } from '@/pages/api/ApiCallerStudent';
-
+import { register, RegisterFormData } from '@/store/signup/ApiCallerStudent';
+import {showToast} from '../popup' ;
 interface FormValues {
   name: string;
   userId: string;
@@ -77,9 +77,10 @@ const SignupFormStudent: React.FC<InjectedFormProps<FormValues>> = ({ handleSubm
   const onSubmit = async (values: FormValues) => {
     try {
       const data = await register(values as RegisterFormData);
-      console.log('Registration successful:', data);
+      showToast('Registration successful', 'success');
     } catch (error) {
       console.error('Registration error:', error);
+      showToast('Registration error: ' + (error as Error).message, 'error');
     }
   };
 

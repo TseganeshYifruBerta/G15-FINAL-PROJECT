@@ -4,7 +4,7 @@ import { BiSolidUserRectangle } from 'react-icons/bi';
 import { MdNumbers, MdOutlineMailOutline } from 'react-icons/md';
 import { TbUserQuestion } from 'react-icons/tb';
 import { RiLockPasswordLine } from 'react-icons/ri';
-import { register, RegisterFormData } from '@/pages/api/ApiCallerTeacher';
+import { register, RegisterFormData } from '@/store/signup/ApiCallerTeacher';
 
 
 interface FormValues {
