@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import route from '../../../final_project_backend/routes/auth/registration/userRoute'
 export type RegisterFormData = {
     name: string;
     userId: string;
@@ -10,11 +11,11 @@ export type RegisterFormData = {
   
   export const register = async (formData: RegisterFormData) => {
     try {
-      const response = await fetch("/register/students", {
+      const response = await fetch("http://localhost:5500/register/students", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json", 
+          Accept: "application/json",
         },
         body: JSON.stringify(formData),
       });
