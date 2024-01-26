@@ -3,7 +3,7 @@ const nodemailer = require("nodemailer");
 const speakeasy = require("speakeasy");
 const {
   teacherData,
-} = require("../UserDataUploaderController/TeachersdataUploaderController.js");
+} = require("../../models/userUpload/teacherUploads.js");
 const otpModel = require("../../services/registration/otpGeneration.js");
 const createTeacher = async (req, res) => {
   try {
