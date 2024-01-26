@@ -1,3 +1,4 @@
+import StudentLogin from "@/components/signin/StudentLogin";
 import StudentsLoginBox from "@/components/signin/StudentsLoginBox";
 import Image from "next/image";
 
@@ -27,7 +28,7 @@ function StudentsLogin() {
         </div>
       </div>
       <div className="flex items-center min-h-screen bg-primary w-1/2">
-        <StudentsLoginBox />
+        <StudentLogin />
       </div>
     </div>
   );

@@ -1,23 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { teachersSignInApi } from "./signin/teachers-signin-api";
-import { studentsSignInApi } from "./signin/students-signin-api";
-import { studentsSignUpApi } from "./signup/students-signup-api";
-import { teachersSignUpApi } from "./signup/teachers-signup-api";
+import { authApiSlice } from "./signin/student-auth-api";
+
 
 export const store = configureStore({
   reducer: {
-    [teachersSignInApi.reducerPath]: teachersSignInApi.reducer,
-    [studentsSignInApi.reducerPath]: studentsSignInApi.reducer,
-    [teachersSignUpApi.reducerPath]: teachersSignUpApi.reducer,
-    [studentsSignUpApi.reducerPath]: studentsSignUpApi.reducer,
+    [authApiSlice.reducerPath]: authApiSlice.reducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware()
-      .concat(teachersSignInApi.middleware)
-      .concat(studentsSignInApi.middleware)
-      .concat(teachersSignUpApi.middleware)
-      .concat(studentsSignUpApi.middleware),
+  middleware: (getDefaultMiddleware) => {
+    return getDefaultMiddleware().concat(
+      authApiSlice.middleware,
+    );
+  },
 });
 
-export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>;
