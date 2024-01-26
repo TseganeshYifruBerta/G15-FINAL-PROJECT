@@ -24,8 +24,9 @@ let [
   },
 ] = useLoginStudentMutation();
 
-   const handleSignin = () => {
-    
+   const handleSignin = async (e: any) => {
+      e.preventDefault();
+
       signinStudent(formValue);
       console.log(signinData, isSigninError)
     }

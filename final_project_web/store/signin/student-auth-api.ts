@@ -6,14 +6,14 @@ export const authApiSlice = createApi({
   reducerPath: "auth/api",
   tagTypes: ["Student"],
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3000/login/students",
+    baseUrl: "http://localhost:3000",
   }),
 
   endpoints(builder) {
     return {
       loginStudent: builder.mutation({
         query: (body: Login) => {
-          return { url: "/Auth/login", method: "POST", body };
+          return { url: "/login/students", method: "POST", body };
         },
       }),
     };
