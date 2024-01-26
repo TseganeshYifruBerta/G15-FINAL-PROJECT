@@ -1,0 +1,10 @@
+compose.yml
+Dockerfile
+config.env
+package-lock.json
+package.json
+/seeders
+/migrations
+/node_modules
+.env
+index.js

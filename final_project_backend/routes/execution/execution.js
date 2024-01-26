@@ -1,6 +1,6 @@
 // routes.js
 const express = require("express");
-const executionRouter = express.executionRouter();
+const executionRouter = express.Router();
 
 // code execution
 const { execute } = require("../../controller/codeExecution/codeExecution");
