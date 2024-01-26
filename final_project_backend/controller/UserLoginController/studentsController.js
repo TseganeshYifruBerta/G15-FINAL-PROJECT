@@ -8,7 +8,7 @@ const generateSecretKey = () => {
 };
 const studentLogin = async (req, res) => {
   const { userId, password } = req.body;
-
+  
   try {
     const student = await Student.findOne({ where: { userId } });
 
@@ -26,15 +26,17 @@ const studentLogin = async (req, res) => {
     const token = jwt.sign({ email }, secretKey, {
       expiresIn: tokenExpiration,
     });
+    
     // const loggedInStudent = await StudentsLogin.create({
     //   userId,
-    //   password,
     //   token,
     // });
 
-    res.status(200).json({ token });
+
+
+    res.status(200).json({userId,token});
   } catch (error) {
-    res.status(500).json({ message: "An error occurred while logging in" });
+    res.status(500).json({ error});
   }
 };
 
