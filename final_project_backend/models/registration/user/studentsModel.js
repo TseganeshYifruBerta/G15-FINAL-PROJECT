@@ -2,7 +2,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../../../database/sequelize");
 
-const Student = sequelize.define("StudentRegisters", {
+const student = sequelize.define("StudentRegisters", {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -38,4 +38,4 @@ const Student = sequelize.define("StudentRegisters", {
   },
 });
 
-module.exports = Student;
+module.exports = student;

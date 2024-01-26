@@ -15,7 +15,7 @@ const createStudent = async (req, res) => {
     });
     
 
-    if (studentDataUploaded.length <= 0) {
+    if (!(studentDataUploaded.length > 0)) {
       
       return res.status(403).json({
         message: "Student data is not uploaded. Cannot register at this time",
@@ -32,7 +32,6 @@ const createStudent = async (req, res) => {
       }
 
       const newStudent = await Student.create({
-        
         name,
         email,
         userId,
