@@ -23,7 +23,7 @@ const Question = sequelize.define("labQuestion", {
   },
   
 });
-Question.hasMany(TestCase, { as: "testCases" });
+Question.hasMany(TestCase, { as: "TestCases" });
 
 TestCase.belongsTo(Question);
 
