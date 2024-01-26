@@ -1,22 +1,6 @@
 const exceljs = require("exceljs");
-const StudentUploadData = require("../../models/userUpload/studentUploads");
+const studentData = require("../../models/userUpload/studentUploads");
 
-const { Sequelize, DataTypes } = require("sequelize");
-const sequelize = require("../../database/sequelize");
-const studentData = sequelize.define("StudentsUploadedDatas", {
-  name: {
-    type: Sequelize.STRING,
-  },
-  userID: {
-    type: Sequelize.STRING,
-  },
-  email: {
-    type: Sequelize.STRING,
-  },
-  section: {
-    type: Sequelize.STRING,
-  },
-});
 
 async function uploadStudentsFile(req, res) {
   try {
@@ -62,5 +46,4 @@ async function uploadStudentsFile(req, res) {
 
 module.exports = {
   uploadStudentsFile,
-  studentData,
 };

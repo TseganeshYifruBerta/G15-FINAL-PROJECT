@@ -23,7 +23,7 @@ const submitQuestionWithTestCases = async (req, res) => {
           : [testCase.output]; // Ensure output is an array
           const formattedInput = Array.isArray(testCase.input)
             ? testCase.input
-            : [testCase.input.score]; 
+            : [testCase.input]; 
         return await TestCase.create({
           // nums: testCase.input.nums,
           // target: testCase.input.target,
