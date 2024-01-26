@@ -2,7 +2,7 @@ const exceljs = require("exceljs");
 const studentData = require("../../models/userUpload/studentUploads");
 
 
-async function uploadStudentsFile(req, res) {
+const uploadStudentsFile = async(req, res)=>{
   try {
     const workbook = new exceljs.Workbook();
     const filePath = req.file.path;
