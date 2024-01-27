@@ -1,25 +1,25 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { teachersSignInApi } from "./signin/teachers-signin-api";
 import { reducer as formReducer } from 'redux-form';
 import { useDispatch } from 'react-redux';
-import { studentsSignInApi } from "./signin/students-signin-api";
 import signupTeacherReducer from './signup/signupSliceReducerTeacher';
 import signupStudentReducer from './signup/SignupSliceReducerStudent';
+import signinStudentReducer from "./signin/student-signin-slice"
 
+import { getQuestionDetalApi } from "./question/get-questionById-api";
 
 export const store = configureStore({
   reducer: {
     form: formReducer,
-    register: signupTeacherReducer,
+    signupTeacherReducer,
+    studentsignin:signinStudentReducer,
+    // teachersignin: signinTeacherReducer,
+
     signupStudentReducer,
-    [teachersSignInApi.reducerPath]: teachersSignInApi.reducer,
-    [studentsSignInApi.reducerPath]: studentsSignInApi.reducer,
+    [getQuestionDetalApi.reducerPath]: getQuestionDetalApi.reducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware()
-      .concat(teachersSignInApi.middleware)
-      .concat(studentsSignInApi.middleware)
-     ,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+  .concat(getQuestionDetalApi.middleware)
+  ,
 });
 
 export type RootState = ReturnType<typeof store.getState>;

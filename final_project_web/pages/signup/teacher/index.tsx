@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import { FaRegUserCircle } from "react-icons/fa";
-import SignupFormTeacher from '../../components/signup/SignupFormTeacher';
+import SignupFormTeacher from '../../../components/signup/SignupFormTeacher';
 
 
 
@@ -35,7 +35,7 @@ export default function Home() {
               </div>
               <SignupFormTeacher onSubmit={onSubmit} />
               <p className="mt-2 text-xs font-bold text-gray-600">
-                Already have an account? <a href="#" className="text-blue-500 font-bold">Sign In</a>
+                Already have an account? <a href="/signin/teachers" className="text-blue-500 font-bold">Sign In</a>
               </p>
             </div>
           </div>

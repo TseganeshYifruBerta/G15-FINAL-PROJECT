@@ -1,7 +1,8 @@
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import { FaRegUserCircle } from "react-icons/fa";
-import SignupFormStudent from '../../components/signup/SignupFormStudent';
+import SignupFormStudent from '../../../components/signup/SignupFormStudent';
+import Link from 'next/link';
 
 
 
@@ -13,7 +14,7 @@ export default function Home() {
     console.log(values);  };
   return (
     <main
-      className={`flex min-h-screen flex-col    ${inter.className}`}
+      className={`flex min-h-screen flex-col ${inter.className}`}
     >
       <div className="min-h-screen bg-white  flex items-center justify-center h-screen ">
           <div className="w-1/2 h-full bg-white">
@@ -33,9 +34,9 @@ export default function Home() {
               <div className="flex items-center justify-center">
               <h2 className="p-3 text-2xl font-semibold text-bold mb-2">Create Account</h2>
               </div>
-              <SignupFormStudent onSubmit={onSubmit} />
+              <SignupFormStudent />
               <p className="mt-2 text-xs font-bold text-gray-600">
-                Already have an account? <a href="#" className="text-blue-500 font-bold">Sign In</a>
+                Already have an account? <Link className="text-blue-500 font-bold" href={'/signin/students'}>Sign In</Link>
               </p>
             </div>
           </div>

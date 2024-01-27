@@ -1,5 +1,5 @@
 export type RegisterFormData = {
-  name: string;
+  fullName: string;
   email: string;
   section: string;
   password: string;
@@ -9,7 +9,7 @@ export type RegisterFormData = {
 export const register = async (formData: RegisterFormData) => {
   try {
     const response = await fetch(
-      "http://localhost:5500/register/teachers",
+      "http://localhost:5000/register/teachers",
       {
         method: "POST",
         headers: {

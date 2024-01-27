@@ -5,21 +5,23 @@ import { MdNumbers, MdOutlineMailOutline } from 'react-icons/md';
 import { TbUserQuestion } from 'react-icons/tb';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { register, RegisterFormData } from '@/store/signup/ApiCallerTeacher';
+import { useRouter } from 'next/router';
+import { showToast } from '../popup';
 
 
 interface FormValues {
-    name: string;
-    email: string;
-    section: string;
-    password: string;
-    confirmPassword: string;
-  }
+  fullName: string;
+  email: string;
+  section: string;
+  password: string;
+  confirmPassword: string;
+}
 
   const validate = (values: FormValues) => {
     const errors: Partial<FormValues> = {};
   
-    if (!values.name) {
-      errors.name = 'Username is required';
+    if (!values.fullName) {
+      errors.fullName = "Username is required";
     }
   
    
@@ -73,12 +75,21 @@ interface FormValues {
 
  
 const SignupFormTeacher: React.FC<InjectedFormProps<FormValues>> = ({ handleSubmit }) => {
+  const router = useRouter()
   const onSubmit = async (values: FormValues) => {
     try {
       const data = await register(values as RegisterFormData);
       console.log('Registration successful:', data);
+            showToast("Registration successful", "success");
+
+      router.push("/signin/teachers")
     } catch (error) {
       console.error('Registration error:', error);
+            showToast(
+              "Registration error: " + (error as Error).message,
+              "error"
+            );
+
     }
   };
 
@@ -150,7 +161,7 @@ const SignupFormTeacher: React.FC<InjectedFormProps<FormValues>> = ({ handleSubm
              type="submit"
              className="bg-[#7983FB]  text-white py-2 px-4 mt-4 rounded hover:bg-blue-600 w-full"
            >
-             Sign in
+             Sign Up
            </button>
          </form>
     
