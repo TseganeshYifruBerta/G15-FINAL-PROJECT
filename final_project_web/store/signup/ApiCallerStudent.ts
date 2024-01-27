@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import route from '../../../final_project_backend/routes/auth/registration/userRoute'
 export type RegisterFormData = {
     name: string;
     userId: string;
