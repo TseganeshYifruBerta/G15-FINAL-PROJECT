@@ -10,6 +10,6 @@ const {
 // questionRouters.post("/question", submitQuestionWithTestCases);
 questionRouters.post("/submitquestion", submitQuestionWithTestCases);
 questionRouters.get("/getAllQuestions", getAllQuestions);   
-questionRouters.get("/getAllQuestionsById/:id", getAllQuestionsById);   
+questionRouters.get("/getAllQuestionsById/:userId/:questionId", getAllQuestionsById);   
 
 module.exports = questionRouters;

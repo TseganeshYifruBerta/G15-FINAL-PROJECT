@@ -145,6 +145,8 @@ const execute = async (req, res) => {
     }
     const newer = await Status.create({
       status: overallStatus,
+      questionId: questionId,
+      userId,
       submittedCodeId: codes.id,
     });
     
