@@ -1,18 +1,5 @@
 const exceljs = require("exceljs");
-const { Sequelize, DataTypes } = require("sequelize");
-const sequelize = require("../../database/sequelize");
 const TeacherUploadData =require("../../models/userUpload/teacherUploads")
-const teacherData = sequelize.define("TeachersUploadedData", {
-  fullName: {
-    type: Sequelize.STRING,
-  },
-  email: {
-    type: Sequelize.STRING,
-  },
-  section: {
-    type: Sequelize.STRING,
-  },
-});
 
 async function uploadTeachersFile(req, res) {
   try {
@@ -23,11 +10,15 @@ async function uploadTeachersFile(req, res) {
 
     let dataToStore = [];
 
-    worksheet.eachRow({ includeEmpty: true }, function (row, rowNumber) {
+    worksheet.eachRow({ includeEmpty: false }, function (row, rowNumber) {
       if (rowNumber !== 1) {
+        const email =
+          typeof row.values[2] === "object"
+            ? row.values[2].text
+            : row.values[2];
         const teacher = {
           fullName: row.values[1],
-          email: row.values[2],
+          email: email,
           section: row.values[3],
         };
         dataToStore.push(teacher);
@@ -54,5 +45,5 @@ async function uploadTeachersFile(req, res) {
 
 module.exports = {
   uploadTeachersFile,
-  teacherData,
+
 };
