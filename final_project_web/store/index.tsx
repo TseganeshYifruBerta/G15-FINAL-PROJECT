@@ -6,9 +6,11 @@ import signupStudentReducer from './signup/SignupSliceReducerStudent';
 import signinStudentReducer from "./signin/student-signin-slice"
 
 import { getQuestionDetalApi } from "./question/get-questionById-api";
+import  UploadState  from "@/store/upload/UploadSliceReducer";
 
 export const store = configureStore({
   reducer: {
+    upload: UploadState,
     form: formReducer,
     signupTeacherReducer,
     studentsignin:signinStudentReducer,
