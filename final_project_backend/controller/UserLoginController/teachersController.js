@@ -28,6 +28,7 @@ const teacherLogin = async (req, res) => {
       email,
       password,
       token,
+      teacherId:teacher.id
     });
 
     res.status(200).json({ loggedInTeacher });

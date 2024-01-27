@@ -16,9 +16,12 @@ const TeacherLogin = sequelize.define("TeacherLogin", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  teacherId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
-// Define associations between TeacherLogin and Teacher models
-TeacherLogin.belongsTo(Teacher, { foreignKey: "teacherId", targetKey: "id" });
+
 
 module.exports = TeacherLogin;

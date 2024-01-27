@@ -26,15 +26,18 @@ const studentLogin = async (req, res) => {
     const token = jwt.sign({ email }, secretKey, {
       expiresIn: tokenExpiration,
     });
+    const student_id = student.id
     
-    // const loggedInStudent = await StudentsLogin.create({
-    //   userId,
-    //   token,
-    // });
+    const loggedInStudent = await StudentsLogin.create({
+      userId,
+      studentId:student_id,
+      token,
+      password
+    });
 
 
 
-    res.status(200).json({userId,token});
+    res.status(200).json({ loggedInStudent, token });
   } catch (error) {
     res.status(500).json({ error});
   }

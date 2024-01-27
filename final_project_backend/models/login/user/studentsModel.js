@@ -2,11 +2,6 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../../../database/sequelize");
 
 const StudentsLogin = sequelize.define("LoggedInStudents", {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
   password: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -19,6 +14,10 @@ const StudentsLogin = sequelize.define("LoggedInStudents", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  studentId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
-module.exports = { StudentsLogin };
+module.exports = StudentsLogin ;
