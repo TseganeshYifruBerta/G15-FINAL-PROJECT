@@ -4,7 +4,6 @@ import { MdNumbers } from "react-icons/md";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { TbUserQuestion } from "react-icons/tb";
 import { RiLockPasswordLine } from "react-icons/ri";
-import { useGetStudentsSignUpApiQuery } from '@/store/signup/students-signup-api';
 import Link from 'next/link';
 
 interface FormValues {

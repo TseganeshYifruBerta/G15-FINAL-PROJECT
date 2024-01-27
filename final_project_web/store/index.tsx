@@ -1,23 +1,28 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { teachersSignInApi } from "./signin/teachers-signin-api";
-import { studentsSignInApi } from "./signin/students-signin-api";
-import { studentsSignUpApi } from "./signup/students-signup-api";
-import { teachersSignUpApi } from "./signup/teachers-signup-api";
+import { reducer as formReducer } from 'redux-form';
+import { useDispatch } from 'react-redux';
+import signupTeacherReducer from './signup/signupSliceReducerTeacher';
+import signupStudentReducer from './signup/SignupSliceReducerStudent';
+import signinStudentReducer from "./signin/student-signin-slice"
+
+import { getQuestionDetalApi } from "./question/get-questionById-api";
 
 export const store = configureStore({
   reducer: {
-    [teachersSignInApi.reducerPath]: teachersSignInApi.reducer,
-    [studentsSignInApi.reducerPath]: studentsSignInApi.reducer,
-    [teachersSignUpApi.reducerPath]: teachersSignUpApi.reducer,
-    [studentsSignUpApi.reducerPath]: studentsSignUpApi.reducer,
+    form: formReducer,
+    signupTeacherReducer,
+    studentsignin:signinStudentReducer,
+    // teachersignin: signinTeacherReducer,
+
+    signupStudentReducer,
+    [getQuestionDetalApi.reducerPath]: getQuestionDetalApi.reducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware()
-      .concat(teachersSignInApi.middleware)
-      .concat(studentsSignInApi.middleware)
-      .concat(teachersSignUpApi.middleware)
-      .concat(studentsSignUpApi.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+  .concat(getQuestionDetalApi.middleware)
+  ,
 });
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+export const useAppDispatch = () => useDispatch<AppDispatch>();
