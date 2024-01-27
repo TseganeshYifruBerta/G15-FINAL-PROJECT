@@ -10,12 +10,16 @@ const uploadStudentsFile = async(req, res)=>{
     const worksheet = uploadedFile.worksheets[0];
 
     let dataToStore = [];
-    worksheet.eachRow({ includeEmpty: true }, function (row, rowNumber) {
+    worksheet.eachRow({ includeEmpty: false }, function (row, rowNumber) {
       if (rowNumber !== 1) {
+        const email =
+          typeof row.values[3] === "object"
+            ? row.values[3].text
+            : row.values[3];
         const student = {
           name: row.values[1],
           userID: row.values[2],
-          email: row.values[3],
+          email: email,
           section: row.values[4],
         };
         dataToStore.push(student);
