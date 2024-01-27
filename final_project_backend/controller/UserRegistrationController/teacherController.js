@@ -10,12 +10,11 @@ const createTeacher = async (req, res) => {
     const { fullName, email, password, confirmPassword, section } = req.body;
     const teacherDataUploaded = await teacherData.findAll({
       where: {
-        
         email: email,
       },
       
     });
-    if ((teacherDataUploaded.length) <= 0) {
+    if (!(teacherDataUploaded.length > 0) ){
       return res.status(403).json({
         message: "Your  data is not uploaded. Cannot register at this time",
       });
