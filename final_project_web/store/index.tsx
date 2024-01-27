@@ -6,17 +6,18 @@ import signupStudentReducer from './signup/SignupSliceReducerStudent';
 import signinStudentReducer from "./signin/student-signin-slice"
 
 import { getQuestionDetalApi } from "./question/get-questionById-api";
-import  UploadState  from "@/store/upload/UploadSliceReducer";
+import  UploadStateStudent  from "@/store/upload/UploadSliceReducerStudent";
+import  UploadStateTeacher  from "@/store/upload/UploadTeacherSliceReducer";
 
 export const store = configureStore({
   reducer: {
-    upload: UploadState,
+    upload: UploadStateStudent,UploadStateTeacher,
     form: formReducer,
-    signupTeacherReducer,
+    register: signupTeacherReducer,
+    signupStudentReducer,
+   
     studentsignin:signinStudentReducer,
     // teachersignin: signinTeacherReducer,
-
-    signupStudentReducer,
     [getQuestionDetalApi.reducerPath]: getQuestionDetalApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware()
