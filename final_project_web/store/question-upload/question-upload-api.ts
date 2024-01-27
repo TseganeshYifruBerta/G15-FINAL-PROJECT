@@ -1,9 +1,11 @@
+import { testCaseProps } from "@/components/questions/QuestionUpload";
+
 export type QuestionUploadFormData = {
   title: string;
   difficulty: string;
   description: string;
   example: string;
-  testCases:JSON[]
+  testCases: testCaseProps[];
 };
 
 

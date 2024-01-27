@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import signupTeacherReducer from './signup/signupSliceReducerTeacher';
 import signupStudentReducer from './signup/SignupSliceReducerStudent';
 import signinStudentReducer from "./signin/student-signin-slice"
-
+import questionUploadReducer from "./question-upload/question-upload-slice"
 import { getQuestionDetalApi } from "./question/get-questionById-api";
 
 export const store = configureStore({
@@ -13,7 +13,7 @@ export const store = configureStore({
     signupTeacherReducer,
     studentsignin:signinStudentReducer,
     // teachersignin: signinTeacherReducer,
-
+questionupload:questionUploadReducer,
     signupStudentReducer,
     [getQuestionDetalApi.reducerPath]: getQuestionDetalApi.reducer,
   },
