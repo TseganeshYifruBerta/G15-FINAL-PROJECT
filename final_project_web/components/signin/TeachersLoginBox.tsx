@@ -44,12 +44,15 @@ const renderTextAreaField = ({
 const TeachersLoginBox: React.FC<InjectedFormProps<FormValues>> = ({
   handleSubmit,
 }) => {
+  const router = useRouter()
   const onSubmit = async (values: FormValues) => {
     try {
       const data = await teacherlogin(values as TeacherLoginFormData);
     
       // dispatch(setUserId(data.userId))
       showToast("Login successful", "success");
+            router.push("/teacher/profile");
+
     } catch (error) {
       console.error("Login error:", error);
       showToast("Login error: " + (error as Error).message, "error");
@@ -59,28 +62,9 @@ const TeachersLoginBox: React.FC<InjectedFormProps<FormValues>> = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-4">
-        {/* <div className="mb-4 flex justify-center">
-          <div>
-            <Image
-              src="/images/profile.png"
-              alt=""
-              width={80}
-              height={80}
-              className="rounded-full"
-            />
-            <h1 className="text-2xl font-semibold">LOGIN</h1>
-          </div>
-        </div> */}
         <div className="mb-4 w-full">
           <div className="mb-4">
             <h3 className="mb-1 font-bold">Email</h3>
-            {/* <input
-              type="text"
-              className="w-full border-b border-gray-500 focus:outline-none focus:border-blue-500"
-              placeholder="UGR/1234/**"
-              value={id}
-              onChange={(e) => setid(e.target.value)}
-            /> */}
             <Field
               name="Email"
               type="text"
@@ -91,15 +75,6 @@ const TeachersLoginBox: React.FC<InjectedFormProps<FormValues>> = ({
           </div>
           <div>
             <h3 className="mb-1 font-bold">PASSWORD</h3>
-            {/* <input
-              type="password"
-              name=""
-              id=""
-              placeholder="********"
-              className="w-full border-b border-gray-500 focus:outline-none focus:border-blue-500"
-              value={password}
-              onChange={(e) => setpassword(e.target.value)}
-            /> */}
             <Field
               name="password"
               type="password"
