@@ -2,8 +2,8 @@ const TestCase = require("../../models/question_testcase_submission/testCase");
 const { spawn } = require("child_process");
 const fs = require("fs");
 const path = require("path");
-
-
+const codeSubmision = require("../../models/codeSubmision/codeSubmision")
+const Status = require("../../models/codeSubmision/codeStatus")
 const getQuestionById = async (questionId) => {
   try {
     const question = await TestCase.findAll({
@@ -26,7 +26,6 @@ const getQuestionById = async (questionId) => {
 const runPythonCode = (pythonCode, nums) => {
   return new Promise((resolve, reject) => {
     const tempFilePath = path.join(__dirname, "tempkol.py");
-    console.log("/////////////////////////////,,,,,",tempFilePath)
     const functionNameMatch = pythonCode.match(/def\s+(\w+)\s*\(/);
     const functionName = functionNameMatch
       ? functionNameMatch[1]
@@ -76,7 +75,7 @@ const runPythonCode = (pythonCode, nums) => {
 
 module.exports = { runPythonCode };
 const execute = async (req, res) => {
-  const { questionId, pythonCode } = req.body;
+  const { questionId,userId, pythonCode } = req.body;
 
   try {
     const testCases = await getQuestionById(questionId);
@@ -84,6 +83,13 @@ const execute = async (req, res) => {
     if(testCases){
 
     const allTestResults = [];
+    const statusData = [];
+    const codes = await codeSubmision.create({
+      questionId,
+      userId,
+      userCode: pythonCode,
+    });
+    
 
     for (const testCase of testCases) {
       const { input, output } = testCase.dataValues;
@@ -106,23 +112,51 @@ const execute = async (req, res) => {
        }
 
       // const results = await runPythonCode(pythonCode, nums || word, target);
-
+     
       const testResults = {
         input: input,
         expectedOutput: JSON.parse(output)[0],
         actualOutput: results,
         passed: JSON.parse(output)[0] === results,
-      };
+      }; 
+     
+       if(testResults.passed === true){
+       
+        statusData.push("Accepted");
+
+        
+        
+       }else{
+        // Status.status = "Wrong Answer";
+        statusData.push("Wrong Answer");
+        
+       }
+       
 
       allTestResults.push(testResults); 
     }
-   
+    let overallStatus;
+    if (statusData.every((status) => status === "Accepted")) {
+      overallStatus = "Accepted";
+    } else if (statusData.some((status) => status === "Wrong Answer")) {
+      overallStatus = "Wrong Answer";
+    } else {
+      overallStatus = "Wrong Answer"; // Handle other cases if needed
+    }
+    const newer = await Status.create({
+      status: overallStatus,
+      submittedCodeId: codes.id,
+    });
+    
+    
+    
 
-    res.json({ allTestResults });}
+    res.json({ allTestResults, codes, status: overallStatus });}
     else{
       res.status(500).json({ error: "question Id is not Found" });
     }
   } catch (error) {
+
     console.error("Error:", error);
     res.status(500).json({ error: "Failed to fetch question or test cases" });
   }
