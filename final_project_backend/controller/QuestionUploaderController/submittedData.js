@@ -40,6 +40,7 @@ const fetchingAllSubmittedQuestionForUser = async (req, res) => {
       const a = {
         questionsForId,
         questionStatus,
+        id
       };
       allQuestions.push(a);
     }
@@ -50,8 +51,28 @@ const fetchingAllSubmittedQuestionForUser = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+const fetchingAllDetailForSubmittedQuestion = async (req, res) => {
+  const { submittedId} = req.params;
 
-module.exports = fetchingAllSubmittedQuestionForUser;
+  try {
+     const questionStatus = await Status.findOne({
+       where: {
+         submittedCodeId: submittedId,
+       },
+     });
+    
+
+
+    return res.status(200).json(questionStatus);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+module.exports = {
+  fetchingAllSubmittedQuestionForUser,
+  fetchingAllDetailForSubmittedQuestion,
+};
 
 
 

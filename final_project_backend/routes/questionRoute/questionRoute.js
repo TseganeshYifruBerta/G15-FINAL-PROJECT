@@ -6,7 +6,11 @@ const {
   getAllQuestionsById,
 } = require("../../controller/QuestionUploaderController/fetch_all_question");
 
- const fetchingAllSubmittedQuestionForUser = require("../../controller/QuestionUploaderController/submittedData")
+ const {
+   fetchingAllSubmittedQuestionForUser,
+   fetchingAllDetailForSubmittedQuestion,
+ } = require("../../controller/QuestionUploaderController/submittedData");
+ 
 // questionRouters.post("/question", submitQuestionWithTestCases);
 questionRouters.post("/submitquestion", submitQuestionWithTestCases);
 questionRouters.get("/getAllQuestions", getAllQuestions);   
@@ -15,6 +19,10 @@ questionRouters.get("/getAllQuestionsById/:userId/:questionId", getAllQuestionsB
 questionRouters.get(
   "/fetchSubmittedQuestionById/:userId",
   fetchingAllSubmittedQuestionForUser
-);   
+);  
+questionRouters.get(
+  "/fetchQuestionDetailBySubmittedId/:submittedId",
+  fetchingAllDetailForSubmittedQuestion
+);  
 
 module.exports = questionRouters;
