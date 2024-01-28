@@ -20,6 +20,7 @@ questionRouters.get(
   "/fetchSubmittedQuestionById/:userId",
   fetchingAllSubmittedQuestionForUser
 );  
+
 questionRouters.get(
   "/fetchQuestionDetailBySubmittedId/:submittedId",
   fetchingAllDetailForSubmittedQuestion
