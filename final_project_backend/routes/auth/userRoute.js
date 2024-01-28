@@ -17,7 +17,6 @@ const {
 
 // const pythonUpload = multer({ dest: "uploads/python" });
 
-const { execute } = require("../../controller/codeExecution/codeExecution");
 
 // student route
 router.post("/register/students", createStudent);
@@ -31,6 +30,5 @@ router.post("/login/students", studentLogin);
 // Teacher login route
 router.post("/login/teachers", teacherLogin);
 
-router.post("/submit", execute);
 
 module.exports = router;

@@ -79,7 +79,11 @@ const execute = async (req, res) => {
 
   try {
     const testCases = await getQuestionById(questionId);
-    console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnn",testCases)
+    if (pythonCode === "") {
+      return res
+        .status(500)
+        .json({ error: "you should have to write a correct code " });
+    }
     if(testCases){
 
     const allTestResults = [];
