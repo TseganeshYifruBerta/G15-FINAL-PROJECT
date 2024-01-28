@@ -34,7 +34,7 @@ const runPythonCode = (pythonCode, nums) => {
         reject(err);
       } else {
         const pythonProcess = spawn("python", [tempFilePath, nums]);
-
+        
         let result = "";
 
         pythonProcess.stdout.on("data", (data) => {
@@ -74,7 +74,13 @@ const codeExecute = async (req, res) => {
 
   try {
     const testCases = await getQuestionById(questionId);
+
     console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnn", testCases);
+    if(pythonCode === ""){
+        return res.status(500).json({ error: "you should have to write a correct code " });
+    }
+    
+
     if (testCases) {
       const allTestResults = [];
       const statusData = [];

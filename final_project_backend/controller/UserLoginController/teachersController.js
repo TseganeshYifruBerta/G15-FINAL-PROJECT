@@ -33,7 +33,7 @@ const teacherLogin = async (req, res) => {
 
     res.status(200).json({ loggedInTeacher });
   } catch (error) {
-    res.status(500).json({ message: "An error occurred while logging in" });
+    res.status(500).json(error);
   }
 };
 

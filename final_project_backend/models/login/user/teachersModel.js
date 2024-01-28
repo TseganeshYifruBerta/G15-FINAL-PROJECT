@@ -6,7 +6,7 @@ const TeacherLogin = sequelize.define("TeacherLogin", {
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
+    
   },
   password: {
     type: DataTypes.STRING,
