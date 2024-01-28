@@ -148,6 +148,7 @@ const execute = async (req, res) => {
       questionId: questionId,
       userId,
       submittedCodeId: codes.id,
+      userCode: pythonCode,
     });
     
     
