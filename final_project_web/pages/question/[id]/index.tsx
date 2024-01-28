@@ -3,20 +3,19 @@ import CodeEditorBox from "@/components/codeeditor/CodeEditorBox";
 import Submissions from "@/components/codeeditor/Submissions";
 import QuestionSet from "@/components/questions/QuestionSet";
 import { useGetQuestionDetailsQuery } from "@/store/question/get-questionById-api";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
-interface QuestionDetailProps {
-qusetionId: string,
-}
 
-const QuestionById: React.FC<QuestionDetailProps> = ({qusetionId}) => {
+const QuestionById: React.FC = () => {
+  const router = useRouter();
+  const questionId = router.query.id as string;
   const pythonCode =
     "def grade_checker(score):\n    if score >= 70:\n        return 'A'\n    elif score >= 80:\n        return 'B'\n    elif score >= 70:\n        return 'C'\n    elif score >= 60:\n        return 'D'\n    else:\n        return 'F'";
 
 const userData = useSelector((state: any) => state.studentsignin.userId);
 const userId = "1"
-const questionId = "19"
     const {
       data: questionDetails,
       isLoading,
@@ -31,7 +30,7 @@ const questionId = "19"
     if (isError){
       return <div>Errroe</div>
     }
-
+console.log(questionDetails)
     const question = questionDetails.question
     const allstatus = questionDetails.allStatus
     const {createdAt,

@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Editor from "@monaco-editor/react";
 import { codeexecution } from "@/store/code-execution/code-execution-api";
 import { showToast } from "../popup";
 import { InjectedFormProps, reduxForm } from "redux-form";
 import { codesubmission } from "@/store/code-submission/code-submission-api";
+import { list } from "postcss";
+import CodeSubmissionResluts from "./CodeSubmitResults";
 
 interface FormValuesExecute {
   questionId: string,
@@ -23,6 +25,13 @@ interface editorProps{
 interface SubmitCodeStatusProps{
   submitStatus: string
 }
+interface allResultsProps 
+{
+            input: string,
+            expectedOutput: string,
+            actualOutput: string,
+            passed: boolean
+        }
 const SubmitCodeDiv: React.FC<SubmitCodeStatusProps> = ({submitStatus}) => {
   if (submitStatus == "Wrong Answer"){
 return (
@@ -46,6 +55,14 @@ return (
 const CodeEditorBox: React.FC<editorProps> = ({userId, questionId}) => {
   const [submitStatus, setSubmitStatus] = useState("")
   const [currentCode, setCurrentCode] = useState("def grade_checker(score):\n");
+  const [currentInput, setCurrentInput] = useState<string[]>([])
+  const [currentExpectedOutput, setCurrentExpectedOutput] = useState<string[]>([]);
+  const [currentActualOutput, setCurrentActualOutput] = useState<string[]>([])
+  const [currentPassedStatus, setCurrentPassesStatus] = useState<boolean[]>([])
+  
+useEffect(() => {
+  console.log(currentCode);
+}, [currentCode]);
   const onSubmitExecuteCode = async (values: FormValuesExecute) => {
     try {
       
@@ -62,12 +79,43 @@ const CodeEditorBox: React.FC<editorProps> = ({userId, questionId}) => {
   
   const onSubmitCode = async (values: FormValuesSubmit) => {
     try {
+        
+
       const data  = await codesubmission(values as FormValuesSubmit);
-  
-  setTimeout(()=>{setSubmitStatus(data.status)}, 1000)
+  console.log(data)
 
+const allResults = data.allTestResults;
+setTimeout(() => {
+  setSubmitStatus(data.status);
+}, 1000);
+const handleAllResults = (results: allResultsProps[]) => {
+  setCurrentActualOutput([])
+  setCurrentExpectedOutput([])
+  setCurrentInput([])
+  setCurrentPassesStatus([])
+  for (var i=0; i < results.length; i++){
+    currentInput.push(results[i].input);
+    currentActualOutput.push(results[i].actualOutput)
+      currentExpectedOutput.push(results[i].expectedOutput);
+currentPassedStatus.push(results[i].passed)
+     
+// setCurrentActualOutput([...currentActualOutput,results[i].actualOutput])
+// setCurrentExpectedOutput([...currentExpectedOutput, results[i].expectedOutput])
+// setCurrentInput([...currentInput, results[i].input])
+  }
+};
 
-      // showToast("submit successful", "success");
+handleAllResults(allResults)
+ setCurrentInput(currentInput);
+ setCurrentActualOutput(currentActualOutput)
+ setCurrentExpectedOutput(currentExpectedOutput)
+ setCurrentPassesStatus(currentPassedStatus)
+console.log("//////////",currentInput)
+
+// setCurrentInput(input)
+// setCurrentActualOutput(actualOutput)
+// setCurrentExpectedOutput(expectedOutput)
+      showToast("submit successful", "success");
 
     } catch (error) {
 
@@ -104,43 +152,58 @@ const CodeEditorBox: React.FC<editorProps> = ({userId, questionId}) => {
           language={language}
           theme={theme}
           value={currentCode}
-          onChange={(newValue) => { if (typeof newValue === "string") {
-            setCurrentCode(newValue);
-            console.log("New value:", newValue);
-            console.log("Currentcode",currentCode)
-          }}}
+          onChange={(newValue) => {
+            if (typeof newValue === "string") {
+              console.log(newValue);
+              setCurrentCode(newValue);
+              console.log("New value:", newValue);
+              console.log("Currentcode", currentCode);
+            }
+          }}
         />
       </div>
       <div>
         <SubmitCodeDiv submitStatus={submitStatus} />
+        <CodeSubmissionResluts
+          inputs={currentInput}
+          actualOutputs={currentActualOutput}
+          expectedOutputs={currentExpectedOutput}
+          passed={currentPassedStatus}
+        />
       </div>
       <div className="w-full h-1/3 bg-white p-4">
-        <div className="flex mb-4">
-          <div className="mt-4 text-black w-1/12">
-            <div className="mr-2">
+        {/* <div className="mb-4">
+          <div className="flex pb-2">
+            <div className="mr-2 w-1/6">
               <h3>Inputs</h3>
             </div>
-            <div className="mr-2">
-              <h3>Stdout</h3>
-            </div>
-            <div className="mr-2">
-              <h3 className="">Outputs</h3>
-            </div>
+            {currentInput.map((input, index) => (
+              <div className="mr-2 bg-gray-200 w-5/6 rounded-md" key={index}>
+                <h3 className="p-2 pt-1">{input}</h3>
+              </div>
+            ))}
           </div>
-          <div className="w-11/12 bg-gray-200">
-            <div className="mt-4 text-black pl-2">
-              <div className="mr-2">
-                <h3>[1, 2, 3, 4, 5]</h3>
-              </div>
-              <div className="mr-2">
-                <h3>hello world!</h3>
-              </div>
-              <div className="mr-2">
-                <h3 className="">5</h3>
-              </div>
+          <div className="flex">
+            <div className="mr-2 w-1/6">
+              <h3>Actual Output</h3>
             </div>
+            {currentActualOutput.map((output, index) => (
+              <div className="mr-2 bg-gray-200 w-5/6 rounded-md" key={index}>
+                <h3 className="p-2 pt-1">{output}</h3>
+              </div>
+            ))}
           </div>
-        </div>
+          <div className="flex">
+            <div className="mr-2 w-1/6">
+              <h3>Expected Output</h3>
+            </div>
+            {currentExpectedOutput.map((expectedoutput, index) => (
+              <div className="mr-2 bg-gray-200 w-5/6 rounded-md" key={index}>
+                <h3 className="p-2 pt-1">{expectedoutput}</h3>
+              </div>
+            ))}
+          </div>
+        </div> */}
         <div className="flex justify-end">
           <div className="mr-4">
             <button
