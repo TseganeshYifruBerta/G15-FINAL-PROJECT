@@ -4,7 +4,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 const routes = require("./routes/auth/userRoute.js");
-const executionRouter = require("./routes/execution/execution.js");
+const executionRouter = require("./routes/code/code.js");
 
 const dataUploadRouters = require("./routes/userDataUploader/userData");
 const sequelize = require("./database/sequelize.js");
