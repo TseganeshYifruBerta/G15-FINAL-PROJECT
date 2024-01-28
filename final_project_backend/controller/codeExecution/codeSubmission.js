@@ -85,7 +85,6 @@ const execute = async (req, res) => {
   try {
     const testCases = await getQuestionById(questionId);
 
-    console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnn",testCases)
 
     if (pythonCode === "") {
       return res
@@ -230,7 +229,6 @@ const execute = async (req, res) => {
     
     
 
-    res.json({ allTestResults, codes, status: overallStatus});}
 
     else{
       res.status(500).json({ error: "question Id is not Found" });
