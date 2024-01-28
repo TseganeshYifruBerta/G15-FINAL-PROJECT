@@ -43,9 +43,10 @@ const createStudent = async (req, res) => {
       res.status(200).json(newStudent);
     }
   } catch (error) {
+    const err = error.errors[0]
     res
       .status(500)
-      .json({error});
+      .json(err);
   }
 };
 
