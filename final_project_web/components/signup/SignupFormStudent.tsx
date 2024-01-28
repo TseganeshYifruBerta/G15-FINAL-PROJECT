@@ -83,6 +83,7 @@ const SignupFormStudent: React.FC<InjectedFormProps<FormValues>> = ({ handleSubm
       showToast('Registration successful', 'success');
       router.push("/signin/students")
     } catch (error) {
+      
       console.error('Registration error:', error);
       showToast('Registration error: ' + (error as Error).message, 'error');
     }

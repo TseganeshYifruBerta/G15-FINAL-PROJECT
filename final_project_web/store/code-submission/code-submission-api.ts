@@ -6,7 +6,7 @@ export type SubmissionFormData = {
 
 export const codesubmission = async (formData: SubmissionFormData) => {
   try {
-    const response = await fetch("http://localhost:5000/submit", {
+    const response = await fetch("http://localhost:5000/execution/submit", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

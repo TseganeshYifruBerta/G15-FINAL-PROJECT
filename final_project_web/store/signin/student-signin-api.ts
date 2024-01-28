@@ -18,7 +18,7 @@ export const studentlogin = async (formData: StudentLoginFormData) => {
       const responseData = await response.json();
       if (responseData.token) {
         // Token is present in the response data
-        localStorage.setItem("token", responseData.token); // Store the token in local storage
+        localStorage.setItem("studenttoken", responseData.token); // Store the token in local storage
         return responseData;
       } else {
         throw new Error("Token not found in the response data");

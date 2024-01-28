@@ -4,8 +4,10 @@ const fs = require("fs");
 const path = require("path");
 const codeSubmision = require("../../models/codeSubmision/codeSubmision")
 const Status = require("../../models/codeSubmision/codeStatus")
+
 const Question = require("../../models/question_testcase_submission/question");
 const Difficulty = require("../../models/codeSubmision/difficultyCounter")
+
 
 const getQuestionById = async (questionId) => {
   try {
@@ -82,15 +84,20 @@ const execute = async (req, res) => {
 
   try {
     const testCases = await getQuestionById(questionId);
+
+    console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnn",testCases)
+
     if (pythonCode === "") {
       return res
         .status(500)
         .json({ error: "you should have to write a correct code " });
     }
+
     if(testCases){
 
     const allTestResults = [];
     const statusData = [];
+
 
     const questionsFound = await codeSubmision.findOne({
       where: {
@@ -143,6 +150,7 @@ const execute = async (req, res) => {
       }
 
     }
+
     const codes = await codeSubmision.create({
       questionId,
       userId,
@@ -212,6 +220,9 @@ const execute = async (req, res) => {
     
     
 
+    res.json({ allTestResults, codes, status: overallStatus });}
+
+
 
      
 
@@ -220,6 +231,7 @@ const execute = async (req, res) => {
     
 
     res.json({ allTestResults, codes, status: overallStatus});}
+
     else{
       res.status(500).json({ error: "question Id is not Found" });
     }

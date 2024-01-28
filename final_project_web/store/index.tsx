@@ -4,21 +4,22 @@ import { useDispatch } from 'react-redux';
 import signupTeacherReducer from './signup/signupSliceReducerTeacher';
 import signupStudentReducer from './signup/SignupSliceReducerStudent';
 import signinStudentReducer from "./signin/student-signin-slice"
-
+import questionUploadReducer from "./question-upload/question-upload-slice"
 import { getQuestionDetalApi } from "./question/get-questionById-api";
+import { getAllQuestionApi } from "./question/get-all-questions";
 
 export const store = configureStore({
   reducer: {
     form: formReducer,
-    signupTeacherReducer,
+    register:signupTeacherReducer, signupStudentReducer,
     studentsignin:signinStudentReducer,
-    // teachersignin: signinTeacherReducer,
-
-    signupStudentReducer,
+questionupload:questionUploadReducer,
     [getQuestionDetalApi.reducerPath]: getQuestionDetalApi.reducer,
+    [getAllQuestionApi.reducerPath]: getAllQuestionApi.reducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware()
   .concat(getQuestionDetalApi.middleware)
+  .concat(getAllQuestionApi.middleware)
   ,
 });
 

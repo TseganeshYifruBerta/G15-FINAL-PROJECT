@@ -18,7 +18,7 @@ export const teacherlogin = async (formData: TeacherLoginFormData) => {
       const responseData = await response.json();
       if (responseData.token) {
         // Token is present in the response data
-        localStorage.setItem("token", responseData.token); // Store the token in local storage
+        localStorage.setItem("teachertoken", responseData.token); // Store the token in local storage
         return responseData;
       } else {
         throw new Error("Token not found in the response data");

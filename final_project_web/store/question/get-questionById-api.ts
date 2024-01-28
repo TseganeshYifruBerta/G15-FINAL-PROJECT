@@ -18,15 +18,14 @@ export const getQuestionDetalApi = createApi({
     getQuestionDetails: builder.query({
       query: (params) => {
         const { userId, questionId } = params;
-        let url = "/";
-
+        let url = "http://localhost:5000/question/getAllQuestionsById";
+console.log(params)
         const queryParams = [];
-        queryParams.push(`userId=${userId}`);
-        queryParams.push(`questionId=${questionId}`);
-
+        queryParams.push(`${userId}`);
+        queryParams.push(`${questionId}`);
         return {
-          url: queryParams.length > 0 ? `${url}?${queryParams.join("&")}` : url,
-          method: "POST",
+          url: queryParams.length > 0 ? `${url}/${queryParams.join("/")}` : url,
+          method: "GET",
         };
       },
     }),
