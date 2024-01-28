@@ -15,6 +15,9 @@ questionRouters.get("/getAllQuestions", getAllQuestions);
 questionRouters.get("/getAllQuestionsById/:userId/:questionId", getAllQuestionsById);   
 questionRouters.put("/updateQuestionById/:questionId", editQuestion)
 questionRouters.delete("/deleteQuestionById/:questionId", deleteQuestion)
-
+questionRouters.get(
+  "/fetchSubmittedQuestionById/:userId",
+  fetchingAllSubmittedQuestionForUser
+);
 
 module.exports = questionRouters;
