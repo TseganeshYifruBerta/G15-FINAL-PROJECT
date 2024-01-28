@@ -1,5 +1,6 @@
 const Question = require("../../models/question_testcase_submission/question"); // Import the LabQuestion and TestCase models
-const Status = require("../../models/codeSubmision/codeStatus")
+const Status = require("../../models/codeSubmision/codeStatus");
+
 const getAllQuestions = async (req, res) => {
   try {
     const questions = await Question.findAll();
@@ -10,26 +11,24 @@ const getAllQuestions = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.sendStatus(400);
-  }  
+  }
 };
 
 const getAllQuestionsById = async (req, res) => {
-  const { userId, questionId} = req.params;
+  const { userId, questionId } = req.params;
   try {
     const question = await Question.findOne({
       where: {
         id: questionId,
       },
     });
-    
+
     const allStatus = await Status.findAll({
       where: {
-        userId:userId,
+        userId: userId,
         questionId: questionId,
       },
     });
-
- 
 
     if (question) {
       res.status(200).json({ question, allStatus }); // Send the student data as a JSON response
