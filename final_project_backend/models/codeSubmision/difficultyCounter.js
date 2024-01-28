@@ -20,5 +20,14 @@ const Difficulty = sequelize.define("difficultyData", {
     defaultValue: 0,
   },
 });
+Difficulty.sync({ alter: true }).then(() => {
+  // Check if there are any existing records
+  Difficulty.findAndCountAll().then((result) => {
+    if (result.count === 0) {
+      // If no records exist, create a new record with default values
+      Difficulty.create({});
+    }
+  });
+});
 
 module.exports = Difficulty;
