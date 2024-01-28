@@ -3,6 +3,7 @@ import CodeEditorBox from "@/components/codeeditor/CodeEditorBox";
 import Submissions from "@/components/codeeditor/Submissions";
 import QuestionSet from "@/components/questions/QuestionSet";
 import { useGetQuestionDetailsQuery } from "@/store/question/get-questionById-api";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 interface QuestionDetailProps {
@@ -10,37 +11,56 @@ qusetionId: string,
 }
 
 const QuestionById: React.FC<QuestionDetailProps> = ({qusetionId}) => {
-const userData = useSelector((state: any) => state.signin.userId);
+  const pythonCode =
+    "def grade_checker(score):\n    if score >= 70:\n        return 'A'\n    elif score >= 80:\n        return 'B'\n    elif score >= 70:\n        return 'C'\n    elif score >= 60:\n        return 'D'\n    else:\n        return 'F'";
+
+const userData = useSelector((state: any) => state.studentsignin.userId);
+const userId = "1"
+const questionId = "19"
     const {
       data: questionDetails,
       isLoading,
       isError,
     } = useGetQuestionDetailsQuery({
-      userId: userData,
-      questionId: qusetionId,
+      userId: userId,
+      questionId: questionId,
     });
-    // const {
-    //   questionTitle,
-    //   questionDescription,
-    //   questionSubmissions,
-    //   currentCode,
-    // } = questionDetails;
+    if (isLoading){
+      return <div>loading</div>
+    }
+    if (isError){
+      return <div>Errroe</div>
+    }
+
+    const question = questionDetails.question
+    const allstatus = questionDetails.allStatus
+    const {createdAt,
+    description,
+    difficulty,
+    example,
+    id,
+    title,
+    updatedAt} = question
+    const currentCode = !questionDetails.allStatus ? "" : pythonCode;
     return (
       <div className="flex">
         <div className="w-1/2">
           <QuestionSet
-            questionTitle={"questionTitle"}
-            questionDescription={"questionDescription"}
-          />
-          <Submissions
-            submissions={[
-              { date: "questionSubmissions", status: "true" },
-              { date: "questionSubmissions", status: "true" },
-            ]}
-          />
+            questionTitle={title}
+            questionDescription={description} questionExample={example}          />
+          <div className="m-6">
+            <h1 className="text-xl font-bold mb-2">Submissions</h1>
+          </div>
+          {questionDetails.allStatus ? (
+            <Submissions
+              submissions={allstatus}
+            />
+          ) : (
+            <div className="m-6 bg-gray-200 rounded-sm p-2">No Submission</div>
+          )}
         </div>
         <div className="flex w-1/2 flex-col">
-          <CodeEditorBox />
+          <CodeEditorBox currentCode={currentCode} userId={userId} questionId={questionId} />
           {/* <CodeSubmission /> */}
         </div>
       </div>

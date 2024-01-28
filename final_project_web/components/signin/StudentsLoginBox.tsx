@@ -8,7 +8,7 @@ import {
 } from "@/store/signin/student-signin-api";
 import { showToast } from "../popup";
 import { Field, reduxForm, InjectedFormProps } from "redux-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUserId } from "@/store/signin/student-signin-slice";
 export interface FormValues {
   userId: string;
@@ -42,15 +42,22 @@ const renderTextAreaField = ({
   </div>
 );
 const StudentsLoginBox: React.FC<InjectedFormProps<FormValues>> = ({handleSubmit}) => {
+  
   const router = useRouter()
   const dispatch = useDispatch()
+      
+
+      // const userData = useSelector((state: any) => state.studentsignin.userId);
+// console.log(userData);
+
   const onSubmit = async (values: FormValues) => {
     try {
       const data = await studentlogin(values as StudentLoginFormData);
-      console.log(data.studentId)
-    // dispatch(setUserId(data.userId))
+       const _id = data.loggedInStudent.studentId;
+      console.log(_id);
+      dispatch(setUserId(_id));
       showToast("Login successful", "success");
-      router.push("/student/profile")
+      router.push("/question")
     } catch (error) {
       console.error("Login error:", error);
       showToast("Login error: " + (error as Error).message, "error");

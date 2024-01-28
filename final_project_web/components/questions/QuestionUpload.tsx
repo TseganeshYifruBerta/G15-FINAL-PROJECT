@@ -31,56 +31,12 @@ const QuestionUploadForm: React.FC<InjectedFormProps<QuestionUploadFormData>> = 
     example: examples,
   };
   const handleAddExample = () => {
-    // Add a new example input field
     setExamples("");
   };
 
   const handleAddTestCase = () => {
-    // Add a new test case input field
     setTestCases([...testCases, { input: "", output: "" }]);
   };
-  //   const handleSubmit = (data:any, e: React.FormEvent) => {
-  //     e.preventDefault();
-
-  //     try {
-  //       setShowWarning(false);
-
-  //       const jsonInput = JSON.parse(testCases[0].input);
-  //       const jsonOutput = JSON.parse(testCases[0].output);
-  //       const jsonTestCases = {
-  //         input: jsonInput,
-  //         output: jsonOutput.output,
-  //       };
-  //       data.testCases = [jsonTestCases];
-  //     } catch (error: any) {
-  //       // Handle parsing errors, if any
-  //       setShowWarning(true);
-
-  //       console.error("Error parsing JSON:", error.message);
-  //     }
-
-  //     data.title = questionTitle;
-  //     data.difficulty = questionDifficulty;
-  //     data.description = questionDescription;
-  //     data.example = examples;
-
-  //      try {
-  //        await dispatch(uploadquestion(data));
-  //        console.log("Form submitted successfully");
-  //      } catch (error) {
-  //        console.error("Error during registration:", error);
-  //      }
-  // Handle form submission - send data to backend
-  // const formData = {
-  //   title: questionTitle,
-  //   difficulty: questionDifficulty,
-  //   description: questionDescription,
-  //   examples: examples,
-  //   testCases: testCases,
-  // };
-  // // console.log(formData);
-  // You can send formData to your backend API for further processing
-  //   };
   const onSubmit = async () => {
     
     try {
@@ -88,17 +44,15 @@ const jsonInput = JSON.parse(values.testCases[0].input);
 const jsonOutput = JSON.parse(values.testCases[0].output);
 const jsonTestCases = {
   input: jsonInput.input,
-  output: jsonOutput,
+  output: jsonOutput.output,
 };
 values.testCases = [jsonTestCases];
 
 
 
       const data = await uploadquestion(values as QuestionUploadFormData);
-      console.log(data.studentId);
-      // dispatch(setUserId(data.userId))
-      showToast("Login successful", "success");
-      //   router.push("/student/profile");
+      console.log(data)
+      showToast("Upload successful", "success");
     } catch (error) {
       console.error("Login error:", error);
           console.log(values);
@@ -171,7 +125,7 @@ values.testCases = [jsonTestCases];
                 <div key={index} className="p-2 flex w-full">
                   <div className="p-1 w-1/2">
                     <input
-                      className="border-2 border-primary p-1 w-full"
+                      className="border-2 border-primary p-1 w-full rounded-md"
                       type="text"
                       placeholder={`testcase input ${index + 1}`}
                       value={testCase.input}
@@ -185,7 +139,7 @@ values.testCases = [jsonTestCases];
                   <div className="p-1 w-1/2">
                     <input
                       placeholder={`testcase output ${index + 1}`}
-                      className="border-2 border-primary p-1 w-full"
+                      className="border-2 border-primary p-1 w-full rounded-md"
                       type="text"
                       value={testCase.output}
                       onChange={(e) => {

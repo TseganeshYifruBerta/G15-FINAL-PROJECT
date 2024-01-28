@@ -10,11 +10,9 @@ import { getQuestionDetalApi } from "./question/get-questionById-api";
 export const store = configureStore({
   reducer: {
     form: formReducer,
-    signupTeacherReducer,
+    register:signupTeacherReducer, signupStudentReducer,
     studentsignin:signinStudentReducer,
-    // teachersignin: signinTeacherReducer,
 questionupload:questionUploadReducer,
-    signupStudentReducer,
     [getQuestionDetalApi.reducerPath]: getQuestionDetalApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware()

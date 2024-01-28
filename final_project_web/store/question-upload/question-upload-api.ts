@@ -12,14 +12,17 @@ export type QuestionUploadFormData = {
 
 export const uploadquestion = async (formData: QuestionUploadFormData) => {
   try {
-    const response = await fetch("http://localhost:5000/question", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    const response = await fetch(
+      "http://localhost:5000/question/submitquestion",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
 
     const data = await response.json();
     console.log("Success:", data);

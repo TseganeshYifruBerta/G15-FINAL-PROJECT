@@ -8,6 +8,7 @@ import { codesubmission } from "@/store/code-submission/code-submission-api";
 interface FormValuesExecute {
   questionId: string,
   pythonCode: string
+  
 }
 interface FormValuesSubmit {
   questionId: string;
@@ -15,30 +16,71 @@ interface FormValuesSubmit {
   userId: string
 }
 interface editorProps{
-  currentCode : string
+  currentCode : string,
+  userId:string,
+  questionId:string
 }
-
-const CodeEditorBox: React.FC = () => {
+interface SubmitCodeStatusProps{
+  submitStatus: string
+}
+const SubmitCodeDiv: React.FC<SubmitCodeStatusProps> = ({submitStatus}) => {
+  if (submitStatus == "Wrong Answer"){
+return (
+  <div className="w-1/2">
+    <h1 className="text-red-700 font-bold">Wrong Answer</h1>
+  </div>
+);
+  }
+  else if(submitStatus == "Accepted"){
+    return (
+      <div className="w-1/2">
+        <h1 className="text-green-700 font-bold">Accepted</h1>
+      </div>
+    );
+  }
+  else{
+    return <div></div>;
+  }
+  
+}
+const CodeEditorBox: React.FC<editorProps> = ({userId, questionId}) => {
+  const [submitStatus, setSubmitStatus] = useState("")
+  const [currentCode, setCurrentCode] = useState("def grade_checker(score):\n");
   const onSubmitExecuteCode = async (values: FormValuesExecute) => {
     try {
-      const data = await codeexecution(values as FormValuesExecute);
+      
+      const {data, isLoading, isError} = await codeexecution(values as FormValuesExecute);
+    
+      const { allTestResults, codes,status } = data
       showToast("run successful", "success");
     } catch (error) {
+     
       console.error("run error:", error);
       //  showToast("Login error: " + (error as Error).message, "error");
     }
   };
+  
   const onSubmitCode = async (values: FormValuesSubmit) => {
     try {
-      const data = await codesubmission(values as FormValuesSubmit);
-      showToast("submit successful", "success");
+      const data  = await codesubmission(values as FormValuesSubmit);
+  
+  setTimeout(()=>{setSubmitStatus(data.status)}, 1000)
+
+
+      // showToast("submit successful", "success");
+
     } catch (error) {
+
       console.error("submit error:", error);
-      //  showToast("Login error: " + (error as Error).message, "error");
+       showToast(
+         "Submission error: check your function or passed arguments" +
+           (error as Error).message,
+         "error"
+       );
     }
   };
-  const [language, setLanguage] = useState("javascript");
-  const [theme, setTheme] = useState("vs-light");
+  const [language, setLanguage] = useState("python");
+  const [theme, setTheme] = useState("vs-dark");
 
   return (
     <div>
@@ -61,9 +103,16 @@ const CodeEditorBox: React.FC = () => {
           height="70vh"
           language={language}
           theme={theme}
-          value={"currentCode"}
-          onChange={() => {}}
+          value={currentCode}
+          onChange={(newValue) => { if (typeof newValue === "string") {
+            setCurrentCode(newValue);
+            console.log("New value:", newValue);
+            console.log("Currentcode",currentCode)
+          }}}
         />
+      </div>
+      <div>
+        <SubmitCodeDiv submitStatus={submitStatus} />
       </div>
       <div className="w-full h-1/3 bg-white p-4">
         <div className="flex mb-4">
@@ -96,7 +145,13 @@ const CodeEditorBox: React.FC = () => {
           <div className="mr-4">
             <button
               className="bg-primary hover:bg-primary-700 text-white font-bold py-2 px-4 rounded"
-              onClick={() => onSubmitCode({questionId:"",userId:"",pythonCode:""})}
+              onClick={() =>
+                onSubmitCode({
+                  questionId: questionId,
+                  userId: userId,
+                  pythonCode: currentCode,
+                })
+              }
             >
               Submit Code
             </button>
@@ -105,7 +160,10 @@ const CodeEditorBox: React.FC = () => {
             <button
               className="bg-gray-300 font-bold py-2 px-4 rounded"
               onClick={() => {
-                onSubmitExecuteCode({ questionId: "", pythonCode: "" });
+                onSubmitExecuteCode({
+                  questionId: questionId,
+                  pythonCode: currentCode,
+                });
               }}
             >
               Run Code
@@ -116,8 +174,8 @@ const CodeEditorBox: React.FC = () => {
     </div>
   );
 };
-const ConnectedExecution = reduxForm({
-  form: "codeexecute",
-})(CodeEditorBox);
+// const ConnectedExecution = reduxForm<editorProps>({
+//   form: "codeexecute",
+// })(CodeEditorBox);
 
-export default ConnectedExecution;
+export default CodeEditorBox;
