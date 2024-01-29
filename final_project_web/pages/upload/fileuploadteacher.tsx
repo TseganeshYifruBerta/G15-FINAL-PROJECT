@@ -50,7 +50,7 @@ const UploadTeacher: React.FC<InjectedFormProps<FileForm>> = ({ handleSubmit }) 
   const onSubmit = async (values: FileForm) => {
    
       try {
-        const data = await uploadFile(values as FileData);
+        // const data = await uploadFile(values as FileData);
         showToast('File uploaded successfully', 'success');
       } catch (error) {
         console.error("File upload failed:", error);
