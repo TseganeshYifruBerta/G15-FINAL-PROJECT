@@ -7,7 +7,7 @@ import signinStudentReducer from "./signin/student-signin-slice"
 import questionUploadReducer from "./question-upload/question-upload-slice"
 import { getQuestionDetalApi } from "./question/get-questionById-api";
 import { getAllQuestionApi } from "./question/get-all-questions";
-
+import { getAllSubmissionsByIdApi } from "./submissions/get-all-submissions-by-id";
 export const store = configureStore({
   reducer: {
     form: formReducer,
@@ -15,11 +15,13 @@ export const store = configureStore({
     studentsignin:signinStudentReducer,
 questionupload:questionUploadReducer,
     [getQuestionDetalApi.reducerPath]: getQuestionDetalApi.reducer,
-    [getAllQuestionApi.reducerPath]: getAllQuestionApi.reducer
+    [getAllQuestionApi.reducerPath]: getAllQuestionApi.reducer,
+    [getAllSubmissionsByIdApi.reducerPath]: getAllSubmissionsByIdApi.reducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware()
   .concat(getQuestionDetalApi.middleware)
   .concat(getAllQuestionApi.middleware)
+  .concat(getAllSubmissionsByIdApi.middleware)
   ,
 });
 
