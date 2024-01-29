@@ -11,7 +11,7 @@ export const getExamQuestionByIdApi = createApi({
     getExamQuestionById: builder.query({
       query: (params) => {
         const { userId } = params;
-        let url = "http://localhost:5000/upload/findStudentByID";
+        let url = "http://localhost:5000/upload/getExamQuestionById/";
         console.log(params);
         const queryParams = [];
         queryParams.push(`${userId}`);
