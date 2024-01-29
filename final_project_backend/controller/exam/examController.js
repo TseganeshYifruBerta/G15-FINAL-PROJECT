@@ -3,14 +3,15 @@ const TestCase = require("../../models/exam/solution");
 const Solution = require("../../models/exam/testcase");
 
 const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
-  const { title, difficulty, questions, example, testcases, solution } = req.body;
+  const { title, difficulty,description , example, testcases, solution } = req.body;
 
   try {
     // Create a new question
-    const newQuestion = await Question.create({
+
+    const newQuestion = await ExamQuestion.create({
       title,
       difficulty,
-      questions,
+      description,
       example,
     });
 
@@ -20,19 +21,25 @@ const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
         const formattedOutput = Array.isArray(testcase.output)
           ? testcase.output
           : [testcase.output]; // Ensure output is an array
-        return await TestCase.create({
-          input: testcase.input,
+          const formattedInput = Array.isArray(testcase.input)
+            ? testcase.input
+            : [testcase.input];
+
+        return await examTestCase.create({
+          input: formattedInput,
           output: formattedOutput,
-          questionId: newQuestion.id,
+          examQuestionId: newQuestion.id,
         });
       })
     );
-
+   
     // Create a new solution
+
     const newSolution = await Solution.create({
       content: solution,
-      questionId: newQuestion.id,
+      examQuestionId: newQuestion.id,
     });
+
 
     res.status(201).json({
       message: "Question, test cases, and solution submitted successfully",
