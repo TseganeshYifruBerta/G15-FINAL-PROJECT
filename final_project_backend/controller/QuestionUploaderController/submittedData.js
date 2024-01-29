@@ -74,5 +74,27 @@ module.exports = {
   fetchingAllDetailForSubmittedQuestion,
 };
 
+const countAcceptedSubmissionsForUser = async (userId) => {
+  try {
+    const questionSubmittedFetch = await codeSubmision.findAll({
+      where: {
+        userId: userId,
+      },
+    });
 
+    const acceptedCount = questionSubmittedFetch.reduce((count, submission) => {
+      if (submission.status === 'Accepted') {
+        return count + 1;
+      }
+      return count;
+    }, 0);
+
+    return acceptedCount;
+  } catch (error) {
+    console.log(error);
+    throw new Error('Failed to count accepted submissions');
+  }
+};
+
+module.exports = { fetchingAllSubmittedQuestionForUser, countAcceptedSubmissionsForUser };
 
