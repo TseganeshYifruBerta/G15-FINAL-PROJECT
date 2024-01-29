@@ -13,6 +13,7 @@ const Widget = () => {
           <div className="flex rounded border border-blue-500 bg-white text-black items-center p-4 g-4 shadow-md ml-20 w-3/4 h-40"> {/* Adjusted width */}
             <div className="flex flex-col justify-evenly">
               <PieChart
+              
                 series={[
                   {
                     data: [

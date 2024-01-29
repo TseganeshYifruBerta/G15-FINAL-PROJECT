@@ -1,8 +1,8 @@
 import React from 'react';
-import Header from '@/components/navbar/navbar';
+import Header from '@/components/navbar/navstudent';
 import dynamic from 'next/dynamic';
 
-const SideNavbar = dynamic(() => import('@/components/sidebar/sidebar'), { ssr: false });
+const SideNavbar = dynamic(() => import('@/components/sidebar/sidebarstudent'), { ssr: false });
 const Widget = dynamic(() => import('@/components/widget/cardStudent'), { ssr: false });
 const Chart1 = dynamic(() => import('@/components/chart/char1'), { ssr: false });
 
