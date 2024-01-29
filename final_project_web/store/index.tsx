@@ -1,23 +1,29 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { teachersSignInApi } from "./signin/teachers-signin-api";
-import { studentsSignInApi } from "./signin/students-signin-api";
-import { studentsSignUpApi } from "./signup/students-signup-api";
-import { teachersSignUpApi } from "./signup/teachers-signup-api";
+import { reducer as formReducer } from 'redux-form';
+import { useDispatch } from 'react-redux';
+import signupTeacherReducer from './signup/signupSliceReducerTeacher';
+import signupStudentReducer from './signup/SignupSliceReducerStudent';
+import signinStudentReducer from "./signin/student-signin-slice"
+import questionUploadReducer from "./question-upload/question-upload-slice"
+import { getQuestionDetalApi } from "./question/get-questionById-api";
+import { getAllQuestionApi } from "./question/get-all-questions";
 
 export const store = configureStore({
   reducer: {
-    [teachersSignInApi.reducerPath]: teachersSignInApi.reducer,
-    [studentsSignInApi.reducerPath]: studentsSignInApi.reducer,
-    [teachersSignUpApi.reducerPath]: teachersSignUpApi.reducer,
-    [studentsSignUpApi.reducerPath]: studentsSignUpApi.reducer,
+    form: formReducer,
+    register:signupTeacherReducer, signupStudentReducer,
+    studentsignin:signinStudentReducer,
+questionupload:questionUploadReducer,
+    [getQuestionDetalApi.reducerPath]: getQuestionDetalApi.reducer,
+    [getAllQuestionApi.reducerPath]: getAllQuestionApi.reducer
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware()
-      .concat(teachersSignInApi.middleware)
-      .concat(studentsSignInApi.middleware)
-      .concat(teachersSignUpApi.middleware)
-      .concat(studentsSignUpApi.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+  .concat(getQuestionDetalApi.middleware)
+  .concat(getAllQuestionApi.middleware)
+  ,
 });
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+export const useAppDispatch = () => useDispatch<AppDispatch>();
