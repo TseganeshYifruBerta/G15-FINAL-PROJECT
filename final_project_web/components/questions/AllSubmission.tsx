@@ -24,6 +24,7 @@ export interface singleSubmissionProps
             updatedAt:string
             submittedCodeId: number
         }
+        id:number
     }
 
 const initial = [
@@ -46,17 +47,24 @@ const initial = [
             "createdAt": "2024-01-28T21:43:21.000Z",
             "updatedAt": "2024-01-28T21:43:21.000Z",
             "submittedCodeId": 1
-        }
+        },
+        "id":1
     }]
 
 const AllSubmissions : React.FC = () => {
 
     const userId = "1";
-    const { data, isLoading, isError } = useGetAllSubmissionsByIdQuery(userId);
+    const { data, isLoading, isError } = useGetAllSubmissionsByIdQuery({
+      userId: userId,
+    });
     if (isLoading) {
       return <div>Loading</div>;
     }
-    
+    if (isError){
+        return(
+            <div>Error</div>
+        )
+    }
     console.log(data);
     return (
       <div>
