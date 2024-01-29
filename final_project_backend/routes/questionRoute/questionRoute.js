@@ -4,6 +4,7 @@ const {submitQuestionWithTestCases} = require('../../controller/QuestionUploader
 const {
   getAllQuestions,
   getAllQuestionsById,
+  getNumberOfAllQuestion,
   
 } = require("../../controller/QuestionUploaderController/fetch_all_question");
 const { editQuestion } = require("../../controller/QuestionUploaderController/manageQuestion/EditQuestion");
@@ -12,6 +13,7 @@ const { deleteQuestion } = require("../../controller/QuestionUploaderController/
  const {
    fetchingAllSubmittedQuestionForUser,
    fetchingAllDetailForSubmittedQuestion,
+   countAcceptedSubmissionsForUser,
  } = require("../../controller/QuestionUploaderController/submittedData");
  
 // questionRouters.post("/question", submitQuestionWithTestCases);
@@ -31,6 +33,7 @@ questionRouters.get(
   "/fetchQuestionDetailBySubmittedId/:submittedId",
   fetchingAllDetailForSubmittedQuestion
 );  
+questionRouters.get("/countAcceptedSubmissionsForUser/:userId",countAcceptedSubmissionsForUser)
 
 
 module.exports = questionRouters;
