@@ -19,7 +19,8 @@ const { deleteQuestion } = require("../../controller/QuestionUploaderController/
 // questionRouters.post("/question", submitQuestionWithTestCases);
 questionRouters.post("/submitquestion", submitQuestionWithTestCases);
 questionRouters.get("/getAllQuestions", getAllQuestions); 
-questionRouter.get("/getNumberOfAllQuestion", getNumberOfAllQuestion);
+
+questionRouters.get("/getNumberOfAllQuestion", getNumberOfAllQuestion);
 questionRouters.get("/getAllQuestionsById/:userId/:questionId", getAllQuestionsById);   
 questionRouters.put("/updateQuestionById/:questionId", editQuestion)
 questionRouters.delete("/deleteQuestionById/:questionId", deleteQuestion)
