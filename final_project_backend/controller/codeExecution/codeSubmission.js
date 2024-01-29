@@ -4,10 +4,8 @@ const fs = require("fs");
 const path = require("path");
 const codeSubmision = require("../../models/codeSubmision/codeSubmision")
 const Status = require("../../models/codeSubmision/codeStatus")
-
 const Question = require("../../models/question_testcase_submission/question");
 const Difficulty = require("../../models/codeSubmision/difficultyCounter")
-
 
 const getQuestionById = async (questionId) => {
   try {
@@ -84,72 +82,22 @@ const execute = async (req, res) => {
 
   try {
     const testCases = await getQuestionById(questionId);
-
-
     if (pythonCode === "") {
       return res
         .status(500)
         .json({ error: "you should have to write a correct code " });
     }
-
     if(testCases){
 
     const allTestResults = [];
     const statusData = [];
-
 
     const questionsFound = await codeSubmision.findOne({
       where: {
         questionId: questionId,
       },
     });
-    if (!questionsFound) {
-      console.log("-----------------------------");
-      easyCount = 0;
-      mediumCount = 0;
-      hardCount = 0;
-      totalCount = 0;
-
-      const questions = await Question.findOne({
-        where: {
-          id: questionId,
-        },
-      });
-      tag = questions.dataValues.difficulty;
-
-      const difficultyRecord = await Difficulty.findOne(); // Assuming there's only one record
-      if (difficultyRecord) {
-        // Update the counts based on the difficulty level of the new submission
-        if (tag === "easy") {
-          await Difficulty.update(
-            { easyCount: difficultyRecord.easyCount + 1 },
-            { where: { id: difficultyRecord.id } }
-          );
-        } else if (tag === "medium") {
-          await Difficulty.update(
-            { mediumCount: difficultyRecord.mediumCount + 1 },
-            { where: { id: difficultyRecord.id } }
-          );
-        } else if (tag === "hard") {
-          await Difficulty.update(
-            { hardCount: difficultyRecord.hardCount + 1 },
-            { where: { id: difficultyRecord.id } }
-          );
-        }
-        // Update the total count
-        await Difficulty.update(
-          {
-            totalCount:
-              difficultyRecord.easyCount +
-              difficultyRecord.mediumCount +
-              difficultyRecord.hardCount,
-          },
-          { where: { id: difficultyRecord.id } }
-        );
-      }
-
-    }
-
+   
     const codes = await codeSubmision.create({
       questionId,
       userId,
@@ -201,6 +149,8 @@ const execute = async (req, res) => {
 
       allTestResults.push(testResults); 
     }
+
+
     let overallStatus;
     if (statusData.every((status) => status === "Accepted")) {
       overallStatus = "Accepted";
@@ -209,6 +159,79 @@ const execute = async (req, res) => {
     } else {
       overallStatus = "Wrong Answer"; // Handle other cases if needed
     }
+
+    const submittedTagStatus = await Status.findAll({
+      where:{
+        questionId: questionId,
+        userId: userId
+      }
+    });
+
+    checker = false
+    for (const submission of submittedTagStatus) {
+
+      if(submission.status == "Accepted"){
+        checker = true
+        break
+      }
+    }
+
+     if (checker == false && overallStatus == "Accepted") {
+       console.log("-----------------------------");
+       easyCount = 0;
+       mediumCount = 0;
+       hardCount = 0;
+       totalCount = 0;
+
+       const questions = await Question.findOne({
+         where: {
+           id: questionId,
+         },
+       });
+       tag = questions.dataValues.difficulty;
+
+       const difficultyRecord = await Difficulty.findOne(); // Assuming there's only one record
+       if (difficultyRecord) {
+         // Update the counts based on the difficulty level of the new submission
+         if (tag === "easy") {
+           await Difficulty.update(
+             { easyCount: difficultyRecord.easyCount + 1 },
+             { where: { id: difficultyRecord.id } }
+           );
+         } else if (tag === "medium") {
+           await Difficulty.update(
+             { mediumCount: difficultyRecord.mediumCount + 1 },
+             { where: { id: difficultyRecord.id } }
+           );
+         } else if (tag === "hard") {
+           await Difficulty.update(
+             { hardCount: difficultyRecord.hardCount + 1 },
+             { where: { id: difficultyRecord.id } }
+           );
+         }
+         // Update the total count
+         await Difficulty.update(
+           {
+             totalCount:
+               difficultyRecord.easyCount +
+               difficultyRecord.mediumCount +
+               difficultyRecord.hardCount,
+           },
+           { where: { id: difficultyRecord.id } }
+         );
+       }
+     }
+
+
+
+
+
+
+
+
+
+
+
     const newer = await Status.create({
       status: overallStatus,
       questionId: questionId,
@@ -219,9 +242,6 @@ const execute = async (req, res) => {
     
     
 
-    res.json({ allTestResults, codes, status: overallStatus });}
-
-
 
      
 
@@ -229,14 +249,15 @@ const execute = async (req, res) => {
     
     
 
-
+    res.json({ allTestResults, codes, status: overallStatus});
+  }
     else{
       res.status(500).json({ error: "question Id is not Found" });
     }
   } catch (error) {
 
     console.error("Error:", error);
-    res.status(500).json({ error: "Failed to fetch question or test cases" });
+    res.status(500).json(error);
   }
 };
 
