@@ -3,9 +3,11 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../../database/sequelize");
 const Solution = require("./solution");
 
+
 const examTestCase = require("./examTestcase");
 
 const ExamQuestion = sequelize.define("examQuestion", {
+
 
   title: {
     type: DataTypes.STRING,
@@ -24,6 +26,7 @@ const ExamQuestion = sequelize.define("examQuestion", {
     allowNull: false,
   },
 });
+
 
 
 ExamQuestion.hasMany(Solution, { as: "solutions" });
