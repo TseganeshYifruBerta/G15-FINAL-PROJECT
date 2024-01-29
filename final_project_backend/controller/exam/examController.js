@@ -1,6 +1,8 @@
-const Question = require("../../models/exam/createExam");
-const TestCase = require("../../models/exam/solution");
-const Solution = require("../../models/exam/testcase");
+
+const ExamQuestion = require("../../models/exam/createExam");
+const examTestCase = require("../../models/exam/examTestcase");
+const Solution = require("../../models/exam/solution");
+
 
 const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
   const { title, difficulty,description , example, testcases, solution } = req.body;
@@ -55,4 +57,8 @@ const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
   }
 };
 
-module.exports = { submitExamQuestionWithTestCaseAndSolution };
+
+
+module.exports =  submitExamQuestionWithTestCaseAndSolution ;
+
+
