@@ -19,7 +19,7 @@ executionRouter.post("/run", codeExecute);
 executionRouter.get("/getSubmittedDifficulty/:userId", getAllDifficultyData);
 executionRouter.get("/countSubmissionsForDate/:date",countSubmissionsForDate);
 executionRouter.get("/countSubmissionsForDateByUserId/:userId/:date",countSubmissionsForDateByUserId)
-executionRouter.get("/ countAcceptedSubmissions " ,countAcceptedSubmissions )
+executionRouter.get("/countAcceptedSubmissions " ,countAcceptedSubmissions )
 
 
 
