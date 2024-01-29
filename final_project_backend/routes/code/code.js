@@ -8,7 +8,7 @@ const { execute } = require("../../controller/codeExecution/codeSubmission");
 const {
     countSubmissionsForDate,
     countSubmissionsForDateByUserId,
-  } = require("../../controller/codeExecution/specificDate")
+  } = require("../../controller/codeExecution/specificDates")
 
 // fetching difficulty tag counts
 const getAllDifficultyData= require("../../controller/codeExecution/manageCodeSubmittedData")
