@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 const routes = require("./routes/auth/userRoute.js");
 const executionRouter = require("./routes/code/code.js");
-const examRouter =require("./routes/exam/examRoute")
+const examRouters =require("./routes/exam/examRoute")
 const dataUploadRouters = require("./routes/userDataUploader/userData");
 const sequelize = require("./database/sequelize.js");
 const questionRouters = require("./routes/questionRoute/questionRoute.js");
@@ -49,6 +49,6 @@ app.use("/execution", executionRouter);
 app.use("/upload", dataUploadRouters); 
 
 //  Routes related to Exam
-app.use("/exam", examRouter); 
+app.use("/exam", examRouters); 
 const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`BACK_END_SERVICE_PORT: ${port}`));
