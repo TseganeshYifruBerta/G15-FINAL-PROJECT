@@ -14,7 +14,7 @@ const countSubmissionsForDate = async (req , res) => {
     throw new Error('Failed to count submissions for date');
   }
 };
-module.exports(countSubmissionsForDate)
+
 const countSubmissionsForDateByUserId = async (req, res) => {
   const { userId, date } = req.params;
   try {
@@ -33,4 +33,4 @@ const countSubmissionsForDateByUserId = async (req, res) => {
     throw new Error('Failed to count submissions for date');
   }
 };
-module.exports(countSubmissionsForDateByUserId)
+module.exports={countSubmissionsForDateByUserId,countSubmissionsForDate}
