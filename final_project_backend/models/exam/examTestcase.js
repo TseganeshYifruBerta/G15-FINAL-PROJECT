@@ -2,7 +2,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../../database/sequelize");
 
-const TestCase = sequelize.define("TestCase", {
+const examTestCase = sequelize.define("examTestCase", {
    
   input: {
     type: DataTypes.JSON,
@@ -14,4 +14,4 @@ const TestCase = sequelize.define("TestCase", {
   },
 });
 
-module.exports = TestCase;
+module.exports = examTestCase;
