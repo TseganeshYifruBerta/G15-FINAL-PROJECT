@@ -6,7 +6,7 @@ import { useDropzone } from "react-dropzone";
 import { HiArrowCircleLeft, HiArrowCircleRight } from "react-icons/hi";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { RootState } from "@/store/index";
-import { uploadFile, FileData } from "@/store/upload/ApiCallerTeacher";
+import { uploadFile, FileData } from '@/store/upload/ApiCallerUploadStudent';
 import {showToast} from '@/components/popup';
 import Link from "next/link";
 
@@ -48,7 +48,7 @@ const Upload: React.FC<InjectedFormProps<FileForm>> = ({ handleSubmit }) => {
   const onSubmit = async (values: FileForm) => {
    
       try {
-        const data = await uploadFile(values as FileData);
+        // const data = await uploadFile(values as FileData);
         showToast('File uploaded successfully', 'success');
       } catch (error) {
         console.error("File upload failed:", error);
