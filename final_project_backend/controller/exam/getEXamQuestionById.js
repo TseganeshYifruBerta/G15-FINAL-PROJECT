@@ -14,4 +14,4 @@ const getExamQuestionById = async (req, res) => {
   }
 };
 
-module.exports = { getExamQuestionById };
+module.exports = getExamQuestionById ;
