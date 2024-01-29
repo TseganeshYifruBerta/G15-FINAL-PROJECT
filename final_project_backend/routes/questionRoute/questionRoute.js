@@ -8,7 +8,11 @@ const {
 const { editQuestion } = require("../../controller/QuestionUploaderController/manageQuestion/EditQuestion");
 const { deleteQuestion } = require("../../controller/QuestionUploaderController/manageQuestion/deleteQuestion");
 
- const fetchingAllSubmittedQuestionForUser = require("../../controller/QuestionUploaderController/submittedData")
+ const {
+   fetchingAllSubmittedQuestionForUser,
+   fetchingAllDetailForSubmittedQuestion,
+ } = require("../../controller/QuestionUploaderController/submittedData");
+ 
 // questionRouters.post("/question", submitQuestionWithTestCases);
 questionRouters.post("/submitquestion", submitQuestionWithTestCases);
 questionRouters.get("/getAllQuestions", getAllQuestions);   
@@ -18,6 +22,13 @@ questionRouters.delete("/deleteQuestionById/:questionId", deleteQuestion)
 questionRouters.get(
   "/fetchSubmittedQuestionById/:userId",
   fetchingAllSubmittedQuestionForUser
-);
+
+);  
+
+questionRouters.get(
+  "/fetchQuestionDetailBySubmittedId/:submittedId",
+  fetchingAllDetailForSubmittedQuestion
+);  
+
 
 module.exports = questionRouters;
