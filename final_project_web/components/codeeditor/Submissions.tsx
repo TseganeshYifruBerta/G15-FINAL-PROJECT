@@ -1,42 +1,92 @@
-import React from "react"
+import React, { useState } from "react"
+import Submission from "./Submission";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
-const Submissions: React.FC = () => {
-    return (
-      <div className="m-6">
-        <div>
-          <h1 className="text-xl font-bold mb-2">Submissions</h1>
-        </div>
-        <div>
-          <div className="flex mb-2">
-            <div className="w-1/2">
-              {" "}
-              <h1 className="text-red-700 font-bold">Wrong Answer</h1>
-            </div>
-            <div className="w-1/2 justify-end flex">
-              <h1 className="font-light text-">12/14/2023 7:40 PM</h1>
-            </div>
-          </div>
-          <div className="flex mb-2">
-            <div className="w-1/2">
-              {" "}
-              <h1 className="text-red-700 font-bold">Wrong Answer</h1>
-            </div>
-            <div className="w-1/2 justify-end flex">
-              <h1 className="font-light text-">12/14/2023 7:40 PM</h1>
-            </div>
-          </div>
-          <div className="flex mb-2">
-            <div className="w-1/2">
-              {" "}
-              <h1 className="text-green-700 font-bold">Accepted</h1>
-            </div>
-            <div className="w-1/2 justify-end flex">
-              <h1 className="font-light text-">12/14/2023 7:40 PM</h1>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+// export interface SubmissionProps {
+//   date:string,
+//   status: string,
+// }
+interface SubmissionsProps {
+  submissions: statusProps[];
 }
+export interface statusProps {
+  id: number;
+  status: string;
+  userId: string;
+  questionId: string;
+  createdAt: string,
+  updatedAt: string;
+  submittedCodeId: number;
+}
+const Submissions: React.FC<SubmissionsProps> = ({ submissions}) => {
+ const [currentPage, setCurrentPage] = useState(1);
+ const itemsPerPage = 4;
+
+ // Assuming submissions is your array of submissions
+ const totalItems = submissions.length;
+
+ // Calculate the index range of submissions to display based on current page and items per page
+ const startIndex = (currentPage - 1) * itemsPerPage;
+ const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+
+ // Slice submissions array to get only the items for the current page
+ const submissionsToDisplay = submissions.slice(startIndex, endIndex);
+
+ // Handler function to navigate to the next page
+ const nextPage = () => {
+   setCurrentPage(currentPage + 1);
+ };
+
+ // Handler function to navigate to the previous page
+ const prevPage = () => {
+   setCurrentPage(currentPage - 1);
+ };
+
+ // Calculate total number of pages
+ const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+ return (
+   <div className="m-6">
+     <div>
+       {submissionsToDisplay.map((submission, index) => (
+         <div key={index}>
+           <Submission
+             createdAt={submission.createdAt}
+             status={submission.status}
+             id={0} // Assuming you need to pass these props to Submission component
+             userId={""}
+             questionId={""}
+             updatedAt={""}
+             submittedCodeId={0}
+           />
+         </div>
+       ))}
+     </div>
+     <div className="flex justify-center">
+       <div className="mt-4 flex justify-between w-2/5">
+         <button
+           onClick={prevPage}
+           disabled={currentPage === 1}
+           className={`bg-gray-200 px-3 py-1 rounded-md ${
+             endIndex >= totalItems ? "" : "bg-primary"
+           } `}
+         >
+           <FiChevronLeft />
+         </button>
+
+         <button
+           onClick={nextPage}
+           disabled={endIndex >= totalItems}
+           className={`bg-gray-200 px-3 py-1 rounded-md ${
+             endIndex >= totalItems ? "" : "bg-primary"
+           } `}
+         >
+           <FiChevronRight />
+         </button>
+       </div>
+     </div>
+   </div>
+ );
+};
 
 export default Submissions

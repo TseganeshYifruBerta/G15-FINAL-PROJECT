@@ -69,10 +69,41 @@ const fetchingAllDetailForSubmittedQuestion = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
+
+const countAcceptedSubmissionsForUser = async (req , res) => {
+  const{userId} = req.params
+  try {
+    const submissions = await codeSubmision.findAll({
+      where: {
+        userId: userId,
+      },
+    });
+    let acceptedCount = 0
+    for (const submission of submissions){
+            const status = await Status.findOne({
+              where : {
+                submittedCodeId : submission.id,
+                status:'Accepted'
+              },
+
+
+            });
+            if (status) {
+              acceptedCount++;
+            }}
+            return  res.status(200).json(acceptedCount);
+          } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error: "Internal Server Error" });
+          }
+
+
+    }
+
 module.exports = {
   fetchingAllSubmittedQuestionForUser,
   fetchingAllDetailForSubmittedQuestion,
-};
-
-
+  countAcceptedSubmissionsForUser};
 
