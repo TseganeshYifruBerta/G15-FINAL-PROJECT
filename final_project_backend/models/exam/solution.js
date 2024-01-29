@@ -4,7 +4,9 @@ const sequelize = require("../../database/sequelize");
 
 const Solution = sequelize.define("Solution", {
   content: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
+
+    type: DataTypes.JSON,
+
     allowNull: false,
   },
 });

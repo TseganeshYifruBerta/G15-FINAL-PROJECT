@@ -2,9 +2,11 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../../database/sequelize");
 const Solution = require("./solution");
-const TestCase = require("./testCase");
 
-const Question = sequelize.define("labQuestion", {
+const examTestCase = require("./examTestcase");
+
+const ExamQuestion = sequelize.define("examQuestion", {
+
   title: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -23,10 +25,12 @@ const Question = sequelize.define("labQuestion", {
   },
 });
 
-Question.hasMany(Solution, { as: "solutions" });
-Question.hasMany(TestCase, { as: "testCases" });
 
-TestCase.belongsTo(Question);
-Solution.belongsTo(Question);
+ExamQuestion.hasMany(Solution, { as: "solutions" });
+ExamQuestion.hasMany(examTestCase, { as: "examTestCase" });
 
-module.exports = Question;
+examTestCase.belongsTo(ExamQuestion);
+Solution.belongsTo(ExamQuestion);
+
+module.exports = ExamQuestion;
+
