@@ -72,27 +72,35 @@ const fetchingAllDetailForSubmittedQuestion = async (req, res) => {
 
 
 
-const countAcceptedSubmissionsForUser = async (userId) => {
+const countAcceptedSubmissionsForUser = async (req , res) => {
+  const{userId} = req.params
   try {
-    const questionSubmittedFetch = await codeSubmision.findAll({
+    const submissions = await codeSubmision.findAll({
       where: {
         userId: userId,
       },
     });
+    let acceptedCount = 0
+    for (const submission of submissions){
+            const status = await Status.findOne({
+              where : {
+                submittedCodeId : submission.id,
+                status:'Accepted'
+              },
 
-    const acceptedCount = questionSubmittedFetch.reduce((count, submission) => {
-      if (submission.status === 'Accepted') {
-        return count + 1;
-      }
-      return count;
-    }, 0);
 
-    return acceptedCount;
-  } catch (error) {
-    console.log(error);
-    throw new Error('Failed to count accepted submissions');
-  }
-};
+            });
+            if (status) {
+              acceptedCount++;
+            }}
+            return  res.status(200).json(acceptedCount);
+          } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error: "Internal Server Error" });
+          }
+
+
+    }
 
 module.exports = {
   fetchingAllSubmittedQuestionForUser,
