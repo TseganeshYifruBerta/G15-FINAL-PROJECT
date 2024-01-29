@@ -1,6 +1,22 @@
 const Question = require("../../models/question_testcase_submission/question"); // Import the LabQuestion and TestCase models
 const Status = require("../../models/codeSubmision/codeStatus");
 
+ConstantSourceNode
+
+const getNumberOfAllQuestion = async(req,res) =>{
+      try{
+        const question = await Question.findAll();
+        const count = question.length;
+        return res.status(200).json(count)
+       
+      } catch(error){
+       console.log(error);
+       return res.sendStatus(400);
+      }
+};
+
+
+
 const getAllQuestions = async (req, res) => {
   try {
     const questions = await Question.findAll();
@@ -40,4 +56,4 @@ const getAllQuestionsById = async (req, res) => {
   }
 };
 
-module.exports = { getAllQuestions, getAllQuestionsById };
+module.exports = { getAllQuestions, getAllQuestionsById , getNumberOfAllQuestion};
