@@ -69,10 +69,8 @@ const fetchingAllDetailForSubmittedQuestion = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
-module.exports = {
-  fetchingAllSubmittedQuestionForUser,
-  fetchingAllDetailForSubmittedQuestion,
-};
+
+
 
 const countAcceptedSubmissionsForUser = async (userId) => {
   try {
@@ -96,5 +94,8 @@ const countAcceptedSubmissionsForUser = async (userId) => {
   }
 };
 
-module.exports = { fetchingAllSubmittedQuestionForUser, countAcceptedSubmissionsForUser };
+module.exports = {
+  fetchingAllSubmittedQuestionForUser,
+  fetchingAllDetailForSubmittedQuestion,
+  countAcceptedSubmissionsForUser};
 
