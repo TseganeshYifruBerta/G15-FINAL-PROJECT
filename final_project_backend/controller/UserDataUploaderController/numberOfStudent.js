@@ -1,7 +1,7 @@
 const Student = require("../../models/registration/user/studentsModel");
 const Question = require("../../models/registration/user/studentsModel"); // Import the LabQuestion and TestCase models
 
-const getNumberOfAllQuestion = async(req,res) =>{
+const getNumberOfAllStudent = async(req,res) =>{
     try{
       const student = await Student.findAll();
       const count = student.length;
@@ -12,4 +12,4 @@ const getNumberOfAllQuestion = async(req,res) =>{
      return res.sendStatus(400);
     }
 };
-module.exports =  getNumberOfAllQuestion
+module.exports =  getNumberOfAllStudent
