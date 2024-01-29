@@ -10,6 +10,9 @@ import { getAllQuestionApi } from "./question/get-all-questions";
 import { getSubmissionDetailByIdApi } from "./submissions/get-submission-detail-by-id-api";
 import { getQuestionDetalApi } from "./question/get-questionById-api";
 import { getAllSubmissionsByIdApi } from "./submissions/get-all-submissions-by-id";
+
+import { getStudentProfileByIdApi } from "./profile/get-student-profile-detail-api";
+import { getTeacherProfileByIdApi } from "./profile/get-teacher-profile-detail-api";
 export const store = configureStore({
   reducer: {
     form: formReducer,
@@ -22,13 +25,17 @@ export const store = configureStore({
     [getSubmissionDetailByIdApi.reducerPath]:
       getSubmissionDetailByIdApi.reducer,
     [getAllSubmissionsByIdApi.reducerPath]: getAllSubmissionsByIdApi.reducer,
+    [getStudentProfileByIdApi.reducerPath]: getStudentProfileByIdApi.reducer,
+    [getTeacherProfileByIdApi.reducerPath]: getTeacherProfileByIdApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(getQuestionDetalApi.middleware)
       .concat(getAllQuestionApi.middleware)
       .concat(getSubmissionDetailByIdApi.middleware)
-      .concat(getAllSubmissionsByIdApi.middleware),
+      .concat(getAllSubmissionsByIdApi.middleware)
+      .concat(getTeacherProfileByIdApi.middleware)
+      .concat(getStudentProfileByIdApi.middleware)
 });
 
 export type RootState = ReturnType<typeof store.getState>;

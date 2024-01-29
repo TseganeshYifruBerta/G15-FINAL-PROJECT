@@ -8,6 +8,8 @@ const Chart2 = dynamic(() => import('@/components/chart/chart'), { ssr: false })
 const Chart1 = dynamic(() => import('@/components/chart/barchart'), { ssr: false });
 
 const AdminPage: React.FC = () => {
+
+  
   return (
     <>
       <main className="mx-36 bg-gray-100 min-h-screen justify-center items-center"> {/* Added justify-center and items-center */}
