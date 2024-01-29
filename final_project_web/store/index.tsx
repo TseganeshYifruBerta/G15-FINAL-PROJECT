@@ -5,22 +5,30 @@ import signupTeacherReducer from './signup/signupSliceReducerTeacher';
 import signupStudentReducer from './signup/SignupSliceReducerStudent';
 import signinStudentReducer from "./signin/student-signin-slice"
 import questionUploadReducer from "./question-upload/question-upload-slice"
-import { getQuestionDetalApi } from "./question/get-questionById-api";
 import { getAllQuestionApi } from "./question/get-all-questions";
-
+// import { getAllSubmissionsByIdApi } from "./submissions/get-all-submissions-by-id";
+import { getSubmissionDetailByIdApi } from "./submissions/get-submission-detail-by-id-api";
+import { getQuestionDetalApi } from "./question/get-questionById-api";
+import { getAllSubmissionsByIdApi } from "./submissions/get-all-submissions-by-id";
 export const store = configureStore({
   reducer: {
     form: formReducer,
-    register:signupTeacherReducer, signupStudentReducer,
-    studentsignin:signinStudentReducer,
-questionupload:questionUploadReducer,
+    register: signupTeacherReducer,
+    signupStudentReducer,
+    studentsignin: signinStudentReducer,
+    questionupload: questionUploadReducer,
     [getQuestionDetalApi.reducerPath]: getQuestionDetalApi.reducer,
-    [getAllQuestionApi.reducerPath]: getAllQuestionApi.reducer
+    [getAllQuestionApi.reducerPath]: getAllQuestionApi.reducer,
+    [getSubmissionDetailByIdApi.reducerPath]:
+      getSubmissionDetailByIdApi.reducer,
+    [getAllSubmissionsByIdApi.reducerPath]: getAllSubmissionsByIdApi.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware()
-  .concat(getQuestionDetalApi.middleware)
-  .concat(getAllQuestionApi.middleware)
-  ,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware()
+      .concat(getQuestionDetalApi.middleware)
+      .concat(getAllQuestionApi.middleware)
+      .concat(getSubmissionDetailByIdApi.middleware)
+      .concat(getAllSubmissionsByIdApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
