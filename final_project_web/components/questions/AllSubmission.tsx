@@ -1,6 +1,7 @@
 import { useGetAllSubmissionsByIdQuery } from "@/store/submissions/get-all-submissions-by-id";
 import AllQuestionSubmissionsList from "./AllQuestionSubmissionsList";
 import NoSubmission from "./NoSubmissions";
+import QuestionLoading from "../common/QuestionLoading";
 
 
 export interface singleSubmissionProps
@@ -58,7 +59,7 @@ const AllSubmissions : React.FC = () => {
       userId: userId,
     });
     if (isLoading) {
-      return <div>Loading</div>;
+      return <div className="flex"><QuestionLoading /></div>;
     }
     if (isError){
         return(
@@ -67,21 +68,23 @@ const AllSubmissions : React.FC = () => {
     }
     console.log(data);
     return (
-      <div>
-        <div className="flex justify-center">
-          <div className="w-4/5 text-2xl font-bold">
-            <span>All</span> <span className="text-primary">Submissions</span>
+      <div className="p-6 min-h-screen flex ">
+        <div className="justify-center">
+          <div className="flex justify-center pb-4">
+            <div className="w-full text-2xl font-bold">
+              <span>All</span> <span className="text-primary">Submissions</span>
+            </div>
           </div>
+          {initial.length == 0 ? (
+            <div className="w-full">
+              <NoSubmission />
+            </div>
+          ) : (
+            <div className="flex w-full">
+              <AllQuestionSubmissionsList questions={initial} />
+            </div>
+          )}
         </div>
-        {initial.length == 0 ? (
-          <div>
-            <NoSubmission />
-          </div>
-        ) : (
-          <div>
-            <AllQuestionSubmissionsList questions={initial} />
-          </div>
-        )}
       </div>
     );
 }

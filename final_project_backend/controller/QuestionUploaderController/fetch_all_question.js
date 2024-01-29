@@ -2,7 +2,6 @@ const Question = require("../../models/question_testcase_submission/question"); 
 const Status = require("../../models/codeSubmision/codeStatus");
 
 
-
 const getNumberOfAllQuestion = async(req,res) =>{
       try{
         const question = await Question.findAll();

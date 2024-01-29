@@ -18,7 +18,7 @@ export const getStudentProfileByIdApi = createApi({
     getStudentProfileById: builder.query({
       query: (params) => {
         const { userId } = params;
-        let url = "http://localhost:5000/question/getAllQuestionsById";
+        let url = "http://localhost:5000/upload/findStudentByID";
         console.log(params);
         const queryParams = [];
         queryParams.push(`${userId}`);

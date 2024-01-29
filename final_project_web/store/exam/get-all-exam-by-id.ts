@@ -2,17 +2,16 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseUrl = "";
 
-export const getEasyMediumHardByIdApi = createApi({
-  reducerPath: "getEasyMediumHardByIdApi",
+export const getExamQuestionByIdApi = createApi({
+  reducerPath: "getExamQuestionByIdApi",
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
   }),
   endpoints: (builder) => ({
-    getEasyMediumHardById: builder.query({
+    getExamQuestionById: builder.query({
       query: (params) => {
         const { userId } = params;
-        let url =
-          "http://localhost:5000/execution/getSubmittedDifficulty";
+        let url = "http://localhost:5000/upload/findStudentByID";
         console.log(params);
         const queryParams = [];
         queryParams.push(`${userId}`);
@@ -25,4 +24,4 @@ export const getEasyMediumHardByIdApi = createApi({
   }),
 });
 
-export const { useGetEasyMediumHardByIdQuery } = getEasyMediumHardByIdApi;
+export const { useGetExamQuestionByIdQuery } = getExamQuestionByIdApi;

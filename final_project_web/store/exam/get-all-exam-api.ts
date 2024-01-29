@@ -2,16 +2,16 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseUrl = "";
 
-export const getNumberOfAllQuestionApi = createApi({
-  reducerPath: "getNumberOfAllQuestionApi",
+export const getAllExamsApi = createApi({
+  reducerPath: "getAllExamsApi",
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
   }),
   endpoints: (builder) => ({
-    getNumberOfAllQuestion: builder.query({
+    getAllExams: builder.query({
       query: (params) => {
         let url = "http://localhost:5000/question/getNumberOfAllQuestion";
-        
+
         return {
           url: url,
           method: "GET",
@@ -21,4 +21,4 @@ export const getNumberOfAllQuestionApi = createApi({
   }),
 });
 
-export const { useGetNumberOfAllQuestionQuery } = getNumberOfAllQuestionApi;
+export const { useGetAllExamsQuery } = getAllExamsApi;

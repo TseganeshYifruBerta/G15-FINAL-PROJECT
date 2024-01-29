@@ -22,14 +22,14 @@ interface statusProps {
 const HandleStatus:React.FC<statusProps> = ({status}) => {
 if (status == "Wrong Answer"){
 return (
-  <div className="w-1/5 text-red-500 font-semibold flex justify-center">
+  <div className="w-1/6 text-red-500 font-semibold flex justify-center">
     {status}
   </div>
 );
 }
 else{
     return (
-      <div className="w-1/5 text-green-600 font-semibold flex justify-center">
+      <div className="w-1/6 text-green-600 font-semibold flex justify-center">
         {status}
       </div>
     );
@@ -43,19 +43,19 @@ interface difficultyProps{
 const HandleDifficulty: React.FC<difficultyProps> = ({ difficulty }) => {
   if (difficulty == "Easy") {
     return (
-      <div className="w-1/5 text-green-500 font-semibold flex justify-center">
+      <div className="w-1/6 text-green-500 font-semibold flex justify-center">
         {difficulty}
       </div>
     );
   } else if (difficulty == "Medium") {
     return (
-      <div className="w-1/5 text-orange-500 text-md font-semibold flex justify-center">
+      <div className="w-1/6 text-orange-500 text-md font-semibold flex justify-center">
         {difficulty}
       </div>
     );
   } else {
     return (
-      <div className="w-1/5 text-red-600 font-semibold flex justify-center">
+      <div className="w-1/6 text-red-600 font-semibold flex justify-center">
         {difficulty}
       </div>
     );
@@ -78,15 +78,15 @@ const QuestionSubmissionCard: React.FC<QuestionCardProps> = ({
   return (
     <Link href={`/submissions/${submitId}`}>
       <div className="flex justify-center">
-        <div className="flex bg-gray-200 rounded-md p-2 m-2 w-4/5">
+        <div className="flex bg-gray-200 rounded-md p-2 m-2 w-full">
           <div className="mx-1 font-bold">{id}.</div>
 
-          <div className="w-1/5 font-bold flex justify-start">
+          <div className="w-2/6 font-bold flex justify-start">
             {questionTitle}
           </div>
           <HandleDifficulty difficulty={capitalized_difficulty} />
           <HandleStatus status={capitalized_status} />
-          <div className="w-2/5 flex justify-end mx-1">{createdAt}</div>
+          <div className="w-1/6 flex mx-1">{createdAt}</div>
         </div>
       </div>
     </Link>
