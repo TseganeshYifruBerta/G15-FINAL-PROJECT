@@ -3,6 +3,8 @@ import { reducer as formReducer } from 'redux-form';
 import { useDispatch } from 'react-redux';
 import signupTeacherReducer from './signup/signupSliceReducerTeacher';
 import signupStudentReducer from './signup/SignupSliceReducerStudent';
+import  UploadStateStudent  from "@/store/upload/UploadSliceReducerStudent";
+import  UploadStateTeacher  from "@/store/upload/UploadTeacherSliceReducer";
 import signinStudentReducer from "./signin/student-signin-slice"
 import questionUploadReducer from "./question-upload/question-upload-slice"
 import { getAllQuestionApi } from "./question/get-all-questions";
@@ -18,6 +20,7 @@ export const store = configureStore({
     form: formReducer,
     register: signupTeacherReducer,
     signupStudentReducer,
+    upload: UploadStateStudent,UploadStateTeacher,
     studentsignin: signinStudentReducer,
     questionupload: questionUploadReducer,
     [getQuestionDetalApi.reducerPath]: getQuestionDetalApi.reducer,
