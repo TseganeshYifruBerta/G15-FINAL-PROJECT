@@ -3,7 +3,7 @@ const  Question  = require("../../models/question_testcase_submission/question")
 const TestCase = require('../../models/question_testcase_submission/testCase')
 // Controller function to submit a question along with its test cases
 const submitQuestionWithTestCases = async (req, res) => {
-  const { title, difficulty, description, example, testCases } = req.body;
+const { title, difficulty, description, example, testCases } = req.body;
 
   try {
     // Create a new LabQuestion
@@ -18,7 +18,8 @@ const submitQuestionWithTestCases = async (req, res) => {
     // Create and associate test cases with the new LabQuestion
     const createdTestCases = await Promise.all(
       testCases.map(async (testCase) => {
-        const formattedOutput = Array.isArray(testCase.output)
+        const formattedOutput = Array.isArray(testCase.output
+          )
           ? testCase.output
           : [testCase.output]; // Ensure output is an array
           const formattedInput = Array.isArray(testCase.input)
