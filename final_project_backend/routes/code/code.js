@@ -12,7 +12,7 @@ const getAllDifficultyData= require("../../controller/codeExecution/manageCodeSu
 
 executionRouter.post("/submit", execute);
 executionRouter.post("/run", codeExecute); 
-executionRouter.get("/getSubmittedDifficulty", getAllDifficultyData);
+executionRouter.get("/getSubmittedDifficulty/:userId", getAllDifficultyData);
 
 
 
