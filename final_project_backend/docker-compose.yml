@@ -10,10 +10,19 @@ services:
       MYSQL_DATABASE: database
       MYSQL_USER: ""
       MYSQL_PASSWORD: ""
-    ports:
-      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+
+  nodejs:
+    build: .
+    container_name: nodejs-container
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql
+    environment:
+      - NODE_ENV=production
 
 volumes:
   mysql_data:
