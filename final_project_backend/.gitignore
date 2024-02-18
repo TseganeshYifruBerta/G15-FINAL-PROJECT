@@ -1,4 +1,4 @@
-compose.yml
+
 config.env
 package-lock.json
 package.json
@@ -11,6 +11,5 @@ index.js
 config
 /services
 /uploads
-Dockerfile
-docker-compose.yml
+
 .dockerignore
