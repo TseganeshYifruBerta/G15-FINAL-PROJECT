@@ -121,7 +121,7 @@ values.testCases = [jsonTestCases];
               + TestCases
             </button>
             {testCases.map((testCase, index) => (
-              <div className="flex">
+              <div className="flex" key={index}>
                 <div key={index} className="p-2 flex w-full">
                   <div className="p-1 w-1/2">
                     <input
