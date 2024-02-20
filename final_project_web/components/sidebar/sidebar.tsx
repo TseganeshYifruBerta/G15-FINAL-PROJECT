@@ -33,7 +33,7 @@ const SideNavbarTeacher: React.FC = () => {
               </div>
             </div>
             <div className=" my-4 border-b border-gray-100 pb-4 pt-12">
-              <Link href="/teacherprofile/">
+              <Link href="/teacher">
                 <div className="flex mb-2 justify-start items-center gap-4 pl-5 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto">
                   <MdOutlineSpaceDashboard className="text-2xl text-white   group-hover:text-white " />
                   <h3 className="text-base text-white group-hover:text-white font-semibold ">
@@ -41,7 +41,7 @@ const SideNavbarTeacher: React.FC = () => {
                   </h3>
                 </div>
               </Link>
-              <Link href="/teacherprofile/getallquestions">
+              <Link href="/teacher/getallquestions">
                 <div className="flex  mb-2 justify-start items-center gap-4 pl-5 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto">
                   <CgProfile className="text-2xl text-white group-hover:text-white " />
                   <h3 className="text-base text-white group-hover:text-white font-semibold ">
@@ -49,7 +49,7 @@ const SideNavbarTeacher: React.FC = () => {
                   </h3>
                 </div>
               </Link>
-              <Link href="/teacherprofile/getallstudents">
+              <Link href="/teacher/getallstudents">
                 <div className="flex  mb-2 justify-start items-center gap-4 pl-5 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto">
                   <MdOutlineAnalytics className="text-2xl text-white group-hover:text-white " />
                   <h3 className="text-base text-white group-hover:text-white font-semibold ">

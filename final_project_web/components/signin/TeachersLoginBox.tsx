@@ -14,6 +14,19 @@ export interface FormValues {
   email: string;
   password: string;
 }
+
+const validate = (values: FormValues) => {
+  const errors: Partial<FormValues> = {};
+
+  if (!values.email) {
+    errors.email = "Email is required";
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+    errors.email = "Invalid email address";
+  }
+
+  return errors;
+};
+
 const renderTextAreaField = ({
   input,
   label,
@@ -44,15 +57,17 @@ const renderTextAreaField = ({
 const TeachersLoginBox: React.FC<InjectedFormProps<FormValues>> = ({
   handleSubmit,
 }) => {
-  const router = useRouter()
+  const router = useRouter();
   const onSubmit = async (values: FormValues) => {
+    console.log(values);
     try {
       const data = await teacherlogin(values as TeacherLoginFormData);
-    
+      if (data.message === "Teacher not found") {
+        return showToast("Teacher not found", "error");
+      }
       // dispatch(setUserId(data.userId))
       showToast("Login successful", "success");
-            router.push("/teacher/profile");
-
+      router.push("/teacher/");
     } catch (error) {
       console.error("Login error:", error);
       showToast("Login error: " + (error as Error).message, "error");
@@ -66,8 +81,8 @@ const TeachersLoginBox: React.FC<InjectedFormProps<FormValues>> = ({
           <div className="mb-4">
             <h3 className="mb-1 font-bold">Email</h3>
             <Field
-              name="Email"
-              type="text"
+              name="email"
+              type="email"
               id="Email"
               component={renderTextAreaField}
               className="w-full border-b border-gray-500 focus:outline-none focus:border-blue-500"
@@ -99,6 +114,7 @@ const TeachersLoginBox: React.FC<InjectedFormProps<FormValues>> = ({
 
 const ConnectedSigninFormTeacher = reduxForm<FormValues>({
   form: "signin",
+  validate,
 })(TeachersLoginBox);
 
 export default ConnectedSigninFormTeacher;

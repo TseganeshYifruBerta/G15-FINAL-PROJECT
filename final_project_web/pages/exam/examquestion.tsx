@@ -9,26 +9,26 @@ import { useSelector } from "react-redux";
 
 const QuestionById: React.FC = () => {
   const router = useRouter();
-//   const questionId = router.query.id as string;
-const questionId = "20"
+  const questionId = router.query.id as string;
+// const questionId = "20"
   const pythonCode =
     "def grade_checker(score):\n    if score >= 70:\n        return 'A'\n    elif score >= 80:\n        return 'B'\n    elif score >= 70:\n        return 'C'\n    elif score >= 60:\n        return 'D'\n    else:\n        return 'F'";
 
   const userData = useSelector((state: any) => state.studentsignin.userId);
-  const userId = "1";
+  const questionIId = 1;
   const {
     data: questionDetails,
     isLoading,
     isError,
   } = useGetQuestionDetailsQuery({
-    userId: userId,
-    questionId: questionId,
+    userId: 1,
+    questionId: questionIId,
   });
   if (isLoading) {
     return <div>loading</div>;
   }
   if (isError) {
-    return <div>Errroe</div>;
+    return <div>Error</div>;
   }
   console.log(questionDetails);
   const question = questionDetails.question;
@@ -49,7 +49,7 @@ const questionId = "20"
       <div className="flex w-1/2 flex-col">
         <CodeEditorBox
           currentCode={currentCode}
-          userId={userId}
+          userId={"1"}
           questionId={questionId}
         />
         {/* <CodeSubmission /> */}

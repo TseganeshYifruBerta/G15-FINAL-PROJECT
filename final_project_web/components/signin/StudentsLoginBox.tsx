@@ -57,7 +57,7 @@ const StudentsLoginBox: React.FC<InjectedFormProps<FormValues>> = ({handleSubmit
       console.log(_id);
       dispatch(setUserId(_id));
       showToast("Login successful", "success");
-      router.push("/question")
+      router.push("/profile")
     } catch (error) {
       console.error("Login error:", error);
       showToast("Login error: " + (error as Error).message, "error");
