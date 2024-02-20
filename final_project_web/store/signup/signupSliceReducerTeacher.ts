@@ -1,28 +1,25 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface SignupState {
-  name: string;
-  userId: string;
+  fullName: string;
   email: string;
   section: string;
   password: string;
- 
 }
 
 const signupSliceTeacher = createSlice({
-  name: 'signup',
+  name: "signup",
   initialState: {
-    name:'',
-    email: '',
-    section:'',
-    password: '',
+    fullName: "",
+    email: "",
+    section: "",
+    password: "",
   } as SignupState,
   reducers: {
     setName: (state, action: PayloadAction<string>) => {
-        state.name = action.payload;
-      },
-    
-    
+      state.fullName = action.payload;
+    },
+
     setEmail: (state, action: PayloadAction<string>) => {
       state.email = action.payload;
     },
@@ -35,5 +32,6 @@ const signupSliceTeacher = createSlice({
   },
 });
 
-export const {setName, setEmail,setSection, setPassword } = signupSliceTeacher.actions;
+export const { setName, setEmail, setSection, setPassword } =
+  signupSliceTeacher.actions;
 export default signupSliceTeacher.reducer;

@@ -9,11 +9,12 @@ export default function Home() {
     <div className="ml-10">
       <div className="flex mt-44">
         <div className="w-1/2">
-          <h1 className="text-5xl font-md">WELCOME</h1>
-          <h2 className="text-5xl font-bold">
-            <span className="font-bold text-5xl text-primary">BYTE</span>
-            -MENTOR
-          </h2>
+          <div className="flex">
+            <h1 className="text-6xl font-md text-primary">
+              <Link href={''} ></Link>
+              ሁሉ <span className="font-bold text-4xl text-black"> CODE</span>
+            </h1>
+          </div>
           <p className="flex font-light w-2/3 mt-8">
             A WEBSITE WITH COOL FEATURES LIKE EASY QUESTION SUBMISSION, HANDS-ON
             INTERACTIVE CODING ECERCISES, SMART GRADING, AND PLAGIARISM

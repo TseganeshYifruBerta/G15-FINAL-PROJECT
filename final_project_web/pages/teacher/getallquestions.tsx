@@ -2,6 +2,8 @@ import NavigationTeacher from "@/components/layout/NavigationTeacher";
 import QuestionCard from "@/components/questions/QuestionCard";
 import QuestionCardStudent from "@/components/questions/QuestionCardStudent";
 import { useGetAllQuestionsQuery } from "@/store/question/get-all-questions";
+import UploadQuestion from "../question/uploadquestion";
+import Link from "next/link";
 export interface questionProps {
   id: number;
   title: string;
@@ -32,10 +34,22 @@ function Questions() {
       <div className="w-4/6">
         <div className="-ml-60 min-h-screen bg-gray-100">
           <div className="flex justify-center">
-            <div className="w-3/5 pb-6">
-              <span className="font-bold text-2xl">
-                List of All <span className="text-primary">Questions</span>
-              </span>
+            <div className="flex pt-4">
+              <div className="w-full pb-6">
+                <span className="font-bold text-2xl w-full">
+                  List of All <span className="text-primary">Questions</span>
+                </span>
+              </div>
+              <Link href={"/question/uploadquestion"} className="w-full">
+                <div className="flex w-full">
+                  <button
+                    type="submit"
+                    className="border-2 border-primary p-1 rounded-md w-full mr-2 x-4"
+                  >
+                    Upload Question
+                  </button>
+                </div>
+              </Link>
             </div>
           </div>
           <div>
