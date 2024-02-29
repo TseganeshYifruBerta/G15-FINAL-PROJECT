@@ -8,4 +8,4 @@ function UploadQuestion() {
     )
 }
 
-export default QuestionUploadForm
+export default UploadQuestion;

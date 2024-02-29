@@ -22,7 +22,7 @@ const Chart1 = () => {
         <span >Question Submissions</span>
         <span>---Daily</span>
       </div>
-      <LineChart width={600}     height = {450} data={data}>
+      <LineChart width={400}     height = {300} data={data}>
         <Line type="monotone" dataKey="submitted" stroke="#FFA500" strokeWidth={3} />
         <CartesianGrid strokeDasharray="3 3" className="chartgrid" />
         <XAxis dataKey="name" />

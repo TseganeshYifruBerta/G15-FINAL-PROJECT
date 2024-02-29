@@ -10,9 +10,9 @@ const AllQuestionSubmissionsList: React.FC<questionProps> = ({
   questions
 }) => {
   return (
-      <div>
+      <div className="flex w-full">
         {questions.map((question, index) => (
-          <div key={index}>
+          <div key={index} className="flex w-full">
             <QuestionSubmissionCard
                     id={index + 1}
                     questionTitle={question.questionsForId.title}

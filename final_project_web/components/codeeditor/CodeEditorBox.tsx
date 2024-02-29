@@ -78,11 +78,13 @@ useEffect(() => {
   };
   
   const onSubmitCode = async (values: FormValuesSubmit) => {
-    try {
-        
 
+     
+    try {
+        console.log("valuesssss", values);
       const data  = await codesubmission(values as FormValuesSubmit);
   console.log(data)
+  
 
 const allResults = data.allTestResults;
 setTimeout(() => {
@@ -155,7 +157,9 @@ console.log("//////////",currentInput)
           onChange={(newValue) => {
             if (typeof newValue === "string") {
               console.log(newValue);
+              
               setCurrentCode(newValue);
+              
               console.log("New value:", newValue);
               console.log("Currentcode", currentCode);
             }
@@ -210,7 +214,7 @@ console.log("//////////",currentInput)
               className="bg-primary hover:bg-primary-700 text-white font-bold py-2 px-4 rounded"
               onClick={() =>
                 onSubmitCode({
-                  questionId: questionId,
+                  questionId: "20",
                   userId: userId,
                   pythonCode: currentCode,
                 })
