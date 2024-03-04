@@ -1,12 +1,10 @@
-version: '3.8'
-
 services:
   mysql:
     image: mysql:latest
     container_name: new_mysql-container
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: "g15" 
+      MYSQL_ROOT_PASSWORD: "g15"
       MYSQL_DATABASE: database
       MYSQL_USER: ""
       MYSQL_PASSWORD: ""
@@ -23,6 +21,13 @@ services:
       - mysql
     environment:
       - NODE_ENV=production
+      - DB_NAME=database
+      - DB_USERNAME=root
+      - DB_PASSWORD=g15
+      - DB_HOST=mysql
+      - DB_PORT=3306
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
 volumes:
   mysql_data:
