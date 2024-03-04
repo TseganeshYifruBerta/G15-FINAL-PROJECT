@@ -29,5 +29,14 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
+      - DB_NAME=database
+      - DB_USERNAME=root
+      - DB_PASSWORD=g15
+      - DB_HOST=mysql
+      - DB_PORT=3306
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+
 volumes:
   mysql_data:
