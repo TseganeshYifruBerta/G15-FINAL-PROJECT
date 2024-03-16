@@ -1,5 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../../database/sequelize");
+const e = require("express");
+const Sections = require("./section");
+const Question = require("./questions");
 
 const creatExam = sequelize.define("exam", {
   title: {
@@ -14,10 +17,7 @@ const creatExam = sequelize.define("exam", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  question_ids: {
-    type: DataTypes.ARRAY(DataTypes.INTEGER),
-    allowNull: false,
-  },
+ 
   status: {
     type: DataTypes.ENUM('upcoming', 'running', 'end'),
     allowNull: false,
@@ -28,12 +28,14 @@ const creatExam = sequelize.define("exam", {
    allowNull: false,
   
   },
-  section:{
-    
-   type: DataTypes.ARRAY(DataTypes.INTEGER),
-   allowNull :false
-
-  }
 
 });
+
+
+creatExam.hasMany(Sections, { as: "sections" });
+Sections.belongsTo(creatExam);
+
+creatExam.hasMany(Question, { as: "questions" });
+Question.belongsTo(creatExam);
+
 module.exports = creatExam;
