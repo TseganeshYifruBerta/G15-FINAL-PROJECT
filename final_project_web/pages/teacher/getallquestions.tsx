@@ -27,13 +27,10 @@ function Questions() {
     allquestions;
   console.log(allquestions);
   return (
-    <div className="flex">
-      <div className="w-2/6">
-        <NavigationTeacher />
-      </div>
-      <div className="w-4/6">
-        <div className="-ml-60 min-h-screen bg-gray-100">
-          <div className="flex justify-center">
+    <div className="flex w-full">
+      <div className="w-full">
+        <div className="min-h-screen bg-gray-100">
+          <div className="flex ml-10">
             <div className="flex pt-4">
               <div className="w-full pb-6">
                 <span className="font-bold text-2xl w-full">
@@ -53,7 +50,7 @@ function Questions() {
             </div>
           </div>
           <div>
-            <div className="flex justify-center w-full font-bold">
+            <div className="flex ml-10 w-full font-bold">
               <div className="flex rounded-md p-2 m-2 w-3/5">
                 {/* <div className="w-1/5"><FaCode /></div> */}
                 <div className="w-3/5 font-bold">{"Question Title"}</div>

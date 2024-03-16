@@ -25,11 +25,8 @@ function Questions() {
     allquestions;
   console.log(allquestions);
   return (
-    <div className="flex">
-      <div className="w-2/6">
-        <Navigation />
-      </div>
-      <div className="w-4/6">
+    <div className="flex w-full">
+      <div className="w-full">
         <div className="min-h-screen">
           <div className="flex justify-center">
             <div className="w-3/5 pb-6">

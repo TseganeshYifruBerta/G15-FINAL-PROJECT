@@ -1,3 +1,5 @@
+// import jwt from "jsonwebtoken";
+
 export type StudentLoginFormData = {
   userId: string;
   password: string;
@@ -16,6 +18,8 @@ export const studentlogin = async (formData: StudentLoginFormData) => {
 
     if (response.ok) {
       const responseData = await response.json();
+      // const decoded = jwt.verify(responseData.token, "Zx3vB79!y@#Tf4cG*8hQ$LpRszMn2qJd");
+      // console.log(decoded);
       if (responseData.token) {
         // Token is present in the response data
         localStorage.setItem("studenttoken", responseData.token); // Store the token in local storage

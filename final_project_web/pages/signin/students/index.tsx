@@ -40,7 +40,7 @@ function StudentsLogin() {
           </div>
           <div className="flex items-center justify-center">
             <h2 className="p-3 text-2xl font-semibold text-bold mb-2">
-              Create Account
+              Sign in
             </h2>
           </div>
           <StudentsLoginBox />

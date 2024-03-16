@@ -1,19 +1,17 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
+import Image from "next/image";
+import { Inter } from "next/font/google";
 import { FaRegUserCircle } from "react-icons/fa";
-import SignupFormTeacher from '../../../components/signup/SignupFormTeacher';
-import Link from 'next/link';
+import SignupFormTeacher from "../../../components/signup/SignupFormTeacher";
+import Link from "next/link";
 
-
-
-
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const onSubmit = (values: any) => {
-    console.log(values);  };
+    console.log(values);
+  };
   return (
-    <main className={`flex min-h-screen flex-col    ${inter.className}`}>
+    <main className={`flex min-h-screen flex-col    ${inter.className} w-full`}>
       <div className="min-h-screen bg-white  flex items-center justify-center h-screen ">
         <div className="w-1/2 h-full bg-white">
           <div className="flex pb-24 pt-8 ">

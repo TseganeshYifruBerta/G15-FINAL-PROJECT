@@ -8,125 +8,122 @@ import { list } from "postcss";
 import CodeSubmissionResluts from "./CodeSubmitResults";
 
 interface FormValuesExecute {
-  questionId: string,
-  pythonCode: string
-  
+  questionId: string;
+  pythonCode: string;
 }
 interface FormValuesSubmit {
   questionId: string;
   pythonCode: string;
-  userId: string
+  userId: string;
 }
-interface editorProps{
-  currentCode : string,
-  userId:string,
-  questionId:string
+interface editorProps {
+  currentCode: string;
+  userId: string;
+  questionId: string;
 }
-interface SubmitCodeStatusProps{
-  submitStatus: string
+interface SubmitCodeStatusProps {
+  submitStatus: string;
 }
-interface allResultsProps 
-{
-            input: string,
-            expectedOutput: string,
-            actualOutput: string,
-            passed: boolean
-        }
-const SubmitCodeDiv: React.FC<SubmitCodeStatusProps> = ({submitStatus}) => {
-  if (submitStatus == "Wrong Answer"){
-return (
-  <div className="w-1/2">
-    <h1 className="text-red-700 font-bold">Wrong Answer</h1>
-  </div>
-);
-  }
-  else if(submitStatus == "Accepted"){
+interface allResultsProps {
+  input: string;
+  expectedOutput: string;
+  actualOutput: string;
+  passed: boolean;
+}
+const SubmitCodeDiv: React.FC<SubmitCodeStatusProps> = ({ submitStatus }) => {
+  if (submitStatus == "Wrong Answer") {
+    return (
+      <div className="w-1/2">
+        <h1 className="text-red-700 font-bold">Wrong Answer</h1>
+      </div>
+    );
+  } else if (submitStatus == "Accepted") {
     return (
       <div className="w-1/2">
         <h1 className="text-green-700 font-bold">Accepted</h1>
       </div>
     );
-  }
-  else{
+  } else {
     return <div></div>;
   }
-  
-}
-const CodeEditorBox: React.FC<editorProps> = ({userId, questionId}) => {
-  const [submitStatus, setSubmitStatus] = useState("")
-  const [currentCode, setCurrentCode] = useState("def grade_checker(score):\n");
-  const [currentInput, setCurrentInput] = useState<string[]>([])
-  const [currentExpectedOutput, setCurrentExpectedOutput] = useState<string[]>([]);
-  const [currentActualOutput, setCurrentActualOutput] = useState<string[]>([])
-  const [currentPassedStatus, setCurrentPassesStatus] = useState<boolean[]>([])
-  
-useEffect(() => {
-  console.log(currentCode);
-}, [currentCode]);
+};
+const CodeEditorBox: React.FC<editorProps> = ({ userId, questionId }) => {
+  const [submitStatus, setSubmitStatus] = useState("");
+  const [currentCode, setCurrentCode] = useState(
+    "def grade_checker(score):\n    if score >= 90:\n        return 'A'\n    elif score >= 85:\n        return 'B'\n    elif score >= 75:\n        return 'C'\n    elif score >= 65:\n        return 'D'\n    else:\n        return 'F'"
+  );
+  const [currentInput, setCurrentInput] = useState<string[]>([]);
+  const [currentExpectedOutput, setCurrentExpectedOutput] = useState<string[]>(
+    []
+  );
+  const [currentActualOutput, setCurrentActualOutput] = useState<string[]>([]);
+  const [currentPassedStatus, setCurrentPassesStatus] = useState<boolean[]>([]);
+
+  useEffect(() => {
+    console.log(currentCode);
+  }, [currentCode]);
   const onSubmitExecuteCode = async (values: FormValuesExecute) => {
     try {
-      
-      const {data, isLoading, isError} = await codeexecution(values as FormValuesExecute);
-    
-      const { allTestResults, codes,status } = data
+      const { data, isLoading, isError } = await codeexecution(
+        values as FormValuesExecute
+      );
+
+      const { allTestResults, codes, status } = data;
       showToast("run successful", "success");
     } catch (error) {
-     
       console.error("run error:", error);
       //  showToast("Login error: " + (error as Error).message, "error");
     }
   };
-  
+
   const onSubmitCode = async (values: FormValuesSubmit) => {
-
-     
+    console.log(values, "ttttttttttttttttttttttttttt");
+    values.pythonCode =
+      "def grade_checker(score):\n    if score >= 70:\n        return 'A'\n    elif score >= 80:\n        return 'B'\n    elif score >= 70:\n        return 'C'\n    elif score >= 60:\n        return 'D'\n    else:\n        return 'F'";
     try {
-        console.log("valuesssss", values);
-      const data  = await codesubmission(values as FormValuesSubmit);
-  console.log(data)
-  
+      console.log("valuesssss", values);
+      const data = await codesubmission(values as FormValuesSubmit);
+      console.log(data);
 
-const allResults = data.allTestResults;
-setTimeout(() => {
-  setSubmitStatus(data.status);
-}, 1000);
-const handleAllResults = (results: allResultsProps[]) => {
-  setCurrentActualOutput([])
-  setCurrentExpectedOutput([])
-  setCurrentInput([])
-  setCurrentPassesStatus([])
-  for (var i=0; i < results.length; i++){
-    currentInput.push(results[i].input);
-    currentActualOutput.push(results[i].actualOutput)
-      currentExpectedOutput.push(results[i].expectedOutput);
-currentPassedStatus.push(results[i].passed)
-     
-// setCurrentActualOutput([...currentActualOutput,results[i].actualOutput])
-// setCurrentExpectedOutput([...currentExpectedOutput, results[i].expectedOutput])
-// setCurrentInput([...currentInput, results[i].input])
-  }
-};
+      const allResults = data.allTestResults;
+      setTimeout(() => {
+        setSubmitStatus(data.status);
+      }, 1000);
+      const handleAllResults = (results: allResultsProps[]) => {
+        setCurrentActualOutput([]);
+        setCurrentExpectedOutput([]);
+        setCurrentInput([]);
+        setCurrentPassesStatus([]);
+        for (var i = 0; i < results.length; i++) {
+          currentInput.push(results[i].input);
+          currentActualOutput.push(results[i].actualOutput);
+          currentExpectedOutput.push(results[i].expectedOutput);
+          currentPassedStatus.push(results[i].passed);
 
-handleAllResults(allResults)
- setCurrentInput(currentInput);
- setCurrentActualOutput(currentActualOutput)
- setCurrentExpectedOutput(currentExpectedOutput)
- setCurrentPassesStatus(currentPassedStatus)
-console.log("//////////",currentInput)
+          // setCurrentActualOutput([...currentActualOutput,results[i].actualOutput])
+          // setCurrentExpectedOutput([...currentExpectedOutput, results[i].expectedOutput])
+          // setCurrentInput([...currentInput, results[i].input])
+        }
+      };
 
-// setCurrentInput(input)
-// setCurrentActualOutput(actualOutput)
-// setCurrentExpectedOutput(expectedOutput)
+      handleAllResults(allResults);
+      setCurrentInput(currentInput);
+      setCurrentActualOutput(currentActualOutput);
+      setCurrentExpectedOutput(currentExpectedOutput);
+      setCurrentPassesStatus(currentPassedStatus);
+      console.log("//////////", currentInput);
+
+      // setCurrentInput(input)
+      // setCurrentActualOutput(actualOutput)
+      // setCurrentExpectedOutput(expectedOutput)
       showToast("submit successful", "success");
-
     } catch (error) {
-
       console.error("submit error:", error);
-       showToast(
-         "Submission error: check your function or passed arguments" +
-           (error as Error).message,
-         "error"
-       );
+      showToast(
+        "Submission error: check your function or passed arguments" +
+          (error as Error).message,
+        "error"
+      );
     }
   };
   const [language, setLanguage] = useState("python");
@@ -157,9 +154,9 @@ console.log("//////////",currentInput)
           onChange={(newValue) => {
             if (typeof newValue === "string") {
               console.log(newValue);
-              
+
               setCurrentCode(newValue);
-              
+
               console.log("New value:", newValue);
               console.log("Currentcode", currentCode);
             }
@@ -214,7 +211,7 @@ console.log("//////////",currentInput)
               className="bg-primary hover:bg-primary-700 text-white font-bold py-2 px-4 rounded"
               onClick={() =>
                 onSubmitCode({
-                  questionId: "20",
+                  questionId: questionId,
                   userId: userId,
                   pythonCode: currentCode,
                 })

@@ -38,9 +38,6 @@ function SubmissionDetailById () {
 
     return (
       <div className="flex">
-        <div className="w-2/6">
-          <Navigation />
-        </div>
         <div className="w-4/6">
           <div className="  min-h-screen p-4">
             <div className="text-2xl font-bold flex justify-center mb-2">

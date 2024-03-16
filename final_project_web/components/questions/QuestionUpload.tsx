@@ -1,5 +1,8 @@
 import { AppDispatch, RootState } from "@/store";
-import { QuestionUploadFormData, uploadquestion } from "@/store/question-upload/question-upload-api";
+import {
+  QuestionUploadFormData,
+  uploadquestion,
+} from "@/store/question-upload/question-upload-api";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { showToast } from "../popup";
@@ -10,14 +13,16 @@ export interface testCaseProps {
   output: string;
 }
 
-const QuestionUploadForm: React.FC<InjectedFormProps<QuestionUploadFormData>> = ({
-  handleSubmit,
-}) => {
+const QuestionUploadForm: React.FC<
+  InjectedFormProps<QuestionUploadFormData>
+> = ({ handleSubmit }) => {
   const [questionTitle, setQuestionTitle] = useState("");
   const [questionDifficulty, setQuestionDifficulty] = useState("");
   const [questionDescription, setQuestionDescription] = useState("");
   const [examples, setExamples] = useState<string>("");
-  const [testCases, setTestCases] = useState<testCaseProps[]>([{input:"{}", output:"{}"}]);
+  const [testCases, setTestCases] = useState<testCaseProps[]>([
+    { input: "{}", output: "{}" },
+  ]);
   const [showWarning, setShowWarning] = useState(false); // State for showing/hiding warning
 
   const dispatch: AppDispatch = useDispatch(); // Use AppDispatch type
@@ -38,30 +43,56 @@ const QuestionUploadForm: React.FC<InjectedFormProps<QuestionUploadFormData>> = 
     setTestCases([...testCases, { input: "", output: "" }]);
   };
   const onSubmit = async () => {
-    
     try {
-const jsonInput = JSON.parse(values.testCases[0].input);
-const jsonOutput = JSON.parse(values.testCases[0].output);
-const jsonTestCases = {
-  input: jsonInput.input,
-  output: jsonOutput.output,
-};
-values.testCases = [jsonTestCases];
+      const jsonInput = JSON.parse(values.testCases[0].input);
+      const jsonOutput = JSON.parse(values.testCases[0].output);
+      const jsonTestCases = {
+        input: jsonInput.input,
+        output: jsonOutput.output,
+      };
+      values.testCases = [jsonTestCases];
+      console.log(values);
+      if (values.title === "") {
+                showToast("Title required", "error");
 
+        return;
+      }
+      if (values.difficulty === "") {
+                showToast("Difficulty required", "error");
 
+        return;
+      }
+      if (values.description === "") {
+               showToast("Description required", "error");
 
+        return;
+      }
+      if (values.example === "") {
+showToast("Example required", "error");
+
+        return;
+      }
+      if (values.testCases[0].input === "") {
+        showToast("Testcase Input required", "error");
+        return;
+      }
+      if (values.testCases[0].output === "") {
+        showToast("Testcase Output required", "error");
+        return;
+      }
       const data = await uploadquestion(values as QuestionUploadFormData);
-      console.log(data)
+      console.log(data);
+      
       showToast("Upload successful", "success");
     } catch (error) {
       console.error("Login error:", error);
-          console.log(values);
+      console.log(values);
 
       showToast("Login error: " + (error as Error).message, "error");
     }
   };
   return (
-    <div className="p-4">
+    <div className="p-4 w-full">
       <div className="font-bold text-2xl ml-4 pl-1 pb-4">
         <span className="text-primary">Upload</span>
         <span> Question</span>
