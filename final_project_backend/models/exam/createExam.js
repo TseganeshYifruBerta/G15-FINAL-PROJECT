@@ -1,39 +1,39 @@
-// student.model.js
 const { DataTypes } = require("sequelize");
 const sequelize = require("../../database/sequelize");
-const Solution = require("./solution");
 
-
-const examTestCase = require("./examTestcase");
-
-const ExamQuestion = sequelize.define("examQuestion", {
-
-
+const creatExam = sequelize.define("exam", {
   title: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  difficulty: {
+  date_and_time: {
+    type: DataTypes.STRING, // Consider using DataTypes.DATE for actual date comparison
+    allowNull: false,
+  },
+  instruction: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  description: {
-    type: DataTypes.STRING,
+  question_ids: {
+    type: DataTypes.ARRAY(DataTypes.INTEGER),
     allowNull: false,
   },
-  example: {
-    type: DataTypes.STRING,
+  status: {
+    type: DataTypes.ENUM('upcoming', 'running', 'end'),
     allowNull: false,
+    defaultValue: 'upcoming', // Default status is 'upcoming'
   },
+  duration:{
+   type: DataTypes.INTEGER,
+   allowNull: false,
+  
+  },
+  section:{
+    
+   type: DataTypes.ARRAY(DataTypes.INTEGER),
+   allowNull :false
+
+  }
+
 });
-
-
-
-ExamQuestion.hasMany(Solution, { as: "solutions" });
-ExamQuestion.hasMany(examTestCase, { as: "examTestCase" });
-
-examTestCase.belongsTo(ExamQuestion);
-Solution.belongsTo(ExamQuestion);
-
-module.exports = ExamQuestion;
-
+module.exports = creatExam;

@@ -1,5 +1,5 @@
 
-const ExamQuestion = require("../../../models/exam/createExam");
+const ExamQuestion = require("../../../models/exam/uploadExamQuestion");
 const examTestCase = require("../../../models/exam/examTestcase");
 const Solution = require("../../../models/exam/solution");
 
