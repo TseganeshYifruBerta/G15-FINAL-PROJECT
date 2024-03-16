@@ -1,14 +1,11 @@
 const express = require("express");
 const examRouters = express.Router();
-const submitExamQuestionWithTestCaseAndSolution = require("../../controller/exam/examController")
-const getAllExamQuestions = require("../../controller/exam/getAllExamQuestion")
-const getExamQuestionById = require("../../controller/exam/getEXamQuestionById")
-const createExam=require("../../controller/exam/createExam/examController")
-const updateCreatedExam =  require("../../controller/exam/createExam/examController")
-const deleteCreatedExam = require("../../controller/exam/createExam/examController")
-const startcreatedExam = require("../../controller/exam/createExam/examController")
-
-
+const submitExamQuestionWithTestCaseAndSolution = require("../../controller/exam/examQuestion/examQuestionController")
+const getAllExamQuestions = require("../../controller/exam/examQuestion/getAllExamQuestion")
+const getExamQuestionById = require("../../controller/exam/examQuestion/getEXamQuestionById")
+const {createExam,updateCreatedExam,deleteCreatedExam,startcreatedExam }=require("../../controller/exam/createExam/examController")
+const deleteExamQuestion = require("../../controller/exam/examQuestion/manageExamQuestion/deleteExamQuestion")
+const editExamQuestion = require("../../controller/exam/examQuestion/manageExamQuestion/updateExamQuestion")
 
 examRouters.post("/submitExam", submitExamQuestionWithTestCaseAndSolution);
 examRouters.get("/getAllExamQuestions" ,getAllExamQuestions);
