@@ -3,19 +3,34 @@ const { sequelize } = require('../../../models/exam/questions'); // Adjust the p
 const { Question } = require('../../../models/exam/questions'); // Adjust the path as necessary
 const { Section } = require('../../../models/exam/section'); // Adjust the path as necessary
   // Create an exam
+  // Create an exam
   const createExam = async (req, res) => {
     try {
-      const { title, date_and_time, instruction, question_ids } = req.body;
+      const { title, date_and_time, instruction, duration, sections, questions } = req.body;
       const exam = await CreatExam.create({
-
         title,
         date_and_time,
         instruction,
         duration,
         status: 'upcoming',
-        // Default is set in the model, so this is technically optional
       });
-      return res.status(201).json(exam);
+
+      if (sections) {
+        await Section.create({
+          sections,
+       
+        });
+      }
+
+      if (questions) {
+        await Question.create({
+          question_ids: questions,
+       
+        });
+      }
+
+      return res.status(201
+        ).json(exam);
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }
