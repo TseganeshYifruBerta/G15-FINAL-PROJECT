@@ -1,6 +1,6 @@
 const ExamQuestion = require("../../../models/exam/createExam")
 
-const editQuestion = async (req, res) => {
+const editExamQuestion = async (req, res) => {
     const { examQuesId } = req.params;
     const updatedData = req.body;
   
@@ -18,8 +18,7 @@ const editQuestion = async (req, res) => {
       return res.status(500).json({ error: "Internal server error" });
     }
   };
-  module.exports = {
-    editQuestion,
+  module.exports = editExamQuestion
 
-  }
+  
 

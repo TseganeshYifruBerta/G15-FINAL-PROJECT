@@ -4,13 +4,13 @@ const submitExamQuestionWithTestCaseAndSolution = require("../../controller/exam
 const getAllExamQuestions = require("../../controller/exam/getAllExamQuestion")
 const getExamQuestionById = require("../../controller/exam/getEXamQuestionById")
 
-const { editQuestion } = require("../../controller/exam/manageExamQuestion.js/updateExam");
-const { deleteExam } = require("../../controller/exam/manageExamQuestion.js/deleteExam");
+const editExamQuestion  = require("../../controller/exam/manageExamQuestion/updateExamQuestion");
+const deleteExamQuestion = require("../../controller/exam/manageExamQuestion/deleteExamQuestion");
 examRouters.post("/submitExam", submitExamQuestionWithTestCaseAndSolution);
 examRouters.get("/getAllExamQuestions" ,getAllExamQuestions);
-examRouters.get("/getExamQuestionById/:id" ,getExamQuestionById)
-examRouters.delete("/deleteExamQuestionById/:examQuesId" ,deleteExam);
-examRouters.put("/updateExamQuestionById/:examQuesId" ,editQuestion);
+examRouters.get("/getExamQuestionById/:id" ,getExamQuestionById);
+examRouters.delete("/deleteExamQuestionById/:examQuesId" ,deleteExamQuestion);
+examRouters.put("/updateExamQuestionById/:examQuesId" ,editExamQuestion);
 
 
 module.exports = examRouters;

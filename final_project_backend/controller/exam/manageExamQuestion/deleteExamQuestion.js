@@ -1,6 +1,6 @@
 const { model } = require("../../../database/sequelize");
 const ExamQuestion = require("../../../models/exam/createExam")
-const deleteExam = async (req, res) => {
+const deleteExamQuestion = async (req, res) => {
     const { examQuesId } = req.params;
   
     try {
@@ -16,7 +16,5 @@ const deleteExam = async (req, res) => {
       return res.status(500).json({ error: "Internal server error" });
     }
   };
-  module.exports={
-
-    deleteExam,
-  }
+module.exports= deleteExamQuestion
+  
