@@ -21,6 +21,8 @@ import { getNumberOfAllQuestionApi } from "./profile/get-number-of-question-api"
 import { getAllExamsApi } from "./exam/get-all-exam-api";
 import { getExamQuestionByIdApi } from "./exam/get-all-exam-by-id";
 import { getAllStudentsApi } from "./teacherprofile/get-all-students";
+import { getAllExamQuestionsApi } from "./exam/get-all-exam-questions";
+
 export const store = configureStore({
   reducer: {
     form: formReducer,
@@ -32,6 +34,7 @@ export const store = configureStore({
     examquestionupload: examQuestionUploadReducer,
     [getQuestionDetalApi.reducerPath]: getQuestionDetalApi.reducer,
     [getAllQuestionApi.reducerPath]: getAllQuestionApi.reducer,
+    [getAllExamQuestionsApi.reducerPath]: getAllExamQuestionsApi.reducer,
     [getSubmissionDetailByIdApi.reducerPath]:
       getSubmissionDetailByIdApi.reducer,
     [getAllSubmissionsByIdApi.reducerPath]: getAllSubmissionsByIdApi.reducer,
@@ -57,7 +60,8 @@ export const store = configureStore({
       .concat(getEasyMediumHardByIdApi.middleware)
       .concat(getNumberOfAllQuestionApi.middleware)
       .concat(getAllStudentsApi.middleware)
-      .concat(getAllExamsApi.middleware),
+      .concat(getAllExamsApi.middleware)
+      .concat(getAllExamQuestionsApi.middleware)
 });
 
 export type RootState = ReturnType<typeof store.getState>;

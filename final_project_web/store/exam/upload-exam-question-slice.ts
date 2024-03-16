@@ -5,7 +5,8 @@ interface ExamQuestionUploadState {
   difficulty: string;
   description: string;
   example: string;
-  testCases: string[];
+  testcases: string[];
+  solution: string;
 }
 
 const examQuestionUploadSlice = createSlice({
@@ -15,7 +16,8 @@ const examQuestionUploadSlice = createSlice({
     difficulty: "",
     description: "",
     example: "",
-    testCases: ["{name:'', grade:''}"],
+    testcases: ["{name:'', grade:''}"],
+    solution: "",
   } as ExamQuestionUploadState,
   reducers: {
     setTitle: (state, action: PayloadAction<string>) => {
@@ -31,7 +33,10 @@ const examQuestionUploadSlice = createSlice({
       state.example = action.payload;
     },
     setTestCases: (state, action: PayloadAction<string[]>) => {
-      state.testCases = action.payload;
+      state.testcases = action.payload;
+    },
+    setSolution: (state, action: PayloadAction<string>) => {
+      state.solution = action.payload;
     },
   },
 });
@@ -42,5 +47,6 @@ export const {
   setDescription,
   setExample,
   setTestCases,
+  setSolution
 } = examQuestionUploadSlice.actions;
 export default examQuestionUploadSlice.reducer;

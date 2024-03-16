@@ -1,3 +1,4 @@
+import { useGetAllExamQuestionsQuery } from "@/store/exam/get-all-exam-questions";
 import { useState, ChangeEvent } from "react";
 
 interface Question {
@@ -13,19 +14,20 @@ interface FormData {
   questionsText: string[];
   dateOfExam: string;
   duration: string;
+  instruction: string;
 }
 
 const CreateExam = () => {
   const sections = [
-    "Section 1",
-    "Section 2",
-    "Section 3",
-    "Section 4",
-    "Section 5",
-    "Section 6",
-    "Section 7",
-    "Section 8",
-    "Section 9",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
   ];
   const questions: Question[] = [
     { id: "1", text: "Two sum" },
@@ -44,6 +46,7 @@ const CreateExam = () => {
     questionsText: [],
     dateOfExam: "",
     duration: "",
+    instruction: "",
   });
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +62,7 @@ const CreateExam = () => {
       const option = options[i];
       if (option.selected) {
         selectedValues.push(option.value);
-        selectedTexts.push(option.text);
+        selectedTexts.push(option.value);
       }
     }
     setFormData((prevState) => ({
@@ -76,15 +79,23 @@ const CreateExam = () => {
     for (let i = 0; i < options.length; i++) {
       const option = options[i];
       if (option.selected) {
-        selectedValues.push(option.value);
-        selectedTexts.push(option.text);
+        selectedValues.push(option.value); // ID
+        selectedTexts.push(option.value); // Title
+        // Find the corresponding question title by ID and push it to selectedTexts
+        const questionTitle = allexamquestions.find(
+          (q: any) => q.id === option.value
+        )?.title;
+        if (questionTitle) {
+          selectedTexts.push(questionTitle);
+        }
       }
     }
     setFormData((prevState) => ({
       ...prevState,
       questionIds: selectedValues,
-      questionsText: selectedTexts,
+      questionsText: selectedTexts, // This now correctly contains only titles
     }));
+    console.log(selectedValues);
   };
 
   const removeChip = (chipType: "sections" | "questionIds", index: number) => {
@@ -119,7 +130,15 @@ const CreateExam = () => {
     console.log(formData);
     // Logic to send formData to the backend goes here
   };
-
+  const {
+    data: allexamquestions,
+    isLoading,
+    isError,
+  } = useGetAllExamQuestionsQuery("");
+  if (isLoading) {
+    return <div>loading</div>;
+  }
+  console.log(allexamquestions);
   return (
     <div className="container px-4 py-8 ml-10">
       {/* Page Title */}
@@ -154,6 +173,30 @@ const CreateExam = () => {
           />
         </div>
 
+        {/* Instruction */}
+        <div className="mb-4">
+          <label
+            htmlFor="instruction"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Instruction
+          </label>
+          <input
+            type="text"
+            name="instruction"
+            id="instruction"
+            required
+            value={formData.instruction}
+            onChange={handleInputChange}
+            className="mt-1 block w-full md:w-1/2 bg-gray-100 px-3 py-2 rounded-lg shadow focus:outline-none focus:shadow-outline"
+            placeholder="Provide instruction"
+            style={{
+              transition:
+                "box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out",
+            }}
+          />
+        </div>
+
         {/* Sections Selection */}
         <div className="mb-4">
           <label
@@ -176,7 +219,7 @@ const CreateExam = () => {
           >
             {sections.map((section) => (
               <option key={section} value={section}>
-                {section}
+                Section {section}
               </option>
             ))}
           </select>
@@ -219,12 +262,13 @@ const CreateExam = () => {
                 "box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out",
             }}
           >
-            {questions.map((question) => (
+            {allexamquestions.map((question: any) => (
               <option key={question.id} value={question.id}>
-                {question.text}
+                {question.title}
               </option>
             ))}
           </select>
+
           <div className="mt-3 flex flex-wrap gap-2">
             {formData.questionsText.map((text, index) => (
               <span

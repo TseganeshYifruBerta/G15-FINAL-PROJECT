@@ -5,17 +5,24 @@ export type ExamQuestionUploadFormData = {
   difficulty: string;
   description: string;
   example: string;
-  testCases: testCaseProps[];
+  testcases: testCaseProps[];
+  solution: string;
 };
 
-export const uploadexamquestion = async (formData: ExamQuestionUploadFormData) => {
+export const uploadexamquestion = async (
+  formData: ExamQuestionUploadFormData
+) => {
   try {
-    const response = await fetch("http://localhost:5000/sumbit/submitExam", {
+    {
+      console.log("Form data submitted afterrrrr:::::::;;;:", formData);
+    }
+    const response = await fetch("http://localhost:5000/exam/submitExam", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
+
       body: JSON.stringify(formData),
     });
 
@@ -23,7 +30,7 @@ export const uploadexamquestion = async (formData: ExamQuestionUploadFormData) =
     console.log("Success:", data);
     return data;
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error:eeeeeeeee", error);
     throw error;
   }
 };

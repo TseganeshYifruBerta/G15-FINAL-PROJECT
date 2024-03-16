@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
+import { useGetAllExamQuestionsQuery } from "@/store/exam/get-all-exam-questions";
 const ExamsPage = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+
   const exams = [
     {
       id: 1,
@@ -24,8 +27,6 @@ const ExamsPage = () => {
       date: "2023-07-01",
     },
   ];
-
-  const [searchTerm, setSearchTerm] = useState("");
 
   const upcomingExam = exams.find((exam) => exam.status === "upcoming");
 
@@ -70,7 +71,7 @@ const ExamsPage = () => {
           placeholder="Search exams..."
           className="px-4 py-2 border rounded-md"
           value={searchTerm}
-          onChange={(e:any) => setSearchTerm(e.target.value)}
+          onChange={(e: any) => setSearchTerm(e.target.value)}
         />
       </div>
 
@@ -140,7 +141,7 @@ const ExamsPage = () => {
           <h2 className="text-lg font-semibold text-gray-900 mb-2 w-1/2">
             Upcoming Exams
           </h2>
-          <Link href="/create-exam" className="w-1/2">
+          <Link href="/teacher/create_exam" className="w-1/2">
             <div className="flex justify-end">
               <div className="flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-white hover:text-primary">
                 Create New Exam
