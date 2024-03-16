@@ -1,11 +1,11 @@
 
-const ExamQuestion = require("../../models/exam/createExam");
-const examTestCase = require("../../models/exam/examTestcase");
-const Solution = require("../../models/exam/solution");
+const ExamQuestion = require("../../../models/exam/createExam");
+const examTestCase = require("../../../models/exam/examTestcase");
+const Solution = require("../../../models/exam/solution");
 
 
 const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
-  const { title, difficulty,description , example, testcases, solution } = req.body;
+  const { title, difficulty, description, example, testcases, solution } = req.body;
 
   try {
     // Create a new question
@@ -23,9 +23,9 @@ const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
         const formattedOutput = Array.isArray(testcase.output)
           ? testcase.output
           : [testcase.output]; // Ensure output is an array
-          const formattedInput = Array.isArray(testcase.input)
-            ? testcase.input
-            : [testcase.input];
+        const formattedInput = Array.isArray(testcase.input)
+          ? testcase.input
+          : [testcase.input];
 
         return await examTestCase.create({
           input: formattedInput,
@@ -34,7 +34,7 @@ const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
         });
       })
     );
-   
+
     // Create a new solution
 
     const newSolution = await Solution.create({
@@ -59,6 +59,6 @@ const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
 
 
 
-module.exports =  submitExamQuestionWithTestCaseAndSolution ;
+module.exports = submitExamQuestionWithTestCaseAndSolution;
 
 

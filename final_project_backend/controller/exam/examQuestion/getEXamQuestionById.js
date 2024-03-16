@@ -1,4 +1,4 @@
-const ExamQuestion = require("../../models/exam/createExam");
+const ExamQuestion = require("../../../models/exam/createExam");
 
 const getExamQuestionById = async (req, res) => {
   const { id } = req.params;
@@ -14,4 +14,4 @@ const getExamQuestionById = async (req, res) => {
   }
 };
 
-module.exports = getExamQuestionById ;
+module.exports = getExamQuestionById;
