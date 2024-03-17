@@ -1,9 +1,9 @@
 const Question = require("../../../models/question_testcase_submission/question")
-const TestCase = require("../../../models/question_testcase_submission/testcase")
-
+const TestCase = require("../../../models/question_testcase_submission/testCase")
+const sequelize = require("../../../database/sequelize")
 const editQuestion = async (req, res) => {
     try {
-      const { title, difficulty, description, example, testcases, solution } = req.body;
+      const { title, difficulty, description, example, testcases } = req.body;
       const { id } = req.params;
   
       const question = await Question.findByPk(id);
@@ -37,19 +37,22 @@ const editQuestion = async (req, res) => {
   
               await TestCase.update(
                 { input: formattedInput, output: formattedOutput },
-                { where: { questionId: id, id: testcaseId }, transaction }
+                { where: { labQuestionId: id, id: testcaseId }, transaction }
               );
             })
           );
         }
+        
   
         // // Check if the section data is provided
     
   
         // Commit the transaction
         await transaction.commit();
+        const updatedTestCases = await TestCase.findAll({ where: { labQuestionId: id } });
+
   
-        return res.status(200).json({ message: "Question updated successfully" });
+        return res.status(200).json({ message: "Question updated successfully"  , question,updatedTestCases});
       } catch (error) {
         // Rollback the transaction if there's an error
         await transaction.rollback();
