@@ -13,6 +13,8 @@ const {
 // fetching difficulty tag counts
 const getAllDifficultyData= require("../../controller/codeExecution/manageCodeSubmittedData")
 const countSubmissionsForLastWeek = require("../../controller/codeExecution/countSubmissionPerWeek")
+const submitExamAnswerByStudent = require("../../controller/exam/submittedExamAnswer/submittedStudentsExamAnswer")
+
 
 executionRouter.post("/submit", execute);
 executionRouter.post("/run", codeExecute); 
@@ -24,6 +26,7 @@ executionRouter.get("/countSubmissionsForDateByUserId/:userId/:date",countSubmis
 executionRouter.get("/countAcceptedSubmissions" ,countAcceptedSubmissions )
 executionRouter.get("/getAllAcceptedSubmissions" , getAllAcceptedSubmissions )
 executionRouter.get("/countSubmissionsForLastWeek/:initialDateString" , countSubmissionsForLastWeek )
+executionRouter.post("/submitExamAnswerByStudent", submitExamAnswerByStudent);
 
 
 
