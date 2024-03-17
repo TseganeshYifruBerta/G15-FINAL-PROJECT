@@ -7,8 +7,8 @@ const {
   getNumberOfAllQuestion,
   
 } = require("../../controller/QuestionUploaderController/fetch_all_question");
-const { editQuestion } = require("../../controller/QuestionUploaderController/manageQuestion/EditQuestion");
-const { deleteQuestion } = require("../../controller/QuestionUploaderController/manageQuestion/deleteQuestion");
+const  editQuestion  = require("../../controller/QuestionUploaderController/manageQuestion/EditQuestion");
+const  deleteQuestion = require("../../controller/QuestionUploaderController/manageQuestion/deleteQuestion");
 
  const {
    fetchingAllSubmittedQuestionForUser,
@@ -22,8 +22,8 @@ questionRouters.get("/getAllQuestions", getAllQuestions);
 
 questionRouters.get("/getNumberOfAllQuestion", getNumberOfAllQuestion);
 questionRouters.get("/getAllQuestionsById/:userId/:questionId", getAllQuestionsById);   
-questionRouters.put("/updateQuestionById/:questionId", editQuestion)
-questionRouters.delete("/deleteQuestionById/:questionId", deleteQuestion)
+questionRouters.put("/updateQuestionById/:id", editQuestion)
+questionRouters.delete("/deleteQuestionById/:id", deleteQuestion)
 questionRouters.get(
   "/fetchSubmittedQuestionById/:userId",
   fetchingAllSubmittedQuestionForUser
