@@ -5,7 +5,7 @@ const Solution = require("../../../models/exam/solution");
 
 
 const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
-  const { title, difficulty, description, example, testcases, solution } = req.body;
+  const { title, difficulty, description, example, testcases, solutions } = req.body;
 
   try {
     // Create a new question
@@ -35,19 +35,25 @@ const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
       })
     );
 
-    // Create a new solution
+    if (solutions && solutions.length > 0) {
+      await Promise.all(solutions.map(async (solution) => {
+       await Solution.create({
+          content: solution,
+          examQuestionId: newQuestion.id,
+        });
+      }));
+    }
 
-    const newSolution = await Solution.create({
-      content: solution,
-      examQuestionId: newQuestion.id,
-    });
-
+    const solutiontable = await Solution.findAll({ where: { examQuestionId: newQuestion.id } });
 
     res.status(201).json({
       message: "Question, test cases, and solution submitted successfully",
+      newQuestion,
       question: newQuestion,
       testCases: createdTestCases,
-      solution: newSolution,
+      solution: solutiontable,
+    
+
     });
   } catch (error) {
     res.status(500).json({

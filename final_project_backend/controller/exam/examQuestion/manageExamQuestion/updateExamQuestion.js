@@ -1,11 +1,11 @@
-const ExamQuestion = require("../../../../models/exam/createExam")
+const ExamQuestion = require("../../../../models/exam/uploadExamQuestion")
 const TestCase = require("../../../../models/exam/examTestcase")
 const Solution = require("../../../../models/exam/solution")
 const sequelize = require('../../../../database/sequelize'); // Import sequelize instance
 
 const editExamQuestion = async (req, res) => {
   try {
-    const { title, difficulty, description, example, testcases, solution } = req.body;
+    const { title, difficulty, description, example, testcases, solutions } = req.body;
     const { id } = req.params;
 
     const examQuestion = await ExamQuestion.findByPk(id);
@@ -50,12 +50,19 @@ const editExamQuestion = async (req, res) => {
 
 
       // // Check if the section data is provided
-      if (solution) {
-        await Solution.update(
-          { solution: solution },
-          { where: { examQuestionId: id }, transaction }
-        )
+      console.log('steppppppppppppp1 ',solutions);
+      if (solutions && solutions.length > 0){
+      console.log('steppppppppppppp2');
 
+        await Promise.all(solutions.map(async (solution) => {
+      console.log('steppppppppppppp3');
+
+          console.log('solution', solution.id);
+          await Solution.update(
+            { content: solution.content },
+            { where: { examQuestionId: id,  id: solution.id}, transaction }
+          );
+        }));
       }
 
       // Commit the transaction
