@@ -2,7 +2,7 @@
 const express = require("express");
 const executionRouter = express.Router();
 // code execution
-const countAcceptedSubmissions = require("../../controller/codeExecution/countAcceptedsubmission")
+const {countAcceptedSubmissions} = require("../../controller/codeExecution/countAcceptedsubmission")
 const { codeExecute}= require("../../controller/codeExecution/codeExecution")
 const { execute } = require("../../controller/codeExecution/codeSubmission");
 const {

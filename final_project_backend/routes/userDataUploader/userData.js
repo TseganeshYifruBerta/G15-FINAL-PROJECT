@@ -4,7 +4,7 @@ const multer = require("multer");
 const {
   findStudentByID,
 } = require("../../controller/UserDataUploaderController/studentDataManagement");
-const getNumberOfAllStudent = require("../../controller/UserDataUploaderController/numberOfStudent")
+const {getNumberOfAllStudent , getNumberOfAllTeacher} = require("../../controller/UserDataUploaderController/numberOfUsers")
 const uploadStudentsFile = require("../../controller/UserDataUploaderController/StudentsDataUploaderController");
 const uploadTeachersFile = require("../../controller/UserDataUploaderController/TeachersdataUploaderController");
 const studentsUpload = multer({ dest: "uploads/student" });
@@ -28,7 +28,9 @@ dataUploadRouters.post(
 ); 
 
 dataUploadRouters.get("/getAllStudents", fetchAllUploadedStudentsFile);
-dataUploadRouters.get("/getNumberOfAllStudent" ,getNumberOfAllStudent)
+dataUploadRouters.get("/getNumberOfAllStudent" ,getNumberOfAllStudent);
+dataUploadRouters.get("/getNumberOfAllTeacher" ,getNumberOfAllTeacher);
+
 
 dataUploadRouters.get("/findStudentByID/:id",findStudentByID)
 module.exports = dataUploadRouters;
