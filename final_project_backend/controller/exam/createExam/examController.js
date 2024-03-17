@@ -1,7 +1,7 @@
-const { CreatExam } = require('../../../models/exam/createExam'); // Adjust the path as necessary
-const { sequelize } = require('../../../models/exam/questions'); // Adjust the path as necessary
-const { Question } = require('../../../models/exam/questions'); // Adjust the path as necessary
-const { Section } = require('../../../models/exam/section'); // Adjust the path as necessary
+const CreatExam  = require('../../../models/exam/createExam'); // Adjust the path as necessary
+const  sequelize  = require('../../../database/sequelize'); // Adjust the path as necessary
+const  Question  = require('../../../models/exam/questions'); // Adjust the path as necessary
+const Section  = require('../../../models/exam/section'); // Adjust the path as necessary
   // Create an exam
   // Create an exam
   const createExam = async (req, res) => {
@@ -15,19 +15,24 @@ const { Section } = require('../../../models/exam/section'); // Adjust the path 
         status: 'upcoming',
       });
 
-      if (sections) {
+      
+    if (sections && sections.length > 0) {
+      await Promise.all(sections.map(async (section) => {
         await Section.create({
-          sections,
-       
+          sections:section,
+          examId: exam.id,
         });
-      }
+      }));
+    }
 
-      if (questions) {
+    if (questions && questions.length > 0) {
+      await Promise.all(questions.map(async (questionId) => {
         await Question.create({
-          question_ids: questions,
-       
+          question_ids: questionId,
+          examId: exam.id,
         });
-      }
+      }));
+    }
 
       return res.status(201
         ).json(exam);
@@ -44,7 +49,7 @@ const { Section } = require('../../../models/exam/section'); // Adjust the path 
     try
     {
       const { id } = req.params;
-      const { title, date_and_time, instruction, duration, status, sections, questions } = req.body;
+      const { title, date_and_time, instruction, duration, status, section, questions } = req.body;
       const exam = await CreatExam.findByPk(id);
       if (!exam) {
         return res.status(404).json({ message: 'Exam not found' });
@@ -57,19 +62,37 @@ const { Section } = require('../../../models/exam/section'); // Adjust the path 
         exam.duration = duration;
         exam.status = status;
         await exam.save({ transaction });
-        if (sections) {
+        // if (section) {
 
-          await Section.update(
-            { section: sections },
-            { where: { examId: id }, transaction }
-          );
+        //   await Section.update(
+        //     { sections: section },
+        //     { where: { examId: id }, transaction }
+        //   );
+        // }
+        console.log("section")
+
+        if (section && section.length > 0) {
+          await Promise.all(section.map(async (section) => {
+            await Section.update(
+              { sections: section.sections },
+              { where: { examId: id,  id: section.id}, transaction }
+            );
+          }));
         }
-        if (questions) {
-          await Question.update(
-            { question: questions },
-            { where: { examId: id }, transaction }
-          );
+        if (questions && questions.length > 0) {
+
+          await Promise.all(questions.map(async (questionId) => {
+        console.log("questihhhhhon", questionId)
+
+            await Question.update(
+              { question_ids: questionId.question_ids },
+              { where: { examId: id ,  id: questionId.id }, transaction }
+            );
+        console.log("quesyyyn")
+
+          }));
         }
+       
         await transaction.commit();
         const updatedExam = await CreatExam.findByPk(id);
         const updatedSections = await Section.findAll({ where: { examId: id } });
@@ -124,11 +147,11 @@ const { Section } = require('../../../models/exam/section'); // Adjust the path 
 // In your exam controller file
 
 // Function to start an exam
-const startcreatedExam = async (req, res) => {
-  const { examId } = req.params; // Get exam ID from the request parameters
+const startCreatedExam = async (req, res) => {
+  const { id } = req.params; // Get exam ID from the request parameters
   
   try {
-    const exam = await CreatExam.findByPk(examId);
+    const exam = await CreatExam.findByPk(id);
     if (!exam) {
       return res.status(404).json({ error: 'Exam not found' });
     }
@@ -139,7 +162,7 @@ const startcreatedExam = async (req, res) => {
     // Schedule to update the status to "ended" after the exam's duration
     const durationInMilliseconds = exam.duration * 60000; // Convert duration from minutes to milliseconds
     setTimeout(async () => {
-      await exam.update({ status: 'ended' });
+      await exam.update({ status: 'end' });
     }, durationInMilliseconds);
     
     return res.status(200).json({ message: 'Exam started successfully' });
@@ -154,7 +177,7 @@ module.exports = {
   
 deleteCreatedExam,
 updateCreatedExam,
-startcreatedExam,
+startCreatedExam,
 createExam
 
 }

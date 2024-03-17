@@ -1,10 +1,10 @@
-const CreatExam = require('../path/to/your/model/CreatExam');
+const CreatExam = require('../../../models/exam/createExam'); // Adjust the path as necessary
 
 // Controller to get all exams
 const getAllExams = async (req, res) => {
   try {
-    const exams = await CreatExam.findAll();
-    res.status(200).json(exams);
+    const exam = await CreatExam.findAll();
+    res.status(200).json(exam);
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -16,11 +16,10 @@ const getExamById = async (req, res) => {
     const { id } = req.params; // Get the ID from the request parameters
     const exam = await CreatExam.findByPk(id);
 
-    if (exam) {
-      res.status(200).json(exam);
-    } else {
+    if (!exam) {
       res.status(404).send('Exam not found');
     }
+      res.status(200).json(exam);
   } catch (error) {
     res.status(500).send(error.message);
   }
