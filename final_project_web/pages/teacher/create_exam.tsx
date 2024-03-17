@@ -1,4 +1,5 @@
 import { useGetAllExamQuestionsQuery } from "@/store/exam/get-all-exam-questions";
+import { uploadexam } from "@/store/exam/upload-exam-api";
 import { useState, ChangeEvent } from "react";
 
 interface Question {
@@ -106,10 +107,13 @@ const CreateExam = () => {
     }
   };
 
-  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(formData);
     // Logic to send formData to the backend goes here
+
+     const data = await uploadexam(formData as FormData);
+     console.log(data);
   };
   const {
     data: allexamquestions,

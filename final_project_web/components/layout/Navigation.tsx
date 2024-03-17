@@ -5,11 +5,9 @@ import { useRouter } from "next/router";
 
 const Navigation: React.FC = () => {
   const router = useRouter();
-  const isSigninPage = router.pathname === "/signin";
-  const isSignupPage = router.pathname === "/signup";
+  const isSigninPage = router.pathname.startsWith("/signin");
+  const isSignupPage = router.pathname.startsWith("/signup");
   const isHomePage = router.pathname === "/";
-  const isStudentProfile = router.pathname === "/student";
-  const isTeacherProfile = router.pathname === "/teacher";
 
   console.log(isSigninPage, isSignupPage, isHomePage);
   return (

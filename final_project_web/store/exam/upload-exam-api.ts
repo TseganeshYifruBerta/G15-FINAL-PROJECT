@@ -11,7 +11,7 @@ export type ExamUploadFormData = {
 
 export const uploadexam = async (formData: ExamUploadFormData) => {
   try {
-    const response = await fetch("http://localhost:5000/exam/submitExam", {
+    const response = await fetch("http://localhost:5000/exam/createExam", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

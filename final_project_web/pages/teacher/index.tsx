@@ -126,7 +126,7 @@ const AdminPage: React.FC = () => {
     //     </main>
     //   </div>
     // </div>
-    <div className="p-4 md:p-8">
+    <div className="p-4 md:p-8 bg-white">
       <div className="grid gap-4 md:gap-8 lg:grid-cols-3">
         {/* Total Questions Solved */}
         <div className="bg-white rounded-lg shadow p-4 col-span-3 lg:col-span-1">

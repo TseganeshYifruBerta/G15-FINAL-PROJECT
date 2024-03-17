@@ -131,7 +131,7 @@ const CodeEditorBox: React.FC<editorProps> = ({ userId, questionId }) => {
 
   return (
     <div>
-      <div className="">
+      <div className="w-full">
         <div className="editor-settings text-blackx">
           <select
             onChange={(e) => setLanguage(e.target.value)}
@@ -147,6 +147,7 @@ const CodeEditorBox: React.FC<editorProps> = ({ userId, questionId }) => {
           </select>
         </div>
         <Editor
+          width="100%"
           height="70vh"
           language={language}
           theme={theme}

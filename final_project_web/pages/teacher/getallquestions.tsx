@@ -27,17 +27,17 @@ function Questions() {
     allquestions;
   console.log(allquestions);
   return (
-    <div className="flex w-full">
+    <div className="flex w-3/5">
       <div className="w-full">
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-white">
           <div className="flex ml-10">
-            <div className="flex pt-4">
+            <div className="flex pt-4 w-3/5">
               <div className="w-full pb-6">
                 <span className="font-bold text-2xl w-full">
                   List of All <span className="text-primary">Questions</span>
                 </span>
               </div>
-              <Link href={"/question/uploadquestion"} className="w-full">
+              <Link href={"/question/uploadquestion"} className="w-1/3">
                 <div className="flex w-full">
                   <button
                     type="submit"
@@ -51,7 +51,7 @@ function Questions() {
           </div>
           <div>
             <div className="flex ml-10 w-full font-bold">
-              <div className="flex rounded-md p-2 m-2 w-3/5">
+              <div className="flex rounded-md p-2 m-2 w-full">
                 {/* <div className="w-1/5"><FaCode /></div> */}
                 <div className="w-3/5 font-bold">{"Question Title"}</div>
                 <div>{"Difficulty"}</div>
@@ -59,7 +59,7 @@ function Questions() {
               </div>
             </div>
             {allquestions.map((question: questionProps) => (
-              <div key={id}>
+              <div key={id} className="ml-10">
                 <QuestionCardStudent
                   id={question.id}
                   title={question.title}

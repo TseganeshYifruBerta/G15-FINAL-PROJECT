@@ -1,96 +1,63 @@
+import React from "react";
 import Link from "next/link";
 
-interface QuestionCardProps {
+interface QuestionSubmissionCardProps {
+  id: number | string;
   questionTitle: string;
-  status: string;
   difficulty: string;
+  status: string; // Assuming 'status' can be either 'wrong' or 'accepted'
   createdAt: string;
-  id:
-    | string
-    | number
-    | boolean
-    | readonly string[]
-    | readonly number[]
-    | readonly boolean[]
-    | null;
-  submitId:number
-}
-interface statusProps {
-    status: string
 }
 
-const HandleStatus:React.FC<statusProps> = ({status}) => {
-if (status == "Wrong Answer"){
-return (
-  <div className="w-1/6 text-red-500 font-semibold flex justify-center">
-    {status}
-  </div>
-);
-}
-else{
-    return (
-      <div className="w-1/6 text-green-600 font-semibold flex justify-center">
-        {status}
-      </div>
-    );
-}
-    
-}
-
-interface difficultyProps{
-    difficulty: string
-}
-const HandleDifficulty: React.FC<difficultyProps> = ({ difficulty }) => {
-  if (difficulty == "Easy") {
-    return (
-      <div className="w-1/6 text-green-500 font-semibold flex justify-center">
-        {difficulty}
-      </div>
-    );
-  } else if (difficulty == "Medium") {
-    return (
-      <div className="w-1/6 text-orange-500 text-md font-semibold flex justify-center">
-        {difficulty}
-      </div>
-    );
-  } else {
-    return (
-      <div className="w-1/6 text-red-600 font-semibold flex justify-center">
-        {difficulty}
-      </div>
-    );
-  }
-};
-const QuestionSubmissionCard: React.FC<QuestionCardProps> = ({
-  questionTitle,
-  status,
-  difficulty,
-  createdAt,
+const QuestionSubmissionCard: React.FC<QuestionSubmissionCardProps> = ({
   id,
-  submitId,
+  questionTitle,
+  difficulty,
+  status,
+  createdAt,
 }) => {
-  function capitalizeFirstWord(str: string) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
+  const difficultyClasses = {
+    easy: "bg-green-200 text-green-800",
+    medium: "bg-yellow-200 text-yellow-800",
+    hard: "bg-red-200 text-red-800",
+  };
 
-  const capitalized_status = capitalizeFirstWord(status);
-  const capitalized_difficulty = capitalizeFirstWord(difficulty);
+  const statusClasses = {
+    wrong: "bg-red-500 text-white",
+    accepted: "bg-green-500 text-white",
+  };
+
   return (
-    <Link href={`/submissions/${submitId}`}>
-      <div className="flex justify-center">
-        <div className="flex bg-gray-200 rounded-md p-2 m-2 w-full">
-          <div className="mx-1 font-bold">{id}.</div>
-
-          <div className="w-2/6 font-bold flex justify-start">
-            {questionTitle}
-          </div>
-          <HandleDifficulty difficulty={capitalized_difficulty} />
-          <HandleStatus status={capitalized_status} />
-          <div className="w-1/6 flex mx-1">{createdAt}</div>
-        </div>
+    <Link
+      className="flex items-center justify-between p-4 bg-white rounded-lg shadow mb-4 hover:bg-gray-50 transition"
+      href={`/submission/${id}`}
+    >
+      <div className="flex-1">
+        <h5 className="text-lg font-semibold">{questionTitle}</h5>
+      </div>
+      <div
+        className={`px-4 py-1 ${
+          difficulty == "easy" ? "bg-green-200 text-green-800" : ""
+        } ${difficulty == "medium" ? "bg-yellow-200 text-yellow-800" : ""} ${
+          difficulty == "hard" ? "bg-red-200 text-red-800" : ""
+        } text-sm rounded-full text-center`}
+      >
+        {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+      </div>
+      <div
+        className={`px-3 py-1 rounded-full text-sm text-center ${
+          status == "accepted" ? "bg-green-500 text-white" : ""
+        } ${status == "wrong" ? "bg-red-500 text-white" : ""}`}
+      >
+        {status.charAt(0).toUpperCase() + status.slice(1)}
+      </div>
+      <div className="flex-1 text-right">
+        <span className="text-sm text-gray-500">
+          {new Date(createdAt).toLocaleDateString()}
+        </span>
       </div>
     </Link>
   );
 };
 
-export default QuestionSubmissionCard
+export default QuestionSubmissionCard;

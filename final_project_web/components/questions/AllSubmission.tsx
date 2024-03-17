@@ -2,6 +2,7 @@ import { useGetAllSubmissionsByIdQuery } from "@/store/submissions/get-all-submi
 import AllQuestionSubmissionsList from "./AllQuestionSubmissionsList";
 import NoSubmission from "./NoSubmissions";
 import QuestionLoading from "../common/QuestionLoading";
+import QuestionSubmissionCard from "./QuestionSubmissionCard";
 
 export interface singleSubmissionProps {
   questionsForId: {
@@ -70,22 +71,19 @@ const AllSubmissions: React.FC = () => {
   }
   console.log(data);
   return (
-    <div className="p-6 min-h-screen flex w-full justify-center">
-      <div className="justify-center">
-        <div className="flex justify-center pb-4">
-          <div className="w-full text-2xl font-bold">
-            <span>All</span> <span className="text-primary">Submissions</span>
-          </div>
-        </div>
-        {initial.length == 0 ? (
-          <div className="w-full">
-            <NoSubmission />
-          </div>
-        ) : (
-          <div className="flex w-full">
-            <AllQuestionSubmissionsList questions={initial} />
-          </div>
-        )}
+    <div className="p-6 min-h-screen">
+      <div className="text-2xl font-bold mb-6">All Submissions</div>
+      <div>
+        {initial.map((submission: singleSubmissionProps) => (
+          <QuestionSubmissionCard
+            key={submission.id}
+            id={submission.id}
+            questionTitle={submission.questionsForId.title}
+            status={submission.questionStatus.status}
+            difficulty={submission.questionsForId.difficulty}
+            createdAt={submission.questionStatus.createdAt}
+          />
+        ))}
       </div>
     </div>
   );

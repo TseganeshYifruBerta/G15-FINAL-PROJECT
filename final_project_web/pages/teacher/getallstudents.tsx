@@ -3,6 +3,7 @@ import QuestionCard from "@/components/questions/QuestionCard";
 import QuestionCardStudent from "@/components/questions/QuestionCardStudent";
 import StudentsListsCard from "@/components/student/StudentsListsCard";
 import { useGetAllStudentsQuery } from "@/store/teacherprofile/get-all-students";
+import { useState } from "react";
 export interface studentProps {
   id: number;
   name: string;
@@ -12,104 +13,56 @@ export interface studentProps {
   createdAt: string;
   updatedAt: string;
 }
+
 function Students() {
   const { data: allstudents, isLoading, isError } = useGetAllStudentsQuery("");
-  if (isLoading) {
-    return <div>loading</div>;
-  }
-  // console.log(all)
-  //   const { id, title, difficulty, description, example, createdAt, updatedAt } =
-  //     allquestions;
-  //   console.log(allquestions);
-  console.log(allstudents);
-  return (
-    // <div className="flex w-full">
-    //   <div className="w-full">
-    //     <div className="min-h-screen bg-gray-100">
-    //       <div className="flex justify-center">
-    //         <div className="w-3/5 pb-6">
-    //           <span className="font-bold text-2xl">
-    //             List of All <span className="text-primary">Students</span>
-    //           </span>
-    //         </div>
-    //       </div>
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filter, setFilter] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc");
 
-    //       <div>
-    //         <div className="flex font-bold ml-10">
-    //           <div className="flex rounded-md p-2 m-2 w-3/6">
-    //             {/* <div className="w-1/5"><FaCode /></div> */}
-    //             <div className="w-3/5 font-bold">{"Students Name"}</div>
-    //             <div>{"Student ID"}</div>
-    //             <div className="ml-6 ">{"Section"}</div>
-    //             <div className="ml-6 ">{"Email"}</div>
-    //           </div>
-    //         </div>
-    //         {allstudents.map((student: studentProps) => (
-    //           <div key={student.id}>
-    //             <StudentsListsCard
-    //               id={student.id}
-    //               name={student.name}
-    //               userID={student.userID}
-    //               email={student.email}
-    //               section={student.section}
-    //               createdAt={student.createdAt}
-    //               updatedAt={student.updatedAt}
-    //             />
-    //           </div>
-    //         ))}
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
-    // <div className="min-h-screen bg-gray-100 p-6 w-full">
-    //   <div className="max-w-4xl mx-auto">
-    //     <div className="text-2xl font-bold mb-4">
-    //       List of All <span className="text-primary">Students</span>
-    //     </div>
-    //     {allstudents.map((student: studentProps) => (
-    //       <StudentsListsCard
-    //         key={student.id}
-    //         id={student.id}
-    //         name={student.name}
-    //         userID={student.userID}
-    //         email={student.email}
-    //         section={student.section}
-    //         createdAt={student.createdAt}
-    //         updatedAt={student.updatedAt}
-    //       />
-    //     ))}
-    //   </div>
-    // </div>
-    <div className="flex w-full">
-      <div className="w-full">
-        <div className="min-h-screen bg-gray-100">
-          <div className="flex justify-center p-6">
-            <div className="w-full max-w-md">
-              <input
-                type="text"
-                className="w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Search for students..."
-                // value=""
-                // onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
-          <div>
-            {/* Render the list of students */}
-            {allstudents.map((student: studentProps) => (
-              <StudentsListsCard
-                key={student.id}
-                id={student.id}
-                name={student.name}
-                userID={student.userID}
-                email={student.email}
-                section={student.section}
-                createdAt={student.createdAt}
-                updatedAt={student.updatedAt}
-              />
-            ))}
-          </div>
-        </div>
+  if (isLoading) return <div>loading</div>;
+  if (isError) return <div>Error</div>;
+
+  const filteredStudents = allstudents.filter(
+    (student: studentProps) =>
+      student.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (filter ? student.section === filter : true)
+  );
+
+  return (
+    <div className="p-6 min-h-screen bg-white w-full">
+      <div className="mb-4 flex">
+        <input
+          type="text"
+          placeholder="Search for students..."
+          className="w-2/3 px-4 py-2 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white"
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <select
+          className="mt-2 w-1/3 ml-2 px-4 py-2 rounded-md bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary shadow"
+          onChange={(e) => setFilter(e.target.value)}
+        >
+          <option value="">All Sections</option>
+          {/* Dynamically list sections here */}
+        </select>
+      </div>
+      <div>
+        {filteredStudents.length > 0 ? (
+          filteredStudents.map((student: studentProps) => (
+            <StudentsListsCard
+              key={student.id}
+              id={student.id}
+              name={student.name}
+              userID={student.userID}
+              email={student.email}
+              section={student.section}
+              createdAt={student.createdAt}
+              updatedAt={student.updatedAt}
+            />
+          ))
+        ) : (
+          <div>No students found</div>
+        )}
       </div>
     </div>
   );

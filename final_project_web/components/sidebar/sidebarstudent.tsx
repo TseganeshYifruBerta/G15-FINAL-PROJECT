@@ -28,7 +28,12 @@ const navigationConfig: any = {
     {
       name: "Submissions",
       href: "/profile/getallsubmissionsbyid",
-      icon: FaQuestionCircle,
+      icon: FaChartPie,
+    },
+    {
+      name: "Exams",
+      href: "/profile/exams",
+      icon: FaBookOpen,
     },
   ],
   teacher: [
@@ -40,7 +45,7 @@ const navigationConfig: any = {
     },
     { name: "Students", href: "/teacher/getallstudents", icon: FaUsers },
 
-    { name: "Exams", href: "/teacher/exams", icon: FaHome },
+    { name: "Exams", href: "/teacher/allexams", icon: FaHome },
     // ... other teacher routes
   ],
 };
@@ -49,28 +54,17 @@ const useRoleBasedNavigation = (role: any) => {
   return navigationConfig[role] || [];
 };
 const SideNavbar: React.FC = () => {
-  const [nav, setNav] = useState(true);
   const router = useRouter();
-  const isSigninPage = router.pathname === "/signin";
-  const isSignupPage = router.pathname === "/signup";
-  const isHomePage = router.pathname === "/";
-  const isStudentProfile = router.pathname === "/student";
-  const isTeacherProfile = router.pathname === "/teacher";
-  const isTeacherExam = router.pathname === "/teacher/exams";
-  const isTeacherQuestion = router.pathname === "/teacher/getallquestions";
-  const isTeacherGetallStudents = router.pathname === "/teacher/getallstudents";
+  const isTeacher = router.pathname.startsWith("/teacher");
+  const examPages = router.pathname.startsWith("/exam");
 
-  const listt =
-    isTeacherProfile ||
-    isTeacherExam ||
-    isTeacherQuestion ||
-    isTeacherGetallStudents
-      ? navigationConfig.teacher
-      : navigationConfig.student;
+  const listt = isTeacher ? navigationConfig.teacher : navigationConfig.student;
   // const role = useSelector((state) => state.currentUser.role);
 
   // const navigationItems = useRoleBasedNavigation("student");
-  return (
+  return examPages ? (
+    <div></div>
+  ) : (
     <div className="h-full w-64 bg-gradient-to-b from-primary to-blue-400 text-white flex flex-col">
       <div className="px-5 py-4 border-b border-blue-300">
         <h1 className="text-xl font-semibold text-white">Hulu</h1>

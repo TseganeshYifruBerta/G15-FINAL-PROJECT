@@ -128,32 +128,8 @@ const ExamsPage = () => {
           <h2 className="text-lg font-semibold text-gray-900 mb-2 w-1/2">
             Upcoming Exams
           </h2>
-          <Link href="/teacher/create_exam" className="w-1/2">
-            <div className="flex justify-end">
-              <div className="flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-white hover:text-primary">
-                Create New Exam
-              </div>
-            </div>
-          </Link>
         </div>
-        {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {allexams
-            .filter((exam: any) => new Date(exam.date_and_time) > new Date())
-            .map((exam: any) => (
-              <div
-                key={exam.id}
-                className="bg-white rounded-lg shadow p-4 flex flex-col"
-              >
-                <h3 className="text-md font-semibold text-gray-800 mb-3">
-                  {exam.title}
-                </h3>
-                <span className="text-sm text-gray-500 mb-3">
-                  {exam.date_and_time}
-                </span>
-                {renderStatusChip(exam.status)}
-              </div>
-            ))}
-        </div> */}
+        
       </div>
 
       {/* Exams List */}
@@ -183,21 +159,20 @@ const ExamsPage = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredExams.map((exam: any) => (
-              
-                <tr key={exam.id}>
-                  <Link href={`/exam/${exam.id}`} >
- <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              <tr key={exam.id}>
+                <Link href={`/exam/${exam.id}`}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     {exam.title}
                   </td>
-                  </Link>
-                 
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {renderStatusChip(exam.status)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {exam.date_and_time}
-                  </td>
-                </tr>
+                </Link>
+
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {renderStatusChip(exam.status)}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {exam.date_and_time}
+                </td>
+              </tr>
             ))}
           </tbody>
         </table>

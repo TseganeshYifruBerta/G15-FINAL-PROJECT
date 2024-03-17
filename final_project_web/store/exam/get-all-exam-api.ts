@@ -10,7 +10,7 @@ export const getAllExamsApi = createApi({
   endpoints: (builder) => ({
     getAllExams: builder.query({
       query: (params) => {
-        let url = "http://localhost:5000/exam/getAllExamQuestions";
+        let url = "http://localhost:5000/exam/getAllExams";
 
         return {
           url: url,

@@ -1,50 +1,40 @@
+import React from "react";
 import { questionProps } from "@/pages/questions";
 import Link from "next/link";
-import React from "react";
-import { FaCode } from "react-icons/fa";
 
-interface questionCardProps {
-  question: questionProps;
-}
+const QuestionCardStudent: React.FC<questionProps> = ({
+  id,
+  title,
+  difficulty,
+  createdAt,
+}) => {
+  const difficultyClasses = {
+    easy: "bg-green-200 text-green-800",
+    medium: "bg-yellow-200 text-yellow-800",
+    hard: "bg-red-200 text-red-800",
+  };
 
-interface difficultyProps {
-  difficulty: string;
-}
-const HandleDifficulty: React.FC<difficultyProps> = ({ difficulty }) => {
-  if (difficulty == "easy") {
-    return (
-      <div className="text-green-600 font-bold">
-        <span>Easy</span>
-      </div>
-    );
-  } else if (difficulty == "medium") {
-    return (
-      <div className="text-orange-500 font-bold">
-        <span>Medium</span>
-      </div>
-    );
-  } else {
-    return (
-      <div className="font-bold text-red-500">
-        <span>Hard</span>
-      </div>
-    );
-  }
-};
-const QuestionCardStudent: React.FC<questionProps> = (question) => {
   return (
-    <Link href={`/question/${question.id}`}>
-      <div className="flex ml-10 w-full">
-        <div className="flex bg-gray-200 rounded-md p-2 m-2 w-3/5">
-          {/* <div className="w-1/5"><FaCode /></div> */}
-          <div className="w-3/5 font-bold">
-            {question.id}. {question.title}
-          </div>
-          <div>
-            <HandleDifficulty difficulty={question.difficulty} />
-          </div>
-          <div className="ml-6 font-light">{question.createdAt}</div>
-        </div>
+    <Link
+      href={`/question/${id}`}
+      className="flex items-center justify-between p-4 bg-white rounded-lg shadow mb-4 hover:bg-gray-50 transition"
+    >
+      <div className="w-1/3">
+        <h5 className="text-lg font-semibold">{title}</h5>
+      </div>
+      <div
+        className={`px-4 py-1 ${
+          difficulty == "easy" ? "bg-green-200 text-green-800" : ""
+        } ${difficulty == "medium" ? "bg-yellow-200 text-yellow-800" : ""} ${
+          difficulty == "hard" ? "bg-red-200 text-red-800" : ""
+        } text-sm rounded-full text-center`}
+      >
+        {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+      </div>
+      <div className="w-1/3 text-right">
+        <span className="text-sm text-gray-500">
+          {new Date(createdAt).toLocaleDateString()}
+        </span>
       </div>
     </Link>
   );
