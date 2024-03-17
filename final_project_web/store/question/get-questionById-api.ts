@@ -6,13 +6,6 @@ export const getQuestionDetalApi = createApi({
   reducerPath: "getQuestionDetalApi",
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
-    // prepareHeaders: (headers, { getState }) => {
-    //   const token = (getState() as any).auth.token;
-    //   if (token) {
-    //     headers.set("authorization", `bearer ${token}`);
-    //   }
-    //   return headers;
-    // },
   }),
   endpoints: (builder) => ({
     getQuestionDetails: builder.query({

@@ -50,7 +50,7 @@ const SubmitCodeDiv: React.FC<SubmitCodeStatusProps> = ({ submitStatus }) => {
 const CodeEditorBox: React.FC<editorProps> = ({ userId, questionId }) => {
   const [submitStatus, setSubmitStatus] = useState("");
   const [currentCode, setCurrentCode] = useState(
-    "def grade_checker(score):\n    if score >= 90:\n        return 'A'\n    elif score >= 85:\n        return 'B'\n    elif score >= 75:\n        return 'C'\n    elif score >= 65:\n        return 'D'\n    else:\n        return 'F'"
+    "def grade_checker(score):\n"
   );
   const [currentInput, setCurrentInput] = useState<string[]>([]);
   const [currentExpectedOutput, setCurrentExpectedOutput] = useState<string[]>(
@@ -78,8 +78,7 @@ const CodeEditorBox: React.FC<editorProps> = ({ userId, questionId }) => {
 
   const onSubmitCode = async (values: FormValuesSubmit) => {
     console.log(values, "ttttttttttttttttttttttttttt");
-    values.pythonCode =
-      "def grade_checker(score):\n    if score >= 70:\n        return 'A'\n    elif score >= 80:\n        return 'B'\n    elif score >= 70:\n        return 'C'\n    elif score >= 60:\n        return 'D'\n    else:\n        return 'F'";
+    values.pythonCode = values.pythonCode.replace(/\n/g, "\\n");
     try {
       console.log("valuesssss", values);
       const data = await codesubmission(values as FormValuesSubmit);

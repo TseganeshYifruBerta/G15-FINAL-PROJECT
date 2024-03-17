@@ -23,18 +23,21 @@ import { getAllExamsApi } from "./exam/get-all-exam-api";
 import { getExamQuestionByIdApi } from "./exam/get-all-exam-by-id";
 import { getAllStudentsApi } from "./teacherprofile/get-all-students";
 import { getAllExamQuestionsApi } from "./exam/get-all-exam-questions";
+import  {getExamDetailByIdApi} from "./exam/get-exam-detail-by-id";
 
 export const store = configureStore({
   reducer: {
     form: formReducer,
     register: signupTeacherReducer,
     signupStudentReducer,
-    upload: UploadStateStudent,UploadStateTeacher,
+    upload: UploadStateStudent,
+    UploadStateTeacher,
     studentsignin: signinStudentReducer,
     questionupload: questionUploadReducer,
     examquestionupload: examQuestionUploadReducer,
     examupload: examUploadReducer,
     [getQuestionDetalApi.reducerPath]: getQuestionDetalApi.reducer,
+    [getExamDetailByIdApi.reducerPath]: getExamDetailByIdApi.reducer,
     [getAllQuestionApi.reducerPath]: getAllQuestionApi.reducer,
     [getAllExamQuestionsApi.reducerPath]: getAllExamQuestionsApi.reducer,
     [getSubmissionDetailByIdApi.reducerPath]:
@@ -48,7 +51,7 @@ export const store = configureStore({
     [getNumberOfAllQuestionApi.reducerPath]: getNumberOfAllQuestionApi.reducer,
     [getAllStudentsApi.reducerPath]: getAllStudentsApi.reducer,
     [getExamQuestionByIdApi.reducerPath]: getExamQuestionByIdApi.reducer,
-    [getAllExamsApi.reducerPath]: getAllExamsApi.reducer
+    [getAllExamsApi.reducerPath]: getAllExamsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -64,6 +67,7 @@ export const store = configureStore({
       .concat(getAllStudentsApi.middleware)
       .concat(getAllExamsApi.middleware)
       .concat(getAllExamQuestionsApi.middleware)
+      .concat(getExamDetailByIdApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
