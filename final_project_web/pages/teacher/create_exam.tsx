@@ -9,26 +9,14 @@ interface Question {
 interface FormData {
   title: string;
   sections: string[];
-  sectionsText: string[];
-  questionIds: string[];
-  questionsText: string[];
-  dateOfExam: string;
+  questions: string[];
+  date_and_time: string;
   duration: string;
   instruction: string;
 }
 
 const CreateExam = () => {
-  const sections = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-  ];
+  const sections = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
   const questions: Question[] = [
     { id: "1", text: "Two sum" },
     { id: "2", text: "Palindrom" },
@@ -41,10 +29,8 @@ const CreateExam = () => {
   const [formData, setFormData] = useState<FormData>({
     title: "",
     sections: [],
-    sectionsText: [],
-    questionIds: [],
-    questionsText: [],
-    dateOfExam: "",
+    questions: [],
+    date_and_time: "",
     duration: "",
     instruction: "",
   });
@@ -68,7 +54,6 @@ const CreateExam = () => {
     setFormData((prevState) => ({
       ...prevState,
       sections: selectedValues,
-      sectionsText: selectedTexts,
     }));
   };
 
@@ -92,8 +77,7 @@ const CreateExam = () => {
     }
     setFormData((prevState) => ({
       ...prevState,
-      questionIds: selectedValues,
-      questionsText: selectedTexts, // This now correctly contains only titles
+      questions: selectedValues, // This now correctly contains only titles
     }));
     console.log(selectedValues);
   };
@@ -102,7 +86,7 @@ const CreateExam = () => {
     // Explicitly handle updates for each chip type
     if (chipType === "sections") {
       const newSections = [...formData.sections];
-      const newSectionsText = [...formData.sectionsText];
+      const newSectionsText = [...formData.sections];
       newSections.splice(index, 1);
       newSectionsText.splice(index, 1);
 
@@ -112,15 +96,12 @@ const CreateExam = () => {
         sectionsText: newSectionsText,
       }));
     } else if (chipType === "questionIds") {
-      const newQuestionIds = [...formData.questionIds];
-      const newQuestionsText = [...formData.questionsText];
+      const newQuestionIds = [...formData.questions];
       newQuestionIds.splice(index, 1);
-      newQuestionsText.splice(index, 1);
 
       setFormData((prevState) => ({
         ...prevState,
         questionIds: newQuestionIds,
-        questionsText: newQuestionsText,
       }));
     }
   };
@@ -224,7 +205,7 @@ const CreateExam = () => {
             ))}
           </select>
           <div className="mt-3 flex flex-wrap gap-2">
-            {formData.sectionsText.map((text, index) => (
+            {formData.sections.map((text, index) => (
               <span
                 key={index}
                 className="flex items-center bg-indigo-200 text-indigo-800 text-xs px-2 py-1 rounded-full"
@@ -245,16 +226,16 @@ const CreateExam = () => {
         {/* Questions Selection */}
         <div className="mb-4">
           <label
-            htmlFor="questionIds"
+            htmlFor="questions"
             className="block text-sm font-semibold text-gray-700"
           >
             Select Questions
           </label>
           <select
             multiple
-            name="questionIds"
-            id="questionIds"
-            value={formData.questionIds}
+            name="questions"
+            id="questions"
+            value={formData.questions}
             onChange={handleSelectedQuestions}
             className="mt-1 block w-full rounded-lg bg-gray-100 px-3 py-2 shadow focus:outline-none focus:shadow-outline"
             style={{
@@ -270,7 +251,7 @@ const CreateExam = () => {
           </select>
 
           <div className="mt-3 flex flex-wrap gap-2">
-            {formData.questionsText.map((text, index) => (
+            {formData.questions.map((text, index) => (
               <span
                 key={index}
                 className="flex items-center bg-indigo-200 text-indigo-800 text-xs px-2 py-1 rounded-full"
@@ -291,17 +272,17 @@ const CreateExam = () => {
         {/* Date of Exam Input */}
         <div className="flex p-4 bg-white rounded-lg shadow-md items-center mb-4 w-full md:w-1/2 lg:w-1/3">
           <label
-            htmlFor="dateOfExam"
+            htmlFor="date_and_time"
             className="block text-sm font-semibold text-gray-700 mr-4"
           >
             Date of Exam
           </label>
           <input
             type="date"
-            name="dateOfExam"
-            id="dateOfExam"
+            name="date_and_time"
+            id="date_and_time"
             required
-            value={formData.dateOfExam}
+            value={formData.date_and_time}
             onChange={handleInputChange}
             className="mt-1 flex-1 rounded-lg bg-gray-100 px-3 py-2 shadow focus:outline-none focus:shadow-outline"
             style={{
