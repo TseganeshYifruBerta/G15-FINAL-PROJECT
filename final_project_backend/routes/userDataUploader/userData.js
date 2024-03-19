@@ -1,36 +1,26 @@
 const express = require("express");
 const dataUploadRouters = express.Router();
 const multer = require("multer");
-const {
-  findStudentByID,
-} = require("../../controller/UserDataUploaderController/studentDataManagement");
-const {getNumberOfAllStudent , getNumberOfAllTeacher} = require("../../controller/UserDataUploaderController/numberOfUsers")
-const uploadStudentsFile = require("../../controller/UserDataUploaderController/StudentsDataUploaderController");
-const uploadTeachersFile = require("../../controller/UserDataUploaderController/TeachersdataUploaderController");
-const studentsUpload = multer({ dest: "uploads/student" });
-const teachersUpload = multer({ dest: "uploads/teacher" });
-const {
-  fetchAllUploadedStudentsFile,
-} = require("../../controller/UserDataUploaderController/studentDataManagement");
+const  uploadUsersFile  = require("../../controller/userDataUploadController/dataUploader");
+const submitUserfile = require("../../controller/userDataUploadController/inputDataUploader")
+const verifyRoles = require("../../middleware/verifyRoles")
+const userUpload = multer({ dest: "uploads/user" });
+const {isAdmin} = require("../../middleware/roleMiddleWare");
 
 
-dataUploadRouters.post(
-  "/studentData",
-  studentsUpload.single("studentsExcelFile"),
-  uploadStudentsFile.uploadStudentsFile
-);
+
+dataUploadRouters.post("/userDataUploader", userUpload.single("usersExcelFile"), uploadUsersFile);
+
+dataUploadRouters.post("/inputUserDataUploader", verifyRoles("admin"),isAdmin, submitUserfile);
 
 
-dataUploadRouters.post(
-  "/teacherData",
-  teachersUpload.single("teachersExcelFile"),
-  uploadTeachersFile.uploadTeachersFile
-); 
-
-dataUploadRouters.get("/getAllStudents", fetchAllUploadedStudentsFile);
-dataUploadRouters.get("/getNumberOfAllStudent" ,getNumberOfAllStudent);
-dataUploadRouters.get("/getNumberOfAllTeacher" ,getNumberOfAllTeacher);
-
-
-dataUploadRouters.get("/findStudentByID/:id",findStudentByID)
 module.exports = dataUploadRouters;
+
+
+
+
+
+
+
+
+

@@ -9,8 +9,8 @@ const examRouters =require("./routes/exam/examRoute")
 const dataUploadRouters = require("./routes/userDataUploader/userData");
 const sequelize = require("./database/sequelize.js");
 const questionRouters = require("./routes/questionRoute/questionRoute.js");
-const Teacher = require("./models/registration/user/teachersModel.js");
-const Student = require("./models/registration/user/studentsModel.js");
+const verifyJWT = require("./middleware/verifyJWT.js")
+const seedAdminData = require("./models/auth/seed.js");
 dotenv.config({
   path: "./config.env",
 });
@@ -33,11 +33,14 @@ async function initializeDatabase() {
 }
 
 initializeDatabase();
+seedAdminData();
+
 app.use(cors());
 app.use(cookieParser());
 
 // Routes related to Authentication
 app.use("/", routes);
+app.use(verifyJWT)
 
 //  Routes related to Question
 app.use("/question", questionRouters);
