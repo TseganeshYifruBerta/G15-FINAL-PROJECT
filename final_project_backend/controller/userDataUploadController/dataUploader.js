@@ -18,13 +18,21 @@ const uploadUsersFile = async (req, res) => {
           typeof row.values[3] === "object"
             ? row.values[3].text
             : row.values[3];
+        var role = "";
+        if (row.values[5] === "teacher" || row.values[5] === "student") {
+          role = row.values[5];
+        } else {
+          return res.status(400).send("Invalid role");
+        }
+        // const role = row.values[5];
         const user = {
           name: row.values[1],
           userId: row.values[2],
           email: email,
           section: row.values[4].toString().split(",").map(section => section.trim()), // Parse section names as an array
-          role: row.values[5]
-          
+          role : role,
+          status: row.values[6],
+            
         };
         dataToStore.push(user);
       }
@@ -39,7 +47,6 @@ const uploadUsersFile = async (req, res) => {
     if (existingUsers.length > 0) {
       return res.status(400).send(`${existingUsers.length} user(s) already exist in the system`);
     } else {
-      console.log("Adding new users to the database");
 
       const otps = dataToStore.map(() => generateOTP()); // Generate OTPs for each user
       const hashedPasswords = await Promise.all(otps.map(otp => bcrypt.hash(otp, 10)));
@@ -50,15 +57,13 @@ const uploadUsersFile = async (req, res) => {
           password: hashedPasswords[index] // Store OTP as password
         };
       });
-      console.log("step3")
 
       const createdUsers = await User.bulkCreate(usersToCreate);
-      console.log("step5")
       
       // Create sections and associate them with users
       const sectionsToCreate = [];
       createdUsers.forEach((user, index) => {
-        console.log("step6",user.id)
+
         const sections = dataToStore[index].section;
         
         sections.forEach(section => {

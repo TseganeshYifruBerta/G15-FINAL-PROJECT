@@ -9,7 +9,7 @@ const {isAdmin} = require("../../middleware/roleMiddleWare");
 
 
 
-dataUploadRouters.post("/userDataUploader", userUpload.single("usersExcelFile"), uploadUsersFile);
+dataUploadRouters.post("/userDataUploader", userUpload.single("usersExcelFile"),verifyRoles("admin"),isAdmin, uploadUsersFile);
 
 dataUploadRouters.post("/inputUserDataUploader", verifyRoles("admin"),isAdmin, submitUserfile);
 

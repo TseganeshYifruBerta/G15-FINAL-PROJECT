@@ -29,10 +29,15 @@ const submitUserfile = async (req, res) => {
 
     const otps = generateOTP();
     const hashedPwd = await bcrypt.hash(otps , 10)
-
+    var roles = "";
+        if (role=== "teacher" || role === "student") {
+          roles = role;
+        } else {
+          return res.status(400).send("Invalid role");
+        }
     
       const newUser = await User.create({
-        name, email, userId, role, status, password: hashedPwd,
+        name, email, userId, role:roles, status, password: hashedPwd,
         transaction,
       });
       
