@@ -10,6 +10,4 @@ const Section = sequelize.define("SectionsOfUser", {
   }
 });
 
-// Section.hasMany(User, { through: 'UserSection' });
 module.exports = Section;
-// Section.belongsToMany(User, { through: 'UserSection' });
