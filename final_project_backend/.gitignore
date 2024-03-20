@@ -9,7 +9,7 @@ package.json
 index.js
 /config
 config
-/services
+
 /uploads
 
 .dockerignore
