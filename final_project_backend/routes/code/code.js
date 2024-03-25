@@ -13,10 +13,11 @@ const {
 // fetching difficulty tag counts
 const getAllDifficultyData= require("../../controller/codeExecution/manageCodeSubmittedData")
 const countSubmissionsForLastWeek = require("../../controller/codeExecution/countSubmissionPerWeek")
-const submitExamAnswerByStudent = require("../../controller/exam/submittedExamAnswer/submittedStudentsExamAnswer")
+const submitExamAnswerByStudent = require("../../controller/exam/submittedExamAnswer/submittedStudentsExamAnswer");
+const { isStudent } = require("../../middleware/roleMiddleWare");
+const  verifyRoles  = require("../../middleware/verifyRoles");
 
-
-executionRouter.post("/submit", execute);
+executionRouter.post("/submit",  verifyRoles("student"),isStudent,execute);
 executionRouter.post("/run", codeExecute); 
 
 executionRouter.get("/getSubmittedDifficulty/:userId", getAllDifficultyData);

@@ -5,7 +5,10 @@ const path = require("path");
 const codeSubmision = require("../../models/codeSubmision/codeSubmision")
 const Status = require("../../models/codeSubmision/codeStatus")
 const Question = require("../../models/question_testcase_submission/question");
-const Difficulty = require("../../models/codeSubmision/difficultyCounter")
+const Difficulty = require("../../models/codeSubmision/difficultyCounter");
+const User = require("../../models/auth/user.model");
+const Section = require("../../models/auth/section.model");
+// const { use } = require("../../routes/questionRoute/questionRoute");
 
 const getQuestionById = async (questionId) => {
   try {
@@ -78,15 +81,34 @@ const runPythonCode = (pythonCode, nums) => {
 
 module.exports = { runPythonCode };
 const execute = async (req, res) => {
-  const { questionId,userId, pythonCode } = req.body;
+  const { questionId, id, pythonCode } = req.body;
 
   try {
+    if(!questionId || !id || !pythonCode){
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const user = await User.findByPk(id);
+    if (!user ) {
+      return res.status(400).json({ error: "User not found" });
+    }
+    const section = await Section.findOne({
+      where: {
+        UserInformationId: id,
+      },
+    });
+
+    if (user.status !== "active") {
+      return res.status(400).json({ error: "User is not active" });
+    }
+    
     const testCases = await getQuestionById(questionId);
     if (pythonCode === "") {
       return res
         .status(500)
         .json({ error: "you should have to write a correct code " });
     }
+
     if(testCases){
 
     const allTestResults = [];
@@ -100,7 +122,8 @@ const execute = async (req, res) => {
    
     const codes = await codeSubmision.create({
       questionId,
-      userId,
+      userId: id,
+      section:section.section,
       userCode: pythonCode,
     });
     
@@ -163,7 +186,7 @@ const execute = async (req, res) => {
     const submittedTagStatus = await Status.findAll({
       where:{
         questionId: questionId,
-        userId: userId
+        userId: id
       }
     });
 
@@ -235,20 +258,12 @@ const execute = async (req, res) => {
     const newer = await Status.create({
       status: overallStatus,
       questionId: questionId,
-      userId,
+      userId: id,
       submittedCodeId: codes.id,
       userCode: pythonCode,
     });
     
-    
-
-
-     
-
-
-    
-    
-
+  
     res.json({ allTestResults, codes, status: overallStatus});
   }
     else{
