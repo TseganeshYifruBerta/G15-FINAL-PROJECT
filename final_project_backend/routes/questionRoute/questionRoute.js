@@ -12,11 +12,7 @@ const {
 const  editQuestion  = require("../../controller/QuestionUploaderController/manageQuestion/EditQuestion");
 const  deleteQuestion = require("../../controller/QuestionUploaderController/manageQuestion/deleteQuestion");
 
-const {
-   fetchingAllSubmittedQuestionForUser,
-   fetchingAllDetailForSubmittedQuestion,
-   countAcceptedSubmissionsForUser,
- } = require("../../controller/QuestionUploaderController/submittedData");
+
 const verifyRoles = require("../../middleware/verifyRoles");
 const {isTeacher} = require("../../middleware/roleMiddleWare");
 // questionRouters.post("/question", submitQuestionWithTestCases);
@@ -30,17 +26,7 @@ questionRouters.get("/getNumberOfAllQuestion", getNumberOfAllQuestion);
  
 questionRouters.put("/updateQuestionById/:id/:teacherId", verifyRoles("teacher"),isTeacher, editQuestion)
 questionRouters.delete("/deleteQuestionById/:id/:teacherId",  verifyRoles("teacher"),isTeacher,deleteQuestion)
-questionRouters.get(
-  "/fetchSubmittedQuestionById/:userId",
-  fetchingAllSubmittedQuestionForUser
 
-);  
-
-questionRouters.get(
-  "/fetchQuestionDetailBySubmittedId/:submittedId",
-  fetchingAllDetailForSubmittedQuestion
-);  
-questionRouters.get("/countAcceptedSubmissionsForUser/:userId",countAcceptedSubmissionsForUser)
 
 
 module.exports = questionRouters;

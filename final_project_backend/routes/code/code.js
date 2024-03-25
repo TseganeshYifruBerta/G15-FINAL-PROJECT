@@ -16,6 +16,13 @@ const countSubmissionsForLastWeek = require("../../controller/codeExecution/coun
 const submitExamAnswerByStudent = require("../../controller/exam/submittedExamAnswer/submittedStudentsExamAnswer");
 const { isStudent } = require("../../middleware/roleMiddleWare");
 const  verifyRoles  = require("../../middleware/verifyRoles");
+const {
+   fetchingAllSubmittedQuestionForUser,
+   fetchingAllDetailForSubmittedQuestion,
+   countAcceptedSubmissionsForUser,
+   countAcceptedSubmissionsOfUserBySection
+ } = require("../../controller/QuestionUploaderController/submittedData");
+const {isTeacher} = require("../../middleware/roleMiddleWare");
 
 executionRouter.post("/submit",  verifyRoles("student"),isStudent,execute);
 executionRouter.post("/run", codeExecute); 
@@ -30,6 +37,21 @@ executionRouter.get("/countSubmissionsForLastWeek/:initialDateString" , countSub
 executionRouter.post("/submitExamAnswerByStudent", submitExamAnswerByStudent);
 
 
+                  // submitted code data
+executionRouter.get("/countAcceptedSubmissionsOfUserBySection/:section", verifyRoles("teacher"),isTeacher,countAcceptedSubmissionsOfUserBySection);
+
+
+executionRouter.get(
+  "/fetchSubmittedQuestionById/:userId",
+  fetchingAllSubmittedQuestionForUser
+
+);  
+
+executionRouter.get(
+  "/fetchQuestionDetailBySubmittedId/:submittedId",
+  fetchingAllDetailForSubmittedQuestion
+);  
+executionRouter.get("/countAcceptedSubmissionsForUser/:userId",countAcceptedSubmissionsForUser)
 
 
 module.exports = executionRouter;

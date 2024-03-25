@@ -12,11 +12,11 @@
 const verifyRoles = (allowedRole) => {
     return (req, res, next) => {
         if (!req.user.role) {
-            return res.sendStatus(401); // No role provided, unauthorized
+            return res.status(401),json({message:"you are not authorized"}); // No role provided, unauthorized
         }
 
         if (req.user.role !== allowedRole) {
-            return res.sendStatus(403); // User role does not match allowed role, forbidden
+            return res.status(403).json({message:"you are not privileged user"}); // User role does not match allowed role, forbidden
         }
 
         next(); // User role matches allowed role, proceed to the next middleware
