@@ -1,5 +1,7 @@
 const Question = require("../../models/question_testcase_submission/question"); // Import the LabQuestion and TestCase models
 const Status = require("../../models/codeSubmision/codeStatus");
+const User = require("../../models/auth/user.model");
+const TestCase = require("../../models/question_testcase_submission/testCase");
 
 
 
@@ -14,46 +16,118 @@ const getNumberOfAllQuestion = async(req,res) =>{
        return res.sendStatus(400);
       }
 };
+             //AllQuestionsCreatedByTeacher 
+
+const getAllQuestionsCreatedByTeacher = async(req,res) =>{
+  try{
+    const {teacherId} = req.params
+    const teacherfound = await User.findOne({
+      where:{
+        id:teacherId
+      }
+    })
+    if (!teacherfound){
+       return res.status(400).json({message:"The user is not found"})
+    }
+    if(teacherfound.status === 'active'){
+   
+    const questionWithTestcase = await Question.findAll({
+      where: {
+        teacherId: teacherId
+      },
+      include: [
+        {
+          model: TestCase,
+          as: 'TestCases',
+          attributes: ['input', 'output'],
+          
+        }
+      ]
+    });
+    
+    
+    return res.status(200).json(questionWithTestcase)
+  }
+  else{
+    return res.status(400).json({message:"The user is not active"})
+  }
+   
+  } catch(error){
+   console.log(error);
+   return res.sendStatus(400);
+  }
+};
+
+        //AllNumberOfAllQuestionsCreatedByTeacher 
+
+const getNumberOfAllQuestionsCreatedByTeacher = async(req,res) =>{
+try{
+  const {teacherId} = req.params
+  const teacherfound = await User.findOne({
+    where:{
+      id:teacherId
+    }
+  })
+  if (!teacherfound){
+    res.status(400).json({message:"The user is not found"})
+
+  }
+
+  if(teacherfound.status === 'active'){
+  const questioncreated = await Question.findAll({ 
+    where: {
+      teacherId: teacherId
+    }
+  }
+  );
+  const count = questioncreated.length;
+  return res.status(200).json(count)
+}
+else{
+  return res.status(400).json({message:"The user is not active"})
+}
+  
+} catch(error){
+  console.log(error);
+  return res.sendStatus(400);
+}
+};
 
 
 
 const getAllQuestions = async (req, res) => {
   try {
-    const questions = await Question.findAll();
-    if (!questions) {
-      return res.sendStatus(400);
+    const {userId} = req.params
+    const findUser = await User.findOne({
+      where:{
+        id:userId 
+      }
+    });
+    if (!findUser){
+      return res.status(400).json({message:"The user is not found"})
     }
-    return res.status(200).json(questions);
+    if(findUser.status === 'active'){
+      const questionWithTestcase = await Question.findAll({
+        
+        include: [
+          {
+            model: TestCase,
+            as: 'TestCases',
+            attributes: ['input', 'output'],
+            
+          }
+        ]
+      });
+      return res.status(200).json(questionWithTestcase);
+  }
+  else{
+    return res.status(400).json({message:"The user is not active"})
+  }
   } catch (error) {
     console.log(error);
     return res.sendStatus(400);
   }
 };
 
-const getAllQuestionsById = async (req, res) => {
-  const { userId, questionId } = req.params;
-  try {
-    const question = await Question.findOne({
-      where: {
-        id: questionId,
-      },
-    });
 
-    const allStatus = await Status.findAll({
-      where: {
-        userId: userId,
-        questionId: questionId,
-      },
-    });
-
-    if (question) {
-      res.status(200).json({ question, allStatus }); // Send the student data as a JSON response
-    } else {
-      res.status(404).send("question is  not found");
-    }
-  } catch (error) {
-    res.status(500).send("An error occurred: " + error.message);
-  }
-};
-
-module.exports = { getAllQuestions, getAllQuestionsById , getNumberOfAllQuestion};
+module.exports = { getAllQuestions,  getNumberOfAllQuestion , getAllQuestionsCreatedByTeacher,getNumberOfAllQuestionsCreatedByTeacher};

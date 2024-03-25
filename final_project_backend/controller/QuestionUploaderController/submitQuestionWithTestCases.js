@@ -1,21 +1,27 @@
-// controllers/questionController.js
-const  Question  = require("../../models/question_testcase_submission/question"); // Import the LabQuestion and TestCase models
+const  Question  = require("../../models/question_testcase_submission/question");
 const TestCase = require('../../models/question_testcase_submission/testCase')
+const User = require('../../models/auth/user.model')
 // Controller function to submit a question along with its test cases
 const submitQuestionWithTestCases = async (req, res) => {
-const { title, difficulty, description, example, testCases } = req.body;
+const { title, difficulty, description, example, testCases ,teacherId} = req.body;
 
   try {
-    // Create a new LabQuestion
+    const teacherDetail = await User.findOne({
+      where: {
+        id : teacherId
+      }
+    })
+    if(teacherDetail.status === 'active'){
+      // Create a new LabQuestion
     const newQuestion = await Question.create({
       title,
       difficulty,
       description,
       example,
+      teacherId
     });
 
-    // Create and associate test cases with the new LabQuestion
-    // Create and associate test cases with the new LabQuestion
+
     const createdTestCases = await Promise.all(
       testCases.map(async (testCase) => {
         const formattedOutput = Array.isArray(testCase.output
@@ -43,6 +49,12 @@ const { title, difficulty, description, example, testCases } = req.body;
       question: newQuestion,
       testCases: createdTestCases,
     });
+
+    }
+    else{
+      res.status(403).json({message: "The user account is not activated",})
+    }
+    
   } catch (error) {
     res
       .status(500)

@@ -22,11 +22,11 @@ const uploadUsersFile = async (req, res) => {
         if (row.values[5] === "teacher" || row.values[5] === "student") {
           role = row.values[5];
         } else {
-          return res.status(400).send("Invalid role");
+          return res.status(400).json({message:"file with  Invalid role"});
         }
         // const role = row.values[5];
         const user = {
-          name: row.values[1],
+          fullName: row.values[1],
           userId: row.values[2],
           email: email,
           section: row.values[4].toString().split(",").map(section => section.trim()), // Parse section names as an array
@@ -45,7 +45,7 @@ const uploadUsersFile = async (req, res) => {
     });
 
     if (existingUsers.length > 0) {
-      return res.status(400).send(`${existingUsers.length} user(s) already exist in the system`);
+      return res.status(400).json({message:`${existingUsers.length} user(s) already exist in the system`});
     } else {
 
       const otps = dataToStore.map(() => generateOTP()); // Generate OTPs for each user
@@ -88,10 +88,10 @@ const uploadUsersFile = async (req, res) => {
       }));
 
       console.log("Emails sent successfully");
-      return res.send("Data uploaded and stored successfully");
+      return res.status(400).json({message:"Data uploaded and stored successfully"});
     }
   } catch (error) {
-    return res.status(500).send("An error occurred: " + error.message);
+    return res.status(500).json({error: error.message});
   }
 }
 

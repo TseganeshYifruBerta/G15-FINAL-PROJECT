@@ -3,7 +3,7 @@ const sequelize = require("../../database/sequelize");
 const Section = require('./section.model'); // Import the Section model
 
 const User = sequelize.define("Userinformation", {
-  name: {
+  fullName: {
     type: DataTypes.STRING,
   },
   email: {

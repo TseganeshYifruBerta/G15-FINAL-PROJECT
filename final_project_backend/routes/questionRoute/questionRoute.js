@@ -1,10 +1,12 @@
 const express = require("express");
 const questionRouters = express.Router();
-const {submitQuestionWithTestCases} = require('../../controller/QuestionUploaderController/questionController')
+const {submitQuestionWithTestCases} = require('../../controller/QuestionUploaderController/submitQuestionWithTestCases')
 const {
   getAllQuestions,
-  getAllQuestionsById,
   getNumberOfAllQuestion,
+  getAllQuestionsCreatedByTeacher,
+  getNumberOfAllQuestionsCreatedByTeacher
+
   
 } = require("../../controller/QuestionUploaderController/fetch_all_question");
 const  editQuestion  = require("../../controller/QuestionUploaderController/manageQuestion/EditQuestion");
@@ -18,12 +20,15 @@ const  deleteQuestion = require("../../controller/QuestionUploaderController/man
  
 // questionRouters.post("/question", submitQuestionWithTestCases);
 questionRouters.post("/submitquestion", submitQuestionWithTestCases);
-questionRouters.get("/getAllQuestions", getAllQuestions); 
+questionRouters.get("/getAllQuestions/:userId", getAllQuestions); 
+questionRouters.get("/getAllQuestionsCreatedByTeacher/:teacherId", getAllQuestionsCreatedByTeacher); 
+questionRouters.get("/getNumberOfAllQuestionsCreatedByTeacher/:teacherId", getNumberOfAllQuestionsCreatedByTeacher); 
+
 
 questionRouters.get("/getNumberOfAllQuestion", getNumberOfAllQuestion);
-questionRouters.get("/getAllQuestionsById/:userId/:questionId", getAllQuestionsById);   
-questionRouters.put("/updateQuestionById/:id", editQuestion)
-questionRouters.delete("/deleteQuestionById/:id", deleteQuestion)
+ 
+questionRouters.put("/updateQuestionById/:id/:teacherId", editQuestion)
+questionRouters.delete("/deleteQuestionById/:id/:teacherId", deleteQuestion)
 questionRouters.get(
   "/fetchSubmittedQuestionById/:userId",
   fetchingAllSubmittedQuestionForUser

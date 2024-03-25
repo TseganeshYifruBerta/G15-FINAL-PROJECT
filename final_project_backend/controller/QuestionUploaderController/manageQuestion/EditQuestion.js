@@ -1,16 +1,35 @@
 const Question = require("../../../models/question_testcase_submission/question")
 const TestCase = require("../../../models/question_testcase_submission/testCase")
+const User = require("../../../models/auth/user.model")
 const sequelize = require("../../../database/sequelize")
 const editQuestion = async (req, res) => {
     try {
       const { title, difficulty, description, example, testcases } = req.body;
-      const { id } = req.params;
-  
+      const { id ,teacherId} = req.params;
+
       const question = await Question.findByPk(id);
-  
       if (!question) {
         return res.status(404).json({ message: 'Question not found' });
       }
+      const questionByTeacher = await Question.findOne({
+        where:{
+          id:id,
+          teacherId:teacherId
+        }
+      })
+
+      if (!questionByTeacher) {
+        return res.status(404).json({ message: "You are not a privileged teacher to edit this question." });
+      }
+      const teacherStatus = await User.findOne({
+        where:{
+          id:teacherId
+        }
+      })
+
+      if (teacherStatus.status === "active" ){
+      
+      
   
       // Start a transaction
       const transaction = await sequelize.transaction();
@@ -58,6 +77,10 @@ const editQuestion = async (req, res) => {
         await transaction.rollback();
         console.error(error);
         return res.status(500).json({ error: "Failed to update question" });
+      }
+    }
+      else{
+        res.status(403).json({ message: "The user is not activated" })
       }
     }
     catch (error) {
