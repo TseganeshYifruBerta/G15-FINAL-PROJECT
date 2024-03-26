@@ -6,8 +6,8 @@ const bcrypt = require('bcrypt');
 
 
 const submitUserfile = async (req, res) => {
-  const { name, email, userId, role, status, section } = req.body;
-  if (!name || !email || !role || !userId || !status || !section) return res.status(400).json({ 'message': 'name, userId, role, status, email, and section are required.' });
+  const { fullName, email, userId, role, status, section } = req.body;
+  if (!fullName || !email || !role || !userId || !status || !section) return res.status(400).json({ 'message': 'name, userId, role, status, email, and section are required.' });
 
   const transaction = await sequelize.transaction();
 
@@ -37,7 +37,7 @@ const submitUserfile = async (req, res) => {
         }
     
       const newUser = await User.create({
-        name, email, userId, role:roles, status, password: hashedPwd,
+        fullName, email, userId, role:roles, status, password: hashedPwd,
         transaction,
       });
       

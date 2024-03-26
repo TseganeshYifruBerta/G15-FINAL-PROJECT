@@ -58,7 +58,5 @@ const deleteQuestion = async (req, res) => {
      }
 
 };
-  module.exports=
-
-    deleteQuestion
+  module.exports= deleteQuestion
   

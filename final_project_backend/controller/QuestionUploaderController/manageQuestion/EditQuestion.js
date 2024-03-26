@@ -2,7 +2,9 @@ const Question = require("../../../models/question_testcase_submission/question"
 const TestCase = require("../../../models/question_testcase_submission/testCase")
 const User = require("../../../models/auth/user.model")
 const sequelize = require("../../../database/sequelize")
+
 const editQuestion = async (req, res) => {
+
     try {
       const { title, difficulty, description, example, testcases , functionName} = req.body;
       const { id ,teacherId} = req.params;

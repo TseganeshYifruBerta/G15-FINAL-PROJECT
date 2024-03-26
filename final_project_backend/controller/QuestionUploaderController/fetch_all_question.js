@@ -9,15 +9,17 @@ const getNumberOfAllQuestion = async(req,res) =>{
       try{
         const question = await Question.findAll();
         const count = question.length;
-        return res.status(200).json(count)
+        return res.status(200).json({count})
        
       } catch(error){
        console.log(error);
-       return res.sendStatus(400);
+       return res.status(500).json({ error: "Internal Server Error" });
+
       }
 };
-             //AllQuestionsCreatedByTeacher 
 
+
+             //AllQuestionsCreatedByTeacher 
 const getAllQuestionsCreatedByTeacher = async(req,res) =>{
   try{
     const {teacherId} = req.params
@@ -46,7 +48,7 @@ const getAllQuestionsCreatedByTeacher = async(req,res) =>{
     });
     
     
-    return res.status(200).json(questionWithTestcase)
+    return res.status(200).json({questionWithTestcase})
   }
   else{
     return res.status(400).json({message:"The user is not active"})
@@ -54,7 +56,8 @@ const getAllQuestionsCreatedByTeacher = async(req,res) =>{
    
   } catch(error){
    console.log(error);
-   return res.sendStatus(400);
+   return res.status(500).json({ error: "Internal Server Error" });
+   
   }
 };
 
@@ -81,7 +84,7 @@ try{
   }
   );
   const count = questioncreated.length;
-  return res.status(200).json(count)
+  return res.status(200).json({count})
 }
 else{
   return res.status(400).json({message:"The user is not active"})
@@ -89,7 +92,8 @@ else{
   
 } catch(error){
   console.log(error);
-  return res.sendStatus(400);
+  return res.status(500).json({ error: "Internal Server Error" });
+
 }
 };
 
@@ -98,7 +102,6 @@ else{
 const getAllQuestions = async (req, res) => {
   try {
    
-    
       const questionWithTestcase = await Question.findAll({
         
         include: [
@@ -110,11 +113,13 @@ const getAllQuestions = async (req, res) => {
           }
         ]
       });
-      return res.status(200).json(questionWithTestcase);
+      return res.status(200).json({questionWithTestcase});
   
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400);
+    return res.status(500).json({ error: "Internal Server Error" });
+
+
   }
 };
 
