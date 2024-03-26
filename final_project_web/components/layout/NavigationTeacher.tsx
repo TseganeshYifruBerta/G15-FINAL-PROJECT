@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import SideNavbar from "../sidebar/sidebarstudent";
+import SideNavbar from "../sidebar/SideNavBar";
 import SideNavbarTeacher from "../sidebar/sidebar";
 
 const NavigationTeacher: React.FC = () => {

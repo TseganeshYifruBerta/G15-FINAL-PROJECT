@@ -11,16 +11,19 @@ export type QuestionUploadFormData = {
 
 
 export const uploadquestion = async (formData: QuestionUploadFormData) => {
+   const token = localStorage.getItem("token");
   try {
     const response = await fetch(
-      "http://localhost:5000/question/submitquestion",
+      "http://localhost:5000/question/submitQuestion",
       {
         method: "POST",
+        body: JSON.stringify(formData),
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          // Include the Authorization header with the bearer token if it exists
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify(formData),
       }
     );
 

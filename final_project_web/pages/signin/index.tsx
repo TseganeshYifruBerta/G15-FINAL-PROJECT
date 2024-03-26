@@ -4,6 +4,8 @@ import { TEInput, TERipple } from "tw-elements-react";
 
 import { Input, Typography } from "@material-tailwind/react";
 import { error } from "console";
+import { LoginFormData, login } from "@/store/login/login-api";
+import { useRouter } from "next/router";
 
 function Copyright() {
   return (
@@ -18,6 +20,7 @@ function Copyright() {
 }
 
 export default function SignInSide() {
+  const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [id, setId] = useState("");
   const [idError, setIdError] = useState("");
@@ -52,16 +55,16 @@ export default function SignInSide() {
   }, [modalRef]);
 
   const validateId = (id: any) => {
-    const regex = /^UGR\/\d{4}\/\d{2}$/;
+    const regex = /^[A-Z]{3}\/\d{4}\/\d{2}$/;
     return regex.test(id);
   };
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
     var error = false;
     const data = new FormData(event.currentTarget);
     if (!validateId(id)) {
-      setIdError("Invalid ID format. Required format: UGR/****/**");
+      setIdError("Invalid ID format. Required format: ***/****/**");
       error = true;
     }
     if (validateId(id)) {
@@ -78,10 +81,13 @@ export default function SignInSide() {
     if (error) {
       return;
     }
-    console.log({
-      id: data.get("id"),
-      password: data.get("password"),
-    });
+
+    const values: LoginFormData = {
+      userId: data.get("id") as string,
+      password: data.get("password") as string,
+    };
+    await login(values);
+    router.push("/home/home");
     // Proceed with authentication...
   };
 
@@ -101,7 +107,7 @@ export default function SignInSide() {
         >
           <div
             ref={modalRef} // Attach the ref to the modal content
-            className="relative top-16 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white  left-96 fadeIn "
+            className="relative top-16 mx-auto p-5  w-96 shadow-lg rounded-md bg-white  left-96 infade "
           >
             <div className="mt-3 text-center">
               <div className="font-semi-bold text-xl">
@@ -114,6 +120,8 @@ export default function SignInSide() {
                 <div className="rounded-md shadow-sm -space-y-px">
                   <div className="pb-4">
                     <Input
+                      id="id"
+                      name="id"
                       label="User ID"
                       crossOrigin={true}
                       value={id}
@@ -130,6 +138,8 @@ export default function SignInSide() {
 
                   <div className="">
                     <Input
+                      id="password"
+                      name="password"
                       color={`${passwordError ? "red" : "black"}`}
                       type="password"
                       label="Password"
