@@ -24,7 +24,12 @@ const Question = sequelize.define("labQuestion", {
   teacherId:{
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  functionName:{
+    type: DataTypes.STRING,
+    allowNull: false,
   }
+
   
 });
 Question.hasMany(TestCase, { as: "TestCases" });

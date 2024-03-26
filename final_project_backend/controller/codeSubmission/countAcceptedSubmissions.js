@@ -1,12 +1,21 @@
 const codeSubmision = require("../../models/codeSubmision/codeSubmision");
 const Question = require("../../models/question_testcase_submission/question"); // Import the LabQuestion and TestCase models
 const Status = require("../../models/codeSubmision/codeStatus")
-const sequelize = require("../../database/sequelize")
+const sequelize = require("../../database/sequelize");
+const User = require("../../models/auth/user.model");
 
-const fetchingAllSubmittedQuestionForUser = async (req, res) => {
+const fetchingAllSubmittedQuestionPerUser = async (req, res) => {
   const { userId } = req.params;
 
   try {  
+    const foundUser = await User.findOne({
+      where:{
+        id:userId
+      }
+    })
+    if(!foundUser) {
+      return res.status(400).json({message:"The user is not found"})
+    }
     const questionSubmittedFetch = await codeSubmision.findAll({
       where: {
         userId: userId,
@@ -49,10 +58,18 @@ const fetchingAllSubmittedQuestionForUser = async (req, res) => {
   }
 };
 
-const fetchingAllDetailForSubmittedQuestion = async (req, res) => {
-  const { submittedId } = req.params;
+const fetchingDetailForAcceptedSubmittedQuestion = async (req, res) => {
+  const {  userId , submittedId  } = req.params;
 
   try {
+    const foundUser = await User.findOne({
+      where:{
+        id:userId
+      }
+    })
+    if(!foundUser) {
+      return res.status(400).json({message:"The user is not found"})
+    }
     const questionStatus = await Status.findOne({
       where: {
         submittedCodeId: submittedId,
@@ -135,8 +152,8 @@ const countAcceptedSubmissionsOfUserBySection = async (req, res) => {
 }
 
 module.exports = {
-  fetchingAllSubmittedQuestionForUser,
-  fetchingAllDetailForSubmittedQuestion,
+  fetchingAllSubmittedQuestionPerUser,
+  fetchingDetailForAcceptedSubmittedQuestion,
   countAcceptedSubmissionsPerUser,
   countAcceptedSubmissionsOfUserBySection
 };

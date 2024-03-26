@@ -3,7 +3,7 @@ const TestCase = require('../../models/question_testcase_submission/testCase')
 const User = require('../../models/auth/user.model')
 // Controller function to submit a question along with its test cases
 const submitQuestionWithTestCases = async (req, res) => {
-const { title, difficulty, description, example, testCases ,teacherId} = req.body;
+const { title, difficulty, description, example, testCases ,teacherId, functionName} = req.body;
 
   try {
     const teacherDetail = await User.findOne({
@@ -18,7 +18,8 @@ const { title, difficulty, description, example, testCases ,teacherId} = req.bod
       difficulty,
       description,
       example,
-      teacherId
+      teacherId,
+      functionName
     });
 
 

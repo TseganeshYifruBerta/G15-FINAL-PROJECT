@@ -3,7 +3,7 @@ const Status = require("../../models/codeSubmision/codeStatus");
 const User = require("../../models/auth/user.model")
   
                 //  get all accepted submissions using user id
-const getAllAcceptedSubmissions= async (req, res) => { 
+const getAllAcceptedSubmissionsByUserId= async (req, res) => { 
   const { userId } = req.params 
   
   try {
@@ -45,4 +45,4 @@ const getAllAcceptedSubmissions= async (req, res) => {
 
 }
 
-module.exports =  getAllAcceptedSubmissions ; 
+module.exports =  getAllAcceptedSubmissionsByUserId ; 

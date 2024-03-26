@@ -2,7 +2,8 @@ const codeSubmision = require("../../models/codeSubmision/codeSubmision");
 const Question = require("../../models/question_testcase_submission/question"); // Import the LabQuestion and TestCase models
 const Difficulty = require("../../models/codeSubmision/difficultyCounter");
 
-const getAllDifficultyData = async (req, res) => {
+const getAllDifficultyDataPerUser = async (req, res) => {
+  
    
   try {
     const questionTagFetch = await Difficulty.findAll();

@@ -4,7 +4,7 @@ const User = require("../../../models/auth/user.model")
 const sequelize = require("../../../database/sequelize")
 const editQuestion = async (req, res) => {
     try {
-      const { title, difficulty, description, example, testcases } = req.body;
+      const { title, difficulty, description, example, testcases , functionName} = req.body;
       const { id ,teacherId} = req.params;
 
       const question = await Question.findByPk(id);
@@ -40,6 +40,7 @@ const editQuestion = async (req, res) => {
         question.difficulty = difficulty;
         question.description = description;
         question.example = example;
+        question.functionName = functionName;
         await question.save({ transaction });
   
   
