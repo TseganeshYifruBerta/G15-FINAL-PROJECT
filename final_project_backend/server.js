@@ -9,6 +9,7 @@ const examRouters =require("./routes/exam/examRoute")
 const dataUploadRouters = require("./routes/userDataUploader/userData");
 const sequelize = require("./database/sequelize.js");
 const questionRouters = require("./routes/questionRoute/questionRoute.js");
+const codeSubmissionRouter = require("./routes/codeSubmission/codeSubmissionRoute.js")
 const verifyJWT = require("./middleware/verifyJWT.js")
 const seedAdminData = require("./models/auth/seed.js");
 dotenv.config({
@@ -47,6 +48,10 @@ app.use("/question", questionRouters);
 
 // Routes related to Execution
 app.use("/execution", executionRouter);
+
+// route related to code submission
+app.use("/codeSubmission", codeSubmissionRouter);
+
 
 // Routes related to DataUpload
 app.use("/upload", dataUploadRouters); 
