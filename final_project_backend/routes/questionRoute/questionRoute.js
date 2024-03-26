@@ -11,7 +11,7 @@ const {
 } = require("../../controller/QuestionUploaderController/fetch_all_question");
 const  editQuestion  = require("../../controller/QuestionUploaderController/manageQuestion/EditQuestion");
 const  deleteQuestion = require("../../controller/QuestionUploaderController/manageQuestion/deleteQuestion");
-// const  DetailofQuestion = require("../../controller/QuestionUploaderController/questionDetail");
+const  DetailOfSelectedQuestion = require("../../controller/QuestionUploaderController/DetailOfSelectedQuestion");
 const verifyRoles = require("../../middleware/verifyRoles");
 const {isTeacher} = require("../../middleware/roleMiddleWare");
 
@@ -24,7 +24,7 @@ questionRouters.get("/getNumberOfAllQuestion", getNumberOfAllQuestion);
 
 
 
-// questionRouters.get("/DetailofQuestion/:questionId",verifyRoles("teacher"),isTeacher, DetailofQuestion);
+questionRouters.get("/DetailOfSelectedQuestion/:questionId",verifyRoles("teacher"),isTeacher, DetailOfSelectedQuestion);
 
  
 questionRouters.put("/updateQuestionById/:id/:teacherId", verifyRoles("teacher"),isTeacher, editQuestion)
