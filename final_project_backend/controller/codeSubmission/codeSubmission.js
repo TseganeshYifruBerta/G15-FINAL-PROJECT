@@ -262,7 +262,7 @@ const submitCode = async (req, res) => {
   } catch (error) {
 
     console.error("Error:", error);
-    res.status(500).json(error);
+    res.status(500).json({ error: "Failed to submit code"});
   }
 };
 

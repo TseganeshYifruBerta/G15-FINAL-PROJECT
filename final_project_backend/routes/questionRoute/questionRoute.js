@@ -15,6 +15,7 @@ const  DetailofQuestion = require("../../controller/QuestionUploaderController/q
 const verifyRoles = require("../../middleware/verifyRoles");
 const {isTeacher} = require("../../middleware/roleMiddleWare");
 // questionRouters.post("/question", submitQuestionWithTestCases);
+
 questionRouters.post("/submitquestion", verifyRoles("teacher"),isTeacher,submitQuestionWithTestCases);
 questionRouters.get("/getAllQuestions/:userId", getAllQuestions); 
 questionRouters.get("/getAllQuestionsCreatedByTeacher/:teacherId", getAllQuestionsCreatedByTeacher); 

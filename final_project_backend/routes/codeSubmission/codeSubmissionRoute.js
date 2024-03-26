@@ -10,7 +10,7 @@ const {
     countAcceptedSubmissionsPerUser,
     countAcceptedSubmissionsOfUserBySection
   } = require("../../controller/codeSubmission/countAcceptedSubmissions");
-
+const {fetchingAllAcceptedSubmittedQuestionsPerUser , fetchingDetailForAcceptedSubmittedQuestion} = require("../../controller/codeSubmission/countAcceptedSubmissions");
 
 codeSubmissionRouter.get("/getAllAcceptedSubmissions/:userId", getAllAcceptedSubmissionsByUserId);
 codeSubmissionRouter.post("/submitCode", verifyRoles("student"),isStudent,submitCode);
@@ -19,6 +19,16 @@ codeSubmissionRouter.get("/countAcceptedSubmissionsOfUserBySection/:section", ve
 codeSubmissionRouter.get("/countAcceptedSubmissionsPerUser/:userId",countAcceptedSubmissionsPerUser)
 
 
+codeSubmissionRouter.get(
+  "/fetchingAllAcceptedSubmittedQuestionsPerUser/:userId",
+  fetchingAllAcceptedSubmittedQuestionsPerUser
+
+);  
+
+codeSubmissionRouter.get(
+  "/fetchQuestionDetailBySubmittedId/:userId/:submittedId",
+  fetchingDetailForAcceptedSubmittedQuestion
+); 
 
 
 
