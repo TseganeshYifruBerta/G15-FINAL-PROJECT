@@ -97,16 +97,8 @@ else{
 
 const getAllQuestions = async (req, res) => {
   try {
-    const {userId} = req.params
-    const findUser = await User.findOne({
-      where:{
-        id:userId 
-      }
-    });
-    if (!findUser){
-      return res.status(400).json({message:"The user is not found"})
-    }
-    if(findUser.status === 'active'){
+   
+    
       const questionWithTestcase = await Question.findAll({
         
         include: [
@@ -119,10 +111,7 @@ const getAllQuestions = async (req, res) => {
         ]
       });
       return res.status(200).json(questionWithTestcase);
-  }
-  else{
-    return res.status(400).json({message:"The user is not active"})
-  }
+  
   } catch (error) {
     console.log(error);
     return res.sendStatus(400);

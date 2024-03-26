@@ -215,6 +215,10 @@ const submitCode = async (req, res) => {
 
        const difficultyRecord = await Difficulty.findOne(); // Assuming there's only one record
        if (difficultyRecord) {
+        await Difficulty.update(
+          { userId: id },
+          { where: { id: difficultyRecord.id } }
+        );
          // Update the counts based on the difficulty level of the new submission
          if (tag === "easy") {
            await Difficulty.update(

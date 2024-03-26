@@ -19,6 +19,12 @@ const Difficulty = sequelize.define("difficultyData", {
 
     defaultValue: 0,
   },
+  userId:{
+    type: DataTypes.STRING,
+    defaultValue: "",
+
+  
+  }
 });
 Difficulty.sync({ alter: true }).then(() => {
   // Check if there are any existing records
