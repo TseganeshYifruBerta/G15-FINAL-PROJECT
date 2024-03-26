@@ -12,7 +12,7 @@ const seedAdminData = async () => {
         if (!adminExists) {
             // Create admin user
             await User.create({
-                name: 'Admin',
+                fullName: 'Admin',
                 email: 'admin@gmail.com',
                 userId: 'ATR/3333/33',
                 password: hashedPwd, // Remember to hash passwords in a real application

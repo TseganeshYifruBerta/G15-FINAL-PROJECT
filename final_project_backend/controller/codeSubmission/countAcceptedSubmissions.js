@@ -3,8 +3,9 @@ const Question = require("../../models/question_testcase_submission/question"); 
 const Status = require("../../models/codeSubmision/codeStatus")
 const sequelize = require("../../database/sequelize");
 const User = require("../../models/auth/user.model");
+const TestCase = require("../../models/question_testcase_submission/testCase");
 
-const fetchingAllSubmittedQuestionPerUser = async (req, res) => {
+const fetchingAllAcceptedSubmittedQuestionsPerUser = async (req, res) => {
   const { userId } = req.params;
 
   try {  
@@ -37,10 +38,21 @@ const fetchingAllSubmittedQuestionPerUser = async (req, res) => {
         where: {
           id: f.questionId,
         },
+        include : [
+          {
+            model: TestCase,
+            where: {
+              labQuestionId: f.questionId
+            },
+            as: "TestCases"
+          }
+        ]
+
       });
       const questionStatus = await Status.findOne({
         where: {
           submittedCodeId: id,
+          status: "Accepted",
         },
       });
       const a = {
@@ -152,7 +164,7 @@ const countAcceptedSubmissionsOfUserBySection = async (req, res) => {
 }
 
 module.exports = {
-  fetchingAllSubmittedQuestionPerUser,
+  fetchingAllAcceptedSubmittedQuestionsPerUser,
   fetchingDetailForAcceptedSubmittedQuestion,
   countAcceptedSubmissionsPerUser,
   countAcceptedSubmissionsOfUserBySection
