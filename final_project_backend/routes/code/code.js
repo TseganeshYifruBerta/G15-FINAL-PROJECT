@@ -19,7 +19,7 @@ const  verifyRoles  = require("../../middleware/verifyRoles");
 const {
    fetchingAllSubmittedQuestionForUser,
    fetchingAllDetailForSubmittedQuestion,
-   countAcceptedSubmissionsForUser,
+   countAcceptedSubmissionsPerUser,
    countAcceptedSubmissionsOfUserBySection
  } = require("../../controller/QuestionUploaderController/submittedData");
 const {isTeacher} = require("../../middleware/roleMiddleWare");
@@ -33,7 +33,6 @@ executionRouter.get("/countSubmissionsForDate/:date",countSubmissionsForDate);
 executionRouter.get("/countSubmissionsForDateByUserId/:userId/:date",countSubmissionsForDateByUserId)
 executionRouter.get("/countAcceptedSubmissions" ,countAcceptedSubmissions )
 executionRouter.get("/getAllAcceptedSubmissions" , getAllAcceptedSubmissions )
-executionRouter.get("/countSubmissionsForLastWeek/:initialDateString" , countSubmissionsForLastWeek )
 executionRouter.post("/submitExamAnswerByStudent", submitExamAnswerByStudent);
 
 

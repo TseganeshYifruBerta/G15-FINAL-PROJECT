@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../database/sequelize'); // Adjust this path to where your Sequelize instance is initialized
 
-const Question = sequelize.define('Question', {
+const SelectedQuestionForExam = sequelize.define('selectedQuestionForExam', {
    
     question_ids: {
         type: DataTypes.STRING,
@@ -10,4 +10,4 @@ const Question = sequelize.define('Question', {
     // You can add more properties here as needed.
 });
 
-module.exports = Question;
+module.exports = SelectedQuestionForExam;

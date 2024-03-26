@@ -1,9 +1,23 @@
 const codeSubmision = require("../../models/codeSubmision/codeSubmision");
 const { Sequelize } = require("sequelize");
+const User = require("../../models/auth/user.model")
 
-const countSubmissionsForLastWeek = async (req, res) => {
+const countCodeSubmissionsForLastWeek = async (req, res) => {
   try {
+    const {userId} = req.params
     const { initialDateString }  = req.params;
+
+    const foundUser  = await User.findOne({
+      where:{
+        id:userId
+      }
+    })
+
+    if(!foundUser){
+      return res.status(400).json({message:"The user is not found"})
+    }
+    if(foundUser.status === "active"){
+    
     const initialDate = new Date(initialDateString);
     // const today = new Date();
     const lastWeek = [];
@@ -29,10 +43,16 @@ const countSubmissionsForLastWeek = async (req, res) => {
     }));
 
     return res.status(200).json(submissionCounts);
+  }
+
+  else{
+    return res.status(403).json({message:"The user is not active"})
+  }
+
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "Failed to count submissions for last week" });
   }
 };
 
-module.exports = countSubmissionsForLastWeek ;
+module.exports = countCodeSubmissionsForLastWeek ;

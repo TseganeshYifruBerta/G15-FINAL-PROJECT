@@ -5,7 +5,7 @@ const Solution = require("../../../models/exam/solution");
 
 
 const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
-  const { title, difficulty, description, example, testcases, solutions } = req.body;
+  const { title, difficulty, description, example, testcases, solutions , teacherId} = req.body;
 
   try {
     // Create a new question
@@ -15,6 +15,7 @@ const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
       difficulty,
       description,
       example,
+      teacherId
     });
 
     // Create and associate test cases with the new question

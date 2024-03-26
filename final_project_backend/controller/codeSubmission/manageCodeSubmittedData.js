@@ -5,12 +5,10 @@ const Difficulty = require("../../models/codeSubmision/difficultyCounter");
 const getAllDifficultyData = async (req, res) => {
    
   try {
-    
-
     const questionTagFetch = await Difficulty.findAll();
   
-    
     return res.status(200).json(questionTagFetch);
+    
   } catch (error) {
     console.log(error);
     return res.sendStatus(400);

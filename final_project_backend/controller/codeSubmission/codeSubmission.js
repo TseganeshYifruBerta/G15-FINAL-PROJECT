@@ -80,7 +80,7 @@ const runPythonCode = (pythonCode, nums) => {
 };
 
 module.exports = { runPythonCode };
-const execute = async (req, res) => {
+const submitCode = async (req, res) => {
   const { questionId, id, pythonCode } = req.body;
 
   try {
@@ -245,16 +245,6 @@ const execute = async (req, res) => {
        }
      }
 
-
-
-
-
-
-
-
-
-
-
     const newer = await Status.create({
       status: overallStatus,
       questionId: questionId,
@@ -276,4 +266,4 @@ const execute = async (req, res) => {
   }
 };
 
-module.exports = { execute };
+module.exports = { submitCode };

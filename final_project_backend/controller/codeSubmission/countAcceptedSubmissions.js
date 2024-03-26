@@ -2,20 +2,17 @@ const codeSubmision = require("../../models/codeSubmision/codeSubmision");
 const Question = require("../../models/question_testcase_submission/question"); // Import the LabQuestion and TestCase models
 const Status = require("../../models/codeSubmision/codeStatus")
 const sequelize = require("../../database/sequelize")
+
 const fetchingAllSubmittedQuestionForUser = async (req, res) => {
   const { userId } = req.params;
 
-  try {
+  try {  
     const questionSubmittedFetch = await codeSubmision.findAll({
       where: {
         userId: userId,
       },
     });
-
-
-    // const questionIds = questionSubmittedFetch.map(
-    //   (submission) => submission.questionId
-    // );
+   
     const Ids = questionSubmittedFetch.map(
       (submission) => submission.id
     );
@@ -51,6 +48,7 @@ const fetchingAllSubmittedQuestionForUser = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 const fetchingAllDetailForSubmittedQuestion = async (req, res) => {
   const { submittedId } = req.params;
 
@@ -72,7 +70,7 @@ const fetchingAllDetailForSubmittedQuestion = async (req, res) => {
 
 
 
-const countAcceptedSubmissionsForUser = async (req, res) => {
+const countAcceptedSubmissionsPerUser = async (req, res) => {
   const { userId } = req.params
   try {
     const submissions = await codeSubmision.findAll({
@@ -87,7 +85,6 @@ const countAcceptedSubmissionsForUser = async (req, res) => {
           submittedCodeId: submission.id,
           status: 'Accepted'
         },
-
 
       });
       if (status) {
@@ -140,7 +137,7 @@ const countAcceptedSubmissionsOfUserBySection = async (req, res) => {
 module.exports = {
   fetchingAllSubmittedQuestionForUser,
   fetchingAllDetailForSubmittedQuestion,
-  countAcceptedSubmissionsForUser,
+  countAcceptedSubmissionsPerUser,
   countAcceptedSubmissionsOfUserBySection
 };
 

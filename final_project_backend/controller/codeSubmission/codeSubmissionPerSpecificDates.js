@@ -1,6 +1,9 @@
 const codeSubmision = require("../../models/codeSubmision/codeSubmision");
 const { Sequelize } = require("sequelize");
+
 const { Op } = require("sequelize");
+
+
 const countSubmissionsForDate = async (req, res) => {
   const { date } = req.params;
   try {
@@ -19,8 +22,6 @@ const countSubmissionsForDate = async (req, res) => {
     throw new Error("Failed to count submissions for date");
   }
 };
-
-
 
 const countSubmissionsForDateByUserId = async (req, res) => {
   const { userId, date } = req.params;
@@ -42,4 +43,7 @@ const countSubmissionsForDateByUserId = async (req, res) => {
     throw new Error("Failed to count submissions for date");
   }
 };
+
+
+
 module.exports = { countSubmissionsForDateByUserId, countSubmissionsForDate };
