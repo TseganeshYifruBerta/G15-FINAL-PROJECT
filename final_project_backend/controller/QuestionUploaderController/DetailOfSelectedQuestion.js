@@ -3,7 +3,8 @@ const Status = require("../../models/codeSubmision/codeStatus");
 const User = require("../../models/auth/user.model");
 const Sequelize = require("../../database/sequelize");
 const TestCase = require("../../models/question_testcase_submission/testCase");
-const DetailofQuestion = async (req, res) => {
+
+const DetailOfSelectedQuestion = async (req, res) => {
     const { questionId  } = req.params;
     
     try {
@@ -51,4 +52,4 @@ const DetailofQuestion = async (req, res) => {
         return res.status(500).json({ error: "Internal Server Error" });
     }
 }
-module.exports = DetailofQuestion;
+module.exports = DetailOfSelectedQuestion;

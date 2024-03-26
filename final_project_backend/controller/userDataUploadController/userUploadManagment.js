@@ -34,13 +34,14 @@ const fetchAllStudentBasedOnSection = async (req, res) => {
         });
 
         if (!userDatas) {
-        return res.sendStatus(400);
+        return res.status(400).json({message: "Not found"});
         }
 
-        return res.status(200).json(userDatas);
+        return res.status(200).json({userDatas});
     } catch (error) {
         console.error(error);
-        return res.sendStatus(400);
+        return res.status(500).json({ error: "Internal server error" });
+
     }
 };
 
@@ -65,19 +66,21 @@ const findStudentByUserId= async(req, res)=> {
       });
 
       if (user) {
-      res.status(200).json(user);
+      res.status(200).json({user});
       } else {
       res.status(404).send("user not found");
       }
   } catch (error) {
-      res.status(500).send("An error occurred: " + error.message);
+      console.log(error.message)
+      return res.status(500).json({ error: "Internal server error" });
+
   }
 }
 
           
                 // updating user data 
 const updateUser = async (req, res) => {
-    const { name, email, userId, role, status, section } = req.body; 
+    const { fullName, email, userId, role, status, section } = req.body; 
     const {id} = req.params
 
     const t = await sequelize.transaction(); 
@@ -92,7 +95,7 @@ const updateUser = async (req, res) => {
   
      
       await User.update(
-        { name, email, userId, role, status },
+        { fullName, email, userId, role, status },
         { where: { id: id }, transaction: t } 
       );
       
@@ -109,12 +112,28 @@ const updateUser = async (req, res) => {
     }
   };
 
+const deleteUser = async (req,res)=>{
+  const { id } = req.params;
+  const transaction = await sequelize.transaction(); 
 
+  try {
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ error: "user not found" });
+    }
+    await user.destroy({  transaction });
+    await transaction.commit();
 
+    return res.status(200).json({ message: "User deleted successfully" });
 
-
-
-
+  } catch (error) {
+      await transaction.rollback();
+      console.error(error);
+      return res.status(500).json({ error: "Failed to delete user" });
     
+  }
 
-module.exports = {fetchAllStudentBasedOnSection, updateUser ,findStudentByUserId }
+}
+
+
+module.exports = {fetchAllStudentBasedOnSection,deleteUser, updateUser ,findStudentByUserId }
