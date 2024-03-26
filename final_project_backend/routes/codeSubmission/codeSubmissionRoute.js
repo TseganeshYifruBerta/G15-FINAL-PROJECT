@@ -11,12 +11,15 @@ const {
     countAcceptedSubmissionsOfUserBySection
   } = require("../../controller/codeSubmission/countAcceptedSubmissions");
 const {fetchingAllAcceptedSubmittedQuestionsPerUser , fetchingDetailForAcceptedSubmittedQuestion} = require("../../controller/codeSubmission/countAcceptedSubmissions");
+const getAllDifficultyDataPerUser = require("../../controller/codeSubmission/getAllDifficultyDataPerUser")
+
 
 codeSubmissionRouter.get("/getAllAcceptedSubmissions/:userId", getAllAcceptedSubmissionsByUserId);
 codeSubmissionRouter.post("/submitCode", verifyRoles("student"),isStudent,submitCode);
 codeSubmissionRouter.get("/countCodeSubmissionsForLastWeek/:initialDateString/:userId",verifyRoles("teacher"),isTeacher, countCodeSubmissionsForLastWeek);
 codeSubmissionRouter.get("/countAcceptedSubmissionsOfUserBySection/:section", verifyRoles("teacher"),isTeacher,countAcceptedSubmissionsOfUserBySection);
 codeSubmissionRouter.get("/countAcceptedSubmissionsPerUser/:userId",countAcceptedSubmissionsPerUser)
+codeSubmissionRouter.get("/getAllDifficultyDataPerUser/:id",verifyRoles("student"),isStudent,getAllDifficultyDataPerUser)
 
 
 codeSubmissionRouter.get(
