@@ -8,6 +8,7 @@ import  UploadStateTeacher  from "@/store/upload/UploadTeacherSliceReducer";
 import signinStudentReducer from "./signin/student-signin-slice"
 import questionUploadReducer from "./question-upload/question-upload-slice"
 import examQuestionUploadReducer from './exam/upload-exam-question-slice'
+import loginReducer from './login/login-slice'
 import { getAllQuestionApi } from "./question/get-all-questions";
 // import { getAllSubmissionsByIdApi } from "./submissions/get-all-submissions-by-id";
 import { getSubmissionDetailByIdApi } from "./submissions/get-submission-detail-by-id-api";
@@ -30,6 +31,7 @@ export const store = configureStore({
     studentsignin: signinStudentReducer,
     questionupload: questionUploadReducer,
     examquestionupload: examQuestionUploadReducer,
+    login: loginReducer,
     [getQuestionDetalApi.reducerPath]: getQuestionDetalApi.reducer,
     [getAllQuestionApi.reducerPath]: getAllQuestionApi.reducer,
     [getSubmissionDetailByIdApi.reducerPath]:
