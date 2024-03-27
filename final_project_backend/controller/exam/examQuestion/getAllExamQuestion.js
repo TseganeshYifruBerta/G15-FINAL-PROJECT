@@ -1,7 +1,22 @@
 const ExamQuestion = require("../../../models/exam/uploadExamQuestion")
+const examTestCase = require("../../../models/exam/examTestcase")
+const Solution = require("../../../models/exam/solution")
 const getAllExamQuestions = async (req, res) => {
     try {
-      const questions = await ExamQuestion.findAll();
+      const questions = await ExamQuestion.findAll({
+        include: [
+          {
+            model: examTestCase,
+            as: "examTestCase",
+            attributes: ["input", "output"],
+          },
+          {
+            model: Solution,
+            as: "solutions",
+            attributes: ["content"],
+          },
+        ],
+      });
       if (!questions) {
         return res.sendStatus(400);
       }
