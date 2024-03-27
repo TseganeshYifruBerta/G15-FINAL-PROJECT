@@ -4,10 +4,15 @@ const Solution = require("../../../../models/exam/solution")
 const sequelize = require('../../../../database/sequelize'); // Import sequelize instance
 
 const deleteExamQuestion = async (req, res) => {
-    const { id } = req.params;
+    const { teacherId ,examId  } = req.params;
 
     try {
-        const examQuestion = await ExamQuestion.findByPk(id);
+        const examQuestion = await ExamQuestion.findOne({
+            where: {
+                id: examId,
+                teacherId: teacherId
+            }
+        });
         if (!examQuestion) {
             return res.status(404).json({ error: "Exam Question not found" });
         }
@@ -15,11 +20,11 @@ const deleteExamQuestion = async (req, res) => {
         const transaction = await sequelize.transaction();
 
         try {
-            await examTestCase.destroy({ where: { examQuestionId: id }, transaction });
+            await examTestCase.destroy({ where: { examQuestionId: examId }, transaction });
 
-            await Solution.destroy({ where: { examQuestionId: id }, transaction });
+            await Solution.destroy({ where: { examQuestionId: examId }, transaction });
 
-            await examQuestion.destroy({ transaction });
+            await examQuestion.destroy({where:{id:examId}, transaction });
 
             await transaction.commit();
 
