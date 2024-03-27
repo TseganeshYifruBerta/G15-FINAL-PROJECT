@@ -49,7 +49,6 @@ const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
 
     res.status(201).json({
       message: "Question, test cases, and solution submitted successfully",
-      newQuestion,
       question: newQuestion,
       testCases: createdTestCases,
       solution: solutiontable,
