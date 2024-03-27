@@ -67,7 +67,7 @@ const AllStudents = () => {
           <div className="col-span-3 flex items-center">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <p className="text-sm text-black dark:text-white">
-                {student.name}
+                {student.fullName}
               </p>
             </div>
           </div>

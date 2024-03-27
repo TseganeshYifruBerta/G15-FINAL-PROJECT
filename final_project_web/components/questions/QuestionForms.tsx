@@ -1,5 +1,6 @@
+const jwt = require("jsonwebtoken");
 import { Metadata } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SelectDifficultyGroup from "../components/SelectGroup/SelectDifficultyGroup";
 import { showToast } from "../popup";
 import {
@@ -14,7 +15,6 @@ export const metadata: Metadata = {
     "This is Next.js Form Layout page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
 };
 
-
 const QuestionForms = () => {
   const router = useRouter();
   const [functionName, setFunctionName] = useState("");
@@ -22,8 +22,18 @@ const QuestionForms = () => {
   const [questionDifficulty, setQuestionDifficulty] = useState("");
   const [questionDescription, setQuestionDescription] = useState("");
   const [examples, setExamples] = useState<string>("");
+  const [teacherId, setTeacherId] = useState("");
   const [testCases, setTestCases] = useState([{ input: "{}", output: "{}" }]);
-
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = jwt.decode(token);
+      const userId = decodedToken?.id || null;
+      setTeacherId(userId);
+    } else {
+      router.push("/login");
+    }
+  }, []);
   const values = {
     testCases: testCases,
     title: questionTitle,
@@ -31,6 +41,7 @@ const QuestionForms = () => {
     description: questionDescription,
     example: examples,
     functionName: functionName,
+    teacherId: teacherId,
   };
   const handleAddTestCase = () => {
     setTestCases([...testCases, { input: "", output: "" }]);

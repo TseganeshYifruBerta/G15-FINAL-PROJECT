@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 import Breadcrumb from "@/components/components/Breadcrumbs/Breadcrumb";
 import ChatCard from "@/components/components/Chat/ChatCard";
 import TopSovedQuestions from "@/components/components/Chat/TopSolvedCard";
@@ -8,7 +9,8 @@ import TableThree from "@/components/components/Tables/TableThree";
 import TableTwo from "@/components/components/Tables/TableTwo";
 import { useGetAllQuestionsQuery } from "@/store/question/get-all-questions";
 import { Metadata } from "next";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 export const metadata: Metadata = {
   title: "Next.js Tables | TailAdmin - Next.js Dashboard Template",
   description:
@@ -16,11 +18,16 @@ export const metadata: Metadata = {
 };
 
 export default function Questions() {
-  const { data:questions, isLoading, isError } = useGetAllQuestionsQuery("");
+  
+
+  const { data: questions, isLoading, isError } = useGetAllQuestionsQuery("");
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
+
   console.log(questions);
+
   return (
     <div className="dark:bg-boxdark h-screen">
       <div className="flex flex-col gap-10">
