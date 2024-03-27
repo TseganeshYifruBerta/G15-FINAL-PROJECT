@@ -8,6 +8,7 @@ import TableOne from "@/components/components/Tables/TableOne";
 import TableThree from "@/components/components/Tables/TableThree";
 import TableTwo from "@/components/components/Tables/TableTwo";
 import { useGetAllQuestionsQuery } from "@/store/question/get-all-questions";
+import { useGetTopSolvedQuestionsQuery } from "@/store/question/get-top-solved-questions";
 import { Metadata } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -18,25 +19,34 @@ export const metadata: Metadata = {
 };
 
 export default function Questions() {
-  
+  const {
+    data: questions,
+    isLoading: isLoadingQuestion,
+    isError: isErrorQuestion,
+  } = useGetAllQuestionsQuery("");
 
-  const { data: questions, isLoading, isError } = useGetAllQuestionsQuery("");
-  if (isLoading) {
+  const {
+    data: topsolved,
+    isLoading: isLoadingTop,
+    isError: isErrorTop,
+  } = useGetTopSolvedQuestionsQuery("");
+
+  if (isLoadingQuestion || isLoadingTop) {
     return <div>Loading...</div>;
   }
 
-
-  console.log(questions);
+  console.log(questions, "questions");
+  console.log(topsolved, "topsolved")
 
   return (
     <div className="dark:bg-boxdark h-screen">
       <div className="flex flex-col gap-10">
         <div className="flex justify-between w-full">
           <div className="w-2/3">
-            <QuestionTable questions={questions} />
+            <QuestionTable questions={questions.questionWithTestcase} />
           </div>
           <div className="w-1/3">
-            <TopSovedQuestions />
+            <TopSovedQuestions topsolved={topsolved.combinedResults} />
           </div>
         </div>
       </div>

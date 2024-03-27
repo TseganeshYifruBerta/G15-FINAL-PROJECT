@@ -22,12 +22,14 @@ import { getNumberOfAllQuestionApi } from "./profile/get-number-of-question-api"
 import { getAllExamsApi } from "./exam/get-all-exam-api";
 import { getExamQuestionByIdApi } from "./exam/get-all-exam-by-id";
 import { getAllStudentsApi } from "./teacherprofile/get-all-students";
+import {getTopSolvedQuestionsApi} from "./question/get-top-solved-questions"
 export const store = configureStore({
   reducer: {
     form: formReducer,
     register: signupTeacherReducer,
     signupStudentReducer,
-    upload: UploadStateStudent,UploadStateTeacher,
+    upload: UploadStateStudent,
+    UploadStateTeacher,
     studentsignin: signinStudentReducer,
     questionupload: questionUploadReducer,
     examquestionupload: examQuestionUploadReducer,
@@ -45,7 +47,8 @@ export const store = configureStore({
     [getNumberOfAllQuestionApi.reducerPath]: getNumberOfAllQuestionApi.reducer,
     [getAllStudentsApi.reducerPath]: getAllStudentsApi.reducer,
     [getExamQuestionByIdApi.reducerPath]: getExamQuestionByIdApi.reducer,
-    [getAllExamsApi.reducerPath]: getAllExamsApi.reducer
+    [getAllExamsApi.reducerPath]: getAllExamsApi.reducer,
+    [getTopSolvedQuestionsApi.reducerPath]: getTopSolvedQuestionsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -59,7 +62,8 @@ export const store = configureStore({
       .concat(getEasyMediumHardByIdApi.middleware)
       .concat(getNumberOfAllQuestionApi.middleware)
       .concat(getAllStudentsApi.middleware)
-      .concat(getAllExamsApi.middleware),
+      .concat(getAllExamsApi.middleware)
+      .concat(getTopSolvedQuestionsApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
