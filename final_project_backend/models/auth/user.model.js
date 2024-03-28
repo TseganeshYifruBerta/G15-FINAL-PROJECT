@@ -1,6 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../../database/sequelize");
 const Section = require('./section.model'); // Import the Section model
+const studentsExamAnswer = require("../exam/studentsExamAnswer");
+const Status = require('../codeSubmision/codeStatus');
 
 const User = sequelize.define("Userinformation", {
   fullName: {
@@ -25,6 +27,13 @@ const User = sequelize.define("Userinformation", {
 });
 
 User.hasMany(Section, { as: "SectionsOfUser" });
+User.hasMany(studentsExamAnswer, { as: "studentsExamAnswer" });
+
+User.hasMany(Status, { as: "statusData" });
+Status.belongsTo(User);
+
+studentsExamAnswer.belongsTo(User)
 
 Section.belongsTo(User);
+
 module.exports = User;

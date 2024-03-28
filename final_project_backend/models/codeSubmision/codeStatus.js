@@ -6,10 +6,6 @@ const Status = sequelize.define("statusData", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  userId: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   questionId: {
     type: DataTypes.STRING,
     allowNull: false,

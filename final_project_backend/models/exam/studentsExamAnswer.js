@@ -7,13 +7,14 @@ const studentsExamAnswer = sequelize.define("studentsExamAnswer", {
     allowNull: false,
   },
   
-  userId: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  }
+  // userId: {
+  //   type: DataTypes.STRING,
+  //   allowNull: false,
+  // }
 
 });
 studentsExamAnswer.hasMany(studentsExamDetail, { as: "studentsExamDetails" });
+
 studentsExamDetail.belongsTo(studentsExamAnswer);
 
 module.exports = studentsExamAnswer;

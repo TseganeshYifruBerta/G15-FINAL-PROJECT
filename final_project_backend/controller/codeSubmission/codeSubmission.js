@@ -186,7 +186,7 @@ const submitCode = async (req, res) => {
     const submittedTagStatus = await Status.findAll({
       where:{
         questionId: questionId,
-        userId: id
+        UserinformationId: id
       }
     });
 
@@ -252,7 +252,7 @@ const submitCode = async (req, res) => {
     const newer = await Status.create({
       status: overallStatus,
       questionId: questionId,
-      userId: id,
+      UserinformationId: id,
       submittedCodeId: codes.id,
       userCode: pythonCode,
     });
