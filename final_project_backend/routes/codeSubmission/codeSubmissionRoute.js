@@ -13,6 +13,8 @@ const {
 const {fetchingAllAcceptedSubmittedQuestionsPerUser , fetchingDetailForAcceptedSubmittedQuestion} = require("../../controller/codeSubmission/countAcceptedSubmissions");
 const getAllDifficultyDataPerUser = require("../../controller/codeSubmission/getAllDifficultyDataPerUser")
 const fetchTopSolvedQuestions = require("../../controller/codeSubmission/topSolvedQuestions")
+const getTopStudents = require("../../controller/codeSubmission/topStudents")
+
 
 codeSubmissionRouter.get("/getAllAcceptedSubmissions/:userId", getAllAcceptedSubmissionsByUserId);
 codeSubmissionRouter.post("/submitCode", verifyRoles("student"),isStudent,submitCode);
@@ -21,7 +23,10 @@ codeSubmissionRouter.get("/countAcceptedSubmissionsOfUserBySection/:section", ve
 codeSubmissionRouter.get("/countAcceptedSubmissionsPerUser/:userId",countAcceptedSubmissionsPerUser)
 codeSubmissionRouter.get("/getAllDifficultyDataPerUser/:id",verifyRoles("student"),isStudent,getAllDifficultyDataPerUser)
 
-codeSubmissionRouter.get("/fetchTopSolvedQuestions",fetchTopSolvedQuestions)
+
+                  // top solved questions and top students 
+codeSubmissionRouter.get("/fetchTopSolvedQuestions",fetchTopSolvedQuestions) 
+codeSubmissionRouter.get("/getTopStudents",getTopStudents)
 
 
 

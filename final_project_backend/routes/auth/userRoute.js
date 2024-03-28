@@ -9,6 +9,6 @@ const {fetchAllStudentBasedOnSection} = require("../../controller/userDataUpload
 
 router.post("/userLogin", login);
 
-router.get("/fetchAllStudentBasedOnSection/:teacherId",fetchAllStudentBasedOnSection );
+router.get("/fetchAllStudentBasedOnSection/:id",fetchAllStudentBasedOnSection );
 
 module.exports = router;
