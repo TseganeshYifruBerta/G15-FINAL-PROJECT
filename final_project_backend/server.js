@@ -11,6 +11,7 @@ const sequelize = require("./database/sequelize.js");
 const questionRouters = require("./routes/questionRoute/questionRoute.js");
 const codeSubmissionRouter = require("./routes/codeSubmission/codeSubmissionRoute.js")
 const verifyJWT = require("./middleware/verifyJWT.js")
+const checkUserStatus = require("./middleware/userStatus.js")
 const seedAdminData = require("./models/auth/seed.js");
 dotenv.config({
   path: "./config.env",
@@ -42,6 +43,9 @@ app.use(cookieParser());
 // Routes related to Authentication
 app.use("/", routes);
 app.use(verifyJWT)
+app.use(checkUserStatus)
+
+
 
 //  Routes related to Question
 app.use("/question", questionRouters);

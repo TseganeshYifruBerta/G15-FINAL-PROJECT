@@ -98,9 +98,7 @@ const submitCode = async (req, res) => {
       },
     });
 
-    if (user.status !== "active") {
-      return res.status(400).json({ error: "User is not active" });
-    }
+  
     
     const testCases = await getQuestionById(questionId);
     if (pythonCode === "") {
