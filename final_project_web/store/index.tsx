@@ -23,6 +23,7 @@ import { getAllExamsApi } from "./exam/get-all-exam-api";
 import { getExamQuestionByIdApi } from "./exam/get-all-exam-by-id";
 import { getAllStudentsApi } from "./teacherprofile/get-all-students";
 import {getTopSolvedQuestionsApi} from "./question/get-top-solved-questions"
+import { getWeeklyReportApi } from "./profile/get-weekly-report";
 export const store = configureStore({
   reducer: {
     form: formReducer,
@@ -49,6 +50,7 @@ export const store = configureStore({
     [getExamQuestionByIdApi.reducerPath]: getExamQuestionByIdApi.reducer,
     [getAllExamsApi.reducerPath]: getAllExamsApi.reducer,
     [getTopSolvedQuestionsApi.reducerPath]: getTopSolvedQuestionsApi.reducer,
+    [getWeeklyReportApi.reducerPath]: getWeeklyReportApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -63,7 +65,8 @@ export const store = configureStore({
       .concat(getNumberOfAllQuestionApi.middleware)
       .concat(getAllStudentsApi.middleware)
       .concat(getAllExamsApi.middleware)
-      .concat(getTopSolvedQuestionsApi.middleware),
+      .concat(getTopSolvedQuestionsApi.middleware)
+      .concat(getWeeklyReportApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

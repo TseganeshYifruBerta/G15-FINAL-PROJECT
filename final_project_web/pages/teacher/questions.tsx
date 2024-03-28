@@ -25,18 +25,11 @@ export default function Questions() {
     isError: isErrorQuestion,
   } = useGetAllQuestionsQuery("");
 
-  const {
-    data: topsolved,
-    isLoading: isLoadingTop,
-    isError: isErrorTop,
-  } = useGetTopSolvedQuestionsQuery("");
-
-  if (isLoadingQuestion || isLoadingTop) {
+  if (isLoadingQuestion) {
     return <div>Loading...</div>;
   }
 
   console.log(questions, "questions");
-  console.log(topsolved, "topsolved")
 
   return (
     <div className="dark:bg-boxdark h-screen">
@@ -46,7 +39,7 @@ export default function Questions() {
             <QuestionTable questions={questions.questionWithTestcase} />
           </div>
           <div className="w-1/3">
-            <TopSovedQuestions topsolved={topsolved.combinedResults} />
+            <TopSovedQuestions />
           </div>
         </div>
       </div>
