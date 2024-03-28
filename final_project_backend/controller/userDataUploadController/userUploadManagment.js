@@ -49,7 +49,7 @@ const fetchAllStudentBasedOnSection = async (req, res) => {
 
           // fetching student using UserId
 
-const findStudentByUserId= async(req, res)=> {
+const fetchUserByUserId= async(req, res)=> {
   const { id } = req.params;
   try {
       const user = await User.findOne({
@@ -103,7 +103,10 @@ const updateUser = async (req, res) => {
   
       await t.commit();
   
-      const updatedUser = await User.findOne({ where: { id } });
+      const updatedUser = await User.findOne({
+         where: { id }, 
+         include: [{ model: Section, as: 'SectionsOfUser' }]
+        });
       return res.status(200).json({ message: 'User updated successfully', user: updatedUser });
     } catch (error) {
       console.error(error);
@@ -121,7 +124,11 @@ const deleteUser = async (req,res)=>{
     if (!user) {
       return res.status(404).json({ error: "user not found" });
     }
-    await user.destroy({  transaction });
+    await Section.destroy( { where: { UserinformationId: id }, transaction });
+
+
+
+    await user.destroy({  where: { id: id },transaction });
     await transaction.commit();
 
     return res.status(200).json({ message: "User deleted successfully" });
@@ -136,4 +143,4 @@ const deleteUser = async (req,res)=>{
 }
 
 
-module.exports = {fetchAllStudentBasedOnSection,deleteUser, updateUser ,findStudentByUserId }
+module.exports = {fetchAllStudentBasedOnSection,deleteUser, updateUser ,fetchUserByUserId }
