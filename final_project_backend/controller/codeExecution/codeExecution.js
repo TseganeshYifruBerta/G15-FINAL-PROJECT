@@ -34,7 +34,7 @@ const runPythonCode = (pythonCode, nums) => {
         reject(err);
       } else {
         const pythonProcess = spawn("python", [tempFilePath, nums]);
-        
+
         let result = "";
 
         pythonProcess.stdout.on("data", (data) => {
@@ -54,6 +54,7 @@ const runPythonCode = (pythonCode, nums) => {
         pythonProcess.on("close", (code) => {
           if (code === 0) {
             resolve(result.trim());
+
             fs.unlink(tempFilePath, (unlinkErr) => {
               if (unlinkErr) {
                 console.error("Error deleting temporary file:", unlinkErr);
@@ -76,19 +77,15 @@ const codeExecute = async (req, res) => {
     const testCases = await getQuestionById(questionId);
 
     console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnn", testCases);
-    if(pythonCode === ""){
-        return res.status(500).json({ error: "you should have to write a correct code " });
+    if (pythonCode === "") {
+      return res.status(500).json({ error: "you should have to write a correct code " });
     }
-    
+
 
     if (testCases) {
       const allTestResults = [];
       const statusData = [];
-    //   const codes = await codeSubmision.create({
-    //     questionId,
-    //     userId,
-    //     userCode: pythonCode,
-    //   });
+
 
       for (const testCase of testCases) {
         const { input, output } = testCase.dataValues;
@@ -134,22 +131,34 @@ const codeExecute = async (req, res) => {
       } else {
         overallStatus = "Wrong Answer"; // Handle other cases if needed
       }
-    //   const newer = await Status.create({
-    //     status: overallStatus,
-    //     questionId: questionId,
-    //     userId,
-    //     submittedCodeId: codes.id,
-    //     userCode: pythonCode,
-    //   });
+      
 
-      res.json({ allTestResults, pythonCode,  overallStatus });
+      res.json({ allTestResults, pythonCode, overallStatus });
     } else {
       res.status(500).json({ error: "question Id is not Found" });
     }
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).json({ error: "Failed to fetch question or test cases" });
+    
+    const errorMessagePattern = /File "[^"]+", line \d+.*$/s;
+    let matches = error.message.match(errorMessagePattern);
+    
+    let refinedMessage = "Unknown error";
+    if (matches) {
+      
+      let parts = matches[0].split(/\.py"/);
+      if (parts.length > 1) {
+        
+        refinedMessage = `File ${parts[1]}`;
+      } else {
+       
+        refinedMessage = matches[0];
+      }
+    }
+  
+    res.status(500).json({ error: refinedMessage });
   }
+  
 };
 
 module.exports = { codeExecute };
