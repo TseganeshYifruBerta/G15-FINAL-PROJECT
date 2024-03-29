@@ -44,6 +44,62 @@ const fetchAllStudentBasedOnSection = async (req, res) => {
 
     }
 };
+   
+              //  fetch all student
+const fetchAllStudents= async(req, res)=> {
+  try {
+      const user = await User.findAll({
+      where: {
+          role:"student"
+      },
+      include: [
+          {
+          model: Section,
+          as: "SectionsOfUser",
+          attributes: ["section"],
+          },
+      ],
+      });
+
+      if (user) {
+      res.status(200).json({user});
+      } else {
+      res.status(404).send("user not found");
+      }
+  } catch (error) {
+      console.log(error.message)
+      return res.status(500).json({ error: "Internal server error" });
+
+  }
+}
+             // fetch all teachers
+const fetchAllTeachers= async(req, res)=> {
+  try {
+      const user = await User.findAll({
+      where: {
+          role:"teacher"
+      },
+      include: [
+          {
+          model: Section,
+          as: "SectionsOfUser",
+          attributes: ["section"],
+          },
+      ],
+      });
+
+      if (user) {
+      res.status(200).json({user});
+      } else {
+      res.status(404).send("user not found");
+      }
+  } catch (error) {
+      console.log(error.message)
+      return res.status(500).json({ error: "Internal server error" });
+
+  }
+}
+
 
 
 
@@ -173,4 +229,4 @@ const deleteUser = async (req,res)=>{
 }
 
 
-module.exports = {fetchAllStudentBasedOnSection,deleteUser, updateUser ,fetchTeacherByUserId,fetchStudentByUserId }
+module.exports = {fetchAllStudentBasedOnSection,fetchAllStudents,fetchAllTeachers,deleteUser, updateUser ,fetchTeacherByUserId,fetchStudentByUserId }

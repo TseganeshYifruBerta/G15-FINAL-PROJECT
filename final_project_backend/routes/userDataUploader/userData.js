@@ -6,7 +6,7 @@ const submitUserfile = require("../../controller/userDataUploadController/inputD
 const verifyRoles = require("../../middleware/verifyRoles")
 const userUpload = multer({ dest: "uploads/user" });
 const {isAdmin, isTeacher} = require("../../middleware/roleMiddleWare");
-const {fetchAllStudentBasedOnSection,fetchStudentByUserId ,fetchTeacherByUserId,updateUser} = require("../../controller/userDataUploadController/userUploadManagment");
+const {fetchAllStudentBasedOnSection,fetchStudentByUserId ,fetchTeacherByUserId,updateUser,fetchAllTeachers,fetchAllStudents} = require("../../controller/userDataUploadController/userUploadManagment");
 
             //  upload user data
 dataUploadRouters.post("/userDataUploader", userUpload.single("usersExcelFile"),verifyRoles("admin"),isAdmin, uploadUsersFile);
@@ -27,7 +27,10 @@ dataUploadRouters.get("/fetchTeacherByUserId/:id",verifyRoles("admin"), fetchTea
             // update user data, only admin can update
 dataUploadRouters.put("/updateUser/:id", verifyRoles("admin"),isAdmin,updateUser );
 
-
+            // fetch all students and teachers
+dataUploadRouters.get("/fetchAllStudents",verifyRoles("admin"), fetchAllStudents );
+dataUploadRouters.get("/fetchAllTeachers",verifyRoles("admin"), fetchAllTeachers );
+      
 
 
 module.exports = dataUploadRouters;
