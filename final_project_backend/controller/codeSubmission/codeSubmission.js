@@ -197,7 +197,7 @@ const submitCode = async (req, res) => {
       }
     }
 
-     if (checker == false && overallStatus == "Accepted") {
+     if (checker == false &&( overallStatus == "Accepted" || overallStatus == "Wrong Answer")) {
        console.log("-----------------------------");
        easyCount = 0;
        mediumCount = 0;
