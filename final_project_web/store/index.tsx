@@ -22,6 +22,7 @@ import { getNumberOfAllQuestionApi } from "./profile/get-number-of-question-api"
 import { getAllExamsApi } from "./exam/get-all-exam-api";
 import { getExamQuestionByIdApi } from "./exam/get-all-exam-by-id";
 import { getAllStudentsApi } from "./teacherprofile/get-all-students";
+import { getAllTeachersApi} from "./admin/get-all-teachers";
 export const store = configureStore({
   reducer: {
     form: formReducer,
@@ -45,6 +46,7 @@ export const store = configureStore({
     [getEasyMediumHardByIdApi.reducerPath]: getEasyMediumHardByIdApi.reducer,
     [getNumberOfAllQuestionApi.reducerPath]: getNumberOfAllQuestionApi.reducer,
     [getAllStudentsApi.reducerPath]: getAllStudentsApi.reducer,
+    [getAllTeachersApi.reducerPath]: getAllTeachersApi.reducer,
     [getExamQuestionByIdApi.reducerPath]: getExamQuestionByIdApi.reducer,
     [getAllExamsApi.reducerPath]: getAllExamsApi.reducer
   },
@@ -60,6 +62,7 @@ export const store = configureStore({
       .concat(getEasyMediumHardByIdApi.middleware)
       .concat(getNumberOfAllQuestionApi.middleware)
       .concat(getAllStudentsApi.middleware)
+      .concat(getAllTeachersApi.middleware)
       .concat(getAllExamsApi.middleware),
 });
 
