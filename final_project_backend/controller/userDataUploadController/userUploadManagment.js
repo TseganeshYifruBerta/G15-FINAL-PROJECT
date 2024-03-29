@@ -49,12 +49,42 @@ const fetchAllStudentBasedOnSection = async (req, res) => {
 
           // fetching student using UserId
 
-const fetchUserByUserId= async(req, res)=> {
+const fetchStudentByUserId= async(req, res)=> {
   const { id } = req.params;
   try {
       const user = await User.findOne({
       where: {
           id: id,
+          role:"student"
+      },
+      include: [
+          {
+          model: Section,
+          as: "SectionsOfUser",
+          attributes: ["section"],
+          },
+      ],
+      });
+
+      if (user) {
+      res.status(200).json({user});
+      } else {
+      res.status(404).send("user not found");
+      }
+  } catch (error) {
+      console.log(error.message)
+      return res.status(500).json({ error: "Internal server error" });
+
+  }
+}
+         // teacher detail by id 
+const fetchTeacherByUserId= async(req, res)=> {
+  const { id } = req.params;
+  try {
+      const user = await User.findOne({
+      where: {
+          id: id,
+          role:"teacher"
       },
       include: [
           {
@@ -143,4 +173,4 @@ const deleteUser = async (req,res)=>{
 }
 
 
-module.exports = {fetchAllStudentBasedOnSection,deleteUser, updateUser ,fetchUserByUserId }
+module.exports = {fetchAllStudentBasedOnSection,deleteUser, updateUser ,fetchTeacherByUserId,fetchStudentByUserId }
