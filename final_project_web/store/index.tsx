@@ -3,8 +3,8 @@ import { reducer as formReducer } from 'redux-form';
 import { useDispatch } from 'react-redux';
 import signupTeacherReducer from './signup/signupSliceReducerTeacher';
 import signupStudentReducer from './signup/SignupSliceReducerStudent';
-import  UploadStateStudent  from "@/store/upload/UploadSliceReducerStudent";
-import  UploadStateTeacher  from "@/store/upload/UploadTeacherSliceReducer";
+import  UploadReducer from "@/store/upload/UploadSliceReducer";
+import  UploadManually  from "./upload/uploadmanuallyslicereducer";
 import signinStudentReducer from "./signin/student-signin-slice"
 import questionUploadReducer from "./question-upload/question-upload-slice"
 import examQuestionUploadReducer from './exam/upload-exam-question-slice'
@@ -22,12 +22,14 @@ import { getNumberOfAllQuestionApi } from "./profile/get-number-of-question-api"
 import { getAllExamsApi } from "./exam/get-all-exam-api";
 import { getExamQuestionByIdApi } from "./exam/get-all-exam-by-id";
 import { getAllStudentsApi } from "./teacherprofile/get-all-students";
+import { getAllTeachersApi} from "./admin/get-all-teachers";
 export const store = configureStore({
   reducer: {
     form: formReducer,
     register: signupTeacherReducer,
     signupStudentReducer,
-    upload: UploadStateStudent,UploadStateTeacher,
+    upload: UploadReducer,
+    uploadpop: UploadManually,
     studentsignin: signinStudentReducer,
     questionupload: questionUploadReducer,
     examquestionupload: examQuestionUploadReducer,
@@ -44,6 +46,7 @@ export const store = configureStore({
     [getEasyMediumHardByIdApi.reducerPath]: getEasyMediumHardByIdApi.reducer,
     [getNumberOfAllQuestionApi.reducerPath]: getNumberOfAllQuestionApi.reducer,
     [getAllStudentsApi.reducerPath]: getAllStudentsApi.reducer,
+    [getAllTeachersApi.reducerPath]: getAllTeachersApi.reducer,
     [getExamQuestionByIdApi.reducerPath]: getExamQuestionByIdApi.reducer,
     [getAllExamsApi.reducerPath]: getAllExamsApi.reducer
   },
@@ -59,6 +62,7 @@ export const store = configureStore({
       .concat(getEasyMediumHardByIdApi.middleware)
       .concat(getNumberOfAllQuestionApi.middleware)
       .concat(getAllStudentsApi.middleware)
+      .concat(getAllTeachersApi.middleware)
       .concat(getAllExamsApi.middleware),
 });
 
