@@ -3,49 +3,31 @@ import dynamic from "next/dynamic";
 import CardDataStats from "../components/CardDataStats";
 import TopSovedQuestions from "../components/Chat/TopSolvedCard";
 import TopStudents from "../components/Tables/TopStudents";
-import { useGetTopSolvedQuestionsQuery } from "@/store/question/get-top-solved-questions";
 import { useGetNumberOfAllQuestionQuery } from "@/store/profile/get-number-of-question-api";
 import { useGetWeeklyReportQuery } from "@/store/profile/get-weekly-report";
 import WeeklyReportChart from "../components/Charts/WeeklyReportChart";
-// import ChartOne from "../components/Charts/ChartOne";
-// import ChartTwo from "../components/Charts/ChartTwo";
-// import ChartThree from "../components/Charts/ChartThree";
-// import TableOne from "../components/Tables/TableOne";
-// import ChatCard from "../components/Chat/ChatCard";
-
-// Import ChartOne dynamically and disable SSR
-const ChartOne = dynamic(() => import("../components/Charts/ChartOne"), {
-  ssr: false,
-});
-
-const ChartTwo = dynamic(() => import("../components/Charts/ChartTwo"), {
-  ssr: false,
-});
+import { useGetTopStudentsQuery } from "@/store/teacherprofile/get-top-students";
+import SolvedQuestionPerSectionChart from "../components/Charts/SolvedQuestionPerSectionChart";
 
 const ChartThree = dynamic(() => import("../components/Charts/ChartThree"), {
   ssr: false,
 });
 
-const TableOne = dynamic(() => import("../components/Tables/TableOne"), {
-  ssr: false,
-});
-
-const ChatCard = dynamic(() => import("../components/Chat/ChatCard"), {
-  ssr: false,
-});
-
 const TeacherDashboard: React.FC = () => {
   const { data, isLoading, isError } = useGetNumberOfAllQuestionQuery("");
-  const { data: weeklyReport, isLoading:weeklyLoading } = useGetWeeklyReportQuery("")
-  if(weeklyLoading || isLoading){
-    return <div>Loading...</div>
+  const { data: weeklyReport, isLoading: weeklyLoading } =
+    useGetWeeklyReportQuery("");
+  const { data: topSolvedQuestions, isLoading: topSolvedLoading } =
+    useGetTopStudentsQuery("");
+  if (weeklyLoading || isLoading || topSolvedLoading) {
+    return <div>Loading...</div>;
   }
 
-
-  console.log(weeklyReport, "weeklyReport")
+  console.log(weeklyReport, "weeklyReport");
   console.log(data, "data");
+  console.log(topSolvedQuestions, "topSolvedQuestions");
   return (
-    <div className="w-full min-h-screen bg-gray-100 py-4">
+    <div className="w-full min-h-screen ">
       <div className="flex justify-between">
         <div className="w-1/4 px-2">
           <CardDataStats title="Total questions" total={data?.count} rate="">
@@ -151,12 +133,12 @@ const TeacherDashboard: React.FC = () => {
           <WeeklyReportChart reports={weeklyReport} />
         </div>
         <div className="w-1/3">
-          <ChartThree />
+          <SolvedQuestionPerSectionChart />
         </div>
       </div>
       <div className="mt-4 flex md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5 p-2">
         <div className="w-2/3">
-          <TopStudents />
+          <TopStudents topstudents={topSolvedQuestions.topStudents} />
         </div>
         <div className="w-1/3">
           <TopSovedQuestions />

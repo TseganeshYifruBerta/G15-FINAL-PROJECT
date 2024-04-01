@@ -1,17 +1,10 @@
-const jwt = require("jsonwebtoken");
-import Breadcrumb from "@/components/components/Breadcrumbs/Breadcrumb";
-import ChatCard from "@/components/components/Chat/ChatCard";
-import TopSovedQuestions from "@/components/components/Chat/TopSolvedCard";
-import Header from "@/components/components/Header";
 import QuestionTable from "@/components/components/Tables/QuestionTable";
-import TableOne from "@/components/components/Tables/TableOne";
-import TableThree from "@/components/components/Tables/TableThree";
-import TableTwo from "@/components/components/Tables/TableTwo";
-import { useGetAllQuestionsQuery } from "@/store/question/get-all-questions";
-import { useGetTopSolvedQuestionsQuery } from "@/store/question/get-top-solved-questions";
+import {
+  useDeleteQuestionMutation,
+  useGetAllQuestionsQuery,
+  useUpdateQuestionMutation,
+} from "@/store/question/get-all-questions";
 import { Metadata } from "next";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 export const metadata: Metadata = {
   title: "Next.js Tables | TailAdmin - Next.js Dashboard Template",
   description:
@@ -19,15 +12,50 @@ export const metadata: Metadata = {
 };
 
 export default function Questions() {
+  // Mutation hook for updating a question
+  const [updateQuestion, { isLoading: isUpdating }] =
+    useUpdateQuestionMutation();
+
+  // Mutation hook for deleting a question
+  const [deleteQuestion, { isLoading: isDeleting }] =
+    useDeleteQuestionMutation();
+
   const {
     data: questions,
     isLoading: isLoadingQuestion,
     isError: isErrorQuestion,
+    refetch,
   } = useGetAllQuestionsQuery("");
-
-  if (isLoadingQuestion) {
+  if (isLoadingQuestion || isDeleting || isUpdating) {
     return <div>Loading...</div>;
   }
+  // Example function to update a question
+  const handleUpdateQuestion = async (
+    questionId: any,
+    updatedData: any,
+    event: any
+  ) => {
+    event.preventDefault();
+    try {
+      await updateQuestion({ id: questionId, ...updatedData }); // Assuming 'updatedData' is an object containing the updated fields
+      // Optionally, you can trigger a refetch of all questions after updating
+      refetch();
+    } catch (error) {
+      // Handle error
+    }
+  };
+
+  // Example function to delete a question
+  const handleDeleteQuestion = async (questionId: any, event: any) => {
+    event.preventDefault();
+    try {
+      await deleteQuestion(questionId);
+      refetch();
+    } catch (error) {
+      // Handle error
+      console.log("error deleting");
+    }
+  };
 
   console.log(questions, "questions");
 
@@ -35,12 +63,12 @@ export default function Questions() {
     <div className="dark:bg-boxdark h-screen">
       <div className="flex flex-col gap-10">
         <div className="flex justify-between w-full">
-          <div className="w-2/3">
+          <div className="w-full">
             <QuestionTable questions={questions.questionWithTestcase} />
           </div>
-          <div className="w-1/3">
+          {/* <div className="w-1/3">
             <TopSovedQuestions />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

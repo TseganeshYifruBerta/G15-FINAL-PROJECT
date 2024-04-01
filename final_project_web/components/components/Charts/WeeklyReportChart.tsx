@@ -116,7 +116,7 @@ const WeeklyReportChart: React.FC<ReportsProps> = ({ reports }) => {
   let reportss: any[] = [0, 0, 0, 0, 0, 0, 0];
   let date: any[] = [];
   for (var i = 0; i < reports.length; i++) {
-    reportss[i] = (reports[i].count);
+    reportss[i] = reports[i].count;
     let curdate = new Date(reports[i].date);
     let dayName = curdate.toLocaleDateString("en-US", { weekday: "long" });
     date.push(dayName.slice(0, 3));
@@ -149,12 +149,11 @@ const WeeklyReportChart: React.FC<ReportsProps> = ({ reports }) => {
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
-        <div className="flex w-full max-w-45 justify-end">
-          <div className="inline-flex items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4">
-            <button className="rounded bg-white px-3 py-1 text-xs font-medium text-black shadow-card hover:bg-white hover:shadow-card dark:bg-boxdark dark:text-white dark:hover:bg-boxdark">
-              Prev 7 Days
-            </button>
-          </div>
+        {" "}
+        <div>
+          <h5 className="text-xl font-semibold text-black dark:text-white">
+            Weekly Report
+          </h5>
         </div>
       </div>
 

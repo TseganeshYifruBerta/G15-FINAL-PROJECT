@@ -13,13 +13,13 @@ const SelectDifficultyGroup: React.FC<SelectDifficultyGroupProps> = ({setSelecte
   };
 
   return (
-    <div className="mb-4.5">
-      <label className="mb-2.5 block text-black dark:text-white text-sm font-medium">
+    <div className="mb-4.5 text-xs">
+      <label className="mb-2.5 block text-black dark:text-white font-medium">
         {" "}
         Difficulty{" "}
       </label>
 
-      <div className="relative z-20 bg-transparent dark:bg-form-input">
+      <div className="relative z-20 bg-transparent dark:bg-form-input text-xs">
         <select
           value={selectedOption}
           onChange={(e) => {
@@ -31,7 +31,7 @@ const SelectDifficultyGroup: React.FC<SelectDifficultyGroupProps> = ({setSelecte
             isOptionSelected ? "text-black dark:text-white" : ""
           }`}
         >
-          <option value="" disabled className="text-body dark:text-bodydark">
+          <option value="" disabled className="text-gray dark:text-bodydark">
             Select Difficulty
           </option>
           <option value="easy" className="text-body dark:text-bodydark">
