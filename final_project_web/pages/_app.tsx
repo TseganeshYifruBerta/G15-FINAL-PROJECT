@@ -9,21 +9,36 @@ import "react-toastify/dist/ReactToastify.css";
 import SideNavbar from "@/components/sidebar/SideNavBar";
 import Header from "@/components/components/Header";
 import { useState } from "react";
+import SideNavigationBar from "@/components/sidebar/SideNavigationBar";
+import RootLayout from "@/components/sidebar/RootLayout";
+import SearchBar from "@/components/sidebar/SearchBar";
 
 export default function App({ Component, pageProps }: AppProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <Provider store={store}>
-      <div className="flex">
-        <SideNavbar />
+    // <Provider store={store}>
+    //   <div className="flex">
+    //     {/* <SideNavbar /> */}
+    //     <SideNavigationBar />
 
-        <div className="w-full">
-          <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-          <Component {...pageProps} /> <ToastContainer />
+    //     <div className="w-full">
+    //       <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+    //       <Component {...pageProps} /> <ToastContainer />
+    //     </div>
+    //   </div>
+    // </Provider>
+
+    <RootLayout>
+      <Provider store={store}>
+        <div className="mx-16 mt-6 h-full">
+          <SearchBar text={"dashboard"} isVisible={true} />
+          <div className="h-[88%] -mt-6 rounded-xl overflow-scroll no-scrollbar">
+            <Component {...pageProps} /> <ToastContainer />
+          </div>
         </div>
-      </div>
-    </Provider>
+      </Provider>
+    </RootLayout>
     // <>
     //   {/* <!-- ===== Page Wrapper Start ===== --> */}
     //   <div className="flex h-screen overflow-hidden">

@@ -3,45 +3,35 @@ import dynamic from "next/dynamic";
 import CardDataStats from "../components/CardDataStats";
 import TopSovedQuestions from "../components/Chat/TopSolvedCard";
 import TopStudents from "../components/Tables/TopStudents";
-// import ChartOne from "../components/Charts/ChartOne";
-// import ChartTwo from "../components/Charts/ChartTwo";
-// import ChartThree from "../components/Charts/ChartThree";
-// import TableOne from "../components/Tables/TableOne";
-// import ChatCard from "../components/Chat/ChatCard";
-
-// Import ChartOne dynamically and disable SSR
-const ChartOne = dynamic(() => import("../components/Charts/ChartOne"), {
-  ssr: false,
-});
-
-const ChartTwo = dynamic(() => import("../components/Charts/ChartTwo"), {
-  ssr: false,
-});
+import { useGetNumberOfAllQuestionQuery } from "@/store/profile/get-number-of-question-api";
+import { useGetWeeklyReportQuery } from "@/store/profile/get-weekly-report";
+import WeeklyReportChart from "../components/Charts/WeeklyReportChart";
+import { useGetTopStudentsQuery } from "@/store/teacherprofile/get-top-students";
+import SolvedQuestionPerSectionChart from "../components/Charts/SolvedQuestionPerSectionChart";
 
 const ChartThree = dynamic(() => import("../components/Charts/ChartThree"), {
   ssr: false,
 });
 
-const TableOne = dynamic(() => import("../components/Tables/TableOne"), {
-  ssr: false,
-});
-
-const ChatCard = dynamic(() => import("../components/Chat/ChatCard"), {
-  ssr: false,
-});
-
 const TeacherDashboard: React.FC = () => {
+  const { data, isLoading, isError } = useGetNumberOfAllQuestionQuery("");
+  const { data: weeklyReport, isLoading: weeklyLoading } =
+    useGetWeeklyReportQuery("");
+  const { data: topSolvedQuestions, isLoading: topSolvedLoading } =
+    useGetTopStudentsQuery("");
+  if (weeklyLoading || isLoading || topSolvedLoading) {
+    return <div>Loading...</div>;
+  }
+
+  console.log(weeklyReport, "weeklyReport");
+  console.log(data, "data");
+  console.log(topSolvedQuestions, "topSolvedQuestions");
   return (
-    <div className="w-full min-h-screen bg-gray-100 py-4">
+    <div className="w-full min-h-screen ">
       <div className="flex justify-between">
         <div className="w-1/4 px-2">
-          <CardDataStats
-            title="Total views"
-            total="$3.456K"
-            rate="0.43%"
-            levelUp
-          >
-            <svg
+          <CardDataStats title="Total questions" total={data?.count} rate="">
+            {/* <svg
               className="fill-primary dark:fill-white"
               width="22"
               height="16"
@@ -57,17 +47,13 @@ const TeacherDashboard: React.FC = () => {
                 d="M11 10.9219C9.38438 10.9219 8.07812 9.61562 8.07812 8C8.07812 6.38438 9.38438 5.07812 11 5.07812C12.6156 5.07812 13.9219 6.38438 13.9219 8C13.9219 9.61562 12.6156 10.9219 11 10.9219ZM11 6.625C10.2437 6.625 9.625 7.24375 9.625 8C9.625 8.75625 10.2437 9.375 11 9.375C11.7563 9.375 12.375 8.75625 12.375 8C12.375 7.24375 11.7563 6.625 11 6.625Z"
                 fill=""
               />
-            </svg>
+            </svg> */}
+            <div></div>
           </CardDataStats>
         </div>
         <div className="w-1/4 px-2">
-          <CardDataStats
-            title="Total Profit"
-            total="$45,2K"
-            rate="4.35%"
-            levelUp
-          >
-            <svg
+          <CardDataStats title="Hard" total="0" rate="">
+            {/* <svg
               className="fill-primary dark:fill-white"
               width="20"
               height="22"
@@ -87,17 +73,13 @@ const TeacherDashboard: React.FC = () => {
                 d="M19.0062 0.618744H17.15C16.325 0.618744 15.6031 1.23749 15.5 2.06249L14.95 6.01562H1.37185C1.0281 6.01562 0.684353 6.18749 0.443728 6.46249C0.237478 6.73749 0.134353 7.11562 0.237478 7.45937C0.237478 7.49374 0.237478 7.49374 0.237478 7.52812L2.36873 13.9562C2.50623 14.4375 2.9531 14.7812 3.46873 14.7812H12.9562C14.2281 14.7812 15.3281 13.8187 15.5 12.5469L16.9437 2.26874C16.9437 2.19999 17.0125 2.16562 17.0812 2.16562H18.9375C19.35 2.16562 19.7281 1.82187 19.7281 1.37499C19.7281 0.928119 19.4187 0.618744 19.0062 0.618744ZM14.0219 12.3062C13.9531 12.8219 13.5062 13.2 12.9906 13.2H3.7781L1.92185 7.56249H14.7094L14.0219 12.3062Z"
                 fill=""
               />
-            </svg>
+            </svg> */}
+            <div></div>
           </CardDataStats>
         </div>
         <div className="w-1/4 px-2">
-          <CardDataStats
-            title="Total Profit"
-            total="$45,2K"
-            rate="4.35%"
-            levelUp
-          >
-            <svg
+          <CardDataStats title="Medium" total="0" rate="">
+            {/* <svg
               className="fill-primary dark:fill-white"
               width="20"
               height="22"
@@ -117,17 +99,13 @@ const TeacherDashboard: React.FC = () => {
                 d="M19.0062 0.618744H17.15C16.325 0.618744 15.6031 1.23749 15.5 2.06249L14.95 6.01562H1.37185C1.0281 6.01562 0.684353 6.18749 0.443728 6.46249C0.237478 6.73749 0.134353 7.11562 0.237478 7.45937C0.237478 7.49374 0.237478 7.49374 0.237478 7.52812L2.36873 13.9562C2.50623 14.4375 2.9531 14.7812 3.46873 14.7812H12.9562C14.2281 14.7812 15.3281 13.8187 15.5 12.5469L16.9437 2.26874C16.9437 2.19999 17.0125 2.16562 17.0812 2.16562H18.9375C19.35 2.16562 19.7281 1.82187 19.7281 1.37499C19.7281 0.928119 19.4187 0.618744 19.0062 0.618744ZM14.0219 12.3062C13.9531 12.8219 13.5062 13.2 12.9906 13.2H3.7781L1.92185 7.56249H14.7094L14.0219 12.3062Z"
                 fill=""
               />
-            </svg>
+            </svg> */}
+            <div></div>
           </CardDataStats>
         </div>
         <div className="w-1/4 px-2">
-          <CardDataStats
-            title="Total Product"
-            total="2.450"
-            rate="2.59%"
-            levelUp
-          >
-            <svg
+          <CardDataStats title="Easy" total="0" rate="">
+            {/* <svg
               className="fill-primary dark:fill-white"
               width="22"
               height="22"
@@ -143,22 +121,24 @@ const TeacherDashboard: React.FC = () => {
                 d="M14.3345 5.29375C13.922 5.39688 13.647 5.80938 13.7501 6.22188C13.7845 6.42813 13.8189 6.63438 13.8189 6.80625C13.8189 8.35313 12.547 9.625 11.0001 9.625C9.45327 9.625 8.1814 8.35313 8.1814 6.80625C8.1814 6.6 8.21577 6.42813 8.25015 6.22188C8.35327 5.80938 8.07827 5.39688 7.66577 5.29375C7.25327 5.19063 6.84077 5.46563 6.73765 5.87813C6.6689 6.1875 6.63452 6.49688 6.63452 6.80625C6.63452 9.2125 8.5939 11.1719 11.0001 11.1719C13.4064 11.1719 15.3658 9.2125 15.3658 6.80625C15.3658 6.49688 15.3314 6.1875 15.2626 5.87813C15.1595 5.46563 14.747 5.225 14.3345 5.29375Z"
                 fill=""
               />
-            </svg>
+            </svg> */}
+            <div></div>
           </CardDataStats>
         </div>
       </div>
 
       <div className="mt-4 flex md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5 p-2">
         <div className="w-2/3">
-          <ChartOne />
+          {/* <ChartOne /> */}
+          <WeeklyReportChart reports={weeklyReport} />
         </div>
         <div className="w-1/3">
-          <ChartThree />
+          <SolvedQuestionPerSectionChart />
         </div>
       </div>
       <div className="mt-4 flex md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5 p-2">
         <div className="w-2/3">
-          <TopStudents />
+          <TopStudents topstudents={topSolvedQuestions.topStudents} />
         </div>
         <div className="w-1/3">
           <TopSovedQuestions />

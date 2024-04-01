@@ -2,8 +2,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseUrl = "";
 
-export const getNumberOfAllQuestionApi = createApi({
-  reducerPath: "getNumberOfAllQuestionApi",
+export const getTopSolvedQuestionsApi = createApi({
+  reducerPath: "getTopSolvedQuestionsApi",
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
     prepareHeaders: (headers, { getState }) => {
@@ -19,9 +19,10 @@ export const getNumberOfAllQuestionApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getNumberOfAllQuestion: builder.query({
-      query: (params) => {
-        let url = "http://localhost:5000/question/getNumberOfAllQuestion";
+    getTopSolvedQuestions: builder.query({
+      query: () => {
+        let url =
+          "http://localhost:5000/codeSubmission/fetchTopSolvedQuestions";
 
         return {
           url: url,
@@ -32,4 +33,4 @@ export const getNumberOfAllQuestionApi = createApi({
   }),
 });
 
-export const { useGetNumberOfAllQuestionQuery } = getNumberOfAllQuestionApi;
+export const { useGetTopSolvedQuestionsQuery } = getTopSolvedQuestionsApi;

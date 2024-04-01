@@ -3,7 +3,7 @@ import React from "react";
 
 function students() {
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-10 pb-10">
       <AllStudents />
     </div>
   );

@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const baseUrl = "";
+const baseUrl = ""; // Ensure this is set to your API's base URL if it's not the same as your app's URL
 
-export const getNumberOfAllQuestionApi = createApi({
-  reducerPath: "getNumberOfAllQuestionApi",
+export const getTopStudentsApi = createApi({
+  reducerPath: "getTopStudentsApi",
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
     prepareHeaders: (headers, { getState }) => {
@@ -19,10 +19,9 @@ export const getNumberOfAllQuestionApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getNumberOfAllQuestion: builder.query({
-      query: (params) => {
-        let url = "http://localhost:5000/question/getNumberOfAllQuestion";
-
+    getTopStudents: builder.query({
+      query: () => {
+        let url = `http://localhost:5000/codeSubmission/getTopStudents`;
         return {
           url: url,
           method: "GET",
@@ -32,4 +31,4 @@ export const getNumberOfAllQuestionApi = createApi({
   }),
 });
 
-export const { useGetNumberOfAllQuestionQuery } = getNumberOfAllQuestionApi;
+export const { useGetTopStudentsQuery } = getTopStudentsApi;

@@ -1,9 +1,10 @@
+const jwt = require("jsonwebtoken");
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseUrl = "";
 
-export const getNumberOfAllQuestionApi = createApi({
-  reducerPath: "getNumberOfAllQuestionApi",
+export const getWeeklyReportApi = createApi({
+  reducerPath: "getWeeklyReportApi",
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
     prepareHeaders: (headers, { getState }) => {
@@ -19,9 +20,14 @@ export const getNumberOfAllQuestionApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getNumberOfAllQuestion: builder.query({
-      query: (params) => {
-        let url = "http://localhost:5000/question/getNumberOfAllQuestion";
+    getWeeklyReport: builder.query({
+      query: () => {
+        const token = localStorage.getItem("token");
+        const decodedToken = jwt.decode(token);
+        const today = new Date().toISOString().split("T")[0];
+
+        let url =
+          `http://localhost:5000/codeSubmission/countCodeSubmissionsForLastWeek/${today}/${decodedToken.id}`;
 
         return {
           url: url,
@@ -32,4 +38,4 @@ export const getNumberOfAllQuestionApi = createApi({
   }),
 });
 
-export const { useGetNumberOfAllQuestionQuery } = getNumberOfAllQuestionApi;
+export const { useGetWeeklyReportQuery } = getWeeklyReportApi;
