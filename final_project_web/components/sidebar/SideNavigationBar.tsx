@@ -20,8 +20,7 @@ function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 
-
-const navigations:any = {
+const navigations: any = {
   teacher: [
     {
       href: "/teacher/dashboard",
@@ -31,7 +30,7 @@ const navigations:any = {
     {
       href: "/teacher/questions",
       name: "Questions",
-      icon: MdOutlineQuiz ,
+      icon: MdOutlineQuiz,
     },
     {
       href: "/teacher/students",
@@ -58,12 +57,12 @@ const navigations:any = {
     {
       href: "/teacher/submissions",
       name: "Submissions",
-      icon: RiGroupLine ,
+      icon: RiGroupLine,
     },
     {
       href: "/student/exams",
       name: "Students",
-      icon: IoFolderOpenOutline ,
+      icon: IoFolderOpenOutline,
     },
   ],
   admin: [
@@ -82,8 +81,7 @@ function SideNavigationBar() {
   const [activeTab, setActiveTab] = useState("/teacher/dashboard");
   const [isNavOpen, setIsNavOpen] = useState(true);
 
-  const navigation:any = navigations[role];
-
+  const navigation: any = navigations[role];
 
   const SetActiveMenuTab = (tab: number, link: string) => {
     router.push(link);
@@ -102,7 +100,7 @@ function SideNavigationBar() {
     <div>
       <div
         className={` ${
-          isNavOpen ? "w-[280px]" : "w-16"
+          isNavOpen ? "w-[200px]" : "w-16"
         } h-screen grid grid-cols-12`}
       >
         <div
@@ -122,24 +120,27 @@ function SideNavigationBar() {
             />
           </div>
 
-          <nav className="flex flex-1 flex-col px-6 bg-white overflow-scroll no-scrollbar rounded-br-xl pt-9">
+          <nav className="flex flex-1 flex-col px-6 bg-white no-scrollbar rounded-br-xl pt-9">
             <ul role="list" className="flex flex-1 flex-col">
               <li>
                 <ul role="list" className="-mx-2 space-y-1">
                   {navigation.map((item: any, i: number) => (
-                    <li key={i} className="h-16 rounded-xl">
+                    <li key={i} className="h-12 rounded-xl">
                       <button
-                        onClick={() => SetActiveMenuTab(item.name, item.href)}
+                        onClick={() => {
+                          SetActiveMenuTab(item.name, item.href);
+                          setActiveTab(item.name);
+                        }}
                         className={classNames(
-                          activeTab == item.i
-                            ? "bg-[#EBD7E7] text-primary"
-                            : "text-secondary hover:bg-lightPrimaryBg",
-                          "group flex gap-x-3 rounded-xl p-2 pt-5 text-sm leading-6 font-medium h-full w-full"
+                          activeTab == item.name
+                            ? "bg-primary text-primary bg-opacity-30"
+                            : "text-primary hover:text-primary hover:bg-primary hover:bg-opacity-30",
+                          "group flex gap-x-3 rounded-xl text-sm leading-6 font-medium h-full w-full pt-2"
                         )}
                       >
                         <item.icon
                           className={classNames(
-                            activeTab == item.i
+                            activeTab == item.name
                               ? "text-primary"
                               : "text-primary",
                             "h-4 w-4 mt-1 ml-2"
@@ -147,12 +148,12 @@ function SideNavigationBar() {
                           aria-hidden="true"
                         />
                         {item.name}
-                        {activeTab == item.i ? (
+                        {activeTab == item.name ? (
                           <span
-                            className="ml-auto text-center text-xs font-medium leading-5 text-white ring-none pt-2 pr-2"
+                            className="ml-auto text-center text-xs font-medium leading-6 text-white ring-none pt-2 pr-2"
                             aria-hidden="true"
                           >
-                            <RiCheckboxBlankCircleFill className="h-3 w-3 text-primary" />
+                            <RiCheckboxBlankCircleFill className="h-2 w-2 text-primary -mb-1" />
                           </span>
                         ) : null}
                       </button>

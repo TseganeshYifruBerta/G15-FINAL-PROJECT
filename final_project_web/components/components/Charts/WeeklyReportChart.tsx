@@ -151,7 +151,7 @@ const WeeklyReportChart: React.FC<ReportsProps> = ({ reports }) => {
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         {" "}
         <div>
-          <h5 className="text-xl font-semibold text-black dark:text-white">
+          <h5 className="text-md font-semibold text-black dark:text-white">
             Weekly Report
           </h5>
         </div>

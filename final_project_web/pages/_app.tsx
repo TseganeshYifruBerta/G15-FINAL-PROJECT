@@ -12,57 +12,27 @@ import { useState } from "react";
 import SideNavigationBar from "@/components/sidebar/SideNavigationBar";
 import RootLayout from "@/components/sidebar/RootLayout";
 import SearchBar from "@/components/sidebar/SearchBar";
+import { useRouter } from "next/router";
 
 export default function App({ Component, pageProps }: AppProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const router = useRouter();
 
-  return (
-    // <Provider store={store}>
-    //   <div className="flex">
-    //     {/* <SideNavbar /> */}
-    //     <SideNavigationBar />
-
-    //     <div className="w-full">
-    //       <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-    //       <Component {...pageProps} /> <ToastContainer />
-    //     </div>
-    //   </div>
-    // </Provider>
-
+  const isHomepage = router.pathname === "/";
+  return isHomepage ? (
+    <Provider store={store}>
+      <Component {...pageProps} /> <ToastContainer />
+    </Provider>
+  ) : (
     <RootLayout>
       <Provider store={store}>
-        <div className="mx-16 mt-6 h-full">
-          <SearchBar text={"dashboard"} isVisible={true} />
-          <div className="h-[88%] -mt-6 rounded-xl overflow-scroll no-scrollbar">
+        <div className="mx-auto mt-6 h-full no-scrollbar">
+          {/* <SearchBar text={"dashboard"} isVisible={true} /> */}
+          <div className=" rounded-xl no-scrollbar">
             <Component {...pageProps} /> <ToastContainer />
           </div>
         </div>
       </Provider>
     </RootLayout>
-    // <>
-    //   {/* <!-- ===== Page Wrapper Start ===== --> */}
-    //   <div className="flex h-screen overflow-hidden">
-    //     {/* <!-- ===== Sidebar Start ===== --> */}
-    //     <SideNavbar />
-    //     {/* <!-- ===== Sidebar End ===== --> */}
-
-    //     {/* <!-- ===== Content Area Start ===== --> */}
-    //     <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-    //       {/* <!-- ===== Header Start ===== --> */}
-    //       {/* <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> */}
-    //       {/* <!-- ===== Header End ===== --> */}
-
-    //       {/* <!-- ===== Main Content Start ===== --> */}
-    //       <main>
-    //         <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-    //           <Component {...pageProps} /> <ToastContainer />
-    //         </div>
-    //       </main>
-    //       {/* <!-- ===== Main Content End ===== --> */}
-    //     </div>
-    //     {/* <!-- ===== Content Area End ===== --> */}
-    //   </div>
-    //   {/* <!-- ===== Page Wrapper End ===== --> */}
-    // </>
   );
 }
