@@ -3,8 +3,8 @@ import { reducer as formReducer } from 'redux-form';
 import { useDispatch } from 'react-redux';
 import signupTeacherReducer from './signup/signupSliceReducerTeacher';
 import signupStudentReducer from './signup/SignupSliceReducerStudent';
-import  UploadStateStudent  from "@/store/upload/UploadSliceReducerStudent";
-import  UploadStateTeacher  from "@/store/upload/UploadTeacherSliceReducer";
+import  UploadReducer from "@/store/upload/UploadSliceReducer";
+import  UploadManually  from "./upload/uploadmanuallyslicereducer";
 import signinStudentReducer from "./signin/student-signin-slice"
 import questionUploadReducer from "./question-upload/question-upload-slice"
 import examQuestionUploadReducer from './exam/upload-exam-question-slice'
@@ -25,13 +25,18 @@ import { getAllStudentsApi } from "./teacherprofile/get-all-students";
 import {getTopSolvedQuestionsApi} from "./question/get-top-solved-questions"
 import { getWeeklyReportApi } from "./profile/get-weekly-report";
 import { getTopStudentsApi } from "./teacherprofile/get-top-students";
+import teacherReducer from './admin/teacher_slice_reducer';
+import studentReducer from './admin/student_slice_reducer';
+
 export const store = configureStore({
   reducer: {
     form: formReducer,
     register: signupTeacherReducer,
     signupStudentReducer,
-    upload: UploadStateStudent,
-    UploadStateTeacher,
+    upload: UploadReducer,
+    uploadpop: UploadManually,
+    teacher: teacherReducer,
+    student: studentReducer,
     studentsignin: signinStudentReducer,
     questionupload: questionUploadReducer,
     examquestionupload: examQuestionUploadReducer,
