@@ -62,7 +62,7 @@ const submitUserfile = async (req, res) => {
       await transaction.commit();
 
       res.status(201).json({
-        message: "user data submitted successfully",
+        message: "user data submitted successfully", newUser
       });
     
   } catch (error) {

@@ -88,7 +88,7 @@ const uploadUsersFile = async (req, res) => {
       }));
 
       console.log("Emails sent successfully");
-      return res.status(200).json({message:"Data uploaded and stored successfully"});
+      return res.status(200).json({message:"Data uploaded and stored successfully" ,createdUsers });
     }
   } catch (error) {
     return res.status(500).json({error: error.message});

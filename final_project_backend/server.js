@@ -9,7 +9,8 @@ const examRouters =require("./routes/exam/examRoute")
 const dataUploadRouters = require("./routes/userDataUploader/userData");
 const sequelize = require("./database/sequelize.js");
 const questionRouters = require("./routes/questionRoute/questionRoute.js");
-const codeSubmissionRouter = require("./routes/codeSubmission/codeSubmissionRoute.js")
+const codeSubmissionRouter = require("./routes/codeSubmission/codeSubmissionRoute.js");
+const plagiarismRouter = require("./routes/plagiarism/plagiarismRoute.js");
 const verifyJWT = require("./middleware/verifyJWT.js")
 const checkUserStatus = require("./middleware/userStatus.js")
 const seedAdminData = require("./models/auth/seed.js");
@@ -62,5 +63,10 @@ app.use("/upload", dataUploadRouters);
 
 //  Routes related to Exam
 app.use("/exam", examRouters); 
+
+  // Routes related to Plagiarism
+app.use("/plagiarism", plagiarismRouter); 
+
+
 const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`BACK_END_SERVICE_PORT: ${port}`));
