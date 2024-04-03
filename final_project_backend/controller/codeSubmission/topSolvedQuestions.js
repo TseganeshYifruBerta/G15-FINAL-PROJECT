@@ -8,7 +8,7 @@ const fetchTopSolvedQuestions = async (req, res) => {
         const topSolvedQuestions = await Status.findAll({
             attributes: [
                 'questionId',
-                [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('userId'))), 'userCount']
+                [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('UserinformationId'))), 'userCount']
             ],
             where: {
                 status: 'accepted'
