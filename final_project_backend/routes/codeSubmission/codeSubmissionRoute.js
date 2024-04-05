@@ -8,7 +8,8 @@ const {isStudent, isTeacher} = require("../../middleware/roleMiddleWare");
 const countCodeSubmissionsForLastWeek = require("../../controller/codeSubmission/countCodeSubmissionPerWeek") 
 const {
     countAcceptedSubmissionsPerUser,
-    countAcceptedSubmissionsOfUserBySection
+    countAcceptedSubmissionsOfUserBySection,
+    fetchStatusForSpecificQuestion
   } = require("../../controller/codeSubmission/countAcceptedSubmissions");
 const {fetchingAllAcceptedSubmittedQuestionsPerUser , fetchingDetailForAcceptedSubmittedQuestion} = require("../../controller/codeSubmission/countAcceptedSubmissions");
 const getAllDifficultyDataPerUser = require("../../controller/codeSubmission/getAllDifficultyDataPerUser")
@@ -39,6 +40,10 @@ codeSubmissionRouter.get(
 codeSubmissionRouter.get(
   "/fetchQuestionDetailBySubmittedId/:userId/:submittedId",
   fetchingDetailForAcceptedSubmittedQuestion
+); 
+codeSubmissionRouter.get(
+  "/fetchStatusForSpecificQuestion/:userId/:questionId",
+  fetchStatusForSpecificQuestion
 ); 
 
 
