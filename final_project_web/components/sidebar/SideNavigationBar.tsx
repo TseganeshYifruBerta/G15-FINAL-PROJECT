@@ -203,14 +203,14 @@ function SideNavigationBar() {
             onClick={() => setIsNavOpen(!isNavOpen)}
             className={classNames(
               isNavOpen ? "-ml-4 mt-20" : "ml-3 mt-7 ring-2 ring-primary",
-              "text-center h-9 w-9 rounded-full border-2 border-white bg-primary text-xs font-medium leading-5 text-white ring-none"
+              "text-center h-7 w-7 rounded-full border-2 border-white bg-primary text-xs font-medium leading-5 text-white ring-none"
             )}
             aria-hidden="true"
           >
             {isNavOpen ? (
-              <AiOutlineMenuFold className="h-5 w-5 ml-1.5 text-white" />
+              <AiOutlineMenuFold className="h-3 w-3 ml-1.5 text-white" />
             ) : (
-              <AiOutlineMenu className="h-5 w-5 ml-1.5 px-0.5 text-white" />
+              <AiOutlineMenu className="h-3 w-3 ml-1.5 px-0.5 text-white" />
             )}
           </button>
         </div>

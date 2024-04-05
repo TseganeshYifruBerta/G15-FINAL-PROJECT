@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseUrl = "";
@@ -6,22 +7,42 @@ export const getQuestionDetalApi = createApi({
   reducerPath: "getQuestionDetalApi",
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
-    // prepareHeaders: (headers, { getState }) => {
-    //   const token = (getState() as any).auth.token;
-    //   if (token) {
-    //     headers.set("authorization", `bearer ${token}`);
-    //   }
-    //   return headers;
-    // },
+    prepareHeaders: (headers, { getState }) => {
+      // Retrieve your access token from wherever it's stored
+      const token = localStorage.getItem("token");
+      // If we have a token, set the authorization header
+      if (token) {
+        headers.set("authorization", `Bearer ${token}`);
+      }
+
+      return headers;
+    },
   }),
   endpoints: (builder) => ({
     getQuestionDetails: builder.query({
       query: (params) => {
-        const { userId, questionId } = params;
+        const { questionId } = params;
         let url = "http://localhost:5000/question/getAllQuestionsById";
-console.log(params)
         const queryParams = [];
+        const token = localStorage.getItem("token");
+        const decodedToken = jwt.decode(token);
+        const userId = decodedToken?.id || null;
+        console.log(decodedToken, "uuuuuuu");
         queryParams.push(`${userId}`);
+        queryParams.push(`${questionId}`);
+
+        return {
+          url: queryParams.length > 0 ? `${url}/${queryParams.join("/")}` : url,
+          method: "GET",
+        };
+      },
+    }),
+
+    getQuestionDetailEdit: builder.query({
+      query: (params) => {
+        const { questionId } = params;
+        let url = "http://localhost:5000/question/DetailOfSelectedQuestion";
+        const queryParams = [];
         queryParams.push(`${questionId}`);
         return {
           url: queryParams.length > 0 ? `${url}/${queryParams.join("/")}` : url,
@@ -32,4 +53,4 @@ console.log(params)
   }),
 });
 
-export const { useGetQuestionDetailsQuery } = getQuestionDetalApi;
+export const { useGetQuestionDetailsQuery, useGetQuestionDetailEditQuery } = getQuestionDetalApi;

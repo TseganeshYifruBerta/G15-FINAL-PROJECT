@@ -2,7 +2,7 @@ import CodeEditorBox from "@/components/codeeditor/CodeEditorBox";
 // import CodeSubmission from "@/components/codeeditor/CodeSubmission";
 import Submissions from "@/components/codeeditor/Submissions";
 import QuestionSet from "@/components/questions/QuestionSet";
-import { useGetQuestionDetailsQuery } from "@/store/question/get-questionById-api";
+import { useGetQuestionDetailEditQuery, useGetQuestionDetailsQuery } from "@/store/question/get-questionById-api";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -20,8 +20,7 @@ const userId = "1"
       data: questionDetails,
       isLoading,
       isError,
-    } = useGetQuestionDetailsQuery({
-      userId: userId,
+    } = useGetQuestionDetailEditQuery({
       questionId: questionId,
     });
     if (isLoading){
@@ -31,7 +30,7 @@ const userId = "1"
       return <div>Errroe</div>
     }
 console.log(questionDetails)
-    const question = questionDetails.question
+    const question = questionDetails.questionDetail
     const allstatus = questionDetails.allStatus
     const {createdAt,
     description,

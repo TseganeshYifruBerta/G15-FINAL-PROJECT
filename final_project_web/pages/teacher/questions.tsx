@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default function Questions() {
-  // Mutation hook for updating a question
+  // <Mutation></Mutation> hook for updating a question
   const [updateQuestion, { isLoading: isUpdating }] =
     useUpdateQuestionMutation();
 
@@ -64,11 +64,9 @@ export default function Questions() {
       <div className="flex flex-col gap-10">
         <div className="flex justify-between w-full">
           <div className="w-full">
-            <QuestionTable questions={questions.questionWithTestcase} />
+            <QuestionTable questions={questions.questionWithTestcase} deletequestion={refetch} />
           </div>
-          {/* <div className="w-1/3">
-            <TopSovedQuestions />
-          </div> */}
+         
         </div>
       </div>
     </div>

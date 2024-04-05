@@ -3,9 +3,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FaEllipsisV } from "react-icons/fa"; // Assuming you're using React Icons
+import UseQuestionsTable from "./UseQuestionsTable";
+import TopSovedQuestions from "../Chat/TopSolvedCard";
 
 interface QuestionsProps {
   questions: any;
+  deletequestion:any
 }
 
 interface CreateQuestionButtonProps {
@@ -25,7 +28,10 @@ const CreateQuestionButton: React.FC<CreateQuestionButtonProps> = ({
   );
 };
 
-const QuestionTable: React.FC<QuestionsProps> = ({ questions }) => {
+const QuestionTable: React.FC<QuestionsProps> = ({
+  questions,
+  deletequestion,
+}) => {
   // Function to handle kebab icon click and toggle selected question ID
 
   const [selectedQuestionId, setSelectedQuestionId] = useState(null);
@@ -76,7 +82,7 @@ const QuestionTable: React.FC<QuestionsProps> = ({ questions }) => {
     });
 
   return (
-    <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+    <div className="rounded-sm bg-white  dark:border-strokedark dark:bg-boxdark">
       <div className="flex justify-between items-center my-4 mx-2">
         <div className="flex mr-4 w-2/5">
           <input
@@ -124,77 +130,18 @@ const QuestionTable: React.FC<QuestionsProps> = ({ questions }) => {
           <CreateQuestionButton onClick={() => {}} />
         </Link>
       </div>
-
-      <div className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
-        <div className="col-span-1 hidden items-center sm:flex">
-          <p className="font-medium">No</p>
+      <div className="flex">
+        <div className="w-2/3">
+          <UseQuestionsTable
+            questions={filteredAndSortedQuestions}
+            teacherId={currentTeacherId}
+            deletequestion={deletequestion}
+          />
         </div>
-        <div className="col-span-2 flex items-center">
-          <p className="font-medium">Question Title</p>
-        </div>
-        <div className="col-span-1 hidden items-center sm:flex">
-          <p className="font-medium">Difficulty</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium">Date</p>
+        <div className="w-1/3">
+          <TopSovedQuestions />
         </div>
       </div>
-
-      {filteredAndSortedQuestions?.map((question: any, key: any) => (
-        <div
-          className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5"
-          key={key}
-        >
-          <div className="col-span-1 flex items-center">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-              <p className="text-sm text-black dark:text-white">
-                {question.id}
-              </p>
-            </div>
-          </div>
-          <div className="col-span-2 flex items-center">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-              <p className="text-sm text-black dark:text-white">
-                {question.title}
-              </p>
-            </div>
-          </div>
-          <div className="col-span-1 hidden items-center sm:flex">
-            <p className="text-sm text-black dark:text-white">
-              {question.difficulty}
-            </p>
-          </div>
-          <div className="col-span-1 flex items-center">
-            <p className="text-sm text-black dark:text-white">
-              {question.createdAt}
-            </p>
-          </div>
-          {/* Column with kebab icon */}
-          <div className="col-span-1 flex justify-center items-center">
-            <FaEllipsisV
-              className="cursor-pointer text-gray-400 dark:text-gray-300"
-              onClick={() => handleKebabClick(question.id)}
-            />
-            {/* Show update and delete buttons when selectedQuestionId matches the current question's id */}
-            {selectedQuestionId === question.id && (
-              <div className="absolute right-32 mt-2 w-48 bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg dark:bg-gray-800 dark:border-gray-700 dark:divide-gray-700">
-                <button
-                  className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-gray-100"
-                  // onClick={() => handleUpdate(question.id)}
-                >
-                  Update
-                </button>
-                <button
-                  className="block w-full px-4 py-2 text-sm text-red-700 hover:bg-red-100 hover:text-red-900 dark:text-red-300 dark:hover:bg-red-700 dark:hover:text-red-100"
-                  // onClick={() => handleDelete(question.id)}
-                >
-                  Delete
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      ))}
     </div>
   );
 };

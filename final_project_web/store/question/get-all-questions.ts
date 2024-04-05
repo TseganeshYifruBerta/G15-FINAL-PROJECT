@@ -29,7 +29,7 @@ export const questionApi = createApi({
         const token = localStorage.getItem("token");
         const userId = jwt.decode(token).id;
         return {
-          url: `${baseUrl}/updateQuestionById/${question.id}/${userId}`, // Assuming the question object has an 'id' property
+          url: `${baseUrl}updateQuestionById/${question.questionId}/${userId}`, // Assuming the question object has an 'id' property
           method: "PUT",
           body: question,
         };
