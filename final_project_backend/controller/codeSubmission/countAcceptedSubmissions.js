@@ -70,6 +70,24 @@ const fetchingAllAcceptedSubmittedQuestionsPerUser = async (req, res) => {
   }
 };
 
+const fetchStatusForSpecificQuestion = async (req, res) => {
+  const { userId, questionId } = req.params;
+
+  const questionStatus = await Status.findAll({
+    where: {
+      questionId: questionId,
+      UserinformationId: userId,
+    },
+  });
+
+ if(questionStatus.length === 0) {
+   return res.status(400).json({message:"The user has not submitted this question"})
+ }
+  return res.status(200).json({questionStatus});
+
+}
+
+
 const fetchingDetailForAcceptedSubmittedQuestion = async (req, res) => {
   const {  userId , submittedId  } = req.params;
 
@@ -133,6 +151,7 @@ const countAcceptedSubmissionsPerUser = async (req, res) => {
 
 
 }
+
 const countAcceptedSubmissionsOfUserBySection = async (req, res) => {
   const { section } = req.params
   const transaction = await sequelize.transaction();
@@ -172,6 +191,7 @@ module.exports = {
   fetchingAllAcceptedSubmittedQuestionsPerUser,
   fetchingDetailForAcceptedSubmittedQuestion,
   countAcceptedSubmissionsPerUser,
-  countAcceptedSubmissionsOfUserBySection
+  countAcceptedSubmissionsOfUserBySection,
+  fetchStatusForSpecificQuestion
 };
 
