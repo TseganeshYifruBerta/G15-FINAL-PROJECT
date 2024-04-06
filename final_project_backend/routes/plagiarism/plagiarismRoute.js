@@ -5,7 +5,7 @@ const plagiarismRouter = express.Router();
 
 const checkPlagiarsm = require('../../controller/plagiarism/plagiarism_checker');
 
-plagiarismRouter.get('/checkPlagiarsm/:userId/:questionId', checkPlagiarsm);
+plagiarismRouter.get('/checkPlagiarsm/:examId', checkPlagiarsm);
 
 
 module.exports = plagiarismRouter;
