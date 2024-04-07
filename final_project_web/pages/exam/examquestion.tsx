@@ -1,4 +1,4 @@
-import CodeEditorBox from "@/components/codeeditor/CodeEditorBox";
+import CodeEditorBox from "@/components/codeeditor/CodeEditorBox.1";
 // import CodeSubmission from "@/components/codeeditor/CodeSubmission";
 import Submissions from "@/components/codeeditor/Submissions";
 import QuestionSet from "@/components/questions/QuestionSet";
@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 const QuestionById: React.FC = () => {
   const router = useRouter();
   const questionId = router.query.id as string;
-// const questionId = "20"
+  // const questionId = "20"
   const pythonCode =
     "def grade_checker(score):\n    if score >= 70:\n        return 'A'\n    elif score >= 80:\n        return 'B'\n    elif score >= 70:\n        return 'C'\n    elif score >= 60:\n        return 'D'\n    else:\n        return 'F'";
 
@@ -44,7 +44,6 @@ const QuestionById: React.FC = () => {
           questionDescription={description}
           questionExample={example}
         />
-
       </div>
       <div className="flex w-1/2 flex-col">
         <CodeEditorBox

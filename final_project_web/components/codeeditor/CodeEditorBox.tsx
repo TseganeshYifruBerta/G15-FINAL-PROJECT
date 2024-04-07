@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Editor from "@monaco-editor/react";
 import { codeexecution } from "@/store/code-execution/code-execution-api";
 import { showToast } from "../popup";
-import { InjectedFormProps, reduxForm } from "redux-form";
-import { codesubmission } from "@/store/code-submission/code-submission-api";
-import { list } from "postcss";
+import SplitPane, { Pane } from 'react-split-pane-next';
+
 import CodeSubmissionResluts from "./CodeSubmitResults";
 
 interface FormValuesExecute {
@@ -53,196 +52,184 @@ return (
   
 }
 const CodeEditorBox: React.FC<editorProps> = ({userId, questionId}) => {
-  const [submitStatus, setSubmitStatus] = useState("")
+  const MAX_HEIGHT = 400;
+  const [submitStatus, setSubmitStatus] = useState("");
   const [currentCode, setCurrentCode] = useState("def grade_checker(score):\n");
-  const [currentInput, setCurrentInput] = useState<string[]>([])
-  const [currentExpectedOutput, setCurrentExpectedOutput] = useState<string[]>([]);
-  const [currentActualOutput, setCurrentActualOutput] = useState<string[]>([])
-  const [currentPassedStatus, setCurrentPassesStatus] = useState<boolean[]>([])
-  
-useEffect(() => {
-  console.log(currentCode);
-}, [currentCode]);
-  const onSubmitExecuteCode = async (values: FormValuesExecute) => {
-    try {
-      
-      const {data, isLoading, isError} = await codeexecution(values as FormValuesExecute);
-    
-      const { allTestResults, codes,status } = data
-      showToast("run successful", "success");
-    } catch (error) {
-     
-      console.error("run error:", error);
-      //  showToast("Login error: " + (error as Error).message, "error");
+  const [currentInput, setCurrentInput] = useState<string[]>([]);
+  const [currentExpectedOutput, setCurrentExpectedOutput] = useState<string[]>(
+    []
+  );
+  const [currentActualOutput, setCurrentActualOutput] = useState<string[]>([]);
+  const [currentPassedStatus, setCurrentPassesStatus] = useState<boolean[]>([]);
+  const [editorHeight, setEditorHeight] = useState("300px"); // Initial editor height
+  const editorContainerRef = useRef(null); // Ref for the editor's container div
+  const submissionResultsRef = useRef(null); // Only if you need to track or manipulate this section
+
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        const { height } = entry.contentRect;
+        console.log(height, "height")
+        // Apply the maximum height limit here
+        const newHeight = Math.min(height, MAX_HEIGHT); // Don't allow the height to exceed MAX_HEIGHT
+        setEditorHeight(`${newHeight}px`);
+      }
+    });
+
+    if (editorContainerRef.current) {
+      resizeObserver.observe(editorContainerRef.current);
     }
-  };
-  
-  const onSubmitCode = async (values: FormValuesSubmit) => {
 
-     
-    try {
-        console.log("valuesssss", values);
-      const data  = await codesubmission(values as FormValuesSubmit);
-  console.log(data)
-  
+    // Cleanup function to disconnect the ResizeObserver when the component unmounts
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
+  useEffect(() => {
+    console.log(currentCode);
+  }, [currentCode]);
+  const onSubmitExecuteCode = async (values: FormValuesExecute) => {
+     try {
+       console.log("valuesssss", values);
+       const data = await codeexecution(values as FormValuesSubmit);
+       console.log(data);
 
-const allResults = data.allTestResults;
-setTimeout(() => {
-  setSubmitStatus(data.status);
-}, 1000);
-const handleAllResults = (results: allResultsProps[]) => {
-  setCurrentActualOutput([])
-  setCurrentExpectedOutput([])
-  setCurrentInput([])
-  setCurrentPassesStatus([])
-  for (var i=0; i < results.length; i++){
-    currentInput.push(results[i].input);
-    currentActualOutput.push(results[i].actualOutput)
-      currentExpectedOutput.push(results[i].expectedOutput);
-currentPassedStatus.push(results[i].passed)
-     
-// setCurrentActualOutput([...currentActualOutput,results[i].actualOutput])
-// setCurrentExpectedOutput([...currentExpectedOutput, results[i].expectedOutput])
-// setCurrentInput([...currentInput, results[i].input])
-  }
-};
-
-handleAllResults(allResults)
- setCurrentInput(currentInput);
- setCurrentActualOutput(currentActualOutput)
- setCurrentExpectedOutput(currentExpectedOutput)
- setCurrentPassesStatus(currentPassedStatus)
-console.log("//////////",currentInput)
-
-// setCurrentInput(input)
-// setCurrentActualOutput(actualOutput)
-// setCurrentExpectedOutput(expectedOutput)
-      showToast("submit successful", "success");
-
-    } catch (error) {
-
-      console.error("submit error:", error);
+       const allResults = data.allTestResults;
+       handleAllResults(allResults);
+       console.log(allResults, "all results");
+     } catch (error) {
+       console.error("submit error:", error);
        showToast(
          "Submission error: check your function or passed arguments" +
            (error as Error).message,
          "error"
        );
+     }
+  };
+
+  const handleAllResults = (results: allResultsProps[]) => {
+    // Clearing previous results before setting new ones
+    setCurrentInput(results.map((result) => result.input));
+    setCurrentActualOutput(results.map((result) => result.actualOutput));
+    setCurrentExpectedOutput(results.map((result) => result.expectedOutput));
+    setCurrentPassesStatus(results.map((result) => result.passed));
+  };
+
+  const onSubmitCode = async (values: FormValuesSubmit) => {
+    try {
+      console.log("valuesssss", values);
+      const data = await codeexecution(values as FormValuesSubmit);
+      console.log(data);
+
+      const allResults = data.allTestResults;
+      handleAllResults(allResults);
+      console.log(allResults, "all results");
+      showToast("submit successful", "success");
+    } catch (error) {
+      console.error("submit error:", error);
+      showToast(
+        "Submission error: check your function or passed arguments" +
+          (error as Error).message,
+        "error"
+      );
     }
   };
   const [language, setLanguage] = useState("python");
   const [theme, setTheme] = useState("vs-dark");
-
+  console.log(questionId, "question ID");
+  console.log(userId, "userr ID");
   return (
-    <div>
-      <div className="">
-        <div className="editor-settings text-blackx">
-          <select
-            onChange={(e) => setLanguage(e.target.value)}
-            value={language}
-          >
-            <option value="javascript">JavaScript</option>
-            <option value="python">Python</option>
-            <option value="java">Java</option>
-          </select>
+    <SplitPane split="horizontal" minSize="25%">
+      <Pane initialSize="5%" minSize="5%" maxSize="5%" className="flex text-xs">
+        <select onChange={(e) => setLanguage(e.target.value)} value={language}>
+          <option value="javascript">JavaScript</option>
+          <option value="python">Python</option>
+          <option value="java">Java</option>
+        </select>
           <select onChange={(e) => setTheme(e.target.value)} value={theme}>
             <option value="vs-light">Light</option>
             <option value="vs-dark">Dark</option>
           </select>
-        </div>
-        <Editor
-          height="70vh"
-          language={language}
-          theme={theme}
-          value={currentCode}
-          onChange={(newValue) => {
-            if (typeof newValue === "string") {
-              console.log(newValue);
-              
-              setCurrentCode(newValue);
-              
-              console.log("New value:", newValue);
-              console.log("Currentcode", currentCode);
-            }
-          }}
-        />
-      </div>
-      <div>
-        <SubmitCodeDiv submitStatus={submitStatus} />
-        <CodeSubmissionResluts
-          inputs={currentInput}
-          actualOutputs={currentActualOutput}
-          expectedOutputs={currentExpectedOutput}
-          passed={currentPassedStatus}
-        />
-      </div>
-      <div className="w-full h-1/3 bg-white p-4">
-        {/* <div className="mb-4">
-          <div className="flex pb-2">
-            <div className="mr-2 w-1/6">
-              <h3>Inputs</h3>
-            </div>
-            {currentInput.map((input, index) => (
-              <div className="mr-2 bg-gray-200 w-5/6 rounded-md" key={index}>
-                <h3 className="p-2 pt-1">{input}</h3>
-              </div>
-            ))}
-          </div>
-          <div className="flex">
-            <div className="mr-2 w-1/6">
-              <h3>Actual Output</h3>
-            </div>
-            {currentActualOutput.map((output, index) => (
-              <div className="mr-2 bg-gray-200 w-5/6 rounded-md" key={index}>
-                <h3 className="p-2 pt-1">{output}</h3>
-              </div>
-            ))}
-          </div>
-          <div className="flex">
-            <div className="mr-2 w-1/6">
-              <h3>Expected Output</h3>
-            </div>
-            {currentExpectedOutput.map((expectedoutput, index) => (
-              <div className="mr-2 bg-gray-200 w-5/6 rounded-md" key={index}>
-                <h3 className="p-2 pt-1">{expectedoutput}</h3>
-              </div>
-            ))}
-          </div>
-        </div> */}
-        <div className="flex justify-end">
-          <div className="mr-4">
-            <button
-              className="bg-primary hover:bg-primary-700 text-white font-bold py-2 px-4 rounded"
-              onClick={() =>
-                onSubmitCode({
-                  questionId: "20",
-                  userId: userId,
-                  pythonCode: currentCode,
-                })
-              }
-            >
-              Submit Code
-            </button>
-          </div>
+        
+      </Pane>
+      <Pane
+        initialSize="55%"
+        minSize="10%"
+        maxSize="80%"
+        className="overflow-hidden"
+      >
+        <div>
           <div>
-            <button
-              className="bg-gray-300 font-bold py-2 px-4 rounded"
-              onClick={() => {
-                onSubmitExecuteCode({
-                  questionId: questionId,
-                  pythonCode: currentCode,
-                });
+            <Editor
+              height={editorHeight}
+              className=""
+              language={language}
+              theme={theme}
+              value={currentCode}
+              onChange={(newValue) => {
+                if (typeof newValue === "string") {
+                  console.log(newValue);
+
+                  setCurrentCode(newValue);
+
+                  console.log("New value:", newValue);
+                  console.log("Currentcode", currentCode);
+                }
               }}
-            >
-              Run Code
-            </button>
+            />
           </div>
         </div>
-      </div>
-    </div>
+      </Pane>
+
+      <Pane
+        initialSize="45%"
+        minSize="40%"
+        maxSize="100%"
+        className="overflow-hidden"
+      >
+        <div>
+          <SubmitCodeDiv submitStatus={submitStatus} />
+          <CodeSubmissionResluts
+            inputs={currentInput}
+            actualOutputs={currentActualOutput}
+            expectedOutputs={currentExpectedOutput}
+            passed={currentPassedStatus}
+          />
+        </div>
+        <div className="w-full bg-white p-4 mb-4">
+          <div className="flex justify-end text-xs font-semibold">
+            <div className="mr-4">
+              <button
+                className="bg-primary bg-opacity-20 hover:bg-opacity-30 text-primary py-2 px-4 rounded"
+                onClick={() =>
+                  onSubmitCode({
+                    questionId: questionId,
+                    userId: userId,
+                    pythonCode: currentCode,
+                  })
+                }
+              >
+                Submit Code
+              </button>
+            </div>
+            <div>
+              <button
+                className="bg-gray-300  py-2 px-4 rounded"
+                onClick={() => {
+                  onSubmitExecuteCode({
+                    questionId: questionId,
+                    pythonCode: currentCode,
+                  });
+                }}
+              >
+                Run Code
+              </button>
+            </div>
+          </div>
+        </div>
+      </Pane>
+    </SplitPane>
   );
 };
-// const ConnectedExecution = reduxForm<editorProps>({
-//   form: "codeexecute",
-// })(CodeEditorBox);
 
 export default CodeEditorBox;

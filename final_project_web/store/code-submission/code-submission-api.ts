@@ -5,12 +5,16 @@ export type SubmissionFormData = {
 };
 
 export const codesubmission = async (formData: SubmissionFormData) => {
+     const token = localStorage.getItem("token");
+
   try {
     const response = await fetch("http://localhost:5000/execution/submit", {
       method: "POST",
+      // CC
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       body: JSON.stringify(formData),
     });
@@ -24,7 +28,7 @@ export const codesubmission = async (formData: SubmissionFormData) => {
     console.log("Success:", data);
     return data; // Return the data for further processing
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error:eeeeeeeeee", error);
     throw error; // Re-throw the error for handling in the calling code
   }
 };
