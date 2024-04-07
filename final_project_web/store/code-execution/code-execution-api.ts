@@ -4,12 +4,15 @@ export type ExecutionFormData = {
 };
 
 export const codeexecution = async (formData: ExecutionFormData) => {
+       const token = localStorage.getItem("token");
+
   try {
-    const response = await fetch("http://localhost:5000/execution/submit", {
+    const response = await fetch("http://localhost:5000/execution/run", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       body: JSON.stringify(formData),
     });

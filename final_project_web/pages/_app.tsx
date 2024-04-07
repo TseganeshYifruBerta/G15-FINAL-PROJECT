@@ -19,9 +19,25 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   const isHomepage = router.pathname === "/";
-  return isHomepage ? (
+  const isQuestionRelated = router.pathname.startsWith("/question")
+  return isHomepage || isQuestionRelated ? (
     <Provider store={store}>
-      <Component {...pageProps} /> <ToastContainer />
+      <div className="flex flex-col flex-1 overflow-hidden">
+        {" "}
+        {/* Ensure this container allows internal scrolling */}
+        <Header
+          sidebarOpen={undefined}
+          setSidebarOpen={function (arg0: boolean): void {
+            throw new Error("Function not implemented.");
+          }}
+        />{" "}
+        {/* Assuming your header is meant to stay fixed at the top */}
+        <div className="overflow-auto">
+          {" "}
+          {/* This allows the children content to scroll */}
+          <Component {...pageProps} /> <ToastContainer />
+        </div>
+      </div>
     </Provider>
   ) : (
     <RootLayout>

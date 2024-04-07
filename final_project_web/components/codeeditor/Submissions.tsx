@@ -2,10 +2,6 @@ import React, { useState } from "react"
 import Submission from "./Submission";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
-// export interface SubmissionProps {
-//   date:string,
-//   status: string,
-// }
 interface SubmissionsProps {
   submissions: statusProps[];
 }
@@ -46,7 +42,7 @@ const Submissions: React.FC<SubmissionsProps> = ({ submissions}) => {
  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
  return (
-   <div className="m-6">
+   <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
      <div>
        {submissionsToDisplay.map((submission, index) => (
          <div key={index}>

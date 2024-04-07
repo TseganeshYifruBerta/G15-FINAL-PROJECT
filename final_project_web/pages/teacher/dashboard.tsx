@@ -1,4 +1,3 @@
-import ECommerce from "@/components/Dashboard/E-commerce";
 import TeacherDashboard from "@/components/Dashboard/TeacherDashboard";
 import { Metadata } from "next";
 
