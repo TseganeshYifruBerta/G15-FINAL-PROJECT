@@ -19,51 +19,58 @@ const getQuestionById = async (questionId) => {
     throw new Error("Failed to fetch question by ID");
   }
 };
-
+var errorType =""
 const runPythonCode = (pythonCode, nums) => {
   return new Promise((resolve, reject) => {
     const tempFilePath = path.join(__dirname, "tempkol.py");
     const functionNameMatch = pythonCode.match(/def\s+(\w+)\s*\(/);
-    const functionName = functionNameMatch
-      ? functionNameMatch[1]
-      : "UnknownFunction";
+    const functionName = functionNameMatch ? functionNameMatch[1] : "UnknownFunction";
+    
+    const modifiedPythonCode = pythonCode.replace(/print\(/g, 'sys.stderr.write(');
     const functionCall = `${functionName}(${JSON.stringify(nums)})`;
-    const pythonScript = `${pythonCode}\n\nprint(${functionCall})`;
+    
+    const pythonScript = `${modifiedPythonCode}\n\nimport sys\nsys.stdout.write(str(${functionCall}))`;
+     
+    console.log("Python script:", pythonScript);
     fs.writeFile(tempFilePath, pythonScript, (err) => {
       if (err) {
         reject(err);
       } else {
-        const pythonProcess = spawn("python", [tempFilePath, nums]);
-
+        const pythonProcess = spawn("python", [tempFilePath,nums]);
+        
         let result = "";
+        let printOutput = ""; 
 
         pythonProcess.stdout.on("data", (data) => {
           result += data.toString();
         });
 
         pythonProcess.stderr.on("data", (data) => {
+          printOutput += data.toString();
           console.error(`Python process error: ${data}`);
-          reject(new Error(`Python process error: ${data}`));
+        });
+        
+        pythonProcess.on("close", (code) => {
           fs.unlink(tempFilePath, (unlinkErr) => {
             if (unlinkErr) {
               console.error("Error deleting temporary file:", unlinkErr);
             }
           });
-        });
-
-        pythonProcess.on("close", (code) => {
+        
           if (code === 0) {
-            resolve(result.trim());
-
-            fs.unlink(tempFilePath, (unlinkErr) => {
-              if (unlinkErr) {
-                console.error("Error deleting temporary file:", unlinkErr);
-              }
-            });
+            resolve({ result: result.trim(), printOutput: printOutput.trim() });
           } else {
-            reject(new Error(`Python process exited with code ${code}`));
+            const errorTypeMatch = printOutput.match(/(\w+Error):/);
+            if (errorTypeMatch) {
+               errorType = errorTypeMatch[1];
+             
+            } 
+            else {}
+            // If the process exits with a non-zero code, consider it an error and reject the promise.
+            reject(new Error(`Python process exited with code ${code}. Error: ${printOutput.trim()}`));
           }
         });
+        
       }
     });
   });
@@ -76,7 +83,6 @@ const codeExecute = async (req, res) => {
   try {
     const testCases = await getQuestionById(questionId);
 
-    console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnn", testCases);
     if (pythonCode === "") {
       return res.status(500).json({ error: "you should have to write a correct code " });
     }
@@ -92,11 +98,10 @@ const codeExecute = async (req, res) => {
         let nums, score, results;
 
         if (typeof input === "object") {
-          // If input is an object, assume it contains 'nums' and 'score'
           const { nums, score } = input;
           results = await runPythonCode(pythonCode, [nums, score]);
         } else {
-          // If input is a string, assume it contains 'word'
+          
           const word = input;
           const { num } = word;
           const inputData = JSON.parse(input);
@@ -110,8 +115,9 @@ const codeExecute = async (req, res) => {
         const testResults = {
           input: input,
           expectedOutput: JSON.parse(output)[0],
-          actualOutput: results,
-          passed: JSON.parse(output)[0] === results,
+          actualOutput: results.result,
+          printed :results.printOutput,
+          passed: JSON.parse(output)[0] === results.result,
         };
 
         if (testResults.passed === true) {
@@ -139,6 +145,7 @@ const codeExecute = async (req, res) => {
     }
   } catch (error) {
     console.error("Error:", error);
+    console.error("//////////",errorType)
     
     const errorMessagePattern = /File "[^"]+", line \d+.*$/s;
     let matches = error.message.match(errorMessagePattern);

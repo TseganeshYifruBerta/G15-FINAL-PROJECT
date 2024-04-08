@@ -8,7 +8,6 @@ const Question = require("../../models/question_testcase_submission/question");
 const Difficulty = require("../../models/codeSubmision/difficultyCounter");
 const User = require("../../models/auth/user.model");
 const Section = require("../../models/auth/section.model");
-// const { use } = require("../../routes/questionRoute/questionRoute");
 
 const getQuestionById = async (questionId) => {
   try {
@@ -29,55 +28,64 @@ const getQuestionById = async (questionId) => {
   }
 };
 
+var errorType =""
 const runPythonCode = (pythonCode, nums) => {
   return new Promise((resolve, reject) => {
     const tempFilePath = path.join(__dirname, "tempkol.py");
     const functionNameMatch = pythonCode.match(/def\s+(\w+)\s*\(/);
-    const functionName = functionNameMatch
-      ? functionNameMatch[1]
-      : "UnknownFunction";
+    const functionName = functionNameMatch ? functionNameMatch[1] : "UnknownFunction";
+    
+    const modifiedPythonCode = pythonCode.replace(/print\(/g, 'sys.stderr.write(');
     const functionCall = `${functionName}(${JSON.stringify(nums)})`;
-    const pythonScript = `${pythonCode}\n\nprint(${functionCall})`;
+    
+    const pythonScript = `${modifiedPythonCode}\n\nimport sys\nsys.stdout.write(str(${functionCall}))`;
+     
+    console.log("Python script:", pythonScript);
     fs.writeFile(tempFilePath, pythonScript, (err) => {
       if (err) {
         reject(err);
       } else {
-        const pythonProcess = spawn("python", [tempFilePath, nums]);
-
+        const pythonProcess = spawn("python", [tempFilePath,nums]);
+        
         let result = "";
+        let printOutput = ""; 
 
         pythonProcess.stdout.on("data", (data) => {
           result += data.toString();
         });
 
         pythonProcess.stderr.on("data", (data) => {
+          printOutput += data.toString();
           console.error(`Python process error: ${data}`);
-          reject(new Error(`Python process error: ${data}`));
+        });
+        
+        pythonProcess.on("close", (code) => {
           fs.unlink(tempFilePath, (unlinkErr) => {
             if (unlinkErr) {
               console.error("Error deleting temporary file:", unlinkErr);
             }
           });
-        });
-
-        pythonProcess.on("close", (code) => {
+        
           if (code === 0) {
-            resolve(result.trim());
-            fs.unlink(tempFilePath, (unlinkErr) => {
-              if (unlinkErr) {
-                console.error("Error deleting temporary file:", unlinkErr);
-              }
-            });
+            resolve({ result: result.trim(), printOutput: printOutput.trim() });
           } else {
-            reject(new Error(`Python process exited with code ${code}`));
+            const errorTypeMatch = printOutput.match(/(\w+Error):/);
+            if (errorTypeMatch) {
+              errorType = errorTypeMatch[1];
+             
+            } 
+            else {}
+            // If the process exits with a non-zero code, consider it an error and reject the promise.
+            reject(new Error(`Python process exited with code ${code}. Error: ${printOutput.trim()}`));
           }
         });
-    
+        
       }
     });
-    
   });
 };
+
+
 
 module.exports = { runPythonCode };
 const submitCode = async (req, res) => {
@@ -118,12 +126,14 @@ const submitCode = async (req, res) => {
       },
     });
    
-    const codes = await codeSubmision.create({
+    var codes = await codeSubmision.create({
       questionId,
       userId: id,
       section:section.section,
       userCode: pythonCode,
     });
+    
+    
     
 
     for (const testCase of testCases) {
@@ -264,7 +274,31 @@ const submitCode = async (req, res) => {
   } catch (error) {
 
     console.error("Error:", error);
-    res.status(500).json({ error: "Failed to submit code"});
+    const statuses = await Status.create({
+      status :errorType,
+      questionId: questionId,
+      UserinformationId: id,
+      submittedCodeId: codes.id,
+      userCode: pythonCode,
+    });
+    
+    const errorMessagePattern = /File "[^"]+", line \d+.*$/s;
+    let matches = error.message.match(errorMessagePattern);
+    
+    let refinedMessage = "Unknown error";
+    if (matches) {
+      
+      let parts = matches[0].split(/\.py"/);
+      if (parts.length > 1) {
+        
+        refinedMessage = `File ${parts[1]}`;
+      } else {
+       
+        refinedMessage = matches[0];
+      }
+    }
+  
+    res.status(500).json({ error: refinedMessage });
   }
 };
 
