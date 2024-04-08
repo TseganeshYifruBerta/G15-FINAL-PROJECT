@@ -100,7 +100,7 @@ const submitCode = async (req, res) => {
     if (!user ) {
       return res.status(400).json({ error: "User not found" });
     }
-    const section = await Section.findOne({
+    var section = await Section.findOne({
       where: {
         UserInformationId: id,
       },
@@ -158,12 +158,14 @@ const submitCode = async (req, res) => {
 
       // const results = await runPythonCode(pythonCode, nums || word, target);
      
+      
       const testResults = {
         input: input,
         expectedOutput: JSON.parse(output)[0],
-        actualOutput: results,
-        passed: JSON.parse(output)[0] === results,
-      }; 
+        actualOutput: results.result,
+        printed :results.printOutput,
+        passed: JSON.parse(output)[0] === results.result,
+      };
      
        if(testResults.passed === true){
        
@@ -263,10 +265,11 @@ const submitCode = async (req, res) => {
       UserinformationId: id,
       submittedCodeId: codes.id,
       userCode: pythonCode,
+      section:section.section
     });
     
   
-    res.json({ allTestResults, codes, status: overallStatus});
+    res.json({ allTestResults, codes, status: overallStatus,newer});
   }
     else{
       res.status(500).json({ error: "question Id is not Found" });
@@ -280,6 +283,7 @@ const submitCode = async (req, res) => {
       UserinformationId: id,
       submittedCodeId: codes.id,
       userCode: pythonCode,
+      section: section.section
     });
     
     const errorMessagePattern = /File "[^"]+", line \d+.*$/s;
