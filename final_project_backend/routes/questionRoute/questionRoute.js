@@ -24,7 +24,7 @@ questionRouters.get("/getNumberOfAllQuestion", getNumberOfAllQuestion);
 
 
 
-questionRouters.get("/DetailOfSelectedQuestion/:questionId",verifyRoles("teacher"),isTeacher, DetailOfSelectedQuestion);
+questionRouters.get("/DetailOfSelectedQuestion/:questionId",DetailOfSelectedQuestion);
 
  
 questionRouters.put("/updateQuestionById/:id/:teacherId", verifyRoles("teacher"),isTeacher, editQuestion)
