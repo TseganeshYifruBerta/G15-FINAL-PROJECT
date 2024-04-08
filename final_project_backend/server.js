@@ -14,6 +14,7 @@ const plagiarismRouter = require("./routes/plagiarism/plagiarismRoute.js");
 const verifyJWT = require("./middleware/verifyJWT.js")
 const checkUserStatus = require("./middleware/userStatus.js")
 const seedAdminData = require("./models/auth/seed.js");
+
 dotenv.config({
   path: "./config.env",
 });
@@ -30,13 +31,14 @@ async function initializeDatabase() {
   try {
     await sequelize.sync();
     console.log("Database synchronized");
+    seedAdminData();
   } catch (error) {
     console.error("Error synchronizing database:", error);
   }
 }
 
+
 initializeDatabase();
-seedAdminData();
 
 app.use(cors());
 app.use(cookieParser());
