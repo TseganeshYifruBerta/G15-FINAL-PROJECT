@@ -2,9 +2,10 @@ const ExamQuestion = require("../../../models/exam/uploadExamQuestion");
 const examTestCase = require("../../../models/exam/examTestcase");
 const Solution = require("../../../models/exam/solution");
 const sequelize = require("../../../database/sequelize");
+const Chapter = require("../../../models/exam/SelectedChapter");
 
 const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
-  const { title, difficulty, description, example, testcases, solutions, teacherId } = req.body;
+  const { title, difficulty, description, example, testcases, solutions, teacherId ,tag ,chapter} = req.body;
 
   try {
     const transaction = await sequelize.transaction(); // Start a transaction
@@ -15,7 +16,9 @@ const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
       difficulty,
       description,
       example,
-      teacherId
+      teacherId,
+      tag,
+      chapter
     }, { transaction });
 
     // Create and associate test cases with the new question within the transaction
@@ -32,6 +35,7 @@ const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
       })
     );
 
+
     // Create solutions within the transaction
     if (solutions && solutions.length > 0) {
       await Promise.all(solutions.map(async (solution) => {
@@ -41,18 +45,20 @@ const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
         }, { transaction });
       }));
     }
+    
+  
 
     // Commit the transaction
     await transaction.commit();
 
     // Fetch solutions associated with the new question
     const solutionTable = await Solution.findAll({ where: { examQuestionId: newQuestion.id } });
-
     res.status(201).json({
       message: "Question, test cases, and solution submitted successfully",
       question: newQuestion,
       testCases: createdTestCases,
       solution: solutionTable,
+
     });
   } catch (error) {
     console.error(error);

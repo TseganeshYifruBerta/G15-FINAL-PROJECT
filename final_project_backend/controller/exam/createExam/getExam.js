@@ -1,6 +1,7 @@
 const CreatExam = require('../../../models/exam/createExam'); // Adjust the path as necessary
 const SelectedQuestionForExam = require('../../../models/exam/SelectedQuestionForExam'); 
 const SelectedSectionsForExam = require('../../../models/exam/SelectedSectionsForExam');
+const SelectedChapter = require('../../../models/exam/SelectedChapter');
 const ExamQuestion = require('../../../models/exam/uploadExamQuestion');
 
 
@@ -16,18 +17,26 @@ const getAllCreatedExams = async (req, res) => {
         {
           model: SelectedSectionsForExam,
           as: 'selectedSectionsForExam',
+
+        },
+        {
+
+          model: SelectedChapter,
+          as: 'selectedChapters',
+
+
         }
       ]
     });
 
     // Iterate over exams and fetch questions for each question ID
-    for (const exam of exams) {
-      for (const selectedQuestion of exam.selectedQuestionsForExam) {
-        const questionId = selectedQuestion.question_ids;
-        const question = await ExamQuestion.findByPk(questionId);
-        selectedQuestion.dataValues.question = question; // Attach the fetched question directly to the selectedQuestion object
-      }
-    }
+    // for (const exam of exams) {
+    //   for (const selectedQuestion of exam.selectedQuestionsForExam) {
+    //     const questionId = selectedQuestion.question_ids;
+    //     const question = await ExamQuestion.findByPk(questionId);
+    //     selectedQuestion.dataValues.question = question; // Attach the fetched question directly to the selectedQuestion object
+    //   }
+    // }
     
     res.status(200).json({ exams });
   } catch (error) {
@@ -60,18 +69,22 @@ const getAllCreatedExamByTeacherId = async (req, res) => {
         {
           model: SelectedSectionsForExam,
           as: 'selectedSectionsForExam',
+        },
+        {
+          model: SelectedChapter,
+          as: 'selectedChapters',
         }
       ]
     });
 
-    // Iterate over exams and fetch questions for each question ID
-    for (const exam of exams) {
-      for (const selectedQuestion of exam.selectedQuestionsForExam) {
-        const questionId = selectedQuestion.question_ids;
-        const question = await ExamQuestion.findByPk(questionId);
-        selectedQuestion.dataValues.question = question; // Attach the fetched question directly to the selectedQuestion object
-      }
-    }
+    // // Iterate over exams and fetch questions for each question ID
+    // for (const exam of exams) {
+    //   for (const selectedQuestion of exam.selectedQuestionsForExam) {
+    //     const questionId = selectedQuestion.question_ids;
+    //     const question = await ExamQuestion.findByPk(questionId);
+    //     selectedQuestion.dataValues.question = question; // Attach the fetched question directly to the selectedQuestion object
+    //   }
+    // }
     
 
     res.status(200).json({ exams  });

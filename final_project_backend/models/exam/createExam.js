@@ -3,6 +3,7 @@ const sequelize = require("../../database/sequelize");
 const e = require("express");
 const SelectedSectionsForExam = require("./SelectedSectionsForExam");
 const SelectedQuestionForExam = require("./SelectedQuestionForExam");
+const SelectedChapter = require("./SelectedChapter");
 
 const creatExam = sequelize.define("exam", {
   title: {
@@ -28,6 +29,23 @@ const creatExam = sequelize.define("exam", {
     allowNull: false,
 
   },
+  tag:{
+    type: DataTypes.ENUM('Lab', 'Final'),
+    allowNull: false,
+  },
+
+  easy_questions: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  medium_questions: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  hard_questions: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
   teacherId: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -35,6 +53,8 @@ const creatExam = sequelize.define("exam", {
 
 });
 
+creatExam.hasMany(SelectedChapter , {as : "selectedChapters"});
+SelectedChapter.belongsTo(creatExam);
 
 creatExam.hasMany(SelectedSectionsForExam, { as: "selectedSectionsForExam" });
 SelectedSectionsForExam.belongsTo(creatExam);
