@@ -108,7 +108,7 @@ const getAllQuestions = async (req, res) => {
           {
             model: TestCase,
             as: 'TestCases',
-            attributes: ['input', 'output'],
+            attributes: ['id','input', 'output'],
             
           }
         ]

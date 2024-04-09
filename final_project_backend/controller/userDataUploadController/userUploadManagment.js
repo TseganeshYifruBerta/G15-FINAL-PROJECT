@@ -56,7 +56,7 @@ const fetchAllStudents= async(req, res)=> {
           {
           model: Section,
           as: "SectionsOfUser",
-          attributes: ["section"],
+          
           },
       ],
       });
@@ -83,7 +83,7 @@ const fetchAllTeachers= async(req, res)=> {
           {
           model: Section,
           as: "SectionsOfUser",
-          attributes: ["section"],
+         
           },
       ],
       });
@@ -105,71 +105,70 @@ const fetchAllTeachers= async(req, res)=> {
 
           // fetching student using UserId
 
-const fetchStudentByUserId= async(req, res)=> {
-  const { id } = req.params;
-  try {
-      const user = await User.findOne({
-      where: {
-          id: id,
-          role:"student"
-      },
-      include: [
-          {
-          model: Section,
-          as: "SectionsOfUser",
-          attributes: ["section"],
-          },
-      ],
-      });
+// const fetchStudentByUserId= async(req, res)=> {
+//   const { id } = req.params;
+//   try {
+//       const user = await User.findOne({
+//       where: {
+//           id: id,
+//           role:"student"
+//       },
+//       include: [
+//           {
+//           model: Section,
+//           as: "SectionsOfUser",
+          
+//           },
+//       ],
+//       });
 
-      if (user) {
-      res.status(200).json({user});
-      } else {
-      res.status(404).send("user not found");
-      }
-  } catch (error) {
-      console.log(error.message)
-      return res.status(500).json({ error: "Internal server error" });
+//       if (user) {
+//       res.status(200).json({user});
+//       } else {
+//       res.status(404).send("user not found");
+//       }
+//   } catch (error) {
+//       console.log(error.message)
+//       return res.status(500).json({ error: "Internal server error" });
 
-  }
-}
-         // teacher detail by id 
-const fetchTeacherByUserId= async(req, res)=> {
-  const { id } = req.params;
-  try {
-      const user = await User.findOne({
-      where: {
-          id: id,
-          role:"teacher"
-      },
-      include: [
-          {
-          model: Section,
-          as: "SectionsOfUser",
-          attributes: ["section"],
-          },
-      ],
-      });
+//   }
+// }
+//          // teacher detail by id 
+// const fetchTeacherByUserId= async(req, res)=> {
+//   const { id } = req.params;
+//   try {
+//       const user = await User.findOne({
+//       where: {
+//           id: id,
+//           role:"teacher"
+//       },
+//       include: [
+//           {
+//           model: Section,
+//           as: "SectionsOfUser",
+//           },
+//       ],
+//       });
 
-      if (user) {
-      res.status(200).json({user});
-      } else {
-      res.status(404).send("user not found");
-      }
-  } catch (error) {
-      console.log(error.message)
-      return res.status(500).json({ error: "Internal server error" });
+//       if (user) {
+//       res.status(200).json({user});
+//       } else {
+//       res.status(404).send("user not found");
+//       }
+//   } catch (error) {
+//       console.log(error.message)
+//       return res.status(500).json({ error: "Internal server error" });
 
-  }
-}
+//   }
+// }
 
           
                 // updating user data 
 const updateUser = async (req, res) => {
-    const { fullName, email, userId, role, status, section } = req.body; 
+    const { fullName, email, userId, role, status, sections } = req.body; 
     const {id} = req.params
 
-    const t = await sequelize.transaction(); 
+    const transaction = await sequelize.transaction(); 
   
     try {
 
@@ -182,25 +181,132 @@ const updateUser = async (req, res) => {
      
       await User.update(
         { fullName, email, userId, role, status },
-        { where: { id: id }, transaction: t } 
+        { where: { id: id }, transaction } 
       );
+
+    
+      if (sections) {
+        await Promise.all(
+          sections.map(async (section) => {
+           
+            const sectionId = section.id;
+
+
+            await Section.update(
+              { section: section.section },
+              { where: { UserinformationId: id, id: sectionId }, transaction }
+            );
+          })
+        );
+      }
+      const updatedTestCases = await Section.findAll({ where: { UserinformationId: id } });
       
-      await Section.update({ section: section }, { where: { UserinformationId: id }, transaction: t });
+
+
+      
+      // await Section.update({ section: section }, { where: {id:section., UserinformationId: id }, transaction: t });
   
-      await t.commit();
+      await transaction.commit();
   
       const updatedUser = await User.findOne({
          where: { id }, 
          include: [{ model: Section, as: 'SectionsOfUser' }]
         });
       return res.status(200).json({ message: 'User updated successfully', user: updatedUser });
+
     } catch (error) {
       console.error(error);
-      await t.rollback(); 
+      await transaction.rollback(); 
       return res.status(500).json({ message: 'An error occurred while updating user data' });
     }
   };
 
+  const AddSections = async (req, res) => {
+    const { sections ,userId} = req.body;
+  
+    try {
+      transaction = await sequelize.transaction();
+
+      const userFound = await User.findOne({
+        where: {
+          id: userId
+        },
+        transaction
+      })
+      if(!userFound){
+          return res.status(400).json({message:"user is Not Found"})
+      }
+      const sectionsArray = Array.isArray(sections) ? sections : [sections];
+      
+        const createdSections = await Promise.all(
+          sectionsArray.map(async (section) => {
+            
+            return await Section.create({
+              section: section,
+          
+              role: userFound.role,
+            
+              UserinformationId: userId, // Associate the test case with the new LabQuestion
+            }, { transaction });
+          })
+        );
+        await transaction.commit();
+  
+        res.status(201).json({
+          message: "Section submitted successfully",
+          section: createdSections,
+        });
+  
+      
+  
+    } catch (error) {
+      await transaction.rollback();
+      res
+        .status(500)
+        .json({
+          message: "Error adding sections",
+          error: error.message,
+        });
+    }
+  };
+
+  const DeleteSections = async (req, res) => {
+    const { sectionId } = req.params;
+  
+    try {
+      transaction = await sequelize.transaction();
+      const sectionFound = await Section.findOne({
+        where: {
+          id: sectionId
+        },
+        transaction
+      })
+      if(!sectionFound){
+          return res.status(400).json({message:"section is Not Found"})
+      }
+      await Section.destroy({ where: { id: sectionId }, transaction });
+  
+    
+
+      await transaction.commit();
+      
+  
+        res.status(201).json({
+          message: "section deleted successfully",
+          
+        });
+ 
+  
+    } catch (error) {
+      await transaction.rollback();
+      res
+        .status(500)
+        .json({
+          message: "Error deleting sections",
+          error: error.message,
+        });
+    }
+  };
 const deleteUser = async (req,res)=>{
   const { id } = req.params;
   const transaction = await sequelize.transaction(); 
@@ -229,4 +335,4 @@ const deleteUser = async (req,res)=>{
 }
 
 
-module.exports = {fetchAllStudentBasedOnSection,fetchAllStudents,fetchAllTeachers,deleteUser, updateUser ,fetchTeacherByUserId,fetchStudentByUserId }
+module.exports = {fetchAllStudentBasedOnSection,fetchAllStudents,fetchAllTeachers,deleteUser, updateUser,DeleteSections, AddSections }
