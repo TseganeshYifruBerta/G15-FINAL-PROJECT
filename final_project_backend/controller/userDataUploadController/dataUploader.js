@@ -3,8 +3,9 @@ const User = require("../../models/auth/user.model");
 const Section = require("../../models/auth/section.model");
 const { sendEmail, generateOTP } = require("../../services/userService");
 const bcrypt = require('bcrypt');
-
+const  sequelize  = require("../../database/sequelize");
 const uploadUsersFile = async (req, res) => {
+  const transaction = await sequelize.transaction();
   try {
     const workbook = new exceljs.Workbook();
     const filePath = req.file.path;
@@ -42,7 +43,7 @@ const uploadUsersFile = async (req, res) => {
       where: {
         email: dataToStore.map((user) => user.email),
       },
-    });
+    }, { transaction });
 
     if (existingUsers.length > 0) {
       return res.status(400).json({message:`${existingUsers.length} user(s) already exist in the system`});
@@ -58,8 +59,9 @@ const uploadUsersFile = async (req, res) => {
         };
       });
 
-      const createdUsers = await User.bulkCreate(usersToCreate);
-      
+      const createdUsers = await User.bulkCreate(usersToCreate, { transaction });
+
+     
       // Create sections and associate them with users
       const sectionsToCreate = [];
       createdUsers.forEach((user, index) => {
@@ -72,15 +74,69 @@ const uploadUsersFile = async (req, res) => {
             UserinformationId	: user.id,
             role: dataToStore[index].role
           });
+       
         });
       });
+      
+      await Section.bulkCreate(sectionsToCreate, { transaction });
+      // var newer = [];
+      // createdUsers.forEach((user, index) => {
+      //   ids = user.id;
+      //   newer.push(ids );
+        
+      // });
+      // var answer = []
+      // const g = newer.map((user) => user.id);
+      // console.log("newer", g);
+      // var newerrr = await User.findAll({
+      //   where: {  
+      //     id: newer.map((user) => user.id),
+      //   },
+      //   include: {
+      //     model: Section,
+      //     as: 'SectionsOfUser'
+      //   }
+      //   // newer.push({user , section});
+      // });
+      // console.log("Sections associated with users:", newerrr);
+      // answer.push(newerrr);
+    
 
-      await Section.bulkCreate(sectionsToCreate);
+      
+      // const ne = await Section.findAll({
+      //  where: {
+      //     UserinformationId: createdUsers.map((user) => user.id),
+      //   },
+      // });
+
+      // const newer = ne.map((section) => section); // Convert Sequelize objects to plain objects
+
+      // const sec = await User.findAll({
+       
+      //   include: {
+      //     model: Section,
+      //     as: 'sections'
+
+      //   }
+      // });
+
+      // const userSections = await Section.findAll({
+      //   where: {
+      //     UserinformationId: createdUsers.map((user) => user.id),
+      //   },
+      // });
+
+
+      // console.log("Sections associated with users:", newer);
+
+
+      
+
       console.log("Sections created and associated with users successfully");
 
       await Promise.all(dataToStore.map(async (user, index) => {
         try {
-          await sendEmail(user.email, 'OTP for User Login', `Your OTP is: ${otps[index]}`);
+          await sendEmail(user.email, 'OTP for User Login', `Your OTP is: ${otps[index]}`,{ transaction });
           console.log(`OTP sent to ${user.email}`);
         } catch (error) {
           console.error(`Error sending OTP to ${user.email}: ${error.message}`);
@@ -88,9 +144,12 @@ const uploadUsersFile = async (req, res) => {
       }));
 
       console.log("Emails sent successfully");
+      await transaction.commit();
+      
       return res.status(200).json({message:"Data uploaded and stored successfully" ,createdUsers });
     }
   } catch (error) {
+    await transaction.rollback();
     return res.status(500).json({error: error.message});
   }
 }

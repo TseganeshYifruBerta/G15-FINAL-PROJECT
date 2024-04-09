@@ -14,8 +14,8 @@ const  deleteQuestion = require("../../controller/QuestionUploaderController/man
 const  DetailOfSelectedQuestion = require("../../controller/QuestionUploaderController/DetailOfSelectedQuestion");
 const verifyRoles = require("../../middleware/verifyRoles");
 const {isTeacher} = require("../../middleware/roleMiddleWare");
-
-questionRouters.post("/submitquestion", verifyRoles("teacher"),isTeacher,submitQuestionWithTestCases);
+const {AddTestcases,DeleteTestcases} = require("../../controller/QuestionUploaderController/manageQuestion/manageTestCases")
+questionRouters.post("/submitquestion", submitQuestionWithTestCases);
 
 questionRouters.get("/getAllQuestions", getAllQuestions); 
 questionRouters.get("/getAllQuestionsCreatedByTeacher/:teacherId", getAllQuestionsCreatedByTeacher); 
@@ -29,6 +29,11 @@ questionRouters.get("/DetailOfSelectedQuestion/:questionId",DetailOfSelectedQues
  
 questionRouters.put("/updateQuestionById/:id/:teacherId", verifyRoles("teacher"),isTeacher, editQuestion)
 questionRouters.delete("/deleteQuestionById/:id/:teacherId",  verifyRoles("teacher"),isTeacher,deleteQuestion)
+
+
+questionRouters.post("/AddTestcases",AddTestcases);
+questionRouters.delete("/DeleteTestcases/:testCasesId",DeleteTestcases);
+
 
 
 
