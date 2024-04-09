@@ -4,8 +4,9 @@ const sequelize = require("../../database/sequelize");
 const Solution = require("./solution");
 const examTestCase = require("./examTestcase");
 const studentsExamDetail = require("./submittedExamDetail")
+const SelectedChapter = require("./SelectedChapter");
 const ExamQuestion = sequelize.define("examQuestion", {
-  
+
   title: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -18,7 +19,16 @@ const ExamQuestion = sequelize.define("examQuestion", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  tag: {
+    type: DataTypes.ENUM("Lab", "Final"),
+    allowNull: false,
+  },
+  
   example: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  chapter :{
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -26,13 +36,14 @@ const ExamQuestion = sequelize.define("examQuestion", {
     type: DataTypes.STRING,
     allowNull: false,
   }
-});
 
+});
 
 
 ExamQuestion.hasMany(Solution, { as: "solutions" });
 ExamQuestion.hasMany(examTestCase, { as: "examTestCase" });
 ExamQuestion.hasMany(studentsExamDetail, { as: "studentsExamDetail" });
+
 studentsExamDetail.belongsTo(ExamQuestion)
 examTestCase.belongsTo(ExamQuestion);
 Solution.belongsTo(ExamQuestion);
