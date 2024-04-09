@@ -102,7 +102,6 @@ const UseQuestionsTable: React.FC<QuestionsProps> = ({questions, teacherId, dele
   };
 
 
-  console.log(questions, "ssssssss");
   return (
     <div>
       <div className="my-1">

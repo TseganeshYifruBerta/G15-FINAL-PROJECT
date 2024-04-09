@@ -23,7 +23,7 @@ const QuestionForms = () => {
   const [questionDescription, setQuestionDescription] = useState("");
   const [examples, setExamples] = useState<string>("");
   const [teacherId, setTeacherId] = useState("");
-  const [testCases, setTestCases] = useState([{ input: "{}", output: "{}" }]);
+  const [testCases, setTestCases] = useState([{ input: "", output: "" }]);
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -49,13 +49,7 @@ const QuestionForms = () => {
   const onSubmit = async (event: any) => {
     event.preventDefault();
     try {
-      const jsonInput = JSON.parse(values.testCases[0].input);
-      const jsonOutput = JSON.parse(values.testCases[0].output);
-      const jsonTestCases = {
-        input: jsonInput.input,
-        output: jsonOutput.output,
-      };
-      values.testCases = [jsonTestCases];
+      console.log(values, "values");
       const data = await uploadquestion(values as QuestionUploadFormData);
       console.log(data);
       showToast("Upload successful", "success");

@@ -402,11 +402,11 @@ const QuestionsTable: React.FC<UserTableProps> = ({
             </TableBody>
           ) : (
             <TableBody>
-              {users.map((item) => (
+              {users?.map((item) => (
                 <TableRow
                   key={item.id}
                   onClick={() => {
-                    handleRowClick(item.id);
+                    // handleRowClick(item.id);
                   }}
                   style={{ cursor: "pointer" }}>
                   {(columnKey) => (
