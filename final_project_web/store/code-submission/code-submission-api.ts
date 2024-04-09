@@ -1,23 +1,26 @@
 export type SubmissionFormData = {
   questionId: string;
   pythonCode: string;
-  userId : string
+  id : string
 };
 
 export const codesubmission = async (formData: SubmissionFormData) => {
      const token = localStorage.getItem("token");
-
+console.log(formData, "formdata")
   try {
-    const response = await fetch("http://localhost:5000/execution/submit", {
-      method: "POST",
-      // CC
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-      body: JSON.stringify(formData),
-    });
+    const response = await fetch(
+      "http://localhost:5000/codeSubmission/submitCode",
+      {
+        method: "POST",
+        // CC
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify(formData),
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json();

@@ -45,10 +45,10 @@ interface UserTableProps {
   };
   setUserFilters: Function;
   teacherId: any;
-  deletequestion: any;
+  deleteexam: any;
 }
 
-const QuestionsTable: React.FC<UserTableProps> = ({
+const ExamsTable: React.FC<UserTableProps> = ({
   data,
   pages,
   users,
@@ -59,27 +59,24 @@ const QuestionsTable: React.FC<UserTableProps> = ({
   onPageChange,
   onNextPage,
   teacherId,
-  deletequestion,
+  deleteexam,
 }) => {
-  const [updateQuestion, { isLoading: isUpdating }] =
-    useUpdateQuestionMutation();
+  // Mutation hook for updating a exam
+  const [updateExam, { isLoading: isUpdating }] = useUpdateQuestionMutation();
 
-  // Mutation hook for deleting a question
-  const [deleteQuestion, { isLoading: isDeleting }] =
-    useDeleteQuestionMutation();
-  const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(
-    null
-  );
+  // Mutation hook for deleting a exam
+  const [deleteExam, { isLoading: isDeleting }] = useDeleteQuestionMutation();
+  const [selectedExamId, setSelectedExamId] = useState<string | null>(null);
   const router = useRouter();
   // Example function to update a question
-  const handleUpdateQuestion = async (
+  const handleUpdateExam = async (
     questionId: any,
     updatedData: any,
     event: any
   ) => {
     event.preventDefault();
     try {
-      await updateQuestion({ id: questionId, ...updatedData }); // Assuming 'updatedData' is an object containing the updated fields
+      await updateExam({ id: questionId, ...updatedData }); // Assuming 'updatedData' is an object containing the updated fields
       // Optionally, you can trigger a refetch of all questions after updating
       // refetch();
     } catch (error) {
@@ -88,11 +85,11 @@ const QuestionsTable: React.FC<UserTableProps> = ({
   };
 
   // Example function to delete a question
-  const handleDeleteQuestion = async (questionId: any, event: any) => {
+  const handleDeleteExam = async (questionId: any, event: any) => {
     event.preventDefault();
     try {
-      await deleteQuestion(questionId);
-      deletequestion();
+      await deleteExam(questionId);
+      deleteexam();
       // refetch();
     } catch (error) {
       // Handle error
@@ -100,12 +97,12 @@ const QuestionsTable: React.FC<UserTableProps> = ({
     }
   };
 
-  const handleQuestioUpdatePage = (questionId: any) => {
+  const handleExamUpdatePage = (questionId: any) => {
     router.push(`/teacher/update_question/${questionId}`);
   };
 
   const tableHeads = [
-    { name: "Question Title", uid: "title", sortable: false },
+    { name: "Exam Title", uid: "title", sortable: false },
     { name: "Difficulty", uid: "difficulty", sortable: true },
     { name: "Date", uid: "date", sortable: false },
     { name: "Actions", uid: "actions", sortable: false },
@@ -114,7 +111,7 @@ const QuestionsTable: React.FC<UserTableProps> = ({
   const t: any = {
     id: "",
     title: "",
-    difficulty: "",
+    status: "",
     createdAt: "",
     updatedAt: "",
     teacherId: "",
@@ -218,7 +215,7 @@ const QuestionsTable: React.FC<UserTableProps> = ({
               <>
                 {user.teacherId == teacherId ? (
                   <div className="flex">
-                    <button onClick={(e) => handleDeleteQuestion(user.id, e)}>
+                    <button onClick={(e) => handleDeleteExam(user.id, e)}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -358,7 +355,7 @@ const QuestionsTable: React.FC<UserTableProps> = ({
     onPreviousPage,
   ]);
   const handleRowClick = (userId: any) => {
-    router.push(`/question/${userId}`);
+    router.push(`/exam/${userId}`);
   };
   return (
     <div>
@@ -408,7 +405,8 @@ const QuestionsTable: React.FC<UserTableProps> = ({
                   onClick={() => {
                     handleRowClick(item.id);
                   }}
-                  style={{ cursor: "pointer" }}>
+                  style={{ cursor: "pointer" }}
+                >
                   {(columnKey) => (
                     <TableCell>{renderCell(true, item, columnKey)}</TableCell>
                   )}
@@ -422,4 +420,4 @@ const QuestionsTable: React.FC<UserTableProps> = ({
   );
 };
 
-export default QuestionsTable;
+export default ExamsTable;

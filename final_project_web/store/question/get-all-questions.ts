@@ -19,8 +19,6 @@ export const questionApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    // const token = localStorage.getItem("token");
-    // const userId = jwt.decode(token).id;
     getAllQuestions: builder.query({
       query: () => `${baseUrl}/getAllQuestions`,
     }),
