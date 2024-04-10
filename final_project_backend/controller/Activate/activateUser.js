@@ -10,11 +10,13 @@ const activateUser = async (req, res) => {
     
     
     user.status = 'active';
+    user.loginAttempt = 0;
     await user.save();
+
     
     res.json({ message: 'User is activated' });
     } catch (error) {
-        console.log("[[[[[[[[[[[[[[[[[", error)
+       
         return res.status(500).json({error:error})
     }
     

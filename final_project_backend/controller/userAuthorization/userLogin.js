@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const User = require('../../models/auth/user.model');
 const Section = require('../../models/auth/section.model');
 const e = require('express');
-var count = 0
+
 const login = async (req, res) => {
     const { userId, password } = req.body;
 
@@ -12,12 +12,14 @@ const login = async (req, res) => {
     // if (!user || !bcrypt.compareSync(password, user.password)) {
     //     return res.status(401).json({ message: 'Invalid userId or password' });
     // }
-    
-    if (!user || !bcrypt.compareSync(password, user.password)) {
-        count = count + 1
-        console.log("[[[[[[[[[[[[[[" ,count)
 
-        if (count >= 5) {
+    if (!user || !bcrypt.compareSync(password, user.password)) {
+      
+        user.loginAttempt += 1;
+        await user.save();
+        console.log("user.loginAttempt",user.loginAttempt)
+
+        if (user.loginAttempt >= 5) {
             user.status = 'inactive';
             user.save();
             return res.status(401).json({ message: 'User is inactive' });
