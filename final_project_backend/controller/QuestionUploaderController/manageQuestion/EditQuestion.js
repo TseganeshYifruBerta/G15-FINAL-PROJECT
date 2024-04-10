@@ -47,10 +47,15 @@ const editQuestion = async (req, res) => {
           })
         );
       }
-
-      const updatedTestCases = await TestCase.findAll({ where: { labQuestionId: id } });
       
+
       await transaction.commit();
+      const updatedTestCases = await TestCase.findAll({ where: { labQuestionId: id } });
+      updatedTestCases.forEach(testCase => {
+        testCase.input = JSON.parse(testCase.input);
+        testCase.output = JSON.parse(testCase.output);
+    });
+      
       
       const editedQuestion = await Question.findAll({
         where:{
