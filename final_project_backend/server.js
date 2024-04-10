@@ -11,6 +11,9 @@ const sequelize = require("./database/sequelize.js");
 const questionRouters = require("./routes/questionRoute/questionRoute.js");
 const codeSubmissionRouter = require("./routes/codeSubmission/codeSubmissionRoute.js");
 const plagiarismRouter = require("./routes/plagiarism/plagiarismRoute.js");
+const ActivateRouter = require(
+  "./routes/Activate/activateUserRoute.js"
+) 
 const verifyJWT = require("./middleware/verifyJWT.js")
 const checkUserStatus = require("./middleware/userStatus.js")
 const seedAdminData = require("./models/auth/seed.js");
@@ -49,6 +52,8 @@ app.use(verifyJWT)
 app.use(checkUserStatus)
 
 
+// Routes for ActivateUser
+app.use("/activateUser",ActivateRouter);
 
 //  Routes related to Question
 app.use("/question", questionRouters);
