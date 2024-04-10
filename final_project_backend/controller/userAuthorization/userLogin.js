@@ -3,35 +3,30 @@ const bcrypt = require('bcrypt');
 const User = require('../../models/auth/user.model');
 const Section = require('../../models/auth/section.model');
 const e = require('express');
-
+var count = 0
 const login = async (req, res) => {
     const { userId, password } = req.body;
 
     const user = await User.findOne({ where: { userId } });
 
+    // if (!user || !bcrypt.compareSync(password, user.password)) {
+    //     return res.status(401).json({ message: 'Invalid userId or password' });
+    // }
+    
     if (!user || !bcrypt.compareSync(password, user.password)) {
-        return res.status(401).json({ message: 'Invalid userId or password' });
-    }
-    if (user.status === 'inactive') {
-        return res.status(401).json({ message: 'User is inactive' });
-    }
+        count = count + 1
+        console.log("[[[[[[[[[[[[[[" ,count)
 
-    if (bcrypt.compareSync(password, user.password)) {
-     user.loginAttempt = (user.loginAttempt || 0)+ 1;
-
-        if (user.loginAttempt >= 5) {
+        if (count >= 5) {
             user.status = 'inactive';
             user.save();
             return res.status(401).json({ message: 'User is inactive' });
         }
         else {
             
-            await user.save();
+            // await user.save();
             return res.status(401).json({ message: 'User is inactive' });
         }
-
-
-
           
     }
     const section = await Section.findAll({ where: { UserinformationId: user.id } });
@@ -55,22 +50,7 @@ const login = async (req, res) => {
 }
 
 
-const activateUser = async (req, res) => {
-    const { userId } = req.body;
-    const user = await User.findOne({ where: { userId } });
-    if (!user) {
-        return res.status(401).json({ message: 'Invalid userId' });
-    }
-    if (user.role !== 'admin') {
-        return res.status(401).json({ message: 'Only admin can activate users' });
-    }
-    user.status = 'active';
-    await user.save();
-    res.json({ message: 'User is activated' });
-}
-
-module.exports = { login, activateUser };
 
 
-
-module.exports = { login, activateUser };          
+module.exports = login;
+      

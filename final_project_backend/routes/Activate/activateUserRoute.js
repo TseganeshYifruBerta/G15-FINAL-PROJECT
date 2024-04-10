@@ -1,13 +1,13 @@
 // routes.js
 const express = require("express");
-const router = express.Router();
-const login   = require("../../controller/userAuthorization/userLogin");
+const ActivateRouter = express.Router();
 // const activateUser = require("../../controller/userAuthorization/userLogin");
 const { isAdmin } = require("../../middleware/roleMiddleWare");
 const verifyRoles = require("../../middleware/verifyRoles");
+const activateUser = require("../../controller/Activate/activateUser");
 
 
-router.post("/userLogin", login);
+ActivateRouter.post("/activateUser",verifyRoles("admin"),isAdmin,activateUser);
 
 
-module.exports = router;
+module.exports = ActivateRouter;
