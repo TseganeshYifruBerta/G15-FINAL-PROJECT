@@ -6,7 +6,7 @@ const User = require("../../../../models/auth/user.model");
 
 const editExamQuestion = async (req, res) => {
   try {
-    const { title, difficulty, description, example, testcases, solutions } = req.body;
+    const { title, difficulty, description,  tag , chapter , example, testcases, solutions } = req.body;
     const { teacherId, examId } = req.params;
 
     const examQuestion = await ExamQuestion.findOne({
@@ -38,6 +38,8 @@ const editExamQuestion = async (req, res) => {
       examQuestion.difficulty = difficulty;
       examQuestion.description = description;
       examQuestion.example = example;
+      examQuestion.tag = tag;
+      examQuestion.chapter = chapter;
       await examQuestion.save({ transaction });
 
       // Update test cases
