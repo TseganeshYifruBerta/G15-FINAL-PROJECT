@@ -184,10 +184,10 @@ const updateUser = async (req, res) => {
         { where: { id: id }, transaction } 
       );
 
-    
-      if (sections) {
+      const sectionsArray = Array.isArray(sections) ? sections : [sections];
+      if (sectionsArray) {
         await Promise.all(
-          sections.map(async (section) => {
+          sectionsArray.map(async (section) => {
            
             const sectionId = section.id;
 

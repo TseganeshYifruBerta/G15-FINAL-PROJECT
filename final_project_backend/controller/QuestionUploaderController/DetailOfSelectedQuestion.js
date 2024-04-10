@@ -13,24 +13,30 @@ const DetailOfSelectedQuestion = async (req, res) => {
                 id: questionId,
             },
             include: [
-            {
-                model: TestCase,
-                as: 'TestCases',
-                where: {
-                    labQuestionId: questionId,
+                {
+                    model: TestCase,
+                    as: 'TestCases',
+                    where: {
+                        labQuestionId: questionId,
+                    },
+                    attributes: ["input","output"],
                 },
-                attribute:["input","output"],
-            },
             ],
-            
         });
+
+        // Parse input and output fields from JSON strings to arrays of objects
+        questionDetail.TestCases.forEach(testCase => {
+            testCase.input = JSON.parse(testCase.input);
+            testCase.output = JSON.parse(testCase.output);
+        });
+
         const submittedBy = await Status.findAll({
             where: {
                 questionId: questionId,
                 status: "Accepted",
             },
-           
         });
+
         const userIds = submittedBy.map((userId) => userId.userId);
 
         const users = await User.findAll({
@@ -52,4 +58,5 @@ const DetailOfSelectedQuestion = async (req, res) => {
         return res.status(500).json({ error: "Internal Server Error" });
     }
 }
+
 module.exports = DetailOfSelectedQuestion;
