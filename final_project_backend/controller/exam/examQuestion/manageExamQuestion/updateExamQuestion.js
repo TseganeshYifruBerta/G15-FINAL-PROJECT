@@ -91,4 +91,77 @@ const editExamQuestion = async (req, res) => {
   }
 };
 
-module.exports = editExamQuestion;
+
+const addSolution  = async (req, res) => {
+
+  const { content} = req.body;
+  const {teacherId, examId} = req.params;
+ 
+
+  const examQuestion = await ExamQuestion.findOne({
+    where: {
+      id: examId,
+      teacherId: teacherId
+    }
+  });
+
+  if (!examQuestion) {
+    return res.status(404).json({ message: 'examQuestion not found' });
+  }
+
+  try {
+    const solution = await Solution.create({
+      content,
+      examQuestionId: examId,
+    });
+
+    return res.status(201).json({ solution , message: 'solution added'});
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Failed to add solution' });
+  }
+
+
+}
+
+const deleteSolution = async (req, res) => {
+  const{teacherId, examId,solutionId} = req.params;
+
+
+  const examQuestion = await ExamQuestion.findOne({
+    where: {
+      id: examId,
+      teacherId: teacherId
+    }
+  });
+
+  if (!examQuestion) {
+    return res.status(404).json({ message: 'examQuestion not found' });
+  }
+
+  const solution = await Solution.findOne({
+    where: {
+      id: solutionId,
+      examQuestionId: examId
+
+    }
+  
+  })
+  
+  if (!solution) {
+    return res.status(404).json({ message: 'solution not found' });
+  }
+
+  try {
+    await solution.destroy();
+    return res.status(204).json({message: 'solution deleted'});
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Failed to delete solution' });
+  }
+
+
+  
+
+}
+module.exports = {editExamQuestion, addSolution , deleteSolution};
