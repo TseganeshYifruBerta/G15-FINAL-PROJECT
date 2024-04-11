@@ -2,15 +2,18 @@ const ExamQuestion = require("../../../models/exam/uploadExamQuestion");
 const examTestCase = require("../../../models/exam/examTestcase");
 const Solution = require("../../../models/exam/solution");
 const sequelize = require("../../../database/sequelize");
-const Chapter = require("../../../models/exam/SelectedChapter");
 
+const User = require("../../../models/auth/user.model");
 const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
   const { title, difficulty, description, example, testcases, solutions, teacherId ,tag ,chapter} = req.body;
 
   try {
-    const transaction = await sequelize.transaction(); // Start a transaction
-
-    // Create a new question within the transaction
+    const transaction = await sequelize.transaction(); 
+    
+    const isTeacher = await User.findOne({ where: { id: teacherId, role: "teacher" } });
+    if(!isTeacher) {
+      return res.status(400).json({ message: "you are not a teacher"});
+    }
     const newQuestion = await ExamQuestion.create({
       title,
       difficulty,

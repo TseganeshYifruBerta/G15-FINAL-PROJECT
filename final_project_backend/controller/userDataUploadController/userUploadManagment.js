@@ -222,53 +222,55 @@ const updateUser = async (req, res) => {
   };
 
   const AddSections = async (req, res) => {
-    const { sections ,userId} = req.body;
+    const { sections, userId } = req.body;
+    let transaction;
   
     try {
       transaction = await sequelize.transaction();
-
-      const userFound = await User.findOne({
-        where: {
-          id: userId
-        },
-        transaction
-      })
-      if(!userFound){
-          return res.status(400).json({message:"user is Not Found"})
+      const userFound = await User.findOne({ where: { id: userId }, transaction });
+  
+      if (!userFound) {
+        throw new Error("User is Not Found"); 
       }
+  
       const sectionsArray = Array.isArray(sections) ? sections : [sections];
-      
-        const createdSections = await Promise.all(
-          sectionsArray.map(async (section) => {
-            
-            return await Section.create({
-              section: section,
-          
-              role: userFound.role,
-            
-              UserinformationId: userId, // Associate the test case with the new LabQuestion
-            }, { transaction });
-          })
-        );
+      let errors = [];
+  
+      for (const section of sectionsArray) {
+        const sectionFound = await Section.findOne({
+          where: { section: section, UserinformationId: userId },
+          transaction,
+        });
+        if (sectionFound) {
+          errors.push(`Section ${section} already exists`);
+        } else {
+          await Section.create({
+            section: section,
+            role: userFound.role,
+            UserinformationId: userId,
+          }, { transaction });
+        }
+      }
+  
+      if (errors.length > 0) {
+        await transaction.rollback();
+        return res.status(400).json({ message: errors.join(", ") });
+      } else {
         await transaction.commit();
-  
-        res.status(201).json({
+        return res.status(201).json({
           message: "Section submitted successfully",
-          section: createdSections,
+          sections: sectionsArray, // Adjust based on what you need to return
         });
-  
-      
-  
+      }
     } catch (error) {
-      await transaction.rollback();
-      res
-        .status(500)
-        .json({
-          message: "Error adding sections",
-          error: error.message,
-        });
+      if (transaction) await transaction.rollback();
+      return res.status(500).json({
+        message: "Error adding sections",
+        error: error.message,
+      });
     }
   };
+  
 
   const DeleteSections = async (req, res) => {
     const { sectionId } = req.params;

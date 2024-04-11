@@ -10,7 +10,7 @@ const examQuestionDetailById = async (req, res) => {
 
   try {
     await sequelize.transaction(async (t) => {
-      const examQuestion = await ExamQuestion.findOne({
+      const examQuestionDetail = await ExamQuestion.findOne({
         where: {
           id: examQuestionId,
         },
@@ -18,22 +18,27 @@ const examQuestionDetailById = async (req, res) => {
           {
             model: examTestCase,
             as: "examTestCase",
-            attributes: ["input", "output"],
+            
           },
           {
             model: Solution,
             as: "solutions",
-            attributes: ["content"],
+           
           },
         ],
         transaction: t, // Include the transaction in the query
       });
 
-      if (!examQuestion) {
+      if (!examQuestionDetail) {
         return res.status(404).json({ message: "Exam question not found" });
       }
+      examQuestionDetail.examTestCase.forEach(testCase => {
+        testCase.input = JSON.parse(testCase.input);
+        testCase.output = JSON.parse(testCase.output);
+    });
+    
 
-      return res.status(200).json({ examQuestion });
+      return res.status(200).json({ examQuestionDetail });
     });
   } catch (error) {
     

@@ -33,7 +33,19 @@ const getExamQuestionFilteredByTeacher = async (req, res) => {
         return res.status(404).json({ message: "Exam question not found" });
       }
 
-      return res.status(200).json({ examQuestion });
+  
+    const allExamQuestionByTeacher = examQuestion.map((question) => {
+        question.examTestCase.forEach(testCase => {
+            testCase.input = JSON.parse(testCase.input);
+            testCase.output = JSON.parse(testCase.output);
+        });
+        return question;  
+    }
+    );
+  
+
+
+      return res.status(200).json({ allExamQuestionByTeacher });
     });
   } catch (error) {
     
