@@ -6,7 +6,6 @@ const User = require('../../../models/auth/user.model');
 
 
 
-
 const updateCreatedExam = async (req, res) => {
   try {
     const { teacherId, examId } = req.params;
@@ -211,6 +210,25 @@ const startCreatedExam = async (req, res) => {
   }
 };
 
+const endStartedExam = async (req, res) => {
+  const { id } = req.params; // Get exam ID from the request parameters
+
+  try {
+    const exam = await CreatExam.findByPk(id);
+    if (!exam) {
+      return res.status(404).json({ error: 'Exam not found' });
+    }
+
+    await exam.update({ status: 'end' });
+
+    return res.status(200).json({ message: 'Exam ended successfully' });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+
+
 
 
 module.exports = {
@@ -218,7 +236,10 @@ module.exports = {
   deleteCreatedExam,
   updateCreatedExam,
   startCreatedExam,
+
   AddSectionToExam,
-  DeleteSectionToExam
+  DeleteSectionToExam,
+
+  endStartedExam
 
 }

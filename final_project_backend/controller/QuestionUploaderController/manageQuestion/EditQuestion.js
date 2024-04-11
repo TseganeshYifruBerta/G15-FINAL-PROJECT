@@ -4,12 +4,14 @@ const User = require("../../../models/auth/user.model")
 const sequelize = require("../../../database/sequelize")
 
 const editQuestion = async (req, res) => {
+  const { title, difficulty, description, example, testcases, functionName } = req.body;
+  const { id, teacherId } = req.params;
+  const transaction = await sequelize.transaction();
   try {
-    const { title, difficulty, description, example, testcases, functionName } = req.body;
-    const { id, teacherId } = req.params;
 
     const question = await Question.findByPk(id);
     if (!question) {
+      await t.rollback(); 
       return res.status(404).json({ success: false, message: 'Question not found' });
     }
 
@@ -24,25 +26,12 @@ const editQuestion = async (req, res) => {
       return res.status(403).json({ success: false, message: "You are not authorized to edit this question." });
     }
 
-    const teacherStatus = await User.findOne({
-      where: {
-        id: teacherId
-      }
-    });
 
-    if (teacherStatus.status !== "active") {
-      return res.status(403).json({ success: false, message: "The user is not activated" });
-    }
 
-    const transaction = await sequelize.transaction();
-
-    try {
-      question.title = title;
-      question.difficulty = difficulty;
-      question.description = description;
-      question.example = example;
-      question.functionName = functionName;
-      await question.save({ transaction });
+      await Question.update(
+        {title,difficulty,description,example,functionName },
+        {where: {id:id} , transaction}
+      )
 
       if (testcases) {
         await Promise.all(
@@ -58,22 +47,37 @@ const editQuestion = async (req, res) => {
           })
         );
       }
+      
 
-      const updatedTestCases = await TestCase.findAll({ where: { labQuestionId: id } });
       await transaction.commit();
+      const updatedTestCases = await TestCase.findAll({ where: { labQuestionId: id } });
+      updatedTestCases.forEach(testCase => {
+        testCase.input = JSON.parse(testCase.input);
+        testCase.output = JSON.parse(testCase.output);
+    });
+      
+      
+      const editedQuestion = await Question.findAll({
+        where:{
+          id:id
+        },
+        include:[
+          {
+            model: TestCase,
+            as: "TestCases"
+          }
+        ]
+      })
 
       return res.status(200).json({
         success: true,
         message: "Question updated successfully",
-        question: question,
-        updatedTestCases: updatedTestCases
+        editedQuestion : editedQuestion,
+        updatedTestCases:updatedTestCases
       });
-    } catch (error) {
-      await transaction.rollback();
-      console.error(error);
-      return res.status(500).json({ success: false, error: "Failed to update question" });
-    }
+   
   } catch (error) {
+    await transaction.rollback()
     console.error(error);
     return res.status(500).json({ success: false, error: "Internal server error" });
   }

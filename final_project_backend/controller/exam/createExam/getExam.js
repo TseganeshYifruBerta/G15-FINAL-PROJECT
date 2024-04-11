@@ -29,14 +29,6 @@ const getAllCreatedExams = async (req, res) => {
       ]
     });
 
-    // Iterate over exams and fetch questions for each question ID
-    // for (const exam of exams) {
-    //   for (const selectedQuestion of exam.selectedQuestionsForExam) {
-    //     const questionId = selectedQuestion.question_ids;
-    //     const question = await ExamQuestion.findByPk(questionId);
-    //     selectedQuestion.dataValues.question = question; // Attach the fetched question directly to the selectedQuestion object
-    //   }
-    // }
     
     res.status(200).json({ exams });
   } catch (error) {
@@ -77,14 +69,6 @@ const getAllCreatedExamByTeacherId = async (req, res) => {
       ]
     });
 
-    // // Iterate over exams and fetch questions for each question ID
-    // for (const exam of exams) {
-    //   for (const selectedQuestion of exam.selectedQuestionsForExam) {
-    //     const questionId = selectedQuestion.question_ids;
-    //     const question = await ExamQuestion.findByPk(questionId);
-    //     selectedQuestion.dataValues.question = question; // Attach the fetched question directly to the selectedQuestion object
-    //   }
-    // }
     
 
     res.status(200).json({ exams  });

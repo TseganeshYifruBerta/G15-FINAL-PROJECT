@@ -4,25 +4,35 @@ const submitExamQuestionWithTestCaseAndSolution = require("../../controller/exam
 const getAllExamQuestions = require("../../controller/exam/examQuestion/getAllExamQuestion")
 const getExamQuestionFilteredByTeacher = require("../../controller/exam/examQuestion/getExamQuestionFilteredByTeacher")
 const createExam = require("../../controller/exam/createExam/createdExamController")
-const {updateCreatedExam,deleteCreatedExam,startCreatedExam , AddSectionToExam,DeleteSectionToExam }=require("../../controller/exam/createExam/examController")
+const {updateCreatedExam,deleteCreatedExam,startCreatedExam , AddSectionToExam,DeleteSectionToExam , endStartedExam}=require("../../controller/exam/createExam/examController")
+
 const deleteExamQuestion = require("../../controller/exam/examQuestion/manageExamQuestion/deleteExamQuestion")
 const {editExamQuestion , addSolution , deleteSolution , AddTestcases,DeleteTestcases} = require("../../controller/exam/examQuestion/manageExamQuestion/updateExamQuestion")
 const {getAllCreatedExams , getAllCreatedExamByTeacherId} = require("../../controller/exam/createExam/getExam")
 const fetchDetailOfCreatedExamById = require("../../controller/exam/createExam/getExamById")
 const examQuestionDetailById = require("../../controller/exam/examQuestion/examQuestionDetailById")
-const { isTeacher} = require("../../middleware/roleMiddleWare");
+const submitExamAnswerByStudent = require("../../controller/exam/submittedExamAnswer/submittedStudentsExamAnswer")
+const fetchAllSubmittedStudentExamAnswerBySection = require("../../controller/exam/submittedExamAnswer/fetchsubmittedStudentExamAnswer")
+const { isTeacher } = require("../../middleware/roleMiddleWare");
 const verifyRoles = require("../../middleware/verifyRoles");
+const fetchAllSections = require("../../controller/exam/createExam/fetchAllSection");
+
 
            // exam question
 examRouters.post("/AddTestcases",AddTestcases);
 examRouters.delete("/DeleteTestcases/:testCasesId",DeleteTestcases);
 examRouters.delete("/deleteSolution/:solutionId",deleteSolution);
 examRouters.post("/addSolution",addSolution);
+
+
+// exam question
+
 examRouters.post("/uploadExamQuestion", submitExamQuestionWithTestCaseAndSolution);
-examRouters.get("/getAllExamQuestions" ,getAllExamQuestions);
-examRouters.get("/getExamQuestionFilteredByTeacher/:id" ,getExamQuestionFilteredByTeacher)
-examRouters.delete("/deleteExamQuestionById/:teacherId/:examId" ,deleteExamQuestion);
-examRouters.put("/updateExamQuestionById/:teacherId/:examId" ,editExamQuestion);
+examRouters.get("/getAllExamQuestions", getAllExamQuestions);
+examRouters.get("/getExamQuestionFilteredByTeacher/:id", getExamQuestionFilteredByTeacher)
+examRouters.delete("/deleteExamQuestionById/:teacherId/:examQuestionId", deleteExamQuestion);
+examRouters.put("/updateExamQuestionById/:teacherId/:examQuestionId", editExamQuestion);
+
 
            // create exam routes
 
@@ -33,13 +43,28 @@ examRouters.put("/updateExam/:teacherId/:examId",  verifyRoles("teacher"),isTeac
 examRouters.delete("/deleteExam/:teacherId/:examId",  verifyRoles("teacher"),isTeacher,deleteCreatedExam);
 examRouters.put("/startExam/:id",  verifyRoles("teacher"),isTeacher,startCreatedExam);
 
+examRouters.get("/fetchAllSections", fetchAllSections);
+examRouters.put("/endExam/:id", endStartedExam);
+
+
 
 examRouters.get("/getAllCreatedExams", getAllCreatedExams);
 examRouters.get("/getAllCreatedExamByTeacherId/:teacherId", getAllCreatedExamByTeacherId);
 
+// detail of created exam and exam question
 
-examRouters.get("/fetchDetailOfCreatedExamById/:examId", fetchDetailOfCreatedExamById);
 examRouters.get("/examQuestionDetailById/:examQuestionId", examQuestionDetailById);
+
+
+// submitted exam answer by student
+examRouters.post("/submitExamAnswerByStudent", submitExamAnswerByStudent);
+examRouters.get("/fetchAllSubmittedStudentExamAnswerBySection/:teacherId", fetchAllSubmittedStudentExamAnswerBySection);
+
+
+
+
+
+
 
 
 

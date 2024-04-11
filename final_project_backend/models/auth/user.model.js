@@ -20,6 +20,10 @@ const User = sequelize.define("Userinformation", {
   status: {
     type: DataTypes.ENUM('active','inactive')
   },
+  loginAttempt: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+  },
   role: {
     type: DataTypes.ENUM('admin','student', 'teacher'),
   },
