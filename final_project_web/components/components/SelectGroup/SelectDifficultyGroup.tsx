@@ -3,9 +3,10 @@ import React, { useState } from "react";
 
 interface SelectDifficultyGroupProps {
   setSelectedOption: React.Dispatch<React.SetStateAction<string>>;
+  value: string;
 }
-const SelectDifficultyGroup: React.FC<SelectDifficultyGroupProps> = ({setSelectedOption}) => {
-  const [selectedOption, setSelecteddOption] = useState<string>("");
+const SelectDifficultyGroup: React.FC<SelectDifficultyGroupProps> = ({setSelectedOption, value}) => {
+  const [selectedOption, setSelecteddOption] = useState<string>(value);
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
 
   const changeTextColor = () => {
@@ -13,8 +14,8 @@ const SelectDifficultyGroup: React.FC<SelectDifficultyGroupProps> = ({setSelecte
   };
 
   return (
-    <div className="mb-4.5 text-xs">
-      <label className="mb-2.5 block text-black dark:text-white font-medium">
+    <div className="mb-4.5 text-xs w-2/5 mr-2">
+      <label className="mb-3 block font-medium text-black dark:text-white">
         {" "}
         Difficulty{" "}
       </label>

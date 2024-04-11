@@ -1,17 +1,17 @@
 import { useRouter } from "next/router";
 import React, { useMemo, useState } from "react";
-import StudentsTable from "./StudentsTable";
-import { useGetAllStudentsQuery } from "@/store/teacherprofile/get-all-students";
-import { useGetAllQuestionsQuery } from "@/store/question/get-all-questions";
-import QuestionsTable from "./QuestionsTable";
+import ExamsTable from "./ExamsTable";
 
-interface QuestionsProps {
-  questions: any[];
-  teacherId: any,
-  deletequestion:any,
-
+interface ExamsProps {
+  exam: any[];
+  teacherId: any;
+  deleteexam: any;
 }
-const UseQuestionsTable: React.FC<QuestionsProps> = ({questions, teacherId, deletequestion}) => {
+const UseExamsTable: React.FC<ExamsProps> = ({
+  exam,
+  teacherId,
+  deleteexam,
+}) => {
   const [pages, setPages] = useState(1);
   const [users, setUsers] = useState<any[]>([]);
   const router = useRouter();
@@ -101,19 +101,19 @@ const UseQuestionsTable: React.FC<QuestionsProps> = ({questions, teacherId, dele
     setLoading(false);
   };
 
-
+  console.log(exam, "ssssssss");
   return (
     <div>
       <div className="my-1">
-        <QuestionsTable
+        <ExamsTable
           data={{
             data: {
-              data: questions,
+              data: exam,
             },
           }}
           pages={pages}
           usersFilters={usersFilters}
-          users={questions}
+          users={exam}
           setUsers={setUsers}
           sortTable={sortTable}
           loading={loading}
@@ -123,11 +123,11 @@ const UseQuestionsTable: React.FC<QuestionsProps> = ({questions, teacherId, dele
           onPageChange={onPageChange}
           onPreviousPage={onPreviousPage}
           teacherId={teacherId}
-          deletequestion={deletequestion}
+          deleteexam={deleteexam}
         />
       </div>
     </div>
   );
-}
+};
 
-export default UseQuestionsTable;
+export default UseExamsTable;

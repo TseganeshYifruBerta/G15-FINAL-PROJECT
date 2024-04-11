@@ -8,6 +8,8 @@ import  UploadManually  from "./upload/uploadmanuallyslicereducer";
 import signinStudentReducer from "./signin/student-signin-slice"
 import questionUploadReducer from "./question-upload/question-upload-slice"
 import examQuestionUploadReducer from './exam/upload-exam-question-slice'
+import addTestcaseReducer from './question-upload/add-testcase-slice'
+import addExamTestcaseReducer from './question-upload/add-exam-testcase-slice'
 import loginReducer from './login/login-slice'
 import { questionApi } from "./question/get-all-questions";
 // import { getAllSubmissionsByIdApi } from "./submissions/get-all-submissions-by-id";
@@ -41,6 +43,8 @@ export const store = configureStore({
     questionupload: questionUploadReducer,
     examquestionupload: examQuestionUploadReducer,
     login: loginReducer,
+    addtestcase: addTestcaseReducer,
+    addexamtestcase:addExamTestcaseReducer,
     [getQuestionDetalApi.reducerPath]: getQuestionDetalApi.reducer,
     [questionApi.reducerPath]: questionApi.reducer,
     [getSubmissionDetailByIdApi.reducerPath]:
@@ -74,7 +78,8 @@ export const store = configureStore({
       .concat(getAllExamsApi.middleware)
       .concat(getTopSolvedQuestionsApi.middleware)
       .concat(getWeeklyReportApi.middleware)
-      .concat(getTopStudentsApi.middleware),
+      .concat(getTopStudentsApi.middleware)
+      .concat(getExamQuestionByIdApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

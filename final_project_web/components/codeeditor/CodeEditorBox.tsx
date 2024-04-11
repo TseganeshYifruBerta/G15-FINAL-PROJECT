@@ -5,6 +5,7 @@ import { showToast } from "../popup";
 import SplitPane, { Pane } from 'react-split-pane-next';
 
 import CodeSubmissionResluts from "./CodeSubmitResults";
+import { codesubmission } from "@/store/code-submission/code-submission-api";
 
 interface FormValuesExecute {
   questionId: string,
@@ -14,7 +15,7 @@ interface FormValuesExecute {
 interface FormValuesSubmit {
   questionId: string;
   pythonCode: string;
-  userId: string
+  id: string
 }
 interface editorProps{
   currentCode : string,
@@ -110,7 +111,9 @@ const CodeEditorBox: React.FC<editorProps> = ({userId, questionId}) => {
   const handleAllResults = (results: allResultsProps[]) => {
     // Clearing previous results before setting new ones
     setCurrentInput(results.map((result) => result.input));
-    setCurrentActualOutput(results.map((result) => result.actualOutput));
+    setCurrentActualOutput(
+      results.map((result) => result.actualOutput.split("\n").join(""))
+    );
     setCurrentExpectedOutput(results.map((result) => result.expectedOutput));
     setCurrentPassesStatus(results.map((result) => result.passed));
   };
@@ -118,12 +121,11 @@ const CodeEditorBox: React.FC<editorProps> = ({userId, questionId}) => {
   const onSubmitCode = async (values: FormValuesSubmit) => {
     try {
       console.log("valuesssss", values);
-      const data = await codeexecution(values as FormValuesSubmit);
+      const data = await codesubmission(values as FormValuesSubmit);
       console.log(data);
 
       const allResults = data.allTestResults;
       handleAllResults(allResults);
-      console.log(allResults, "all results");
       showToast("submit successful", "success");
     } catch (error) {
       console.error("submit error:", error);
@@ -204,7 +206,7 @@ const CodeEditorBox: React.FC<editorProps> = ({userId, questionId}) => {
                 onClick={() =>
                   onSubmitCode({
                     questionId: questionId,
-                    userId: userId,
+                    id: userId,
                     pythonCode: currentCode,
                   })
                 }

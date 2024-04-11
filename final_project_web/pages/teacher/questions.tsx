@@ -57,14 +57,13 @@ export default function Questions() {
     }
   };
 
-  console.log(questions, "questions");
 
   return (
     <div className="dark:bg-boxdark h-screen">
       <div className="flex flex-col gap-10">
         <div className="flex justify-between w-full">
           <div className="w-full">
-            <QuestionTable questions={questions.questionWithTestcase} deletequestion={refetch} />
+            <QuestionTable questions={questions?.questionWithTestcase} deletequestion={refetch} />
           </div>
          
         </div>

@@ -1,29 +1,30 @@
 import { testCaseProps } from "@/components/questions/QuestionUpload";
 
-export type QuestionUploadFormData = {
+export type ExamQuestionUploadFormData = {
   title: string;
   difficulty: string;
   description: string;
   example: string;
   testcases: testCaseProps[];
+  solutions: any[];
+  tag:string;
+  chapter:string;
 };
 
+export const uploadexamquestion = async (formData: ExamQuestionUploadFormData) => {
+     const token = localStorage.getItem("token");
 
-
-export const uploadquestion = async (formData: QuestionUploadFormData) => {
-   const token = localStorage.getItem("token");
   try {
     const response = await fetch(
-      "http://localhost:5000/question/submitQuestion",
+      "http://localhost:5000/exam/uploadExamQuestion",
       {
         method: "POST",
-        body: JSON.stringify(formData),
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          // Include the Authorization header with the bearer token if it exists
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
+        body: JSON.stringify(formData),
       }
     );
 

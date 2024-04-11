@@ -1,3 +1,5 @@
+const jwt = require("jsonwebtoken");
+
 import Submissions from "@/components/codeeditor/Submissions";
 import QuestionSet from "@/components/questions/QuestionSet";
 import {
@@ -79,7 +81,10 @@ const QuestionById: React.FC = () => {
     "def grade_checker(score):\n    if score >= 70:\n        return 'A'\n    elif score >= 80:\n        return 'B'\n    elif score >= 70:\n        return 'C'\n    elif score >= 60:\n        return 'D'\n    else:\n        return 'F'";
 
   const userData = useSelector((state: any) => state.studentsignin.userId);
-  const userId = "1";
+
+  const token = localStorage.getItem("token");
+const decodedToken = jwt.decode(token);
+const userId = decodedToken?.id || null;
   const {
     data: questionDetails,
     isLoading,
