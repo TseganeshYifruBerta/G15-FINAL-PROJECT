@@ -27,7 +27,7 @@ const login = async (req, res) => {
         else {
             
             // await user.save();
-            return res.status(401).json({ message: 'User is inactive' });
+            return res.status(401).json({ message: 'UserId or password  is incorrect' });
         }
           
     }
