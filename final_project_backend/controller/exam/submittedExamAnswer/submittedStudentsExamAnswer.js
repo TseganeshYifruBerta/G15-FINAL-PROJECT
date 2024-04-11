@@ -12,7 +12,8 @@ const submitExamAnswerByStudent = async (req, res) => {
     const studentsExamAnswers = await studentsExamAnswer.create(
       {
         examId,
-        userId,
+        // userId,
+        UserinformationId: userId,
       },
       { transaction: t }
     );
@@ -21,7 +22,7 @@ const submitExamAnswerByStudent = async (req, res) => {
       questionAndSolution.map(async (questionAndSolution) => {
         return await studentsExamDetail.create(
           {
-            questionId: questionAndSolution.questionId,
+            examQuestionId: questionAndSolution.questionId,
             submittedAnswer: questionAndSolution.submittedAnswer,
             studentsExamAnswerId: studentsExamAnswers.id,
           },

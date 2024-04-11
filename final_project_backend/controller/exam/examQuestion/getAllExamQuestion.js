@@ -3,27 +3,48 @@ const examTestCase = require("../../../models/exam/examTestcase")
 const Solution = require("../../../models/exam/solution")
 const getAllExamQuestions = async (req, res) => {
     try {
-      const questions = await ExamQuestion.findAll({
+      const allQuestions = await ExamQuestion.findAll({
         include: [
           {
             model: examTestCase,
             as: "examTestCase",
-            attributes: ["input", "output"],
+            
           },
           {
             model: Solution,
             as: "solutions",
-            attributes: ["content"],
+          
           },
         ],
       });
-      if (!questions) {
-        return res.sendStatus(400);
+      if (!allQuestions) {
+        return res.status(400).json({ message: "No questions found" });
       }
-      return res.status(200).json(questions);
+
+    //   const allExamQuestion = allQuestions.map((question) => {
+    //     allQuestions.examTestCase.forEach(testCase => {
+    //         testCase.input = JSON.parse(testCase.input);
+    //         testCase.output = JSON.parse(testCase.output);
+    //     });
+    //     return question;  
+    // }
+    // );
+      
+    const combinedResult = allQuestions.map((question) => {
+      
+      
+    
+        question.examTestCase.forEach(testCase => {
+            testCase.input = JSON.parse(testCase.input);
+            testCase.output = JSON.parse(testCase.output);
+        });
+        return question;
+      });
+
+      return res.status(200).json({combinedResult});
     } catch (error) {
       console.log(error);
-      return res.sendStatus(400);
+      return res.status(500).json({ message: "Internal server error" });
     }
   };
 
