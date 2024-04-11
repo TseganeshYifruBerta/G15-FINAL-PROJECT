@@ -4,77 +4,7 @@ const SelectedQuestionForExam = require('../../../models/exam/SelectedQuestionFo
 const SelectedSectionsForExam = require('../../../models/exam/SelectedSectionsForExam'); // Adjust the path as necessary
 const User = require('../../../models/auth/user.model');
 
-const createExam = async (req, res) => {
-  const { title, date_and_time, instruction, duration, sections, questions, teacherId } = req.body;
 
-  try {
-    const foundUser = await User.findOne({
-      where: {
-        id: teacherId
-      }
-    });
-
-    if (!foundUser) {
-      return res.status(400).json({ message: "The user is not found" });
-    }
-
-    if (foundUser.status !== "active") {
-      return res.status(403).json({ message: "The user is not active" });
-    }
-
-    // Start a transaction
-    const transaction = await sequelize.transaction();
-
-    try {
-      // Create the exam within the transaction
-      const exam = await CreatExam.create({
-        title,
-        date_and_time,
-        instruction,
-        duration,
-        status: 'upcoming',
-        teacherId
-      }, { transaction });
-
-      // Create selected sections for the exam within the transaction
-      if (sections && sections.length > 0) {
-        await Promise.all(sections.map(async (section) => {
-          await SelectedSectionsForExam.create({
-            sections: section,
-            examId: exam.id,
-          }, { transaction });
-        }));
-      }
-
-      // Create selected questions for the exam within the transaction
-      if (questions && questions.length > 0) {
-        await Promise.all(questions.map(async (questionId) => {
-          await SelectedQuestionForExam.create({
-            question_ids: questionId,
-            examId: exam.id,
-          }, { transaction });
-        }));
-      }
-
-      // Commit the transaction
-      await transaction.commit();
-
-      return res.status(201).json(exam);
-    } catch (error) {
-      // Rollback the transaction if an error occurs
-      await transaction.rollback();
-      return res.status(400).json({ error: error.message });
-    }
-  } catch (error) {
-    return res.status(400).json({ error: error.message });
-  }
-};
-
-
-// In your exam controller file
-
-
-// Update an exam
 const updateCreatedExam = async (req, res) => {
   try {
     const { teacherId, examId } = req.params;
@@ -235,7 +165,6 @@ module.exports = {
   deleteCreatedExam,
   updateCreatedExam,
   startCreatedExam,
-  createExam,
   endStartedExam
 
 }

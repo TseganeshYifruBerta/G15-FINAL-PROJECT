@@ -19,15 +19,15 @@ const fetchAllSections = require("../../controller/exam/createExam/fetchAllSecti
 examRouters.post("/uploadExamQuestion", submitExamQuestionWithTestCaseAndSolution);
 examRouters.get("/getAllExamQuestions", getAllExamQuestions);
 examRouters.get("/getExamQuestionFilteredByTeacher/:id", getExamQuestionFilteredByTeacher)
-examRouters.delete("/deleteExamQuestionById/:teacherId/:examId", deleteExamQuestion);
-examRouters.put("/updateExamQuestionById/:teacherId/:examId", editExamQuestion);
+examRouters.delete("/deleteExamQuestionById/:teacherId/:examQuestionId", deleteExamQuestion);
+examRouters.put("/updateExamQuestionById/:teacherId/:examQuestionId", editExamQuestion);
 
 // create exam route
 examRouters.post("/createExam",createExam);
 examRouters.put("/updateExam/:teacherId/:examId", verifyRoles("teacher"), isTeacher, updateCreatedExam);
-examRouters.delete("/deleteExam/:teacherId/:examId", verifyRoles("teacher"), isTeacher, deleteCreatedExam);
-examRouters.put("/startExam/:id", verifyRoles("teacher"), isTeacher, startCreatedExam);
-examRouters.put("/endExam/:id", verifyRoles("teacher"), isTeacher, endStartedExam);
+examRouters.delete("/deleteExam/:teacherId/:examId",deleteCreatedExam);
+examRouters.put("/startExam/:id",  startCreatedExam);
+examRouters.put("/endExam/:id", endStartedExam);
 examRouters.get("/fetchAllSections", fetchAllSections);
 
 

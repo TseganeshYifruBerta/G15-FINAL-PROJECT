@@ -11,6 +11,7 @@ const fetchAllSubmittedStudentExamAnswerBySection = async (req, res) => {
         const foundSection = await Section.findAll({
             where: {
                 userInformationId: teacherId,
+
             },
             attributes: ["section"],
         });
@@ -18,71 +19,50 @@ const fetchAllSubmittedStudentExamAnswerBySection = async (req, res) => {
         if (!foundSection || foundSection.length === 0) {
             return res.status(404).json({ message: "Sections not found" });
         }
-// /]]][[[[[", foundSection);
-        
+
+
         const userIds = [];
-        
+
         for (const section of foundSection) {
-            console.log("//////////",section.dataValues.section)
-            // const examQuestions = await studentsExamAnswer.findAll({
-            //     include: [
-            //         {
-            //             model: User,
-            //             include: [
-            //                 {
-            //                     model: Section,
-            //                     as: "SectionsOfUser",
-            //                     where: {
-            //                         section: section.dataValues.section,
-            //                     },
-            //                     attributes: ["section"],
-            //                 },
-            //             ],
-            //         },
-            //         {
-            //             model: studentsExamDetail,
-            //             as: "studentsExamDetails",
-            //         },
-            //     ],
-            // });
+
+
             const examQuestions = await User.findAll({
                 include: [
                     {
-                
+
                         model: Section,
                         as: "SectionsOfUser",
                         where: {
                             section: section.dataValues.section,
+                            role: "student"
                         },
                         attributes: ["section"],
-                           
-                    },
-                    
-                        {
-                            model: studentsExamAnswer,
-                            as: "studentsExamAnswer",
-                            include: [
-                                {
-                                    model: studentsExamDetail,
-                                    as: "studentsExamDetails",
-                                    // include:[
-                                    //     {
-                                    //         model:ExamQuestion,
-                                    //         where: {
-                                    //             id: questionId,
-                                    //         },
-                                    //     }
 
-                                    // ]
-                                },
-                            ],
-                        },
-                    
-                   
+                    },
+
+                    {
+                        model: studentsExamAnswer,
+                        as: "studentsExamAnswer",
+                        include: [
+                            {
+                                model: studentsExamDetail,
+                                as: "studentsExamDetails",
+                                include: [
+                                    {
+                                        model: ExamQuestion,
+
+                                    }
+
+                                ]
+                            },
+                        ],
+                    },
+
+
                 ],
             })
             userIds.push(examQuestions);
-            
+
         }
         res.status(200).json({ userIds });
     } catch (error) {
