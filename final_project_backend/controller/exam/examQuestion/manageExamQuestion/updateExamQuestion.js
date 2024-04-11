@@ -3,6 +3,7 @@ const TestCase = require("../../../../models/exam/examTestcase");
 const Solution = require("../../../../models/exam/solution");
 const sequelize = require('../../../../database/sequelize');
 const User = require("../../../../models/auth/user.model");
+const { where } = require("sequelize");
 
 const editExamQuestion = async (req, res) => {
   try {
@@ -92,16 +93,14 @@ const editExamQuestion = async (req, res) => {
 };
 
 
-const addSolution  = async (req, res) => {
-
-  const { content} = req.body;
-  const {teacherId, examId} = req.params;
+const addSolution = async (req, res) => {
+  const { content , examId} = req.body;
  
 
   const examQuestion = await ExamQuestion.findOne({
     where: {
       id: examId,
-      teacherId: teacherId
+    
     }
   });
 
@@ -110,39 +109,42 @@ const addSolution  = async (req, res) => {
   }
 
   try {
-    const solution = await Solution.create({
-      content,
-      examQuestionId: examId,
-    });
+    const solutions = Array.isArray(content) ? content : [content];
 
-    return res.status(201).json({ solution , message: 'solution added'});
+    const createdSolutions = await Promise.all(
+      solutions.map(async (solution) => {
+        const createdSolution = await Solution.create({
+          content: solution,
+          examQuestionId: examId,
+        });
+        return createdSolution;
+      })
+    );
+
+    return res.status(201).json({ solutions: createdSolutions, message: 'solutions added' });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Failed to add solution' });
+    return res.status(500).json({ message: 'Failed to add solutions' });
   }
-
-
 }
 
 const deleteSolution = async (req, res) => {
-  const{teacherId, examId,solutionId} = req.params;
+  
+  const{solutionId} = req.params;
 
 
   const examQuestion = await ExamQuestion.findOne({
     where: {
-      id: examId,
-      teacherId: teacherId
+      id:solutionId
     }
   });
 
-  if (!examQuestion) {
-    return res.status(404).json({ message: 'examQuestion not found' });
-  }
+
 
   const solution = await Solution.findOne({
     where: {
       id: solutionId,
-      examQuestionId: examId
+   
 
     }
   
@@ -159,9 +161,87 @@ const deleteSolution = async (req, res) => {
     console.error(error);
     return res.status(500).json({ message: 'Failed to delete solution' });
   }
-
-
-  
-
 }
-module.exports = {editExamQuestion, addSolution , deleteSolution};
+
+const AddTestcases = async (req, res) => {
+  const { testCases ,examId } = req.body;
+
+
+  try {
+    const transaction = await sequelize.transaction();
+    const examQuestion = await ExamQuestion.findOne(
+     {  where: { 
+      id: examId ,
+      
+    
+    }
+      }
+      );
+    if (!examQuestion) {
+      return res.status(404).json({ message: 'Exam question not found' });
+    }
+
+    try {
+      const createdTestCases = await Promise.all(
+        testCases.map(async (testCase) => {
+          const formattedOutput = Array.isArray(testCase.output)
+           ? testCase.output
+            : [testCase.output];
+          const formattedInput = Array.isArray(testCase.input)
+           ? testCase.input
+            : [testCase.input];
+          const createdTestCase = await TestCase.create({
+            input: formattedInput,
+            output: formattedOutput,
+            examQuestionId: examId
+          }, { transaction });
+          return createdTestCase;
+        })
+      );
+
+      await transaction.commit();
+      return res.status(201).json({ message: 'Test cases added successfully', testCases: createdTestCases });
+    } catch (error) {
+      await transaction.rollback();
+      console.error(error);
+      return res.status(500).json({ message: 'Failed to add test cases' });
+    }
+  
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+const DeleteTestcases = async (req, res) => {
+  const { testCasesId } = req.params;
+
+  try {
+    const transaction = await sequelize.transaction();
+    const testcaseFound = await TestCase.findOne({
+      where: {
+        id: testCasesId
+      }
+    });
+
+    if (!testcaseFound) {
+      return res.status(404).json({ message: 'Test case not found' });
+    }
+
+    try {
+      await testcaseFound.destroy({ transaction });
+      await transaction.commit();
+      return res.status(204).json({ message: 'Test case deleted successfully' });
+    } catch (error) {
+      await transaction.rollback();
+      console.error(error);
+      return res.status(500).json({ message: 'Failed to delete test case' });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+
+module.exports = {editExamQuestion, addSolution , deleteSolution , AddTestcases , DeleteTestcases};

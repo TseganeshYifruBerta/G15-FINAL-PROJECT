@@ -4,77 +4,9 @@ const SelectedQuestionForExam = require('../../../models/exam/SelectedQuestionFo
 const SelectedSectionsForExam = require('../../../models/exam/SelectedSectionsForExam'); // Adjust the path as necessary
 const User = require('../../../models/auth/user.model');
 
-const createExam = async (req, res) => {
-  const { title, date_and_time, instruction, duration, sections, questions, teacherId } = req.body;
-
-  try {
-    const foundUser = await User.findOne({
-      where: {
-        id: teacherId
-      }
-    });
-
-    if (!foundUser) {
-      return res.status(400).json({ message: "The user is not found" });
-    }
-
-    if (foundUser.status !== "active") {
-      return res.status(403).json({ message: "The user is not active" });
-    }
-
-    // Start a transaction
-    const transaction = await sequelize.transaction();
-
-    try {
-      // Create the exam within the transaction
-      const exam = await CreatExam.create({
-        title,
-        date_and_time,
-        instruction,
-        duration,
-        status: 'upcoming',
-        teacherId
-      }, { transaction });
-
-      // Create selected sections for the exam within the transaction
-      if (sections && sections.length > 0) {
-        await Promise.all(sections.map(async (section) => {
-          await SelectedSectionsForExam.create({
-            sections: section,
-            examId: exam.id,
-          }, { transaction });
-        }));
-      }
-
-      // Create selected questions for the exam within the transaction
-      if (questions && questions.length > 0) {
-        await Promise.all(questions.map(async (questionId) => {
-          await SelectedQuestionForExam.create({
-            question_ids: questionId,
-            examId: exam.id,
-          }, { transaction });
-        }));
-      }
-
-      // Commit the transaction
-      await transaction.commit();
-
-      return res.status(201).json(exam);
-    } catch (error) {
-      // Rollback the transaction if an error occurs
-      await transaction.rollback();
-      return res.status(400).json({ error: error.message });
-    }
-  } catch (error) {
-    return res.status(400).json({ error: error.message });
-  }
-};
 
 
-// In your exam controller file
 
-
-// Update an exam
 const updateCreatedExam = async (req, res) => {
   try {
     const { teacherId, examId } = req.params;
@@ -182,6 +114,76 @@ const deleteCreatedExam = async (req, res) => {
     return res.status(500).json({ error: "internal server error" });
   }
 }
+const AddSectionToExam = async (req, res) => {
+  const { sections, examId } = req.body;
+
+  try {
+    const exam = await CreatExam.findOne({ where: { id: examId } });
+    if (!exam) {
+      return res.status(404).json({ error: 'Exam not found' });
+    }
+
+    const transaction = await sequelize.transaction();
+    const sectionsArray = Array.isArray(sections) ? sections : [sections];
+    let errors = [];
+    let addedSections = [];
+
+    for (let section of sectionsArray) {
+      const existingSection = await SelectedSectionsForExam.findOne({
+        where: { sections: section, examId: examId }
+      });
+      if (existingSection) {
+        errors.push(`Section ${section} already added to exam`);
+        continue; // Skip this iteration and go to the next section
+      }
+      const newSection = await SelectedSectionsForExam.create({
+        sections: section,
+        examId: examId,
+      }, { transaction });
+      addedSections.push(newSection);
+    }
+
+    if (errors.length > 0) {
+      await transaction.rollback();
+      return res.status(400).json({ errors });
+    } else {
+      await transaction.commit();
+      return res.status(201).json({ message: 'Sections added to exam', addedSections });
+    }
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const DeleteSectionToExam = async (req, res) => {
+  const { examId, sectionId } = req.params;
+
+  try {
+    const section = await SelectedSectionsForExam.findOne({
+      where: {
+        id: sectionId,
+        examId: examId
+      }
+    });
+
+    if (!section) {
+      return res.status(404).json({ message: 'Section not found' });
+    }
+
+    try {
+      await section.destroy();
+      return res.status(200).json({ message: 'Section deleted successfully' });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Failed to delete section' });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
 
 
 // Function to start an exam
@@ -216,6 +218,7 @@ module.exports = {
   deleteCreatedExam,
   updateCreatedExam,
   startCreatedExam,
-  createExam
+  AddSectionToExam,
+  DeleteSectionToExam
 
 }
