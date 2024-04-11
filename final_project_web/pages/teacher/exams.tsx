@@ -14,7 +14,7 @@ console.log("allexams", allexams)
       <div className="flex flex-col gap-10">
         <div className="flex justify-between w-full">
           <div className="w-full">
-            <ExamTable exams={allexams} deleteexam={refetch} />
+            <ExamTable exams={allexams.combinedResult} deleteexam={refetch} />
           </div>
         </div>
       </div>

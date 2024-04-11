@@ -23,15 +23,15 @@ console.log(questionId, "questionId")
   return (
     <div>
       <ExamQuestionFormEdit
-        EditedTitle={examDetails.examQuestion.title}
-        EditedDifficulty={examDetails.examQuestion.difficulty}
-        EditedDescription={examDetails.examQuestion.description}
-        EditedExample={examDetails.examQuestion.example}
-        EditedTestcases={examDetails.examQuestion.examTestCase}
-        EditedSolution={examDetails.examQuestion.solutions}
-        EditedTag={examDetails.examQuestion.tag}
-        EditedChapter={examDetails.examQuestion.chapter}
-        questionId={examDetails.examQuestion.id}
+        EditedTitle={examDetails.examQuestionDetail.title}
+        EditedDifficulty={examDetails.examQuestionDetail.difficulty}
+        EditedDescription={examDetails.examQuestionDetail.description}
+        EditedExample={examDetails.examQuestionDetail.example}
+        EditedTestcases={examDetails.examQuestionDetail.examTestCase}
+        EditedSolution={examDetails.examQuestionDetail.solutions}
+        EditedTag={examDetails.examQuestionDetail.tag}
+        EditedChapter={examDetails.examQuestionDetail.chapter}
+        questionId={examDetails.examQuestionDetail.id}
       />
     </div>
   );

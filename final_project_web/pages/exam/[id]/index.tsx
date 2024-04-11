@@ -20,8 +20,10 @@ function ExamById() {
    if (isError) {
      return <div>Errroe</div>;
    }
-  const question = examDetails.examQuestion;
-  const testcases = examDetails.examQuestion.examTestCase
+
+   console.log("examDetails", examDetails)
+  const question = examDetails.examQuestionDetail;
+  const testcases = examDetails.examQuestionDetail.examTestCase
   const { createdAt, description, difficulty, example, id, title, updatedAt, tag, solutions , chapter} =question
 
 console.log("examDetails", examDetails)
