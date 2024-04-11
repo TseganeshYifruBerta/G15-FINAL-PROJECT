@@ -26,7 +26,7 @@ dataUploadRouters.get("/fetchAllStudentBasedOnSection/:id", verifyRoles("teacher
 
 // update user data, only admin can update
 dataUploadRouters.put("/updateUser/:id", verifyRoles("admin"), isAdmin, updateUser);
-dataUploadRouters.put("/deleteUser/:id", verifyRoles("admin"), isAdmin, deleteUser);
+dataUploadRouters.delete("/deleteUser/:id", verifyRoles("admin"), isAdmin, deleteUser);
 
 
 // fetch all students and teachers
