@@ -294,9 +294,10 @@ const [solution, setSolution] = useState<Array<{ content: string }>>(EditedSolut
                             required
                             placeholder={`testcase input ${index + 1}`}
                             value={
-                              typeof testCase.input === "object"
-                                ? JSON.stringify(testCase.input)
-                                : testCase.input
+                              // typeof testCase.input === "object"
+                              //   ? JSON.stringify(testCase.input[0])
+                              //   : testCase.input
+                              testCase.input
                             }
                             onChange={(e) => {
                               const updatedTestCases = testCases.map(
@@ -323,9 +324,13 @@ const [solution, setSolution] = useState<Array<{ content: string }>>(EditedSolut
                             type="text"
                             required
                             value={
-                              typeof testCase.output === "object"
-                                ? JSON.stringify(testCase.output)
-                                : testCase.output
+                              //   `
+                              // '${
+                              //   typeof testCase.output === "object"
+                              //     ? JSON.stringify(testCase.output[0])
+                              //     : testCase.output
+                              // }'`
+                              testCase.output
                             }
                             onChange={(e) => {
                               // Create a new array with updated objects
