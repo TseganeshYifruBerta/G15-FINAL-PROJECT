@@ -1,5 +1,6 @@
 // seed.js
 
+const login = require('../../controller/userAuthorization/userLogin');
 const User = require('./user.model');
 const bcrypt = require('bcrypt');
 
@@ -18,6 +19,7 @@ const seedAdminData = async () => {
                 password: hashedPwd, // Remember to hash passwords in a real application
                 role: 'admin',
                 status: 'active',
+                loginAttempt: 0,
             });
             console.log('Admin data seeded successfully.');
         } else {
