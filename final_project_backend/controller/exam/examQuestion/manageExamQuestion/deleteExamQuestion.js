@@ -4,12 +4,12 @@ const Solution = require("../../../../models/exam/solution")
 const sequelize = require('../../../../database/sequelize'); // Import sequelize instance
 
 const deleteExamQuestion = async (req, res) => {
-    const { teacherId ,examId  } = req.params;
+    const { teacherId ,examQuestionId  } = req.params;
 
     try {
         const examQuestion = await ExamQuestion.findOne({
             where: {
-                id: examId,
+                id: examQuestionId,
                 teacherId: teacherId
             }
         });
@@ -20,11 +20,11 @@ const deleteExamQuestion = async (req, res) => {
         const transaction = await sequelize.transaction();
 
         try {
-            await examTestCase.destroy({ where: { examQuestionId: examId }, transaction });
+            await examTestCase.destroy({ where: { examQuestionId: examQuestionId }, transaction });
 
-            await Solution.destroy({ where: { examQuestionId: examId }, transaction });
+            await Solution.destroy({ where: { examQuestionId: examQuestionId }, transaction });
 
-            await examQuestion.destroy({where:{id:examId}, transaction });
+            await examQuestion.destroy({where:{id:examQuestionId}, transaction });
 
             await transaction.commit();
 
