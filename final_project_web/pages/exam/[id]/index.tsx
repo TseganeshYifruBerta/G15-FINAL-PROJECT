@@ -1,20 +1,16 @@
-const jwt = require('jsonwebtoken');
 import ExamQuestionSet from '@/components/questions/ExamQuestionSet';
-import { useGetQuestionDetailEditQuery } from '@/store/question/get-questionById-api';
+import { useGetExamQuestionByIdQuery } from '@/store/exam/get-all-exam-by-id';
 import { useRouter } from 'next/router';
 import React from 'react'
 
 function ExamById() {
       const router = useRouter();
   const questionId = router.query.id as string;
-const token = localStorage.getItem("token");
-const decodedToken = jwt.decode(token);
-const userId = decodedToken?.id || null;
  const {
-   data: questionDetails,
+   data: examDetails,
    isLoading,
    isError,
- } = useGetQuestionDetailEditQuery({
+ } = useGetExamQuestionByIdQuery({
    questionId: questionId,
  });
 
@@ -24,19 +20,24 @@ const userId = decodedToken?.id || null;
    if (isError) {
      return <div>Errroe</div>;
    }
-  const question = questionDetails.questionDetail;
-  const { createdAt, description, difficulty, example, id, title, updatedAt } =question
+  const question = examDetails.examQuestion;
+  const testcases = examDetails.examQuestion.examTestCase
+  const { createdAt, description, difficulty, example, id, title, updatedAt, tag, solutions , chapter} =question
 
-
+console.log("examDetails", examDetails)
 
   return (
-      <ExamQuestionSet
-        questionTitle={title}
-        questionDescription={description}
-        questionExample={example}
-        difficulty={difficulty}
-        questionId={questionId}
-      />
+    <ExamQuestionSet
+      questionTitle={title}
+      questionDescription={description}
+      questionExample={example}
+      difficulty={difficulty}
+      questionId={questionId}
+      tag={tag}
+      chapter={chapter}
+      solution={solutions}
+      testcases={testcases}
+    />
   );
 }
 

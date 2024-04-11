@@ -6,11 +6,12 @@ export type ExamQuestionUploadFormData = {
   description: string;
   example: string;
   testcases: testCaseProps[];
-  solution: string;
+  solutions: any[];
+  tag:string;
+  chapter:string;
 };
 
 export const uploadexamquestion = async (formData: ExamQuestionUploadFormData) => {
-  console.log(formData, "formdata");
      const token = localStorage.getItem("token");
 
   try {

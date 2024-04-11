@@ -19,6 +19,7 @@ import {
 import { stringify } from "querystring";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useDeleteExamQuestionMutation } from "@/store/exam/get-all-exam-api";
 
 interface UserTableProps {
   data: {
@@ -65,8 +66,10 @@ const ExamsTable: React.FC<UserTableProps> = ({
   const [updateExam, { isLoading: isUpdating }] = useUpdateQuestionMutation();
 
   // Mutation hook for deleting a exam
-  const [deleteExam, { isLoading: isDeleting }] = useDeleteQuestionMutation();
   const [selectedExamId, setSelectedExamId] = useState<string | null>(null);
+  
+    const [deleteExamQuestion, { isLoading: isDeleting }] =
+      useDeleteExamQuestionMutation();
   const router = useRouter();
   // Example function to update a question
   const handleUpdateExam = async (
@@ -88,7 +91,7 @@ const ExamsTable: React.FC<UserTableProps> = ({
   const handleDeleteExam = async (questionId: any, event: any) => {
     event.preventDefault();
     try {
-      await deleteExam(questionId);
+      await deleteExamQuestion(questionId);
       deleteexam();
       // refetch();
     } catch (error) {
@@ -105,6 +108,9 @@ const ExamsTable: React.FC<UserTableProps> = ({
     { name: "Exam Title", uid: "title", sortable: false },
     { name: "Difficulty", uid: "difficulty", sortable: true },
     { name: "Date", uid: "date", sortable: false },
+    { name: "Tag", uid: "tag", sortable: false },
+    { name: "Chapter", uid: "chapter", sortable: false },
+
     { name: "Actions", uid: "actions", sortable: false },
   ];
 
@@ -143,16 +149,50 @@ const ExamsTable: React.FC<UserTableProps> = ({
     const time = dateObject.toLocaleDateString("en-US", options).split(",");
     return time[1];
   };
+
   const renderCell = (isUser: boolean, user: any, columnKey: any) => {
-    console.log(user);
     switch (columnKey) {
       case "title":
         return (
           <>
             {isUser ? (
+              <button
+                onClick={() =>
+                  router.push(`/exam/${user.id}`)
+                }
+              >
+                <div className="text-xs text-gray-700 font-light">
+                  {user && user.id} {".  "}
+                  {user && user.title}
+                </div>
+              </button>
+            ) : (
+              <div className="mr-32 w-full">
+                <Skeleton className="h-3 mb-2 w-4/5 rounded-full" />
+              </div>
+            )}
+          </>
+        );
+      case "tag":
+        return (
+          <>
+            {isUser ? (
               <div className="text-xs text-gray-700 font-light">
-                {user && user.id} {".  "}
-                {user && user.title}
+                {user && user.tag}
+              </div>
+            ) : (
+              <div className="mr-32 w-full">
+                <Skeleton className="h-3 mb-2 w-4/5 rounded-full" />
+              </div>
+            )}
+          </>
+        );
+      case "chapter":
+        return (
+          <>
+            {isUser ? (
+              <div className="text-xs text-gray-700 font-light">
+                {user && user.chapter}
               </div>
             ) : (
               <div className="mr-32 w-full">
@@ -233,7 +273,7 @@ const ExamsTable: React.FC<UserTableProps> = ({
                     </button>
                     <button
                       onClick={() =>
-                        router.push(`/teacher/update_question/${user.id}`)
+                        router.push(`/teacher/update_exam_question/${user.id}`)
                       }
                     >
                       <svg
@@ -401,10 +441,6 @@ const ExamsTable: React.FC<UserTableProps> = ({
             <TableBody>
               {users.map((item) => (
                 <TableRow
-                  key={item.id}
-                  onClick={() => {
-                    handleRowClick(item.id);
-                  }}
                   style={{ cursor: "pointer" }}
                 >
                   {(columnKey) => (

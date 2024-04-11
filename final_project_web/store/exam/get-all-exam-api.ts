@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseUrl = "";
@@ -38,7 +39,30 @@ export const getAllExamsApi = createApi({
         };
       },
     }),
+    updateExamQuestion: builder.mutation({
+      query: (question) => {
+        const token = localStorage.getItem("token");
+        const userId = jwt.decode(token).id;
+        return {
+          url: `http://localhost:5000/exam/updateExamQuestionById/${userId}/${question.questionId}`, // Assuming the question object has an 'id' property
+          method: "PUT",
+          body: question,
+        };
+      },
+    }),
+    deleteExamQuestion: builder.mutation({
+      
+      query: (questionId) => {
+        console.log(questionId, "questionId");
+        const token = localStorage.getItem("token");
+        const userId = jwt.decode(token).id;
+        return {
+          url: `http://localhost:5000/exam/deleteExamQuestionById/${userId}/${questionId}`,
+          method: "DELETE",
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetAllExamsQuery, useGetAllExamListQuery } = getAllExamsApi;
+export const { useGetAllExamsQuery, useGetAllExamListQuery, useDeleteExamQuestionMutation, useUpdateExamQuestionMutation } = getAllExamsApi;

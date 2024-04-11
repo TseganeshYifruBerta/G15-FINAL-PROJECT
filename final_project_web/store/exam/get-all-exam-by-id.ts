@@ -6,15 +6,24 @@ export const getExamQuestionByIdApi = createApi({
   reducerPath: "getExamQuestionByIdApi",
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
+    prepareHeaders: (headers, { getState }) => {
+      // Retrieve your access token from wherever it's stored
+      const token = localStorage.getItem("token");
+      // If we have a token, set the authorization header
+      if (token) {
+        headers.set("authorization", `Bearer ${token}`);
+      }
+
+      return headers;
+    },
   }),
   endpoints: (builder) => ({
     getExamQuestionById: builder.query({
       query: (params) => {
-        const { userId } = params;
-        let url = "http://localhost:5000/upload/getExamQuestionById/";
-        console.log(params);
+        const { questionId } = params;
+        let url = "http://localhost:5000/exam/examQuestionDetailById";
         const queryParams = [];
-        queryParams.push(`${userId}`);
+        queryParams.push(`${questionId}`);
         return {
           url: queryParams.length > 0 ? `${url}/${queryParams.join("/")}` : url,
           method: "GET",

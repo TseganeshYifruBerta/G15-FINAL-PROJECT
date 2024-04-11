@@ -3,36 +3,59 @@ import { Metadata } from "next";
 import { useEffect, useState } from "react";
 import SelectDifficultyGroup from "../components/SelectGroup/SelectDifficultyGroup";
 import { showToast } from "../popup";
-import {
-  QuestionUploadFormData,
-  uploadquestion,
-} from "@/store/question-upload/question-upload-api";
 import { useRouter } from "next/router";
-import { ExamQuestionUploadFormData, uploadexamquestion } from "@/store/exam/upload-exam-question-api";
+import {
+  ExamQuestionUploadFormData,
+  uploadexamquestion,
+} from "@/store/exam/upload-exam-question-api";
+import { testCaseProps } from "./QuestionUpload";
+import { useUpdateExamQuestionMutation } from "@/store/exam/get-all-exam-api";
 
 export const metadata: Metadata = {
   title: "Next.js Form Layout | TailAdmin - Next.js Dashboard Template",
   description:
     "This is Next.js Form Layout page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
 };
-
-const ExamForm = () => {
+export type ExamQuestionFormEditProps = {
+  EditedTitle: string;
+  EditedDifficulty: string;
+  EditedDescription: string;
+  EditedExample: string;
+  EditedTestcases: testCaseProps[];
+  EditedSolution: [{ content: string}];
+  EditedTag: string;
+  EditedChapter: string;
+  questionId: string;
+};
+const ExamQuestionFormEdit:React.FC<ExamQuestionFormEditProps> = ({
+    EditedTitle,
+    EditedChapter,
+    EditedDescription,
+    EditedExample,
+    EditedDifficulty,
+    EditedSolution,
+    EditedTag,
+    EditedTestcases,
+    questionId
+}) => {
   const router = useRouter();
-  const [questionTitle, setQuestionTitle] = useState("");
-  const [questionDifficulty, setQuestionDifficulty] = useState("");
-  const [questionDescription, setQuestionDescription] = useState("");
-  const [examples, setExamples] = useState<string>("");
+  const [questionTitle, setQuestionTitle] = useState(EditedTitle);
+  const [questionDifficulty, setQuestionDifficulty] = useState(EditedDifficulty);
+  const [questionDescription, setQuestionDescription] = useState(EditedDescription);
+  const [examples, setExamples] = useState<string>(EditedExample);
   const [teacherId, setTeacherId] = useState("");
-  const [testCases, setTestCases] = useState([{ input: "", output: "" }]);
-  const [solutions, setSolution] = useState<string[]>([]);
-  const [selectedTag, setSelectedTag] = useState("");
-const [chapter, setChapter] = useState("");
+  const [testCases, setTestCases] = useState(EditedTestcases);
+const [solution, setSolution] = useState<Array<{ content: string }>>(EditedSolution);
+  const [selectedTag, setSelectedTag] = useState(EditedTag);
+  const [chapter, setChapter] = useState(EditedChapter);
+ const [addedTestCases, setAddedTestCases] = useState<
+   Array<{ input: string; output: string }>
+ >([]);
+  const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
 
-    const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
-
-    const changeTextColor = () => {
-      setIsOptionSelected(true);
-    };
+  const changeTextColor = () => {
+    setIsOptionSelected(true);
+  };
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -50,39 +73,42 @@ const [chapter, setChapter] = useState("");
     description: questionDescription,
     example: examples,
     teacherId: teacherId,
-    solutions: solutions,
+    solutions: solution,
     chapter: chapter,
     tag: selectedTag,
+    questionId :questionId
   };
-  const handleAddTestCase = () => {
-    setTestCases([...testCases, { input: "", output: "" }]);
-  };
-    const handleAddSolution = () => {
-      setSolution([...solutions, "" ]);
-    };
-  const onSubmit = async (event: any) => {
-    event.preventDefault();
-    try {
-console.log(values, "values")
-      const data = await uploadexamquestion(
-        values as ExamQuestionUploadFormData
-      );
-      showToast("Upload successful", "success");
-      router.push("/teacher/exams");
-    } catch (error) {
-      console.error("Upload error:", error);
+        const [updateExamQuestion, { isLoading: isUpdating }] = useUpdateExamQuestionMutation();
 
-      showToast("Upload error: " + (error as Error).message, "error");
-    }
+  const handleAddTestCase = () => {
+    setAddedTestCases([...addedTestCases, { input: "", output: "" }]);
   };
+  const handleUpdateQuestion = async (updatedData:any, event: any) => {
+   event.preventDefault();
+
+   try {
+    console.log(updatedData, "updatedData");
+     const data = await updateExamQuestion({ ...updatedData }); // Assuming 'updatedData' is an object containing the updated fields
+     console.log(data, "data");
+     // Optionally, you can trigger a refetch of all questions after updating
+     //   refetch();
+     showToast("Exam Question Updated successfully", "success");
+
+     // router.push("/teacher/questions");
+   } catch (error) {
+     // Handle error
+   }
+  };
+
+
   return (
-    <form onSubmit={onSubmit}>
-      <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
+    <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
+      <form onSubmit={(e: any) => handleUpdateQuestion(values, e)}>
         <div className="flex flex-col gap-9">
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
               <h3 className="font-semibold text-black dark:text-white">
-                Create Exam Question
+                Update Exam Question
               </h3>
             </div>
             <>
@@ -123,7 +149,9 @@ console.log(values, "values")
                       />
                     </div>
                     <SelectDifficultyGroup
-                      setSelectedOption={setQuestionDifficulty} value={""}                    />
+                      setSelectedOption={setQuestionDifficulty}
+                      value={questionDifficulty}
+                    />
 
                     <div className="mb-4.5 text-xs w-2/5 mr-2">
                       <label className="mb-3 block font-medium text-black dark:text-white">
@@ -201,10 +229,135 @@ console.log(values, "values")
                     }}
                   ></textarea>
                 </div>
+                <div className="w-full xl:w-1/2 mb-6">
+                  <label className="mb-3 block font-medium text-black dark:text-white">
+                    Examples
+                  </label>
+                  <textarea
+                    rows={1}
+                    placeholder="Add Examples"
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    value={examples}
+                    required
+                    onChange={(e) => {
+                      setExamples(e.target.value);
+                    }}
+                  ></textarea>
+                </div>
+                <div className="w-full xl:w-1/2">
+                  <label className="mb-3 block font-medium text-black dark:text-white">
+                    Solution
+                  </label>
+                  {solution.map((sol, index) => (
+                    <div className="flex" key={index}>
+                      <div key={index} className="p-2 flex w-full">
+                        <div className="p-1 w-full">
+                          <textarea
+                            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                            required
+                            placeholder={`Solution ${index + 1}`}
+                            value={sol.content}
+                            onChange={(e) => {
+                              const updatedSolution = solution.map(
+                                (solu, solIndex) => {
+                                  if (index === solIndex) {
+                                    // Return a new object with the updated input for the matched index
+
+                                    return {
+                                      ...solu,
+                                      content: e.target.value,
+                                    };
+                                  }
+                                  // Return the original object for other indexes
+                                  return solu;
+                                }
+                              );
+                              setSolution(updatedSolution);
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="w-full xl:w-1/2">
+                  <label className="mb-3 block font-medium text-black dark:text-white">
+                    Testcases
+                  </label>
+                  {testCases.map((testCase, index) => (
+                    <div className="flex" key={index}>
+                      <div key={index} className="p-2 flex w-full">
+                        <div className="p-1 w-1/2">
+                          <input
+                            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                            type="text"
+                            required
+                            placeholder={`testcase input ${index + 1}`}
+                            value={testCase.input}
+                            onChange={(e) => {
+                              const updatedTestCases = testCases.map(
+                                (testCase, testCaseIndex) => {
+                                  if (index === testCaseIndex) {
+                                    // Return a new object with the updated input for the matched index
+                                    return {
+                                      ...testCase,
+                                      input: e.target.value,
+                                    };
+                                  }
+                                  // Return the original object for other indexes
+                                  return testCase;
+                                }
+                              );
+                              setTestCases(updatedTestCases);
+                            }}
+                          />
+                        </div>
+                        <div className="p-1 w-1/2">
+                          <input
+                            placeholder={`testcase output ${index + 1}`}
+                            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                            type="text"
+                            required
+                            value={testCase.output}
+                            onChange={(e) => {
+                              // Create a new array with updated objects
+                              const updatedTestCases = testCases.map(
+                                (testCase, testCaseIndex) => {
+                                  if (index === testCaseIndex) {
+                                    // Return a new object with the updated input for the matched index
+                                    return {
+                                      ...testCase,
+                                      output: e.target.value,
+                                    };
+                                  }
+                                  // Return the original object for other indexes
+                                  return testCase;
+                                }
+                              );
+
+                              // Update the state with the new array
+                              setTestCases(updatedTestCases);
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="justify-end flex">
+                  <button
+                    className="flex w-1/3 text-xs justify-center rounded bg-primary text-white p-2 m-2 font-medium text-gray hover:bg-opacity-90"
+                    type="submit"
+                  >
+                    Update Question
+                  </button>
+                </div>
               </div>
             </>
           </div>
         </div>
+      </form>
+      <form>
         <div className="flex flex-col gap-9 text-xs">
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <>
@@ -212,49 +365,18 @@ console.log(values, "values")
                 <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                   <div className="w-full xl:w-1/2">
                     <label className="mb-3 block font-medium text-black dark:text-white">
-                      Examples
+                      Solution
                     </label>
                     <textarea
                       rows={1}
-                      placeholder="Add Examples"
+                      placeholder="Add Solution"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                      value={examples}
+                      // value={solution}
                       required
                       onChange={(e) => {
-                        setExamples(e.target.value);
+                        // setSolution(e.target.value);
                       }}
                     ></textarea>
-                  </div>
-
-                  <div className="flex">
-                    <div className="w-full">
-                      <button
-                        type="button"
-                        onClick={handleAddSolution}
-                        className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                      >
-                        + Solution
-                      </button>
-                      {solutions.map((sol, index) => (
-                        <div className="flex" key={index}>
-                          <div key={index} className="p-2 flex w-full">
-                            <div className="p-1 w-full">
-                              <textarea
-                                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                required
-                                placeholder={`Solution ${index + 1}`}
-                                value={sol}
-                                onChange={(e) => {
-                                  var newSolution = [...solutions];
-                                  newSolution[index] = e.target.value;
-                                  setSolution(newSolution);
-                                }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
                   </div>
                   <div className="flex">
                     <div className="w-full">
@@ -265,21 +387,20 @@ console.log(values, "values")
                       >
                         + TestCases
                       </button>
-                      {testCases.map((testCase, index) => (
+                      {addedTestCases.map((testCase, index) => (
                         <div className="flex" key={index}>
                           <div key={index} className="p-2 flex w-full">
                             <div className="p-1 w-1/2">
                               <input
                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                 type="text"
-                                required
                                 placeholder={`testcase input ${index + 1}`}
                                 value={testCase.input}
                                 onChange={(e) => {
-                                  const newTestCasesInput = [...testCases];
+                                  const newTestCasesInput = [...addedTestCases];
                                   newTestCasesInput[index].input =
                                     e.target.value;
-                                  setTestCases(newTestCasesInput);
+                                  setAddedTestCases(newTestCasesInput);
                                 }}
                               />
                             </div>
@@ -288,13 +409,14 @@ console.log(values, "values")
                                 placeholder={`testcase output ${index + 1}`}
                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                 type="text"
-                                required
                                 value={testCase.output}
                                 onChange={(e) => {
-                                  const newTestCasesOutput = [...testCases];
+                                  const newTestCasesOutput = [
+                                    ...addedTestCases,
+                                  ];
                                   newTestCasesOutput[index].output =
                                     e.target.value;
-                                  setTestCases(newTestCasesOutput);
+                                  setAddedTestCases(newTestCasesOutput);
                                 }}
                               />
                             </div>
@@ -305,19 +427,21 @@ console.log(values, "values")
                   </div>
                 </div>
 
-                <button
-                  className="flex w-full justify-center rounded bg-primary text-white p-3 font-medium text-gray hover:bg-opacity-90"
-                  type="submit"
-                >
-                  Submit Question
-                </button>
+                <div className="justify-end flex">
+                  <button
+                    className="flex w-1/3 text-xs justify-center rounded bg-primary text-white p-2 m-2 font-medium text-gray hover:bg-opacity-90"
+                    type="submit"
+                  >
+                    Add Testcases
+                  </button>
+                </div>
               </div>
             </>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 
-export default ExamForm;
+export default ExamQuestionFormEdit;
