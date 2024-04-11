@@ -153,10 +153,16 @@ const QuestionsTable: React.FC<UserTableProps> = ({
         return (
           <>
             {isUser ? (
-              <div className="text-xs text-gray-700 font-light">
-                {user && user.id} {".  "}
-                {user && user.title}
-              </div>
+              <button
+                onClick={() => {
+                  handleRowClick(user.id);
+                }}
+              >
+                <div className="text-xs text-gray-700 font-light">
+                  {user && user.id} {".  "}
+                  {user && user.title}
+                </div>
+              </button>
             ) : (
               <div className="mr-32 w-full">
                 <Skeleton className="h-3 mb-2 w-4/5 rounded-full" />
@@ -405,9 +411,6 @@ const QuestionsTable: React.FC<UserTableProps> = ({
               {users?.map((item) => (
                 <TableRow
                   key={item.id}
-                  onClick={() => {
-                    // handleRowClick(item.id);
-                  }}
                   style={{ cursor: "pointer" }}>
                   {(columnKey) => (
                     <TableCell>{renderCell(true, item, columnKey)}</TableCell>
