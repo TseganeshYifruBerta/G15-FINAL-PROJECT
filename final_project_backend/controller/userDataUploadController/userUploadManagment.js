@@ -226,6 +226,9 @@ const updateUser = async (req, res) => {
     let transaction;
   
     try {
+      if(!sections ) {
+        return res.status(400).json({ error: 'Section is required' });
+      }
       transaction = await sequelize.transaction();
       const userFound = await User.findOne({ where: { id: userId }, transaction });
   

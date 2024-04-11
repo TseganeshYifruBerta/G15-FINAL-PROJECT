@@ -8,8 +8,8 @@ const SelectedChapter = require("../../../models/exam/SelectedChapter");
 // Function to get an exam by ID along with associated questions
 const getExamByIdWithQuestions = async (req, res) => {
     try {
-        const { id   } = req.params; // The exam's ID
-        const exam = await Exam.findByPk(id);
+        const { examId } = req.params; // The exam's ID
+        const exam = await Exam.findByPk(examId);
         
         if (!exam) {
             return res.status(404).json({ message: 'Exam not found.' });
@@ -17,7 +17,7 @@ const getExamByIdWithQuestions = async (req, res) => {
 
         // Assuming exam.questionIds is an array of question IDs. If it's a string, you'll need to split it.
         const ExamWithquestionIds = await Exam.findAll({
-          where: { id: id },
+          where: { id: examId },
 
           include : [{
             model: ExamQuestionId,
@@ -49,7 +49,9 @@ const getExamByIdWithQuestions = async (req, res) => {
         // Combine exam details with the questions
         const response = {
             ...exam.toJSON(),
+            chapters: ExamWithquestionIds[0].selectedChapters,
             questions: filteredQuestions,
+           
         };
 
 
