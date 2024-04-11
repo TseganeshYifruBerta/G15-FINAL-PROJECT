@@ -8,11 +8,11 @@ const { where } = require("sequelize");
 const editExamQuestion = async (req, res) => {
   try {
     const { title, difficulty, description,  tag , chapter , example, testcases, solutions } = req.body;
-    const { teacherId, examId } = req.params;
+    const { teacherId, examQuestionId } = req.params;
 
     const examQuestion = await ExamQuestion.findOne({
       where: {
-        id: examId,
+        id: examQuestionId,
         teacherId: teacherId
       }
     });
@@ -53,7 +53,7 @@ const editExamQuestion = async (req, res) => {
 
             await TestCase.update(
               { input: formattedInput, output: formattedOutput },
-              { where: { examQuestionId: examId, id: testcaseId }, transaction }
+              { where: { examQuestionId: examQuestionId, id: testcaseId }, transaction }
             );
           })
         );
@@ -67,7 +67,7 @@ const editExamQuestion = async (req, res) => {
           console.log("///////////",solution.content);
           await Solution.update(
             { content: solution.content },
-            { where: { examQuestionId: examId, id: solutionId}, transaction }
+            { where: { examQuestionId: examQuestionId, id: solutionId}, transaction }
           );
         }));
       }
@@ -76,9 +76,9 @@ const editExamQuestion = async (req, res) => {
       await transaction.commit();
 
       // Fetch updated data
-      const updatedExamQuestion = await ExamQuestion.findByPk(examId);
-      const updatedTestCases = await TestCase.findAll({ where: { examQuestionId: examId } });
-      const updatedSolution = await Solution.findAll({ where: { examQuestionId: examId } });
+      const updatedExamQuestion = await ExamQuestion.findByPk(examQuestionId);
+      const updatedTestCases = await TestCase.findAll({ where: { examQuestionId: examQuestionId } });
+      const updatedSolution = await Solution.findAll({ where: { examQuestionId: examQuestionId } });
 
       return res.status(200).json({ examQuestion: updatedExamQuestion, testCases: updatedTestCases, solution: updatedSolution });
     } catch (error) {
@@ -94,12 +94,12 @@ const editExamQuestion = async (req, res) => {
 
 
 const addSolution = async (req, res) => {
-  const { content , examId} = req.body;
+  const { content , examQuestionId} = req.body;
  
 
   const examQuestion = await ExamQuestion.findOne({
     where: {
-      id: examId,
+      id: examQuestionId,
     
     }
   });
@@ -115,7 +115,7 @@ const addSolution = async (req, res) => {
       solutions.map(async (solution) => {
         const createdSolution = await Solution.create({
           content: solution,
-          examQuestionId: examId,
+          examQuestionId: examQuestionId,
         });
         return createdSolution;
       })
@@ -130,7 +130,7 @@ const addSolution = async (req, res) => {
 
 const deleteSolution = async (req, res) => {
   
-  const{solutionId} = req.params;
+  const { solutionId } = req.params;
 
 
   const examQuestion = await ExamQuestion.findOne({
@@ -156,7 +156,7 @@ const deleteSolution = async (req, res) => {
 
   try {
     await solution.destroy();
-    return res.status(204).json({message: 'solution deleted'});
+    return res.status(200).json({message: 'solution deleted'});
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Failed to delete solution' });
@@ -231,7 +231,7 @@ const DeleteTestcases = async (req, res) => {
     try {
       await testcaseFound.destroy({ transaction });
       await transaction.commit();
-      return res.status(204).json({ message: 'Test case deleted successfully' });
+      return res.status(200).json({ message: 'Test case deleted successfully' });
     } catch (error) {
       await transaction.rollback();
       console.error(error);

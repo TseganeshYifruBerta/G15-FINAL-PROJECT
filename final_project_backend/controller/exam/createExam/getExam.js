@@ -53,6 +53,9 @@ const getAllCreatedExamByTeacherId = async (req, res) => {
     }
 
     const exams = await CreatExam.findAll({
+      where: {
+        teacherId: teacherId
+      },
       include: [
         {
           model: SelectedQuestionForExam,

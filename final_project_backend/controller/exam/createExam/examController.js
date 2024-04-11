@@ -9,7 +9,7 @@ const User = require('../../../models/auth/user.model');
 const updateCreatedExam = async (req, res) => {
   try {
     const { teacherId, examId } = req.params;
-    const { title, date_and_time, instruction, duration, status, sections, questions } = req.body;
+    const { title, date_and_time, instruction, duration, status, sections} = req.body;
 
     const exam = await CreatExam.findOne({
       where: {
@@ -43,15 +43,7 @@ const updateCreatedExam = async (req, res) => {
           );
         }));
       }
-      // update question
-      if (questions && questions.length > 0) {
-        await Promise.all(questions.map(async (question) => {
-          await SelectedQuestionForExam.update(
-            { question_ids: question.question_ids },
-            { where: { examId: examId, id: question.id }, transaction }
-          );
-        }));
-      }
+      
 
       // Commit the transaction
       await transaction.commit();
@@ -59,9 +51,9 @@ const updateCreatedExam = async (req, res) => {
       // Fetch updated data
       const updatedExam = await CreatExam.findByPk(examId);
       const updatedSections = await SelectedSectionsForExam.findAll({ where: { examId: examId } });
-      const updatedQuestions = await SelectedQuestionForExam.findAll({ where: { examId: examId } });
+     
 
-      return res.status(200).json({ updatedExam, updatedSections, updatedQuestions });
+      return res.status(200).json({ updatedExam, updatedSections});
     } catch (error) {
       // Rollback the transaction if an error occurs
       await transaction.rollback();
@@ -117,6 +109,9 @@ const AddSectionToExam = async (req, res) => {
   const { sections, examId } = req.body;
 
   try {
+    if(!sections || !examId) {
+      return res.status(400).json({ error: 'Sections and examId are required' });
+    }
     const exam = await CreatExam.findOne({ where: { id: examId } });
     if (!exam) {
       return res.status(404).json({ error: 'Exam not found' });
