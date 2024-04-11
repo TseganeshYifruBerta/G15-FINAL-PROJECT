@@ -25,10 +25,9 @@ const login = async (req, res) => {
             return res.status(401).json({ message: 'User is inactive' });
         }
         else {
-            
-            // await user.save();
-            return res.status(401).json({ message: 'User is inactive' });
+            return res.status(401).json({ message: 'Invalid userId or password' });
         }
+      
           
     }
     const section = await Section.findAll({ where: { UserinformationId: user.id } });
