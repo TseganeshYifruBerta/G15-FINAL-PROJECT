@@ -2,7 +2,7 @@ const Exam = require("../../../models/exam/createExam");
 const SelectedSectionsForExam = require("../../../models/exam/SelectedSectionsForExam");
 const User = require("../../../models/auth/user.model");
 const { Op } = require("sequelize");
-
+const Section = require("../../../models/auth/section.model");
 // Function to get the exams for a user's section with the closest date
 const getExamWithClosestDate = async (req, res) => {
     try {
@@ -12,11 +12,11 @@ const getExamWithClosestDate = async (req, res) => {
             where: { id: userId },
             include: [{
                 model: Section, // Assuming you have a Section model that relates to the User
-                as: 'section' // Assuming 'section' is the association alias
+                as: 'SectionsOfUser' // Assuming 'section' is the association alias
             }]
         });
 
-        if (!userWithSection || !userWithSection.section) {
+        if (!userWithSection || !userWithSection.SectionsOfUser[0].section) {
             return res.status(404).json({ message: 'User or section not found' });
         }
 
@@ -25,16 +25,19 @@ const getExamWithClosestDate = async (req, res) => {
             include: [{
                 model: SelectedSectionsForExam,
                 as: 'selectedSectionsForExam',
-                where: { sectionId: userWithSection.section.id }
+                where: { sections: userWithSection.SectionsOfUser[0].section }
             }],
             raw: true,
         });
 
         const now = new Date();
+        console.log('now:', now);
 
         // Calculate the absolute difference in time between each exam's date_and_time and now
         exams.forEach(exam => {
+            console.log('exam.date_and_time:', exam.date_and_time);
             const examDateTime = new Date(exam.date_and_time);
+            console.log('examDateTime:', examDateTime);
             exam.timeDifference = Math.abs(examDateTime - now);
         });
 
@@ -44,7 +47,7 @@ const getExamWithClosestDate = async (req, res) => {
         // Return the closest exam
         const closestExam = exams[0];
 
-        res.status(200).json(userWithSection);
+        res.status(200).json(closestExam);
     } catch (error) {
         console.error('Failed to fetch exams:', error);
         res.status(500).json({ message: 'Internal server error' });
