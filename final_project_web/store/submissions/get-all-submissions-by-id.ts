@@ -48,7 +48,7 @@ export const getAllSubmissionsByIdApi = createApi({
     baseUrl: baseUrl,
     prepareHeaders: (headers, { getState }) => {
       // Retrieve your access token from wherever it's stored
-      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJVR1IvODg4OC84OCIsImlkIjo5LCJlbWFpbCI6ImVrcnVpd2MyMDIwQGdtYWlsLmNvbSIsInJvbGUiOiJzdHVkZW50Iiwic2VjdGlvbiI6WyIxIl0sImlhdCI6MTcxMjg1NzQ3Nn0.bX77E6A6vicd_2M713DKF6wYAJwasG8LiDFBgXVUaZI";
+      const token = localStorage.getItem("token");
       // If we have a token, set the authorization header
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
@@ -60,7 +60,7 @@ export const getAllSubmissionsByIdApi = createApi({
   endpoints: (builder) => ({
     getAllSubmissionsById: builder.query<Submission[], void>({
       query: () => {
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJVR1IvODg4OC84OCIsImlkIjo5LCJlbWFpbCI6ImVrcnVpd2MyMDIwQGdtYWlsLmNvbSIsInJvbGUiOiJzdHVkZW50Iiwic2VjdGlvbiI6WyIxIl0sImlhdCI6MTcxMjg1NzQ3Nn0.bX77E6A6vicd_2M713DKF6wYAJwasG8LiDFBgXVUaZI";
+        const token = localStorage.getItem("token");
         const decodedToken: { id: number } = jwt.decode(token) as { id: number };
         const userId = decodedToken.id;
         let url = "http://localhost:5000/codeSubmission/fetchingAllAcceptedSubmittedQuestionsPerUser";

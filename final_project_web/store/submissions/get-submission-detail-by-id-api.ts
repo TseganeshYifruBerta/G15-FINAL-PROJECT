@@ -33,7 +33,7 @@ export const getSubmissionDetailByIdApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
     prepareHeaders: (headers, { getState }) => {
-      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJVR1IvODg4OC84OCIsImlkIjo5LCJlbWFpbCI6ImVrcnVpd2MyMDIwQGdtYWlsLmNvbSIsInJvbGUiOiJzdHVkZW50Iiwic2VjdGlvbiI6WyIxIl0sImlhdCI6MTcxMjg1NzQ3Nn0.bX77E6A6vicd_2M713DKF6wYAJwasG8LiDFBgXVUaZI";
+      const token = localStorage.getItem("token");
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }
@@ -44,7 +44,7 @@ export const getSubmissionDetailByIdApi = createApi({
   endpoints: (builder) => ({
     getSubmissionDetail: builder.query<SubmissionDetailProps, { submitId: string }>({
       query: ({submitId}) => {
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJVR1IvODg4OC84OCIsImlkIjo5LCJlbWFpbCI6ImVrcnVpd2MyMDIwQGdtYWlsLmNvbSIsInJvbGUiOiJzdHVkZW50Iiwic2VjdGlvbiI6WyIxIl0sImlhdCI6MTcxMjg1NzQ3Nn0.bX77E6A6vicd_2M713DKF6wYAJwasG8LiDFBgXVUaZI";
+        const token = localStorage.getItem("token");
         const decodedToken: { id: number } = jwt.decode(token) as { id: number };
         const userId = decodedToken.id;
         let url = "http://localhost:5000/codeSubmission/fetchQuestionDetailBySubmittedId";
