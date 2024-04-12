@@ -2,6 +2,7 @@ const User = require('../../../models/auth/user.model');
 const SubmittedExamAnswer = require('../../../models/exam/studentsExamAnswer');
 const section = require('../../../models/auth/section.model');
 const SelectedSectionsForExam = require('../../../models/exam/SelectedSectionsForExam');
+const submitExamAnswerByStudent = require('../../../models/exam/submittedExamDetail');
 
 const getAllExamtakeStudent = async (req, res) => {
     const { examId , teacherId } = req.params;
@@ -52,4 +53,31 @@ const getAllExamtakeStudent = async (req, res) => {
     }
 };
 
-module.exports = getAllExamtakeStudent
+
+const getSubmissionOfstudentByQuestionId = async (req, res) => {
+    const { userId, questionId } = req.params;
+
+    try {
+        const submission = await SubmittedExamAnswer.findAll({
+            where: {
+                UserinformationId: userId,
+            },
+            include: [
+                {
+                    model: submitExamAnswerByStudent,
+                    as: 'studentsExamDetails',
+                    where: {
+                        examQuestionId: questionId
+                    }
+                }
+            ]
+        });
+
+        res.status(200).json(submission[0].studentsExamDetails[0].submittedAnswer)
+    } catch (error) {
+        console.error('Failed to fetch exams:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+module.exports = { getAllExamtakeStudent, getSubmissionOfstudentByQuestionId }
