@@ -15,7 +15,8 @@ const submitExamAnswerByStudent = require("../../controller/exam/submittedExamAn
 const fetchAllSubmittedStudentExamAnswerBySection = require("../../controller/exam/submittedExamAnswer/fetchSubmittedStudentExamAnswer")
 const { isTeacher } = require("../../middleware/roleMiddleWare");
 const verifyRoles = require("../../middleware/verifyRoles");
-const getAllExamtakeStudent = require("../../controller/exam/submittedExamAnswer/getAllExamtakeStudent");
+const {getAllExamtakeStudent,getSubmissionOfstudentByQuestionId} = require("../../controller/exam/submittedExamAnswer/getAllExamtakeStudent");
+const e = require("express");
  
 
 
@@ -60,6 +61,7 @@ examRouters.get("/examQuestionDetailById/:examQuestionId", examQuestionDetailByI
 // submitted exam answer by student
 
 examRouters.get("/getAllExamtakeStudent/:teacherId/:examId", getAllExamtakeStudent);
+examRouters.get("/getSubmissionOfstudentByQuestionId/:userId/:questionId", getSubmissionOfstudentByQuestionId);
 examRouters.post("/submitExamAnswerByStudent", submitExamAnswerByStudent);
 examRouters.get("/fetchAllSubmittedStudentExamAnswerBySection/:teacherId", fetchAllSubmittedStudentExamAnswerBySection);
 
