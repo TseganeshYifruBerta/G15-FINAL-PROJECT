@@ -32,9 +32,9 @@ const getAllExamtakeStudent = async (req, res) => {
          where: {
             id: teacherId
         },
-        include: [{
+        include: {
             model: section,
-            as: 'SectionsOfUser'}]
+            as: 'SectionsOfUser'}
 
     
      } );  
@@ -45,7 +45,8 @@ const getAllExamtakeStudent = async (req, res) => {
 
     const filterUser = users.filter(examTake => teacherSectionList.includes(examTake.SectionsOfUser[0].section));
     console.log(filterUser);
-        res.status(200).json(filterUser);
+    
+        res.status(200).json({filterUser,examId});
     } catch (error) {
         console.error('Failed to fetch exams:', error);
         res.status(500).json({ message: 'Internal server error' });
