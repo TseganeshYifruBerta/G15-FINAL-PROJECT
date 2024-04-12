@@ -31,13 +31,10 @@ const getExamWithClosestDate = async (req, res) => {
         });
 
         const now = new Date();
-        console.log('now:', now);
 
         // Calculate the absolute difference in time between each exam's date_and_time and now
         exams.forEach(exam => {
-            console.log('exam.date_and_time:', exam.date_and_time);
             const examDateTime = new Date(exam.date_and_time);
-            console.log('examDateTime:', examDateTime);
             exam.timeDifference = Math.abs(examDateTime - now);
         });
 
@@ -47,7 +44,7 @@ const getExamWithClosestDate = async (req, res) => {
         // Return the closest exam
         const closestExam = exams[0];
 
-        res.status(200).json(closestExam);
+        res.status(200).json(closestExam );
     } catch (error) {
         console.error('Failed to fetch exams:', error);
         res.status(500).json({ message: 'Internal server error' });
