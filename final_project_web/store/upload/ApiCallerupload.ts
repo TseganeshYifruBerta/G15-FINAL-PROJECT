@@ -4,7 +4,7 @@ export const uploadFile = async (file: File) => {
   console.log(formData.get("usersExcelFile"), "hello world");
   // Retrieve your access token from wherever it's stored
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlkIjoxLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInNlY3Rpb24iOltdLCJpYXQiOjE3MTEzOTY4Njh9.0LlDEKQCidCQEn_zoOnFo_89zON7QPmDhlNW7GWDtOw";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBVFIvMzMzMy8zMyIsImlkIjoxLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInNlY3Rpb24iOltdLCJpYXQiOjE3MTI4NzA1NjJ9._TcXZ0V0BH3Tba7Nk9ppHGe-o-qhbYqqgZ8EEbzYdp0";
 
   try {
     const response = await fetch(
