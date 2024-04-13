@@ -29,6 +29,7 @@ import { getWeeklyReportApi } from "./profile/get-weekly-report";
 import { getTopStudentsApi } from "./teacherprofile/get-top-students";
 import teacherReducer from './admin/teacher_slice_reducer';
 import studentReducer from './admin/student_slice_reducer';
+import passwordReducer from '@/store/changnepassword/slicereducer'
 
 export const store = configureStore({
   reducer: {
@@ -37,6 +38,7 @@ export const store = configureStore({
     signupStudentReducer,
     upload: UploadReducer,
     uploadpop: UploadManually,
+    password: passwordReducer,
     teacher: teacherReducer,
     student: studentReducer,
     studentsignin: signinStudentReducer,
