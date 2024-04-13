@@ -60,7 +60,7 @@ const countCodeSubmissionsForLastMonth = async (req, res) => {
     const { initialDateString } = req.params;
 
    
-    if (foundUser.status === "active") {
+ 
 
       const initialDate = new Date(initialDateString);
       const lastMonth = [];
@@ -77,22 +77,20 @@ const countCodeSubmissionsForLastMonth = async (req, res) => {
           where: {
             userId: userId ,
             createdAt: {
-              [Sequelize.Op.between]: [new Date(date), new Date(date + 'T23:59:59')]
+              [Sequelize.Op.between]: [new Date(date), new Date(date - 'T23:59:59')]
             }
           }
         });
         return { date, count };
       }));
 
-      return res.status(200).json(submissionCounts);
-    } else {
-      return res.status(403).json({ message: "The user is not active" });
-    }
 
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ error: "Failed to count submissions for last month" });
-  }
-};
+      return res.status(200).json(submissionCounts);
+    } 
+    catch (error) {
+      console.log(error);
+      return res.status(500).json({ error: "Failed to count submissions for last month" });
+    }   
+}
 
 module.exports = { countCodeSubmissionsForLastWeek, countCodeSubmissionsForLastMonth };
