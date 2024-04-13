@@ -30,7 +30,8 @@ import { getTopStudentsApi } from "./teacherprofile/get-top-students";
 import { getAllExamTakenStudentsApi } from "./exam/examAnswer/get-all-students";
 import teacherReducer from './admin/teacher_slice_reducer';
 import studentReducer from './admin/student_slice_reducer';
-import { getAllQuestionByStudentIdApi } from "./exam/examAnswer/get-all-questions-by-student-id";
+import { getAllQuestionsByStudentIdApi } from "./exam/examAnswer/get-all-questions-by-student-id";
+import { getExamQuestionAnswerApi } from "./exam/examAnswer/get-exam-question-answer";
 export const store = configureStore({
   reducer: {
     form: formReducer,
@@ -59,12 +60,13 @@ export const store = configureStore({
     [getNumberOfAllQuestionApi.reducerPath]: getNumberOfAllQuestionApi.reducer,
     [getAllStudentsApi.reducerPath]: getAllStudentsApi.reducer,
     [getAllExamTakenStudentsApi.reducerPath]: getAllExamTakenStudentsApi.reducer,
-    [getAllQuestionByStudentIdApi.reducerPath]: getAllQuestionByStudentIdApi.reducer,
+    [getAllQuestionsByStudentIdApi.reducerPath]: getAllQuestionsByStudentIdApi.reducer,
     [getExamQuestionByIdApi.reducerPath]: getExamQuestionByIdApi.reducer,
     [getAllExamsApi.reducerPath]: getAllExamsApi.reducer,
     [getTopSolvedQuestionsApi.reducerPath]: getTopSolvedQuestionsApi.reducer,
     [getWeeklyReportApi.reducerPath]: getWeeklyReportApi.reducer,
     [getTopStudentsApi.reducerPath]: getTopStudentsApi.reducer,
+    [getExamQuestionAnswerApi.reducerPath]: getExamQuestionAnswerApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -82,7 +84,10 @@ export const store = configureStore({
       .concat(getTopSolvedQuestionsApi.middleware)
       .concat(getWeeklyReportApi.middleware)
       .concat(getTopStudentsApi.middleware)
-      .concat(getExamQuestionByIdApi.middleware),
+      .concat(getExamQuestionByIdApi.middleware)
+      .concat(getAllExamTakenStudentsApi.middleware)
+      .concat(getAllQuestionsByStudentIdApi.middleware)
+      .concat(getExamQuestionAnswerApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

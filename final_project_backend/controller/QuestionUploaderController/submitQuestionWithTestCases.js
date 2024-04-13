@@ -14,6 +14,9 @@ const submitQuestionWithTestCases = async (req, res) => {
       },
       transaction
     })
+    if(!teacherDetail){
+      return res.status(200).json({message:"The user is not found"})
+    }
     if (teacherDetail.status === 'active') {
       // Create a new LabQuestion
       const newQuestion = await Question.create({
