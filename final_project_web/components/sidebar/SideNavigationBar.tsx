@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 import React from "react";
 import {
   RiCheckboxBlankCircleFill,
@@ -74,28 +75,42 @@ const navigations: any = {
   ],
 };
 function SideNavigationBar() {
-  let role = "teacher";
-  const router = useRouter();
-  const map = useMemo(() => new Map(), []);
-
-  const [activeTab, setActiveTab] = useState("/teacher/dashboard");
-  const [isNavOpen, setIsNavOpen] = useState(true);
-
-  const navigation: any = navigations[role];
-
+  
+    const router = useRouter();
+    const [role, setRole] = useState("teacher"); // Default role if none is provided
+    const [navigation, setNavigation] = useState(navigations.teacher); // Default navigation
+    const [activeTab, setActiveTab] = useState("/teacher/dashboard");
+    const [isNavOpen, setIsNavOpen] = useState(true);
   const SetActiveMenuTab = (tab: number, link: string) => {
     router.push(link);
   };
 
-  useEffect(() => {
-    window.addEventListener("resize", () => {
-      if (window.innerWidth < 1290) {
-        setIsNavOpen(false);
+    useEffect(() => {
+      // Adjust navigation bar visibility based on window size
+      const handleResize = () => {
+        setIsNavOpen(window.innerWidth >= 1290);
+      };
+      window.addEventListener("resize", handleResize);
+      handleResize(); // Call once initially
+
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    useEffect(() => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const decodedToken = jwt.decode(token);
+        const userRole = decodedToken?.role || "teacher"; // Default to teacher if role is not decoded
+        setRole(userRole);
       } else {
-        setIsNavOpen(true);
+        router.push("/login");
       }
-    });
-  }, []);
+    }, []);
+
+    useEffect(() => {
+      // Set navigation based on role
+      setNavigation(navigations[role] || []);
+    }, [role]);
   return (
     <div>
       <div

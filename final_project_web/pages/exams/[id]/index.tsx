@@ -7,7 +7,7 @@ interface ExamDetailProps {
 
 const ExamDetail: React.FC<ExamDetailProps> = () => {
   return (
-    <div className="p-8">
+    <div className="p-8 text-sm">
       <div className="text-xl font-bold mb-4">Exam Title</div>
       <div className="mb-4">
         Date and Time:{" "}
@@ -22,7 +22,7 @@ const ExamDetail: React.FC<ExamDetailProps> = () => {
       </div>
 
       {/* Table for list of exam questions */}
-      <div className="mb-4">
+      <div className="mb-4 w-2/3">
         <div className="font-bold mb-2">List of Exam Questions</div>
         <table className="min-w-full table-auto border-collapse border border-gray-300">
           <thead>
@@ -36,10 +36,10 @@ const ExamDetail: React.FC<ExamDetailProps> = () => {
             <tr>
               <td className="border border-gray-300 p-2">1</td>
               <td className="border border-gray-300 p-2">
-                What is the capital of France?
+                Question Title
               </td>
               <td className="border border-gray-300 p-2">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
+                <button className="bg-primary hover:bg-primary-hover text-white font-bold py-1 px-2 rounded">
                   View
                 </button>
               </td>
@@ -60,7 +60,7 @@ const ExamDetail: React.FC<ExamDetailProps> = () => {
         <span className="font-medium">Easy: 5, Medium: 10, Hard: 5</span>
       </div>
       <div className="mb-4">
-        Selected Sections: <span className="font-medium">Sections 1, 2</span>
+        Selected Sections: <span className="font-medium"> 1, 2</span>
       </div>
     </div>
   );

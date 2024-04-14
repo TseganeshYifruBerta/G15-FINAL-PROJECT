@@ -21,7 +21,7 @@ const AllTeacher: React.FC = () => {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [newPassword, setNewPassword] = useState('');
 
-  const getAuthToken = () => "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBVFIvMzMzMy8zMyIsImlkIjoxLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInNlY3Rpb24iOltdLCJpYXQiOjE3MTI4OTg4Nzh9.y-j8pll2EuzsOI36cxiNsj_AD0WAPJ44q87l8eeLFGQ"
+   const token = localStorage.getItem("token");
 
 
   const getStudents = async () => {
@@ -86,17 +86,19 @@ console.log(students); // This might not log updated state immediately due to se
   const handleActivateUser = async (id: number) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`http://localhost:5000/activateUser/activateUser`, {
-        method: 'POST',
-       
+      const response = await fetch(
+        `http://localhost:5000/activateUser/activateUser`,
+        {
+          method: "POST",
+
           headers: {
-            'Authorization': `Bearer ${getAuthToken()}`,
-            'Content-Type': 'application/json'
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            "Content-Type": "application/json",
           },
-  
-  
-        body: JSON.stringify({ userId: id.toString() }) // Send userId as a string in the body
-      });
+
+          body: JSON.stringify({ userId: id.toString() }), // Send userId as a string in the body
+        }
+      );
       const data = await response.json();
       if (response.ok) {
         setNewPassword(data.newPassword); // Save the new password
