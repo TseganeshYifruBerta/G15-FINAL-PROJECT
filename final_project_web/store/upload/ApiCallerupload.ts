@@ -3,8 +3,7 @@ export const uploadFile = async (file: File) => {
   formData.append("usersExcelFile", file); // Make sure 'file' matches the expected field name in your backend.
   console.log(formData.get("usersExcelFile"), "hello world");
   // Retrieve your access token from wherever it's stored
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBVFIvMzMzMy8zMyIsImlkIjoxLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInNlY3Rpb24iOltdLCJpYXQiOjE3MTI4NzA1NjJ9._TcXZ0V0BH3Tba7Nk9ppHGe-o-qhbYqqgZ8EEbzYdp0";
+  const token = localStorage.getItem("token");
 
   try {
     const response = await fetch(

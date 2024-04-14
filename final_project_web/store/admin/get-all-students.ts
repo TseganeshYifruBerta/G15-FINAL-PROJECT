@@ -26,13 +26,13 @@ export type Section = {
       sections: string;
     }
     
-    const getAuthToken = () => "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBVFIvMzMzMy8zMyIsImlkIjoxLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInNlY3Rpb24iOltdLCJpYXQiOjE3MTMwMTkyMDN9.9wdVM-xVHHKaqUZUXXTllmNdfVO-tpndtKMy6xyrHFY"
+     const token = localStorage.getItem("token");
     export const fetchAllStudents = async (): Promise<StudentApiResponse> => {
       try {
         const response = await fetch('http://localhost:5000/upload/fetchAllStudents?_=${new Date().getTime()}', {
           method: "GET",
           headers: {
-            'Authorization': `Bearer ${getAuthToken()}`,
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
             'Content-Type': 'application/json'
           },
         });
@@ -51,15 +51,17 @@ export type Section = {
     export const updateStudent = async ({ id, updateData }: UpdateStudentParams): Promise<any> => {
       try {
         console.log('Sending update payload to server:', JSON.stringify(updateData)); // Debugging line
-        const response = await fetch(`http://localhost:5000/upload/updateUser/${id}`, {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Bearer ${getAuthToken()}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(updateData),
-
-        });
+        const response = await fetch(
+          `http://localhost:5000/upload/updateUser/${id}`,
+          {
+            method: "PUT",
+            headers: {
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updateData),
+          }
+        );
     
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -83,7 +85,7 @@ export type Section = {
         const response = await fetch(`http://localhost:5000/upload/AddSections`, {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${getAuthToken()}`,
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({ userId, sections }),
@@ -105,7 +107,7 @@ export type Section = {
         const response = await fetch(`http://localhost:5000/upload/DeleteSections/${sectionId}`, {
           method: 'DELETE',
           headers: {
-            'Authorization': `Bearer ${getAuthToken()}`
+           ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
         });
         if (!response.ok) {
@@ -125,7 +127,7 @@ export type Section = {
         const response = await fetch(`http://localhost:5000/upload/deleteUser/${id}`, {
           method: 'DELETE',
           headers: {
-            'Authorization': `Bearer ${getAuthToken()}`
+           ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
         });
         if (!response.ok) {

@@ -30,7 +30,19 @@ export const getExamQuestionByIdApi = createApi({
         };
       },
     }),
+    getExamById: builder.query({
+      query: (params) => {
+        const { examId } = params;
+        let url = "http://localhost:5000/exam/getExamByIdWithQuestions";
+        const queryParams = [];
+        queryParams.push(`${examId}`);
+        return {
+          url: queryParams.length > 0 ? `${url}/${queryParams.join("/")}` : url,
+          method: "GET",
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetExamQuestionByIdQuery } = getExamQuestionByIdApi;
+export const { useGetExamQuestionByIdQuery, useGetExamByIdQuery } = getExamQuestionByIdApi;

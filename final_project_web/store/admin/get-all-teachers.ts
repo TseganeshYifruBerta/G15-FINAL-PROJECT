@@ -29,13 +29,13 @@ export type Teacher = {
   }
 
 
-  const getAuthToken = () => "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBVFIvMzMzMy8zMyIsImlkIjoxLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInNlY3Rpb24iOltdLCJpYXQiOjE3MTI3Mzg4Mjl9.gqlU-OXCLGytyDHxDTQ69H86HcQU4esehiyZvvcJiwE"
+  const token = localStorage.getItem("token");
   export const fetchAllTeachers = async (): Promise<TeacherApiResponse> => {
     try {
       const response = await fetch('http://localhost:5000/upload/fetchAllTeachers?_=${new Date().getTime()}', {
         method: "GET",
         headers: {
-          'Authorization': `Bearer ${getAuthToken()}`,
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
           'Content-Type': 'application/json'
         },
       });
@@ -59,7 +59,7 @@ export type Teacher = {
       const response = await fetch(`http://localhost:5000/upload/updateUser/${id}`, {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${getAuthToken()}`,
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(updateData),
@@ -88,7 +88,7 @@ export type Teacher = {
       const response = await fetch(`http://localhost:5000/upload/AddSections`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${getAuthToken()}`,
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ userId, sections }),
@@ -110,7 +110,7 @@ export type Teacher = {
       const response = await fetch(`http://localhost:5000/upload/DeleteSections/${sectionId}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${getAuthToken()}`
+         ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
       });
       if (!response.ok) {
@@ -130,7 +130,7 @@ export type Teacher = {
       const response = await fetch(`http://localhost:5000/upload/deleteUser/${id}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${getAuthToken()}`
+         ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
       });
       if (!response.ok) {
