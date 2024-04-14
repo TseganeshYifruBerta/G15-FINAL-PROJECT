@@ -46,6 +46,42 @@ const createExam = async (req, res) => {
         }
 
 
+
+
+        const [easyQuestions, mediumQuestions, hardQuestions] = await Promise.all([
+          ExamQuestion.findAll({
+            where: { difficulty: 'easy', tag: tag, chapter: { [Op.in]: chapter } }
+          }),
+          ExamQuestion.findAll({
+            where: { difficulty: 'medium', tag: tag, chapter: { [Op.in]: chapter } }
+          }),
+          ExamQuestion.findAll({
+            where: { difficulty: 'hard', tag: tag, chapter: { [Op.in]: chapter } }
+          })
+        ]);
+        const errors = [];
+        if (easyQuestions.length < easy_questions) errors.push("insufficient easy questions");
+        if (mediumQuestions.length < medium_questions) errors.push("insufficient medium questions");
+        if (hardQuestions.length < hard_questions) errors.push("insufficient hard questions");
+    
+        if (errors.length > 0) {
+          await transaction.rollback();
+          return res.status(400).json({ message: errors.join(", ") });
+        }
+    
+      
+       else { 
+        
+        
+        (errors.length === 0)}
+
+        
+
+
+
+
+
+
         function shuffleArray(array) {
           for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -66,9 +102,7 @@ const createExam = async (req, res) => {
         
         const selectedTag = selectedQuestionByTag(tag , chapter);
         const selectedTagIds = (await selectedTag).map(question => question.id)
-//         console.log(selectedTag);
-// console.log(selectedTagIds);
-      
+
         const selectedQuestionsForExam = await ExamQuestion.findAll({
 
           where: {
@@ -78,11 +112,15 @@ const createExam = async (req, res) => {
    
          })
 
+       
 
 
 
 
 
+
+        // console.log(selectedQuestionsForExam);
+        
         async function selectQuestionsByDifficulty(difficultyCount) {
         //   // Fetch all questions for each difficulty level
           const questionsByDifficulty = {
@@ -91,6 +129,7 @@ const createExam = async (req, res) => {
             hard:  selectedQuestionsForExam.filter(question => question.difficulty === 'hard'),
           };
         
+          
         
         
           // Shuffle and slice questions for each difficulty to match the requested counts
@@ -105,12 +144,47 @@ const createExam = async (req, res) => {
         
           // Combine selected question IDs from all difficulties
           return [...selectedQuestions.easy, ...selectedQuestions.medium, ...selectedQuestions.hard];
-        }
+        };
   
         // console.log(selectedTagIds);
         
+      
+          // Check if there are enough questions available for each difficulty level
+        
 
    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     // Use the selectQuestions function to get a randomized selection of question IDs
