@@ -31,7 +31,9 @@ import { getTopStudentsApi } from "./teacherprofile/get-top-students";
 import teacherReducer from './admin/teacher_slice_reducer';
 import studentReducer from './admin/student_slice_reducer';
 import passwordReducer from '@/store/changnepassword/slicereducer'
-
+import { upcomingExamsApi } from './../store/exam/upcoming-exam-api';
+import { getCountCodeSubmissionsForLastMonthApi } from "./submissions/get-all-last-month-submissions-by-id"; // Import your API file
+import { getAllDifficultyDataPerUserApi } from './submissions/get-all-difficulty-data-per-user'; // Import your difficulty data reducer
 
 export const store = configureStore({
   reducer: {
@@ -67,6 +69,9 @@ export const store = configureStore({
     [getTopSolvedQuestionsApi.reducerPath]: getTopSolvedQuestionsApi.reducer,
     [getWeeklyReportApi.reducerPath]: getWeeklyReportApi.reducer,
     [getTopStudentsApi.reducerPath]: getTopStudentsApi.reducer,
+    [upcomingExamsApi.reducerPath]: upcomingExamsApi.reducer,
+    [getCountCodeSubmissionsForLastMonthApi.reducerPath]: getCountCodeSubmissionsForLastMonthApi.reducer,
+    [getAllDifficultyDataPerUserApi.reducerPath]: getAllDifficultyDataPerUserApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -84,7 +89,10 @@ export const store = configureStore({
       .concat(getTopSolvedQuestionsApi.middleware)
       .concat(getWeeklyReportApi.middleware)
       .concat(getTopStudentsApi.middleware)
-      .concat(getExamQuestionByIdApi.middleware),
+      .concat(getExamQuestionByIdApi.middleware)
+      .concat(upcomingExamsApi.middleware)
+      .concat(getCountCodeSubmissionsForLastMonthApi.middleware)
+      .concat(getAllDifficultyDataPerUserApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
