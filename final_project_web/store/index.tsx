@@ -43,6 +43,10 @@ import {getAllPlagiarismCheckedExamsApi} from "./plagiarism/get-all-plagiarism-c
 import { getAllEndedExamsApi } from "./plagiarism/get-all-ended-exams";
 import {fetchQuestionsFromPlagiarismCheckedExamApi} from "./plagiarism/fetch-questions-from-plagiarism-checked-exam";
 import {fetchAllPlagiarizedSectionApi} from "./plagiarism/get-all-plagiarized-section"
+import { upcomingExamsApi } from './../store/exam/upcoming-exam-api';
+import { getCountCodeSubmissionsForLastMonthApi } from "./submissions/get-all-last-month-submissions-by-id"; // Import your API file
+import { getAllDifficultyDataPerUserApi } from './submissions/get-all-difficulty-data-per-user'; // Import your difficulty data reducer
+
 export const store = configureStore({
   reducer: {
     form: formReducer,
@@ -88,7 +92,10 @@ export const store = configureStore({
     [getAllPlagiarismCheckedExamsApi.reducerPath]: getAllPlagiarismCheckedExamsApi.reducer,
     [fetchStudentsFromPlagiarismCheckedExamApi.reducerPath]: fetchStudentsFromPlagiarismCheckedExamApi.reducer,
     [fetchQuestionsFromPlagiarismCheckedExamApi.reducerPath]: fetchQuestionsFromPlagiarismCheckedExamApi.reducer,
-    [fetchAllPlagiarizedSectionApi.reducerPath]:fetchAllPlagiarizedSectionApi.reducer
+    [fetchAllPlagiarizedSectionApi.reducerPath]:fetchAllPlagiarizedSectionApi.reducer,
+    [upcomingExamsApi.reducerPath]: upcomingExamsApi.reducer,
+    [getCountCodeSubmissionsForLastMonthApi.reducerPath]: getCountCodeSubmissionsForLastMonthApi.reducer,
+    [getAllDifficultyDataPerUserApi.reducerPath]: getAllDifficultyDataPerUserApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -119,6 +126,9 @@ export const store = configureStore({
       .concat(fetchQuestionsFromPlagiarismCheckedExamApi.middleware)
       .concat(fetchAllPlagiarizedSectionApi.middleware)
      
+      .concat(upcomingExamsApi.middleware)
+      .concat(getCountCodeSubmissionsForLastMonthApi.middleware)
+      .concat(getAllDifficultyDataPerUserApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
