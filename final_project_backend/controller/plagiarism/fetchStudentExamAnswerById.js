@@ -1,24 +1,19 @@
 const studentsExamAnswer = require("../../models/exam/studentsExamAnswer");
 
-const studentsExamDetail = require("../../models/exam/submittedExamDetail"); // Import the studentsExamDetail model
 
-const fetchStudentExamAnswerById = async (userId, questionId) => {
+const fetchStudentExamAnswerById = async (userId, questionId, examId) => {
+    // const {userId, questionId, examId} = req.params;
     try {
-        const answers = await studentsExamDetail.findAll({
+        const answers = await studentsExamAnswer.findAll({
             where: {
                 examQuestionId: questionId,
+                examId: examId,
+                UserinformationId: userId
             },
-            include: [{
-                model: studentsExamAnswer,
-                where: {
-                    
-                    UserinformationId: userId,
-
-
-                },
-            }]
+            
         });
         return  answers ;
+        // return res.status(200).json({answers});
     } catch (error) {
         console.error("Error fetching answers:", error);
         throw error;

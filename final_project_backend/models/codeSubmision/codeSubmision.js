@@ -10,7 +10,7 @@ const codeSubmision = sequelize.define("submittedCodes", {
     allowNull: false,
   },
   userCode: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false,
     defaultValue: "",
   },
