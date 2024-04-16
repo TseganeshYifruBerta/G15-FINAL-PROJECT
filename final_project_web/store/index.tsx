@@ -12,6 +12,7 @@ import addTestcaseReducer from './question-upload/add-testcase-slice'
 import addExamTestcaseReducer from './question-upload/add-exam-testcase-slice'
 import loginReducer from './login/login-slice'
 import examUploadReducer from './exam/upload-exam-slice'
+import examAnswerReducer from './exam/upload-exam-question-slice'
 import { questionApi } from "./question/get-all-questions";
 // import { getAllSubmissionsByIdApi } from "./submissions/get-all-submissions-by-id";
 import { getSubmissionDetailByIdApi } from "./submissions/get-submission-detail-by-id-api";
@@ -35,6 +36,7 @@ import studentReducer from './admin/student_slice_reducer';
 import passwordReducer from '@/store/changnepassword/slicereducer'
 
 
+
 export const store = configureStore({
   reducer: {
     form: formReducer,
@@ -48,6 +50,7 @@ export const store = configureStore({
     studentsignin: signinStudentReducer,
     questionupload: questionUploadReducer,
     examquestionupload: examQuestionUploadReducer,
+    examanswerupload:examAnswerReducer,
     login: loginReducer,
     addtestcase: addTestcaseReducer,
 

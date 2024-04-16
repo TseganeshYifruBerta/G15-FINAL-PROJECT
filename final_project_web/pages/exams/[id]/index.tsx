@@ -17,7 +17,7 @@ interface Question {
   example:string
   tag:string
   difficulty:string
-
+solution: string[]
 
 }
 const ExamDetail: React.FC<ExamDetailProps> = () => {
@@ -191,6 +191,13 @@ console.log(examdetail)
                 {selectedQuestion.example}
               </pre>
             </div>
+
+            {/* <div className="bg-gradient-to-r  from-gray-50 to-transparent rounded-lg shadow-md px-4 pt-4 pb-8">
+              <div className="font-semibold text-gray-700">Solutions:</div>
+              <pre className="ml-2 bg-primary bg-opacity-20 w-full p-3 rounded-md text-gray-800 overflow-x-auto">
+                {selectedQuestion.solution[0]}
+              </pre>
+            </div> */}
           </div>
         ) : (
           <div className="flex items-center justify-center h-full">
