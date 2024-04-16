@@ -4,7 +4,7 @@ export type ExamAnswerUploadFormData = {
   examId: string;
   userId: string;
   questionId: string;
-  submittedAnswer: string;
+  solution: string;
 };
 
 export const uploadexamanswer = async (formData: ExamAnswerUploadFormData) => {
@@ -12,7 +12,7 @@ export const uploadexamanswer = async (formData: ExamAnswerUploadFormData) => {
 
   try {
     const response = await fetch(
-      "http://localhost:5000/exam/uploadExamQuestion",
+      "http://localhost:5000/exam/submitExamAnswerByStudent",
       {
         method: "POST",
         headers: {

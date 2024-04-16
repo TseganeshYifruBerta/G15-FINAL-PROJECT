@@ -31,7 +31,7 @@ const ExamCodeEditorBox: React.FC<ExamCodeEditorBoxProps> = ({
     examId: examId,
     userId: studentId,
     questionId: questionId,
-    submittedAnswer: code,
+    solution: code,
   };
   const onSubmitAnswer = async (e:any, values: ExamAnswerUploadFormData) => {
      e.preventDefault();
@@ -51,7 +51,7 @@ const ExamCodeEditorBox: React.FC<ExamCodeEditorBoxProps> = ({
     }
   };
   return (
-    <form action={(e)=>{onSubmitAnswer(e, values)}}>
+    <form onSubmit={(e)=>{onSubmitAnswer(e, values)}}>
       <div className="overflow-y-auto py-2 bg-white">
         <button
           type="submit"

@@ -151,9 +151,6 @@ const [questionCodes, setQuestionCodes] = useState<{ [key: string]: string }>(
               examdetail.easy_questions}{" "}
           </div>
         </div>
-        <div className="mb-4">
-          Selected Sections: <span className="font-medium">1, 2</span>
-        </div>
       </Pane>
 
       <Pane className="ml-4 overflow-y-auto">
