@@ -20,7 +20,8 @@ export default function App({ Component, pageProps }: AppProps) {
 
   const isHomepage = router.pathname === "/";
   const isQuestionRelated = router.pathname.startsWith("/question")
-  return isHomepage || isQuestionRelated ? (
+  const isExamEnv = router.pathname.startsWith("/enter_exam");
+  return isHomepage || isQuestionRelated || isExamEnv ? (
     <Provider store={store}>
       <div className="flex flex-col flex-1 overflow-hidden">
         {" "}
