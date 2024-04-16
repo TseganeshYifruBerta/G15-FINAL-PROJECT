@@ -42,6 +42,11 @@ const navigations: any = {
       name: "Exams",
       icon: IoFolderOpenOutline,
     },
+    {
+      href: "/plagiarism/plagiarism",
+      name: "Plagiarism",
+      icon: IoFolderOpenOutline,
+    }
   ],
   student: [
     {

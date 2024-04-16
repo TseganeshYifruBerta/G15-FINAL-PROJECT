@@ -1,5 +1,9 @@
+import { on } from "events";
 import Link from "next/link";
 import { useState } from "react";
+import {showToast} from '../../popup' ;
+// import Plagiarism from './plagiarism';
+// import { useCheckPlagiarismByExamIdQuery } from "@/store/plagiarism/check-plagiarism-by-exam-id";
 interface AllStudentsProps {
   examTakenStudents:any[],
   examId :string
@@ -21,6 +25,9 @@ const AllExamTakenStudents: React.FC<AllStudentsProps> = ({
   ];
  
   const [searchTerm, setSearchTerm] = useState("");
+  const [showPlagiarism, setShowPlagiarism] = useState(false);
+
+// Inside the return statement
 
   const modifiedData = examTakenStudents?.map((student: any) => {
     const date = new Date(student.createdAt);
@@ -39,6 +46,33 @@ const AllExamTakenStudents: React.FC<AllStudentsProps> = ({
   const filteredStudents = modifiedData?.filter((student: any) =>
     student.fullName.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  // const onSubmit = async (examId:string ) => {
+  //   // event.preventDefault();
+    
+  //   const {
+  //     data: plagiarismResult,
+  //     isLoading,
+  //     isError,
+  // } = useCheckPlagiarismByExamIdQuery({
+  //     examId: examId,
+  // });
+
+  // if (isLoading) {
+  //     return <div>Loading...</div>;
+  // }
+  // if (isError) {
+  //     return <div>Error</div>;
+  // }
+  //   console.log("plagiarismResult",plagiarismResult)
+  //   if(plagiarismResult.error){
+  //     console.log("Error",plagiarismResult.error)
+  //   }else{
+  //     showToast( 'Plagiarism check is successful','success');
+  //   }
+    
+  //   // Proceed with authentication...
+  // };
+
 
   
   return (
@@ -70,9 +104,7 @@ const AllExamTakenStudents: React.FC<AllStudentsProps> = ({
         <div className="col-span-1 flex items-center">
           <p className="">Status</p>
         </div>
-        <div className="col-span-1 flex items-center">
-          <p className="">Section</p>
-        </div>
+        
         <div className="col-span-1 flex items-center">
           <p className="">Joined At</p>
         </div>
@@ -98,15 +130,16 @@ const AllExamTakenStudents: React.FC<AllStudentsProps> = ({
           <div className="col-span-1 flex items-center">
             <p className="text-sm text-meta-3">{student.status}</p>
           </div>
-          <div className="col-span-1 flex items-center">
-            <p className="text-sm text-meta-3">{student.SectionsOfUser[0].section}</p>
-          </div>
+         
           <div className="col-span-1 flex items-center">
             <p className=" text-black dark:text-white">{student.createdAt}</p>
           </div>
         </div>
         </Link>
+
+
       ))}
+      
     </div>
   );
 };

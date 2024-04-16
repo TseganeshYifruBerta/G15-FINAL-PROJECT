@@ -7,6 +7,7 @@ import UploadReducer from "@/store/upload/UploadSliceReducer";
 import UploadManually from "./upload/uploadmanuallyslicereducer";
 import signinStudentReducer from "./signin/student-signin-slice"
 import questionUploadReducer from "./question-upload/question-upload-slice"
+import PlagiarismCheckSliceReducer from "./plagiarism/check-plagiarism-by-exam-id-slice";
 import examQuestionUploadReducer from './exam/upload-exam-question-slice'
 import addTestcaseReducer from './question-upload/add-testcase-slice'
 import addExamTestcaseReducer from './question-upload/add-exam-testcase-slice'
@@ -32,6 +33,8 @@ import teacherReducer from './admin/teacher_slice_reducer';
 import studentReducer from './admin/student_slice_reducer';
 import { getAllQuestionsByStudentIdApi } from "./exam/examAnswer/get-all-questions-by-student-id";
 import { getExamQuestionAnswerApi } from "./exam/examAnswer/get-exam-question-answer";
+import {getAllPlagiarismCheckedExamsApi} from "./plagiarism/get-all-plagiarism-checked-exams";
+import { getAllEndedExamsApi } from "./plagiarism/get-all-ended-exams";
 export const store = configureStore({
   reducer: {
     form: formReducer,
@@ -47,6 +50,7 @@ export const store = configureStore({
     login: loginReducer,
     addtestcase: addTestcaseReducer,
     addexamtestcase: addExamTestcaseReducer,
+    checkPlagiarismByExamId: PlagiarismCheckSliceReducer,
     [getQuestionDetalApi.reducerPath]: getQuestionDetalApi.reducer,
     [questionApi.reducerPath]: questionApi.reducer,
     [getSubmissionDetailByIdApi.reducerPath]:
@@ -67,6 +71,8 @@ export const store = configureStore({
     [getWeeklyReportApi.reducerPath]: getWeeklyReportApi.reducer,
     [getTopStudentsApi.reducerPath]: getTopStudentsApi.reducer,
     [getExamQuestionAnswerApi.reducerPath]: getExamQuestionAnswerApi.reducer,
+    [getAllEndedExamsApi.reducerPath]: getAllEndedExamsApi.reducer,
+    [getAllPlagiarismCheckedExamsApi.reducerPath]: getAllPlagiarismCheckedExamsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -87,7 +93,10 @@ export const store = configureStore({
       .concat(getExamQuestionByIdApi.middleware)
       .concat(getAllExamTakenStudentsApi.middleware)
       .concat(getAllQuestionsByStudentIdApi.middleware)
-      .concat(getExamQuestionAnswerApi.middleware),
+      .concat(getExamQuestionAnswerApi.middleware)
+      .concat(getAllEndedExamsApi.middleware)
+      .concat(getAllPlagiarismCheckedExamsApi.middleware),
+     
 });
 
 export type RootState = ReturnType<typeof store.getState>;
