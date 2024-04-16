@@ -34,6 +34,8 @@ import teacherReducer from './admin/teacher_slice_reducer';
 import studentReducer from './admin/student_slice_reducer';
 
 import passwordReducer from '@/store/changnepassword/slicereducer'
+import { getAllQuestionsByStudentIdApi } from "./exam/examAnswer/get-all-questions-by-student-id";
+import { getExamQuestionAnswerApi } from "./exam/examAnswer/get-exam-question-answer";
 
 
 
