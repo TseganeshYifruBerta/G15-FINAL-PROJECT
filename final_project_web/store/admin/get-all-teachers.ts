@@ -1,28 +1,41 @@
 // src/api/teacherApi.ts
-interface Section {
+export type Section = {
+  id?: number;
   section: string;
 }
 
 export type Teacher = {
-  id:number;
-    fullName?: string;
-    userId: string;
-    email?: string;
-    SectionsOfUser?: Section[];
-    role?: string;
-    status?: string;
-  };interface TeacherApiResponse {
+  id: number;
+  fullName?: string;
+  userId: string;
+  email?: string;
+  SectionsOfUser?: Section[];
+  role?: string;
+  status?: string;
+
+  };
+  interface TeacherApiResponse {
     user: Teacher[];
   }
   
-  const getAuthToken = () => "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBVFIvMzMzMy8zMyIsImlkIjoyMiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJzZWN0aW9uIjpbXSwiaWF0IjoxNzEyMDAyMDMyfQ.6jllLz-85xHr6pNckAK8yZwF2O3V7bdwVm3cmWZwsVA";
-  
+  interface UpdateTeacherParams {
+    id: number;
+    updateData: Partial<Teacher>;
+  }
+ 
+  interface AddSectionsParams{
+    userId?: string;
+    sections: string;
+  }
+
+
+  const token = localStorage.getItem("token");
   export const fetchAllTeachers = async (): Promise<TeacherApiResponse> => {
     try {
-      const response = await fetch('http://localhost:5000/upload/fetchAllTeachers', {
+      const response = await fetch('http://localhost:5000/upload/fetchAllTeachers?_=${new Date().getTime()}', {
         method: "GET",
         headers: {
-          'Authorization': `Bearer ${getAuthToken()}`,
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
           'Content-Type': 'application/json'
         },
       });
@@ -38,36 +51,99 @@ export type Teacher = {
       throw error;
     }
   };
-  /**
-   * Updates a specific teacher's information.
-   * @param userId The unique identifier of the teacher to update.
-   * @param updateData The data to update for the teacher.
-   * @returns A promise that resolves with the updated teacher data.
-   */
- 
-  export const updateTeacher = async (id: number, updateData: Partial<Teacher>): Promise<Teacher> => {
-    console.log("updateTeacher call:", { id, updateData });
-    console.log("Attempting to update teacher with ID:", id); // Debug log
-    if (id === undefined) {
-      console.error("Undefined ID passed to updateTeacher");
-      throw new Error("Undefined ID passed to updateTeacher");
-    }
+  
+  export const updateTeacher = async ({ id, updateData}: UpdateTeacherParams):Promise<any> => {
+   
     try {
+      console.log('Sending update payload to server:', JSON.stringify(updateData)); // Debugging line
       const response = await fetch(`http://localhost:5000/upload/updateUser/${id}`, {
-        method: 'PUT', // Assuming the update operation is done via a PUT request
+        method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${getAuthToken()}`,
-          'Content-Type': 'application/json'
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(updateData),
+
+
+      });
+ 
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+ 
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('There was a problem with the update operation:', error);
+      throw error;
+    }
+  };
+ 
+  export const addSections = async ({ userId, sections }: { userId: string, sections: string }): Promise<any> => {
+    try {
+      console.log("Sending payload to server:", JSON.stringify({ userId, sections }));
+
+
+ 
+      const response = await fetch(`http://localhost:5000/upload/AddSections`, {
+        method: 'POST',
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userId, sections }),
+       
       });
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      const data: Teacher = await response.json();
-      return data;
+      const data = await response.json();
+      return data; // Assuming the backend returns the added sections
     } catch (error) {
       console.error('There was a problem with the fetch operation:', error);
       throw error;
     }
   };
+ 
+  export const deleteSection = async (sectionId: number): Promise<any> => {
+    try {
+      const response = await fetch(`http://localhost:5000/upload/DeleteSections/${sectionId}`, {
+        method: 'DELETE',
+        headers: {
+         ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('There was a problem with the delete operation:', error);
+      throw error;
+    }
+  };
+ 
+  export const deleteUser = async ( id: number): Promise<any> => {
+    try {
+     
+      const response = await fetch(`http://localhost:5000/upload/deleteUser/${id}`, {
+        method: 'DELETE',
+        headers: {
+         ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('There was a problem with the delete operation:', error);
+      throw error;
+    }
+  };
+ 
+
+
+

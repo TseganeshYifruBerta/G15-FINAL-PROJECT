@@ -41,7 +41,7 @@ const SelectDifficultyGroup: React.FC<SelectDifficultyGroupProps> = ({setSelecte
           <option value="medium" className="text-body dark:text-bodydark">
             Medium
           </option>
-          <option value="Hard" className="text-body dark:text-bodydark">
+          <option value="hard" className="text-body dark:text-bodydark">
             Hard
           </option>
         </select>

@@ -78,13 +78,20 @@ const ExamQuestionSet: React.FC<QuestionSetProps> = ({
             </div>
             <div className=" w-2/3">
               {testcases.map((testcase, testIdx) => (
-                <div className="py-2 flex bg-primary bg-opacity-20 rounded-md" key={testIdx}>
+                <div
+                  className="py-2 flex bg-primary bg-opacity-20 rounded-md"
+                  key={testIdx}
+                >
                   {/* <div className="text-xs pb-1">Testcase {index + 1}</div> */}
                   <div className="ml-2 w-1/2 rounded-md px-2 py-2">
-                    {testcase.input}
+                    {typeof testcase.input === "object"
+                      ? JSON.stringify(testcase.input)
+                      : testcase.input}
                   </div>
                   <div className="ml-2 w-1/2 rounded-md px-2 py-2">
-                    {testcase.output}
+                    {typeof testcase.output === "object"
+                      ? JSON.stringify(testcase.output)
+                      : testcase.output}
                   </div>
                 </div>
               ))}

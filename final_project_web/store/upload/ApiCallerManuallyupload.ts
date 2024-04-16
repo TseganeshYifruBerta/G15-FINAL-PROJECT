@@ -3,15 +3,14 @@ export type UploadFormData = {
     fullName?: string;
     userId?: string;
     email?: string;
-    section?: string;
+    section?: string[];
     role?: string;
     status?: string;
   };
   
   
   export const UploadManually = async (formData:UploadFormData) => {
-    const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlkIjoxLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInNlY3Rpb24iOltdLCJpYXQiOjE3MTEzOTY4Njh9.0LlDEKQCidCQEn_zoOnFo_89zON7QPmDhlNW7GWDtOw";
+     const token = localStorage.getItem("token");
 
     try {
       const response = await fetch("http://localhost:5000/upload/inputUserDataUploader", {
