@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { TEInput, TERipple } from "tw-elements-react";
@@ -86,8 +87,14 @@ export default function SignInSide() {
       userId: data.get("id") as string,
       password: data.get("password") as string,
     };
-    await login(values);
-    router.push("/home/home");
+    const response = await login(values);
+    console.log(response, "response");
+    const token = response.token;
+   
+        const decodedToken = jwt.decode(token);
+       
+    const role = decodedToken.role;
+    router.push(`/${role}/dashboard`);
     // Proceed with authentication...
   };
 

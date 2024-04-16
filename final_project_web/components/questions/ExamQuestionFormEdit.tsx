@@ -293,7 +293,12 @@ const [solution, setSolution] = useState<Array<{ content: string }>>(EditedSolut
                             type="text"
                             required
                             placeholder={`testcase input ${index + 1}`}
-                            value={testCase.input}
+                            value={
+                              // typeof testCase.input === "object"
+                              //   ? JSON.stringify(testCase.input[0])
+                              //   : testCase.input
+                              testCase.input
+                            }
                             onChange={(e) => {
                               const updatedTestCases = testCases.map(
                                 (testCase, testCaseIndex) => {
@@ -318,7 +323,15 @@ const [solution, setSolution] = useState<Array<{ content: string }>>(EditedSolut
                             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                             type="text"
                             required
-                            value={testCase.output}
+                            value={
+                              //   `
+                              // '${
+                              //   typeof testCase.output === "object"
+                              //     ? JSON.stringify(testCase.output[0])
+                              //     : testCase.output
+                              // }'`
+                              testCase.output
+                            }
                             onChange={(e) => {
                               // Create a new array with updated objects
                               const updatedTestCases = testCases.map(

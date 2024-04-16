@@ -1,32 +1,26 @@
-import React, { useEffect } from "react";
-import { Field, reduxForm, InjectedFormProps, reset } from "redux-form";
-import { Student, updateStudent } from "@/store/admin/get-all-students"; // Import the updateStudent function
-import {
-  FaEnvelope,
-  FaIdBadge,
-  FaToggleOn,
-  FaUser,
-  FaUserTag,
-  FaUsers,
-} from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { Field, reduxForm, InjectedFormProps, reset, FieldArray } from "redux-form";
+import { Student, updateStudent,Section,fetchAllStudents, addSections, deleteSection } from "@/store/admin/get-all-students"; // Import the updateStudent function
+import {FaEnvelope,FaIdBadge,FaPlus,FaToggleOn,FaTrash,FaUser,FaUserTag,FaUsers,} from "react-icons/fa";
 import { useDispatch } from "react-redux";
-
 import { showToast } from "@/components/popup";
-
+import { TiTick } from "react-icons/ti";
+import { AiOutlineClose } from 'react-icons/ai';
 interface OwnProps {
   student: Student;
   onClose: () => void;
-  onSave: (student: Student) => void;
+  onSave: (updatedStudent: Student) => void;
 }
 
+
+
 interface FormStudent extends Omit<Student, "SectionsOfUser"> {
-  SectionsOfUser: string; // Treat SectionsOfUser as a string for the form
+  NewSections: Section[];
+  SectionsOfUser: Array<{ id?: number; section: string }>;
 }
 
 // This interface now correctly extends InjectedFormProps, defining the form's value type and the component's own props.
-interface FormProps
-  extends InjectedFormProps<FormStudent, OwnProps>,
-    OwnProps {}
+interface FormProps extends InjectedFormProps<FormStudent, OwnProps>, OwnProps {}
 const validate = (
   values: FormStudent
 ): Partial<Record<keyof FormStudent, string>> => {
@@ -104,47 +98,194 @@ const renderField = ({
   </div>
 );
 
+
 export const EditStudentPopup: React.FC<FormProps> = (props) => {
   const { handleSubmit, student, onClose, onSave, initialize } = props;
   const dispatch = useDispatch(); // Use useDispatch to get the dispatch function
+  const [sectionsToDelete, setSectionsToDelete] = useState<number[]>([]);
+  const [sections, setSections] = useState(student.SectionsOfUser || []);
+  const [students, setStudents] = useState<Student[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(''); 
+ 
+  const getStudents = async () => {
+    setIsLoading(true);
+    setError('');
+    try {
+      const response = await fetchAllStudents();
+      if (response.user) {
+        console.log(response.user); // After fetchAllStudents call
+        
+       setStudents(response.user);
+console.log(students); // This might not log updated state immediately due to setState being asynchronous
 
+      } else {
+        console.error('Error: response does not have a user property', response);
+        setError('Failed to load students due to unexpected data format.');
+      }
+    } catch (error) {
+      console.error('Error fetching students:', error);
+      setError('Failed to load students.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const handlePopupClose = () => {
     dispatch(reset("editStudent")); // Dispatch the reset action with your form name
     onClose(); // Then call the onClose prop to close the popup
   };
+  
+  useEffect(() => {
+    initialize({ ...student, SectionsOfUser: student.SectionsOfUser ?? [],NewSections: []  });
+  }, [student, initialize]);
 
-  // Define onSubmit within the component to use closure variables
-  const onSubmit = async (values: FormStudent) => {
-    console.log("Test submission with values:", values);
-    const { id } = props.student; // Directly using the ID from props
-
-    if (!id) {
-      showToast("Error: Undefined student ID.", "error");
-      console.error("Student ID is undefined.");
-      return; // Exit if ID is undefined
-    }
-
-    const submissionValues: Partial<Student> = {
-      ...values,
-      SectionsOfUser: values.SectionsOfUser.split(", ").map((sectionStr) => ({
-        section: sectionStr.trim(),
-      })),
-    };
-    console.log("Sending updateData to server:", submissionValues);
-
+  const handleDeleteSection = async (sectionId: number) => {
+   
     try {
-      const updatedStudent = await updateStudent(id, submissionValues);
-      console.log("Updated student from server:", updatedStudent);
-
-      showToast("Student updated successfully", "success");
-      props.onSave({ ...props.student, ...submissionValues, id });
-      props.onClose();
+      const response = await deleteSection(sectionId);
+      showToast(`Section ${sectionId} deleted successfully`, "success");
+      const updatedSections = sections.filter(sec => sec.id !== sectionId);
+      setSections(updatedSections);
+      console.log("svdiluCWEVFUI",updatedSections)
+    initialize({ ...student, SectionsOfUser: updatedSections });
+    onSave(response)
+    await getStudents();
     } catch (error) {
-      showToast("Update error: " + (error as Error).message, "error");
-      console.error("Update error:", error);
+      showToast("Error deleting section: " + (error as Error).message, "error");
+      console.error("Error deleting section:", error);
     }
   };
+  
 
+  const handleAddSection = async (sectionInput: { section: string }) => {
+    const section = sectionInput.section;
+      const userId = student.id.toString();
+   
+      
+     
+     
+      try {
+        console.log("Adding section:", section);  // Debug: Log the section being added
+        const response = await addSections({ userId, sections: section });
+        console.log("API response:", response);  // Debug: Log the complete API response
+        showToast("Section added successfully", "success");
+        // Check if 'sections' is present and has at least one item
+        if (response && response.sections && response.sections.length > 0) {
+          console.log("Response section:", response.sections);  // Debug: Log the response section
+    
+          const newSections = [...sections, ...response.sections];
+          setSections(newSections);  // Update the state to reflect the newly added sections
+          console.log('Updated sections:', newSections);  // Debug: Log the new sections array
+    
+          initialize({ ...student, SectionsOfUser: newSections });
+          onSave(response);  // Update the local state to reflect the changes
+          
+        } else {
+          console.error("No sections in response or empty sections array:", response);  // Error handling: Log if no sections
+        }
+
+    } catch (error) {
+      showToast("Error adding section: " + (error as Error).message, "error");
+      console.error("Error adding section:", error);
+    }
+  };
+  
+  
+  useEffect(() => {
+    getStudents();
+  }, [sections]);
+  
+interface RenderSectionsProps {
+  fields: any;  // Depending on your setup, you might want to define a more specific type
+  meta: {
+    error: string;
+    submitFailed: boolean;
+  };
+}
+
+  // Adjusted RenderSections component to use handleDeleteSection and handleAddSection
+  const RenderSections: React.FC<any> = ({ fields, meta: { error, submitFailed } }) => (
+    <>
+      <button type="button" onClick={() => fields.push({})} className="flex w-35 items-center bg-[#7983FB] bg-opacity-30 text-[#7983FB] hover:bg-[#7983FB] hover:bg-opacity-60  font-bold py-2 px-2 rounded-xl  mb-4">
+        <FaPlus className="mr-2" />Add Section
+      </button>
+      {fields.map((section:string, index:number) => (
+        <div key={index} className="flex items-center space-x-2">
+          <Field name={`${section}.id`} type="hidden" component="input" />
+          <Field name={`${section}.section`} type="number" component="input" placeholder="Section" parse={(value: string) => Number(value)} className="p-2 border rounded" />
+          <button type="button" className="p-3 text-green-600 bg-green-50 hover:bg-green-100 rounded-full" onClick={() => handleAddSection(fields.get(index) )} >
+    <TiTick />
+</button>
+
+          
+        </div>
+      ))}
+    </>
+  );
+  const RenderSections2: React.FC<any> = ({ fields, meta: { error, submitFailed } }) => (
+    <>
+     
+      {fields.map((section:string, index:number) => (
+        <div key={index} className="flex items-center space-x-2">
+           <Field name={`${section}.section`} type="number" component="input" placeholder="Section" className="p-2 border rounded" readOnly />
+          <button type="button" className="p-3 text-red-600 bg-red-50 hover:bg-red-100 rounded-full" onClick={() => handleDeleteSection(fields.get(index).id)}>
+            <FaTrash />
+          </button>
+        </div>
+      ))}
+    </>
+  );
+  const RenderSections3: React.FC<any> = ({ fields, meta: { error, submitFailed } }) => (
+    <>
+     
+      {fields.map((section:string, index:number) => (
+        <div key={index} className="flex items-center space-x-2">
+           <Field name={`${section}.section`} type="number" component="input" placeholder="Section" className="p-2 border rounded" />
+          
+        </div>
+      ))}
+    </>
+  );
+
+
+  // Define onSubmit within the component to use closure variables
+  const onSubmit = async (formValues:FormStudent) => {
+    // Destructure formValues to separate sections from other data
+    const { SectionsOfUser, ...studentData } = formValues;
+
+    // Assuming SectionsOfUser might already be in the correct format or just needs filtering out undefined ids
+    const sectionsTransformed = SectionsOfUser.map(section => ({
+      ...(section.id && { id: section.id.toString() }),// Convert id to string, handle undefined safely
+        section: section.section,
+    }));
+
+    const finalPayload = {
+        
+        fullName: studentData.fullName,
+        email: studentData.email,
+        userId: studentData.userId,
+        role: studentData.role,
+        status: studentData.status,
+        sections: sectionsTransformed,
+    };
+
+    console.log("Final payload being sent to server:", JSON.stringify(finalPayload));
+
+    try {
+        // Replace `updateStudent` with the actual function call to your API
+        const response = await updateStudent({ id: studentData.id, updateData: finalPayload });
+        console.log("Update response:", response);
+        showToast("Updated successfully", "success");
+        onSave(response); // Assuming this is how you update the local state to reflect the changes
+      await getStudents();
+    } catch (error) {
+        console.error("Error updating student:", error);
+        showToast("Error updating student: " + (error as Error).message, "error");
+    }
+};
+
+
+  
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-md flex justify-center items-center"
@@ -154,7 +295,16 @@ export const EditStudentPopup: React.FC<FormProps> = (props) => {
         className="relative w-full max-w-2xl mx-auto bg-white rounded-xl shadow-2xl p-6 md:p-8 lg:p-12 transform transition-all"
         onClick={(e) => e.stopPropagation()}
       >
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+         <button
+              type="button"
+              onClick={handlePopupClose}
+              className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
+              >
+                  <AiOutlineClose size={24} />
+            </button>
+        <div className="flex flex-row gap-10">
+          
+        <form onSubmit={handleSubmit(onSubmit)} className="w-1/2">
           <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">
             Edit User
           </h2>
@@ -180,19 +330,8 @@ export const EditStudentPopup: React.FC<FormProps> = (props) => {
               placeholder={student.email || "User ID"}
               iconName={FaEnvelope}
             />
-            <Field
-              name="SectionsOfUser"
-              component={renderField}
-              type="text"
-              placeholder={
-                student.SectionsOfUser?.map((section) => section.section).join(
-                  ", "
-                ) ||
-                "" ||
-                "Section"
-              }
-              iconName={FaUsers}
-            />
+            <p className="flex items-center"><FaUsers className="text-xl text-gray-700 mr-2"/>Section</p>
+            <FieldArray name="SectionsOfUser" component={RenderSections3}  />
             <Field
               name="role"
               component={renderField}
@@ -206,28 +345,10 @@ export const EditStudentPopup: React.FC<FormProps> = (props) => {
               <option value="teacher">Teacher</option>
               <option value="student">Student</option>
             </Field>
-            <Field
-              name="status"
-              component={renderField}
-              type="select"
-              iconName={FaToggleOn}
-              placeholder={student.status || "Status"}
-            >
-              <option value="" disabled>
-                Select a status...
-              </option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </Field>
+            
           </div>
           <div className="flex justify-end space-x-4">
-            <button
-              type="button"
-              className="btn btn-outline btn-error border-2 border-[#7983FB] rounded-xl hover:bg-[#919AF3] text-black py-2 px-4"
-              onClick={handlePopupClose}
-            >
-              Cancel
-            </button>
+           
             <button
               type="submit"
               className="btn bg-[#7983FB] border-2 hover:bg-[#919AF3] text-white py-2 px-4 rounded-xl font-bold"
@@ -236,6 +357,23 @@ export const EditStudentPopup: React.FC<FormProps> = (props) => {
             </button>
           </div>
         </form>
+        <div className="w-1/2  ">
+        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6 mt-2">
+           Add Section
+          </h2>
+        <FieldArray name="NewSections" component={RenderSections} props={{ sections, setSections }} />
+        
+        
+        <div className="mb-4">
+
+        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6 mt-2">
+            Delete Section
+          </h2>
+        <FieldArray name="SectionsOfUser" component={RenderSections2} props={{ sectionsToDelete, setSectionsToDelete }} />
+        </div>
+        </div>
+        </div>
+        
       </div>
     </div>
   );
@@ -244,5 +382,5 @@ export const EditStudentPopup: React.FC<FormProps> = (props) => {
 export default reduxForm<FormStudent, OwnProps>({
   form: "editStudent",
   validate,
-  enableReinitialize: true,
+  
 })(EditStudentPopup);

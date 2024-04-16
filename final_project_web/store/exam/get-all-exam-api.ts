@@ -51,7 +51,6 @@ export const getAllExamsApi = createApi({
       },
     }),
     deleteExamQuestion: builder.mutation({
-      
       query: (questionId) => {
         console.log(questionId, "questionId");
         const token = localStorage.getItem("token");
@@ -62,7 +61,32 @@ export const getAllExamsApi = createApi({
         };
       },
     }),
+
+    updateExam: builder.mutation({
+      query: (question) => {
+        const token = localStorage.getItem("token");
+        const userId = jwt.decode(token).id;
+        const examId = question.examId
+        return {
+          url: `http://localhost:5000/exam/updateExam/${userId}/${examId}`, // Assuming the question object has an 'id' property
+          method: "PUT",
+          body: question,
+        };
+      },
+    }),
+
+    deleteExam: builder.mutation({
+      query: (questionId) => {
+        console.log(questionId, "questionId");
+        const token = localStorage.getItem("token");
+        const userId = jwt.decode(token).id;
+        return {
+          url: `http://localhost:5000/exam/deleteExam/${userId}/${questionId}`,
+          method: "DELETE",
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetAllExamsQuery, useGetAllExamListQuery, useDeleteExamQuestionMutation, useUpdateExamQuestionMutation } = getAllExamsApi;
+export const { useGetAllExamsQuery, useGetAllExamListQuery, useDeleteExamQuestionMutation, useUpdateExamQuestionMutation, useDeleteExamMutation, useUpdateExamMutation } = getAllExamsApi;
