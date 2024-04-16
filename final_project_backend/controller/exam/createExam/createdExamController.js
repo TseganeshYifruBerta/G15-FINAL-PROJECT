@@ -78,11 +78,6 @@ const createExam = async (req, res) => {
    
          })
 
-
-
-
-
-
         async function selectQuestionsByDifficulty(difficultyCount) {
         //   // Fetch all questions for each difficulty level
           const questionsByDifficulty = {

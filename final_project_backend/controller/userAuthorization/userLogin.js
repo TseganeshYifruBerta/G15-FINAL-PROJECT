@@ -45,9 +45,11 @@ const login = async (req, res) => {
         process.env.ACCESS_TOKEN_SECRET, 
     );
     const decodedToken = jwt.decode(token);
+    const role = decodedToken.role;
+    const fullName = user.fullName;
     console.log("decodedToken",decodedToken)
   
-    res.json({ token });
+    res.json({ token , role,fullName });
 
 }
 

@@ -1,15 +1,17 @@
 const sequelize  = require("../../../database/sequelize");
 const SelectedQuestionForExam = require("../../../models/exam/SelectedQuestionForExam");
 const studentsExamAnswer = require("../../../models/exam/studentsExamAnswer");
-const studentsExamDetail = require("../../../models/exam/submittedExamDetail");
+
 const Exam = require("../../../models/exam/createExam");
 const User = require("../../../models/auth/user.model");
 
 const submitExamAnswerByStudent = async (req, res) => {
-  const { examId, userId, questionAndSolution } = req.body;
+  const { examId, userId, questionId , solution} = req.body;
+  // let id = req.user
   const t = await sequelize.transaction();
 
   try {
+
     const examFound = await Exam.findOne({ where: { id: examId } }, { transaction: t });
     const userFound = await User.findOne({ where: { id: userId } }, { transaction: t });
     if (!examFound || !userFound) {
@@ -17,33 +19,28 @@ const submitExamAnswerByStudent = async (req, res) => {
       return res.status(404).json({ message: "Exam or user not found" });
     }
 
-    const studentsExamAnswers = await studentsExamAnswer.create({
-      examId,
-      UserinformationId: userId,
-    }, { transaction: t });
+
 
     let errors = [];
-    const questionAndSolutions = (await Promise.all(
-      questionAndSolution.map(async (item) => {
-        const { questionId, submittedAnswer } = item;
-        const questionExists = await SelectedQuestionForExam.findOne({
-          where: { examId, question_ids: questionId },
-          transaction: t
-        });
+    const questionExists = await SelectedQuestionForExam.findOne({
+      where: { examId, question_ids: questionId },
+      transaction: t
+    });
 
-        if (!questionExists) {
-          errors.push(`Question ID ${questionId} not found in exam`);
-          return null;
-        } else {
-          return studentsExamDetail.create({
-            examQuestionId: questionId,
-            submittedAnswer,
-            studentsExamAnswerId: studentsExamAnswers.id,
-          }, { transaction: t });
-        }
-      })
-    )).filter(item => item !== null); // Filter out the nulls
-
+    if (!questionExists) {
+      errors.push(`Question ID ${questionId} not found in exam`);
+      await t.rollback();
+      return res.status(400).json({ message: `Question ID ${questionId} not found in exam`});
+   
+    } else {
+      var answer = await studentsExamAnswer.create({
+        examQuestionId: questionId,
+        submittedAnswer:solution,
+        examId:examId,
+        UserinformationId: userId,
+      }, { transaction: t });
+    }
+      
     if (errors.length > 0) {
       await t.rollback();
       return res.status(400).json({ message: "Some questions not found in the exam", errors });
@@ -53,8 +50,8 @@ const submitExamAnswerByStudent = async (req, res) => {
     res.status(201).json({
       message: "Questions and answers submitted successfully",
       details: {
-        ExamAndUser: studentsExamAnswers,
-        QuestionAndAnswer: questionAndSolutions,
+        
+       answer,
       },
     });
   } catch (error) {
