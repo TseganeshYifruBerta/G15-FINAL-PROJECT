@@ -187,7 +187,80 @@ const countAcceptedSubmissionsOfUserBySection = async (req, res) => {
 
 }
 
+const countAcceptedSubmissionperDifficulty = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const easyCount = await codeSubmision.count({
+      where: {
+        userId: id,
+      },
+      include: [
+        {
+          model: Status,
+          where: {
+            status: 'Accepted',
+          },
+
+        },
+        {
+          model: Question,
+          where: {
+            difficulty: 'Easy',
+          },
+        },
+      ],
+    });
+
+    const mediumCount = await codeSubmision.count({
+      where: {
+        userId: id,
+      },
+      include: [
+        {
+          model: Status,
+          where: {
+            status: 'Accepted',
+          },
+        },
+        {
+          model: Question,
+          where: {
+            difficulty: 'Medium',
+          },
+        },
+      ],
+    });
+
+    const hardCount = await codeSubmision.count({
+      where: {
+        userId: id,
+      },
+      include: [
+        {
+          model: Status,
+          where: {
+            status: 'Accepted',
+          },
+        },
+        {
+          model: Question,
+          where: {
+            difficulty: 'Hard',
+          },
+        },
+      ],
+    });
+
+    return res.status(200).json({ easyCount, mediumCount, hardCount });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
 module.exports = {
+  countAcceptedSubmissionperDifficulty,
   fetchingAllAcceptedSubmittedQuestionsPerUser,
   fetchingDetailForAcceptedSubmittedQuestion,
   countAcceptedSubmissionsPerUser,
