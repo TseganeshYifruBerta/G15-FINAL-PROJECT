@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 import ExamCodeEditorBox from "@/components/codeeditor/ExamCodeEditorBox";
+import { showToast } from "@/components/popup";
 import { useGetExamByIdQuery } from "@/store/exam/get-all-exam-by-id";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -19,30 +20,72 @@ interface Question {
   id: string;
 }
 const ExamDetail: React.FC<ExamDetailProps> = () => {
+  const [timeLeft, setTimeLeft] = useState({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+  const [examDuration, setExamDuration] = useState(0);
+
   const router = useRouter();
-const [studentId, setStudentId] = useState<string>("");
+  const [studentId, setStudentId] = useState<string>("");
   const examId = router.query.examId as string;
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
     null
   );
-const [questionCodes, setQuestionCodes] = useState<{ [key: string]: string }>(
-  {}
-);
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const decodedToken = jwt.decode(token);
-      const userId = decodedToken?.id; 
-      setStudentId(userId);
-    } else {
-      router.push("/login");
-    }
-  }, []);
+  const [questionCodes, setQuestionCodes] = useState<{ [key: string]: string }>(
+    {}
+  );
+
   const handleViewQuestion = (question: Question) => {
     setSelectedQuestion(question);
   };
 
   const { data, isLoading, isError } = useGetExamByIdQuery({ examId: examId });
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = jwt.decode(token);
+      const userId = decodedToken?.id;
+      setStudentId(userId);
+    } else {
+      router.push("/login");
+    }
+  }, []);
+  useEffect(() => {
+    if (data?.response) {
+      setExamDuration(data.response.duration); // Set duration from fetched data
+    }
+  }, [data]); // Reacts to changes in 'data'
+
+  useEffect(() => {
+    let totalSeconds = examDuration * 60;
+
+    const timerInterval = setInterval(() => {
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      setTimeLeft({ hours, minutes, seconds });
+
+      if (totalSeconds > 0) {
+        totalSeconds--;
+      } else {
+        clearInterval(timerInterval);
+        // Redirect to another page, for example, to a results or confirmation page
+        showToast(
+          "Time's up! Your exam has been submitted successfully.",
+          "success"
+        );
+        router.push("/enter_exam/exam-completed"); // Change '/exam-completed' to the URL you want to redirect to
+        // If you want to close the page instead, you can use window.close();
+        // window.close(); // Note: Modern browsers restrict this to being effective only on windows that were opened by a script
+      }
+    }, 1000);
+
+    return () => clearInterval(timerInterval);
+  }, [examDuration, router]); // Add router to the dependency array if using Next.js router for redirection
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -53,39 +96,45 @@ const [questionCodes, setQuestionCodes] = useState<{ [key: string]: string }>(
 
   const examdetail = data.response;
   console.log(examdetail);
- const QuestionAnswers = () => {
-   const temp: { [key: string]: JSX.Element } = {};
-   for (let i = 0; i < examdetail.questions.length; i++) {
-     const question: any = examdetail.questions[i];
-     temp[question.id] = (
-       <ExamCodeEditorBox
-         key={question.id}
-         code={
-           questionCodes[question.id] ||
-           "# Write your code here\nprint('Hello, World!')\n"
-         }
-         onChange={(newCode: any) => {
-           setQuestionCodes((prev) => ({
-             ...prev,
-             [question.id]: newCode,
-           }));
-         }}
-         examId={examId}
-         questionId={question.id}
-         studentId={studentId}
-       />
-     );
-   }
-   return temp;
- };
-
-    console.log(QuestionAnswers(), "selectedQuestion");
+  const QuestionAnswers = () => {
+    const temp: { [key: string]: JSX.Element } = {};
+    for (let i = 0; i < examdetail.questions.length; i++) {
+      const question: any = examdetail.questions[i];
+      temp[question.id] = (
+        <ExamCodeEditorBox
+          key={question.id}
+          code={
+            questionCodes[question.id] ||
+            "# Write your code here\nprint('Hello, World!')\n"
+          }
+          onChange={(newCode: any) => {
+            setQuestionCodes((prev) => ({
+              ...prev,
+              [question.id]: newCode,
+            }));
+          }}
+          examId={examId}
+          questionId={question.id}
+          studentId={studentId}
+        />
+      );
+    }
+    return temp;
+  };
+const MemoizedSplitPane = React.memo(SplitPane);
+  console.log(QuestionAnswers(), "selectedQuestion");
   return (
     <SplitPane
       className=" rounded-md bg-white px-5 pb-5 shadow-lg dark:border-strokedark dark:bg-boxdark w-full "
       split="vertical"
     >
       <Pane className="border-r-4 text-sm bg-white shadow-md rounded-lg p-4">
+        <div className="mb-4 border-2 border-primary w-[180px] p-2 m-2 rounded-md">
+          Timer:{" "}
+          <span className="font-semibold">
+            {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
+          </span>
+        </div>
         <div className="text-2xl font-bold mb-6">{examdetail.title}</div>
         <div className="mb-4">
           Date and Time:{" "}
@@ -149,6 +198,24 @@ const [questionCodes, setQuestionCodes] = useState<{ [key: string]: string }>(
             {examdetail.hard_questions +
               examdetail.medium_questions +
               examdetail.easy_questions}{" "}
+          </div>
+        </div>
+        <div className="mb-4 justify-end flex">
+          <div>
+            <div>
+              <button className="bg-primary p-2 rounded-md text-white" onClick={()=>{
+                showToast(
+                  "Your exam has been submitted successfully.",
+                  "success"
+                );
+                router.push("/enter_exam/exam-completed");
+              }}>
+                End Exam
+              </button>
+            </div>
+            <div className="text-blue-400 underline">
+              finished exam ? end it here.
+            </div>
           </div>
         </div>
       </Pane>
