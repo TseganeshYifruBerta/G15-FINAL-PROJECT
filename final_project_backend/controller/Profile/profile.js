@@ -56,12 +56,12 @@ const createProfile  = async (req, res) =>  {
 const getProfile = async (req, res) => {
     const { id } = req.params;
     try {
-        const user
-            = await User.findOne({where: {userId: id}});
-        if(!user){
-            return res.status(404).json({message: "User not found"});
-        }
-        const profile = await UserProfile.findOne({where: {userId: id}});
+        // const user
+        //     = await User.findOne({where: {userId: id}});
+        // if(!user){
+        //     return res.status(404).json({message: "User not found"});
+        // }
+        const profile = await UserProfile.findOne({where: {id: id}});
 
         if(!profile){
             return res.status(404).json({message: "Profile not found"});
@@ -81,11 +81,11 @@ const updateProfile = async (req, res) => {
     
     try {
         const
-        user = await User.findOne({where: {userId: id}});
+        user = await User.findOne({where: {id: id}});
         if(!user){
             return res.status(404).json({message: "User not found"});
         }
-        const profile = await UserProfile.findOne({where: {userId: id}});
+        const profile = await UserProfile.findOne({where: {id: id}});
         if(!profile){
             return res.status(404).json({message: "Profile not found"});
         }

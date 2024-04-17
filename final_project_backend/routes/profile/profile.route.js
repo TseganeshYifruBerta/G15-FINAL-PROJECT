@@ -4,10 +4,9 @@ const userProfile = express.Router();
 
 const {createProfile, getProfile, updateProfile} = require("../../controller/Profile/profile");
 
-rofile
 userProfile.post("/CreateUserProfile/:id",createProfile);
-userProfile.get("/userProfile",getProfile);
-userProfile.get("/updateUserProfile/:id",updateProfile);
+userProfile.get("/getUserProfile/:id",getProfile);
+userProfile.put("/updateUserProfile/:id",updateProfile);
 
 
 module.exports = userProfile;
