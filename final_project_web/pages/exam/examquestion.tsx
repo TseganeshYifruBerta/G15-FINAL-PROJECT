@@ -1,5 +1,4 @@
-import CodeEditorBox from "@/components/codeeditor/CodeEditorBox.1";
-// import CodeSubmission from "@/components/codeeditor/CodeSubmission";
+import CodeEditorBox from "@/components/codeeditor/CodeEditorBox";
 import Submissions from "@/components/codeeditor/Submissions";
 import QuestionSet from "@/components/questions/QuestionSet";
 import { useGetQuestionDetailsQuery } from "@/store/question/get-questionById-api";
@@ -42,8 +41,7 @@ const QuestionById: React.FC = () => {
         <QuestionSet
           questionTitle={title}
           questionDescription={description}
-          questionExample={example}
-        />
+          questionExample={example} difficulty={""} questionId={""}        />
       </div>
       <div className="flex w-1/2 flex-col">
         <CodeEditorBox
