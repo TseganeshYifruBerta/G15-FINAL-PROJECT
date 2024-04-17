@@ -190,28 +190,7 @@ const countAcceptedSubmissionsOfUserBySection = async (req, res) => {
 const countAcceptedSubmissionperDifficulty = async (req, res) => {
   const { id } = req.params;
   try {
-    const easyCount = await codeSubmision.count({
-      where: {
-        userId: id,
-      },
-      include: [
-        {
-          model: Status,
-          where: {
-            status: 'Accepted',
-          },
-
-        },
-        {
-          model: Question,
-          where: {
-            difficulty: 'Easy',
-          },
-        },
-      ],
-    });
-
-    const mediumCount = await codeSubmision.count({
+    const acceptedSubmissions = await codeSubmision.findAll({
       where: {
         userId: id,
       },
@@ -222,41 +201,38 @@ const countAcceptedSubmissionperDifficulty = async (req, res) => {
             status: 'Accepted',
           },
         },
-        {
-          model: Question,
-          where: {
-            difficulty: 'Medium',
-          },
-        },
       ],
     });
 
-    const hardCount = await codeSubmision.count({
-      where: {
-        userId: id,
-      },
-      include: [
-        {
-          model: Status,
-          where: {
-            status: 'Accepted',
-          },
+    let easyCount = 0;
+    let mediumCount = 0;
+    let hardCount = 0;
+    for (const submission of acceptedSubmissions) {
+      const question = await Question.findOne({
+        where: {
+          id: submission.questionId,
         },
-        {
-          model: Question,
-          where: {
-            difficulty: 'Hard',
-          },
-        },
-      ],
-    });
-
+      });
+      if (question.difficulty === 'Easy') {
+        easyCount++;
+      }
+      if (question.difficulty === 'Medium') {
+        mediumCount++;
+      }
+      if (question.difficulty === 'Hard') {
+        hardCount++;
+      }
+    }
     return res.status(200).json({ easyCount, mediumCount, hardCount });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ error: "Internal Server Error" });
   }
-};
+    catch (error) {
+      console.log(error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+
+    
+
 
 
 module.exports = {
