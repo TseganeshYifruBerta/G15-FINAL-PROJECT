@@ -54,7 +54,7 @@ const ExamList: React.FC = () => {
             </div>
           </div>
           {allexamlist?.exams.map((exam: any, key: any) => (
-            <Link href={""}>
+            <Link href={""} key={exam.id}>
               <div
                 className="border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 text-xs"
                 key={key}

@@ -39,7 +39,7 @@ const TopSovedQuestions: React.FC = () => {
       ) : (
         <div className="w-full">
           {topsolved?.combinedResults.map((question: any, key: any) => (
-            <Link href={""}>
+            <Link href={""} key={question.id}>
               <div
                 className="border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5"
                 key={key}

@@ -1,7 +1,7 @@
 import ExamForm from "@/components/questions/ExamForm";
 import React from "react";
 
-function create_exam_question() {
+function CreateExamQuestion() {
   return (
     <div>
       <ExamForm />
@@ -9,4 +9,4 @@ function create_exam_question() {
   );
 }
 
-export default create_exam_question;
+export default CreateExamQuestion;
