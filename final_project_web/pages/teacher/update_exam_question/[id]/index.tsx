@@ -3,7 +3,7 @@ import { useGetExamQuestionByIdQuery } from '@/store/exam/get-all-exam-by-id';
 import { useRouter } from 'next/router';
 import React from 'react'
 
-function update_exam_question() {
+function UpdateExamQuestion() {
     const router = useRouter();
     const questionId = router.query.id as string;
 console.log(questionId, "questionId")
@@ -37,4 +37,4 @@ console.log(questionId, "questionId")
   );
 }
 
-export default update_exam_question
+export default UpdateExamQuestion;
