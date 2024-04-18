@@ -135,8 +135,7 @@ export default function SignInSide() {
                       color={`${idError ? "red" : "black"}`}
                       onChange={(e) => {
                         setId(e.target.value);
-                      }}
-                    />
+                      } } onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                    />
 
                     {idError && (
                       <p className="text-red-500 text-xs italic">{idError}</p>
@@ -154,8 +153,7 @@ export default function SignInSide() {
                       value={passwordd}
                       onChange={(e) => {
                         setPassword(e.target.value);
-                      }}
-                    />
+                      } } onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                    />
                     {passwordError && (
                       <p className="text-red-500 text-xs italic">
                         {passwordError}

@@ -6,7 +6,7 @@ import {
 import { useRouter } from "next/router";
 import React from "react";
 
-function update_question() {
+function UpdateQuestion() {
   const router = useRouter();
   const questionId = router.query.id as string;
 
@@ -38,4 +38,4 @@ function update_question() {
   );
 }
 
-export default update_question;
+export default UpdateQuestion;

@@ -1,12 +1,9 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
-// import {store} from "@/store";
-import Navigation from "@/components/layout/Navigation";
 import { store } from "@/store";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import SideNavbar from "@/components/sidebar/SideNavBar";
 import Header from "@/components/components/Header";
 import { useState } from "react";
 import SideNavigationBar from "@/components/sidebar/SideNavigationBar";
