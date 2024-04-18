@@ -14,13 +14,13 @@ const UserProfile = sequelize.define("UserProfileinformation", {
     type: DataTypes.STRING,
   },
   
-  linkdien:{
+  linkedin:{
     type: DataTypes.STRING,
   },
   github:{
     type: DataTypes.STRING,
   },
-  phoneNo:{
+  phoneNumber:{
     type: DataTypes.STRING,
   },
   telegramUsername:{    
@@ -32,10 +32,10 @@ const UserProfile = sequelize.define("UserProfileinformation", {
   department:{
     type: DataTypes.STRING,
   },
-  shortbio:{
+  shortBio:{
     type: DataTypes.TEXT,
   },
-  photo:{
+  photoUrl:{
     type: DataTypes.STRING,
   },
   userId: {
@@ -47,9 +47,7 @@ const UserProfile = sequelize.define("UserProfileinformation", {
 
 }); 
 
-UserProfile.hasMany(Section, { as: "SectionsOfUser" });
 
-Section.belongsTo(UserProfile);
 
 module.exports = UserProfile;
 
