@@ -9,7 +9,7 @@ const createProfile  = async (req, res) =>  {
     const{ id} = req.params;
     const { 
         university, 
-        linkdien,
+        linkedin,
          github, 
          phoneNumber,
           telegramUsername, 
@@ -34,7 +34,7 @@ const createProfile  = async (req, res) =>  {
         email,
         userId,
         university,
-        linkdien,
+        linkedin,
         github,
         phoneNumber,
         telegramUsername,
