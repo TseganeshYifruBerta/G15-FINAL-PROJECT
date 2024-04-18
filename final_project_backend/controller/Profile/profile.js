@@ -11,12 +11,12 @@ const createProfile  = async (req, res) =>  {
         university, 
         linkdien,
          github, 
-         phoneNo,
+         phoneNumber,
           telegramUsername, 
           gender,
            department, 
-           shortbio,
-           photo,
+           shortBio,
+           photoUrl,
 
              } = req.body;
     try {
@@ -36,12 +36,12 @@ const createProfile  = async (req, res) =>  {
         university,
         linkdien,
         github,
-        phoneNo,
+        phoneNumber,
         telegramUsername,
         gender,
         department,
-        shortbio,
-        photo,
+        shortBio,
+        photoUrl,
         role
     });
         
@@ -77,7 +77,7 @@ const getProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
     const { id } = req.params;
-    const { university, linkedin, github, phoneNo, telegramUsername,gender,shortBio,photo,department} = req.body; 
+    const { university, linkedin, github, phoneNumber, telegramUsername,gender,shortBio,photo,department} = req.body; 
     
     try {
         const
@@ -92,11 +92,11 @@ const updateProfile = async (req, res) => {
         profile.university = university;
         profile.linkedin = linkedin;
         profile.github = github;
-        profile.phoneNo = phoneNo;
+        profile.phoneNumber = phoneNumber;
         profile.telegramUsername = telegramUsername;
      
         profile.phpoto = photo;
-        profile.depqartment = department;
+        profile.department = department;
         profile.shortBio = shortBio;
         profile.gender = gender;
 
