@@ -8,6 +8,10 @@ const fetchAnswersExcludingUser = require('../../controller/plagiarism/fetchExam
 const getAllEndedExams = require('../../controller/plagiarism/fetchAllEndedExams');
 const fetchStudentExamAnswerById = require('../../controller/plagiarism/fetchStudentExamAnswerById');
 const fetchAllPlagiarismCheckedExams = require('../../controller/plagiarism/fetchAllPlagiarismCheckedExams');
+const fetchStudentsFromPlagiarismCheckedExam = require('../../controller/plagiarism/fetchStudentsFromPlagiarismCheckedExam');
+const fetchListOfQuestionsByExamId = require('../../controller/plagiarism/fetchListOfQuestionsByExamId');
+const fetchAllPlagiarizedSections = require("../../controller/plagiarism/fetchAllplagiarizedSections")
+
 
 plagiarismRouter.post('/checkPlagiarsm', checkPlagiarsm);
 plagiarismRouter.post('/fetchAnswersExcludingUser',fetchAnswersExcludingUser)
@@ -15,4 +19,9 @@ plagiarismRouter.post('/fetchStudentExamAnswerById/:userId/:questionId/:examId',
 
 plagiarismRouter.get('/fetchAllEndedExams/:teacherId',getAllEndedExams)
 plagiarismRouter.get('/fetchAllPlagiarismCheckedExams',fetchAllPlagiarismCheckedExams)
+plagiarismRouter.get('/fetchStudentsFromPlagiarismCheckedExam/:examId',fetchStudentsFromPlagiarismCheckedExam)
+plagiarismRouter.get('/fetchListOfQuestionsByExamId/:examId',fetchListOfQuestionsByExamId)
+plagiarismRouter.get('/fetchAllPlagiarizedSections/:examId/:studentId/:questionId',fetchAllPlagiarizedSections)
+
+
 module.exports = plagiarismRouter;
