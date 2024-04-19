@@ -86,7 +86,7 @@ const AllExamTakenStudents: React.FC<AllStudentsProps> = ({
       </div>
 
       {filteredStudents.map((student: any, key: any) => (
-        <Link href={`/exam/examanswer/examquestion/${student.id}/${examId}`}>
+        <Link href={`/exam/examanswer/examquestion/${student.id}/${examId}`} key={student.id}>
         <div
           className="grid grid-cols-6 border-t border-stroke px-4 py-2 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 text-xs"
           key={key}

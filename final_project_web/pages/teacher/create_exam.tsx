@@ -7,16 +7,15 @@ import React, { useState } from 'react'
 
 
 
-const create_exam:React.FC = () => {
+const CreateExam:React.FC = () => {
   const router = useRouter();
 const [examTitle, setExamTitle] = useState("")
 const [date, setDate] = useState("")
 const [instruction, setInstruction] = useState("")
 const [duration, setDuration] = useState("")
-const [sections, setSections] = useState<string[]>([])
+const [sections, setSections] = useState<any[]>([])
 const [selectedTag, setSelectedTag] = useState("");
     const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
-    const [difficulty, setDifficulty] = useState("");
     const [chapter, setChapter] = useState("");
     const [easy_questions, setEasyQuestions] = useState<string>("");
     const [medium_questions, setMediumQuestions] = useState<string>("");
@@ -159,7 +158,7 @@ const [selectedTag, setSelectedTag] = useState("");
                           </button>
                         </div>
                         {sections.map((section, index) => (
-                          <div className="w-[80px] mx-1">
+                          <div className="w-[80px] mx-1" key={section.id}>
                             <input
                               className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                               type="number"
@@ -322,4 +321,4 @@ const [selectedTag, setSelectedTag] = useState("");
   );
 }
 
-export default create_exam
+export default CreateExam;

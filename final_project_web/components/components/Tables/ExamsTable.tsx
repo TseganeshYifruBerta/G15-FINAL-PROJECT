@@ -441,7 +441,7 @@ const ExamsTable: React.FC<UserTableProps> = ({
             <TableBody>
               {users.map((item) => (
                 <TableRow
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer" }} key={item.id}
                 >
                   {(columnKey) => (
                     <TableCell>{renderCell(true, item, columnKey)}</TableCell>

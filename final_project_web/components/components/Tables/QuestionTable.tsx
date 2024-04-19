@@ -9,6 +9,8 @@ import { useGetAllExamsQuery } from "@/store/exam/get-all-exam-api";
 import { useGetAllQuestionsQuery } from "@/store/question/get-all-questions";
 import ExamList from "../Chat/ExamList";
 import UseExamsTable from "./UseExamsTable";
+import Loading from "@/components/common/Loading";
+import FetchError from "@/components/common/Error";
 
 interface QuestionsProps {
   questions: any;
@@ -86,10 +88,16 @@ const QuestionTable: React.FC = () => {
   } = useGetAllQuestionsQuery("");
 
   if (isLoadingQuestion || isLoading) {
-    return <div>Loading...</div>;
+    return <div>
+      <Loading />
+    </div>;
   }
   // Function to handle kebab icon click and toggle selected question ID
-
+if (isErrorQuestion || isError) {
+    return <div>
+      <FetchError />
+    </div>;
+  }
   
 
   const handleKebabClick = (questionId: any) => {

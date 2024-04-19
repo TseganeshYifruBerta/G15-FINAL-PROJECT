@@ -1,7 +1,7 @@
 import QuestionForms from '@/components/questions/QuestionForms'
 import React from 'react'
 
-function create_question() {
+function CreateQuestion() {
   return (
     <div>
         <QuestionForms />
@@ -9,4 +9,4 @@ function create_question() {
   )
 }
 
-export default create_question
+export default CreateQuestion;

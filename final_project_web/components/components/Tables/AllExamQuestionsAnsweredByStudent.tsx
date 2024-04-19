@@ -78,7 +78,7 @@ const AllExamQuestionsAnsweredByStudent: React.FC<AllQuestionsProps> = ({
 
       {filteredQuestions.map((question: any, key: any) => (
      
-      <Link href={`/exam/examanswer/questionanswer/${studentId}/${question.id}`}>
+      <Link href={`/exam/examanswer/questionanswer/${studentId}/${question.id}`} key={question.id}>
         <div
           className="grid grid-cols-6 border-t border-stroke px-4 py-2 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 text-xs"
           key={key}

@@ -1,12 +1,9 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
-// import {store} from "@/store";
-import Navigation from "@/components/layout/Navigation";
 import { store } from "@/store";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import SideNavbar from "@/components/sidebar/SideNavBar";
 import Header from "@/components/components/Header";
 import { useState } from "react";
 import SideNavigationBar from "@/components/sidebar/SideNavigationBar";
@@ -20,7 +17,8 @@ export default function App({ Component, pageProps }: AppProps) {
 
   const isHomepage = router.pathname === "/";
   const isQuestionRelated = router.pathname.startsWith("/question")
-  return isHomepage || isQuestionRelated ? (
+  const isExamEnv = router.pathname.startsWith("/enter_exam");
+  return isHomepage || isQuestionRelated || isExamEnv ? (
     <Provider store={store}>
       <div className="flex flex-col flex-1 overflow-hidden">
         {" "}
