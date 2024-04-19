@@ -98,9 +98,9 @@ const HeatMap = forwardRef<HTMLDivElement, Props>(
         if (error) return <>Error: Error</>;
 
         const totalSubmissionCount = data ? data.reduce((total, { count }) => total + count, 0) : 0;
-        const blockWidth = 20; 
+        const blockWidth = screenWidth < 780 ? 20 : 50; // Adjusted block width
         const totalColumns = Math.max(Math.ceil((data?.length || 0) / 5), 1);
-        const blockHeight = screenWidth > 780 ? (screenWidth - 60) / 30 : (screenWidth - 60) / 10; // Adjusted for 30 boxes per column
+        const blockHeight = screenWidth < 780 ? (screenWidth - 60) / 30 : (screenWidth - 60) / 20; // Adjusted block height
         const columns: Array<Array<{ count: number; date: string }>> = Array.from({ length: totalColumns }, (_, index) =>
             data?.slice(index * 5, index * 5 + 5) || []
         );
@@ -116,13 +116,13 @@ const HeatMap = forwardRef<HTMLDivElement, Props>(
                     <span className="text-sm">{totalSubmissionCount} Submissions</span>
                     {showUserName && <span>{userName}</span>}
                 </h2>
-                <div id="heat_map" className="w-full flex">
+                <div id="heat_map" className="w-full flex flex-row items-center justify-center">
                     {columns.map((column, columnIndex) => (
                         <div key={columnIndex} className="flex flex-col">
                             {column.map((element, rowIndex) => (
                                 <Block
-                                    width={blockWidth}
-                                    height={blockHeight/3}
+                                    width={blockWidth/ 3}
+                                    height={blockHeight / 3}
                                     key={rowIndex}
                                     count={element.count}
                                 />
