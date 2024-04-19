@@ -3,8 +3,7 @@ import MemoizedHeatMap from '../../components/Dashboard/student/HeatMap';
 import MemoizedSolvedProblemsStats from '@/components/Dashboard/student/SolvedQuestions';
 import SubmissionList from '../../components/Dashboard/student/SubmissionList';
 import UpcomingExams from '../../components/Dashboard/student/UpcomingExam'; 
-import Image
- from 'next/image';
+import Image from 'next/image';
 const jwt = require("jsonwebtoken");
 
 const Dashboard = () => {
@@ -51,15 +50,15 @@ const Dashboard = () => {
           <MemoizedSolvedProblemsStats userName={userData.fullname} />
           <UpcomingExams /> 
         </div>
-        <MemoizedHeatMap userName={userData.fullname} />
+          <MemoizedHeatMap userName={userData.fullname} />
       </div>
       <div className='gap-24'>
         <h2 className='text-lg font-semibold p-4'>Recent Submissions</h2>
         <div className="flex flex-col gap-4 mt-12">
-          <SubmissionList />
+         <SubmissionList /> 
+          </div>
         </div>
       </div>
-    </div>
   );
 };
 
