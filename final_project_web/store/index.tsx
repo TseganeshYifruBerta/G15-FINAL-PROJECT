@@ -15,7 +15,6 @@ import loginReducer from './login/login-slice'
 import examUploadReducer from './exam/upload-exam-slice'
 import examAnswerReducer from './exam/upload-exam-question-slice'
 import { questionApi } from "./question/get-all-questions";
-// import { getAllSubmissionsByIdApi } from "./submissions/get-all-submissions-by-id";
 import { getSubmissionDetailByIdApi } from "./submissions/get-submission-detail-by-id-api";
 import { getQuestionDetalApi } from "./question/get-questionById-api";
 import { getAllSubmissionsByIdApi } from "./submissions/get-all-submissions-by-id";
@@ -33,11 +32,8 @@ import { getTopStudentsApi } from "./teacherprofile/get-top-students";
 import { getAllExamTakenStudentsApi } from "./exam/examAnswer/get-all-students";
 import teacherReducer from './admin/teacher_slice_reducer';
 import studentReducer from './admin/student_slice_reducer';
-import { getExamQuestionAnswerApi } from "./exam/examAnswer/get-exam-question-answer";
 import passwordReducer from '@/store/changnepassword/slicereducer'
-import { getAllQuestionsByStudentIdApi } from "./exam/examAnswer/get-all-questions-by-student-id";
 import { getExamQuestionAnswerApi } from "./exam/examAnswer/get-exam-question-answer";
-
 import {fetchStudentsFromPlagiarismCheckedExamApi} from "./plagiarism/fetch-students-from-plagiarism-checked-exam";
 import { getAllQuestionsByStudentIdApi } from "./exam/examAnswer/get-all-questions-by-student-id"
 import {getAllPlagiarismCheckedExamsApi} from "./plagiarism/get-all-plagiarism-checked-exams";
