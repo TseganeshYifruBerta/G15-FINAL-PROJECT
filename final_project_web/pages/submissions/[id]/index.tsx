@@ -2,7 +2,6 @@ import { useGetSubmissionDetailQuery } from "@/store/submissions/get-submission-
 import { Editor } from "@monaco-editor/react";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { SubmissionDetailProps } from "@/store/submissions/get-submission-detail-by-id-api";
 
 function SubmissionDetailById() {
   const router = useRouter();
@@ -53,36 +52,36 @@ function SubmissionDetailById() {
 
   return (
     <div className="p-8">
-      <h3 className="text-xl text-primary">
-        {/* {submissionDetail.questionSubmitted.title} */}
+      <h3 className="text- text-primary">
+        {submissionDetail.questionSubmitted.title}
       </h3>
       <div className="mt-3 space-y-4">
-        <div className="text-3xl">Submission Detail</div>
+        <div className="text-2xl">Submission Detail</div>
         <div className="border-4 border-double border-primary text-primary p-3">
           <div className="flex items-center">
-            <div className="mr-2 text-gray-500">Status:</div>
-            <div className="text-red-500">{submissionDetail.questionStatus && (
+            <div className="mr-2 text-gray-500 text-sm">Status:</div>
+            <div className="text-red-500 text-sm">{submissionDetail.questionStatus && (
                   <>
                       {submissionDetail.questionStatus.status === 'Accepted' && (
                           <span style={{ color: 'green' }}>Accepted</span>
                       )}
-                      {submissionDetail.questionStatus.status === 'Wrong' && (
-                          <span style={{ color: 'red' }}>Wrong</span>
+                      {submissionDetail.questionStatus.status !== 'Accepted' && (
+                          <span style={{ color: 'red' }}>Wrong Answer</span>
                       )}
                   </>
             )}</div>
           </div>
           <div className="flex items-center">
-            <div className="mr-2 text-gray-500">Submitted:</div>
-            <div className="text-primary">{timeAgo}</div>
+            <div className="mr-2 text-gray-500 text-sm">Submitted:</div>
+            <div className="text-primary text-sm">{timeAgo}</div>
           </div>
         </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <div className="mr-2 text-gray-500">Language:</div>
-            <div className="text-black">Python</div>
+            <div className="mr-2 text-gray-500 text-sm">Language:</div>
+            <div className="text-black text-sm">Python</div>
           </div>
-          <button className="focus:outline-none text-white bg-primary hover:bg-primary focus:ring-4 focus:ring-primary font-medium rounded-lg text-sm px-5 py-2.5 mb-2">
+          <button className="focus:outline-none text-white text-sm bg-primary hover:bg-primary focus:ring-4 focus:ring-primary font-medium rounded-lg text-sm px-5 py-2.5 mb-2">
             Edit
           </button>
         </div>
@@ -94,7 +93,7 @@ function SubmissionDetailById() {
             value={submissionDetail.questionStatus.userCode}
           />
         </div>
-        <a href="#" className="flex items-center justify-center font-medium text-primary hover:underline mt-3">
+        <a href="#" className="flex items-center justify-center text-sm font-medium text-primary hover:underline mt-3">
            Back to code 
           <svg className="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
