@@ -1,15 +1,17 @@
 import { on } from "events";
 import Link from "next/link";
 import { useState } from "react";
-import {showToast} from '../../popup' ;
+import Image from "next/image";
+
+
 // import Plagiarism from './plagiarism';
 // import { useCheckPlagiarismByExamIdQuery } from "@/store/plagiarism/check-plagiarism-by-exam-id";
 interface AllStudentsProps {
-  examTakenStudents:any[],
+  Students:any[],
   examId :string
 }
-const AllExamTakenStudents: React.FC<AllStudentsProps> = ({
-  examTakenStudents,
+const AllStudentsInPLagiarism: React.FC<AllStudentsProps> = ({
+  Students,
   
   examId
  
@@ -28,8 +30,9 @@ const AllExamTakenStudents: React.FC<AllStudentsProps> = ({
   const [showPlagiarism, setShowPlagiarism] = useState(false);
 
 // Inside the return statement
+ 
 
-  const modifiedData = examTakenStudents?.map((student: any) => {
+  const modifiedData = Students?.map((student: any) => {
     const date = new Date(student.createdAt);
     const dayOfWeek = days[date.getDay()];
     const time = date.toLocaleTimeString();
@@ -51,7 +54,7 @@ const AllExamTakenStudents: React.FC<AllStudentsProps> = ({
 
   
   return (
-    <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+    <div className="rounded-sm  bg-white shadow-default  dark:border-strokedark dark:bg-boxdark">
       <div className="px-4 py-6 md:px-6 xl:px-7.5 flex ">
         <h4 className="text-xl font-semibold text-black dark:text-white w-4/5">
           All Students
@@ -65,8 +68,8 @@ const AllExamTakenStudents: React.FC<AllStudentsProps> = ({
           />
         </div>
       </div>
-
-      <div className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 font-bold text-xs">
+      {!(filteredStudents.length === 0 )&& (
+      <div className="grid grid-cols-6  px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 font-bold text-xs">
         <div className="col-span-2 flex items-center">
           <p className="">Full Name</p>
         </div>
@@ -84,11 +87,12 @@ const AllExamTakenStudents: React.FC<AllStudentsProps> = ({
           <p className="">Joined At</p>
         </div>
       </div>
+      )}
 
       {filteredStudents.map((student: any, key: any) => (
-        <Link href={`/exam/examanswer/examquestion/${student.id}/${examId}`} key={student.id}>
+        <Link href={`/plagiarism/question/${student.id}/${examId}`}>
         <div
-          className="grid grid-cols-6 border-t border-stroke px-4 py-2 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 text-xs"
+          className="grid grid-cols-6  px-4 py-2 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 text-xs"
           key={key}
         >
           <div className="col-span-2 flex items-center">
@@ -111,13 +115,30 @@ const AllExamTakenStudents: React.FC<AllStudentsProps> = ({
           </div>
         </div>
         </Link>
-
-
       ))}
-      
+        {filteredStudents.length === 0 && (
+            <div className="flex flex-col items-center justify-center p-10 text-center">
+              <Image
+                src="/images/nodata.svg"
+                className="w-16 h-16 mb-4 text-gray-400 dark:text-gray-500"
+                alt=""
+                width={64}
+                height={64}
+              />
+              <h3 className="mb-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
+                No Exam Has Been Checked For Plagiarism
+              </h3>
+              <p className="text-xs text-gray-600 dark:text-gray-400">
+                It looks like there are no exams to display at the moment. Check back later!
+              </p>
+            </div>
+          )}
+
+
+    
     </div>
   );
 };
 
-export default AllExamTakenStudents;
+export default AllStudentsInPLagiarism;
 

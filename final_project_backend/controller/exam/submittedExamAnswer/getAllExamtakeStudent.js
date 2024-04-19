@@ -2,7 +2,7 @@ const User = require('../../../models/auth/user.model');
 const SubmittedExamAnswer = require('../../../models/exam/studentsExamAnswer');
 const section = require('../../../models/auth/section.model');
 const SelectedSectionsForExam = require('../../../models/exam/SelectedSectionsForExam');
-const submitExamAnswerByStudent = require('../../../models/exam/submittedExamDetail');
+// const submitExamAnswerByStudent = require('../../../models/exam/submittedExamDetail');
 const ExamQuestion = require("../../../models/exam/uploadExamQuestion")
 const getAllExamtakeStudent = async (req, res) => {
     const { examId , teacherId } = req.params;
@@ -75,21 +75,23 @@ const getSubmissionOfstudentByQuestionId = async (req, res) => {
         const submission = await SubmittedExamAnswer.findAll({
             where: {
                 UserinformationId: userId,
+                examQuestionId: questionId
+
             },
-            include: [
-                {
-                    model: submitExamAnswerByStudent,
-                    as: 'studentsExamDetails',
-                    where: {
-                        examQuestionId: questionId
-                    }
-                },
+            // include: [
+            //     {
+            //         model: submitExamAnswerByStudent,
+            //         as: 'studentsExamDetails',
+            //         where: {
+            //             examQuestionId: questionId
+            //         }
+            //     },
                 
-            ]
+            // ]
             
         });
-        const response = submission[0].studentsExamDetails[0].submittedAnswer
-        const submittedDate = submission[0].studentsExamDetails[0].createdAt
+        const response = submission[0].submittedAnswer
+        const submittedDate = submission[0].createdAt
         return res.status(200).json({response,questionDetail,submittedDate})
     } catch (error) {
         console.error('Failed to fetch exams:', error);
