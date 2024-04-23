@@ -4,17 +4,14 @@ const sequelize = require("../../database/sequelize"); // Assuming your Sequeliz
 
 const TestCase = sequelize.define("TestCases", {
   output: {
-    type: DataTypes.JSON,
+    type: DataTypes.STRING ,
     allowNull: false,
   },
   input: {
-    type: DataTypes.JSON,
+    type: DataTypes.STRING,
     allowNull: false,
   },
-  // userId: {
-  //   type: DataTypes.INTEGER,
-  //   allowNull: false,
-  // },
+
 });
 
 module.exports = TestCase;

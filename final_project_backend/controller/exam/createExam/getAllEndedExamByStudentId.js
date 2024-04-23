@@ -54,66 +54,6 @@ const getAllEndedExamsByStudentId = async (req, res) => {
     return res.status(200).json(labeledExams);
 
 
-
-  
-    
-    // const missedExamIds = missedExams.map((exam) => exam.id);
-    // // const missedExamTitles = missedExams.map((exam) => exam.title);
-
-    // const labeledExams = endedExams.map((exam) => {
-    //   if (missedExamIds.includes(exam.id)) {
-    //     return {
-    //       id: exam.id,
-    //       title: exam.title,
-    //       status: "missed",
-    //     };
-    //   } else {
-    //     return {
-    //       id: exam.id,
-    //       title: exam.title,
-    //       status: "ended",
-    //     };
-    //   }
-    // });
-
-
-
-    // const checkTakenExam = await studentsExamAnswer.findAll({
-    //   where: {
-    //     status: "end",
-    //   },
-    // });
-
-     
-      //  let final = []
-      //  let exams = []
-      // if(!endedExams){
-      //    exams = []
-      // }
-      // else{
-      //   const examFound = endedExams.map((exam) => ({examId:exam.id,examtitle:exam.title}));
-      //   // return res.status(200).json({exams: examFound});
-      //   for(const examId of examFound){
-      //     const examData = await Allplagiarism.findOne({
-      //       where: {
-      //           examId: examId.examId, 
-      //       },
-      //   });
-      //   // return res.status(200).json({exams: examData});
-      //   if(examData === null){
-      //     exams.push({
-      //       id: examId.examId,
-      //       title: examId.examtitle,
-
-      //     });
-      //   }
-        
-      
-      //   }
-        
-      // }
-
-      return res.status(200).json({exams: allExamId});
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Internal server error" });

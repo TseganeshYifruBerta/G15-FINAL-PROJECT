@@ -25,10 +25,10 @@ const DetailOfSelectedQuestion = async (req, res) => {
         });
 
         // Parse input and output fields from JSON strings to arrays of objects
-        questionDetail.TestCases.forEach(testCase => {
-            testCase.input = JSON.parse(testCase.input);
-            testCase.output = JSON.parse(testCase.output);
-        });
+        // questionDetail.TestCases.forEach(testCase => {
+        //     testCase.input = JSON.parse(testCase.input);
+        //     testCase.output = JSON.parse(testCase.output);
+        // });
 
         const submittedBy = await Status.findAll({
             where: {
@@ -37,7 +37,7 @@ const DetailOfSelectedQuestion = async (req, res) => {
             },
         });
 
-        const userIds = submittedBy.map((userId) => userId.userId);
+        const userIds = submittedBy.map((userId) => userId.UserinformationId);
 
         const users = await User.findAll({
             where: {
