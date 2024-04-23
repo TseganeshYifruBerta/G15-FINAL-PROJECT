@@ -188,15 +188,16 @@ const countAcceptedSubmissionsOfUserBySection = async (req, res) => {
 }
 
 const countAcceptedSubmissionperDifficulty = async (req, res) => {
-  const { id } = req.params;
+  const { userId } = req.params;
   try {
     const acceptedSubmissions = await codeSubmision.findAll({
       where: {
-        userId: id,
+        userId: userId,
       },
       include: [
         {
           model: Status,
+          as:"Status",
           where: {
             status: 'Accepted',
           },
@@ -213,13 +214,13 @@ const countAcceptedSubmissionperDifficulty = async (req, res) => {
           id: submission.questionId,
         },
       });
-      if (question.difficulty === 'Easy') {
+      if (question.difficulty === 'easy') {
         easyCount++;
       }
-      if (question.difficulty === 'Medium') {
+      if (question.difficulty === 'medium') {
         mediumCount++;
       }
-      if (question.difficulty === 'Hard') {
+      if (question.difficulty === 'hard') {
         hardCount++;
       }
     }
