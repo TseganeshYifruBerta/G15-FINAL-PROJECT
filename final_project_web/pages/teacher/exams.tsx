@@ -2,7 +2,7 @@ import ExamTable from '@/components/components/Tables/ExamTable';
 import { useGetAllExamsQuery } from '@/store/exam/get-all-exam-api';
 import React from 'react'
 
-function exams() {
+function Exams() {
     const { data: allexams, isLoading, isError, refetch } = useGetAllExamsQuery("");
 if (isLoading) {
     return <div>loading...</div>;
@@ -14,7 +14,7 @@ console.log("allexams", allexams)
       <div className="flex flex-col gap-10">
         <div className="flex justify-between w-full">
           <div className="w-full">
-            <ExamTable exams={allexams} deleteexam={refetch} />
+            <ExamTable exams={allexams.combinedResult} deleteexam={refetch} />
           </div>
         </div>
       </div>
@@ -22,4 +22,4 @@ console.log("allexams", allexams)
   );
 }
 
-export default exams
+export default Exams;

@@ -3,7 +3,8 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../../database/sequelize");
 const Solution = require("./solution");
 const examTestCase = require("./examTestcase");
-const studentsExamDetail = require("./submittedExamDetail")
+
+const studentsExamAnswer = require("./studentsExamAnswer");
 const SelectedChapter = require("./SelectedChapter");
 const ExamQuestion = sequelize.define("examQuestion", {
 
@@ -42,9 +43,9 @@ const ExamQuestion = sequelize.define("examQuestion", {
 
 ExamQuestion.hasMany(Solution, { as: "solutions" });
 ExamQuestion.hasMany(examTestCase, { as: "examTestCase" });
-ExamQuestion.hasMany(studentsExamDetail, { as: "studentsExamDetail" });
+ExamQuestion.hasMany(studentsExamAnswer, { as: "studentsExamAnswer" });
 
-studentsExamDetail.belongsTo(ExamQuestion)
+studentsExamAnswer.belongsTo(ExamQuestion)
 examTestCase.belongsTo(ExamQuestion);
 Solution.belongsTo(ExamQuestion);
 

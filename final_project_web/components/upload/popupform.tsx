@@ -1,19 +1,30 @@
 import React from 'react';
 import { Field, reduxForm, InjectedFormProps } from 'redux-form';
-import { FaUser, FaIdBadge, FaEnvelope, FaUsers, FaUserTag, FaToggleOn } from 'react-icons/fa';
+import { FaUser, FaIdBadge, FaEnvelope, FaUsers, FaUserTag, FaToggleOn, FaPlus } from 'react-icons/fa';
 import { UploadManually, UploadFormData } from '@/store/upload/ApiCallerManuallyupload';
 import { showToast } from '../popup';
+import { PlusIcon } from '@heroicons/react/24/solid';
+import { AiOutlineClose } from 'react-icons/ai';
 
 interface FormValues {
   fullName?: string;
   userId?: string;
   email?: string;
-  section?: string;
+  section?: string[]; 
   role?: string;
   status?: string;
   }
-  const validate = (values: FormValues) => {
-    const errors: Partial<FormValues> = {};
+  interface FormValidationErrors {
+    fullName?: string;
+    userId?: string;
+    email?: string;
+ 
+    role?: string;
+    status?: string;
+  }
+  const validate = (values: FormValues): FormValidationErrors => {
+    const errors: FormValidationErrors = {};
+  
     if (!values.fullName) {
       errors.fullName = 'Please enter a username.';
     }
@@ -25,17 +36,14 @@ interface FormValues {
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
       errors.email = 'Please enter a valid email address.';
     }
-    if (!values.section) {
-      errors.section = 'Please enter a section.';
-    } else if (!/^\d+$/.test(values.section)) {
-      errors.section = 'Section must be numeric.';
-    }
+   
     if (!values.role) {
       errors.role = 'Please select a role.';
     }
     if (!values.status) {
       errors.status = 'Please select a status.';
     }
+   
   
     return errors;
   };
@@ -59,7 +67,6 @@ interface FormValues {
           {input.name === 'status' && (
             <>
               <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
             </>
           )}
         </select>
@@ -72,14 +79,30 @@ interface FormValues {
     </div>
   );
 
-  const UploadPopup: React.FC<InjectedFormProps<FormValues>> = ({ handleSubmit }) => {
+  interface ExtraProps {
+    onUploadSuccess: () => void;
+  }
+  
+  const UploadPopup: React.FC<InjectedFormProps<FormValues, ExtraProps> & ExtraProps> = ({ handleSubmit, onUploadSuccess }) => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [sections, setSections] = React.useState(['']); 
 
+  const handleSectionChange = (index: number, value: string) => {
+    const updatedSections = [...sections];
+    updatedSections[index] = value;
+    setSections(updatedSections);
+  };
+  
   const onSubmit = async (values: FormValues, dispatch: Function, props: any) => {
+    const formData = {
+      ...values,
+      section: sections.filter(section => section.trim() !== ''), // Filter out empty strings
+    };
     try {
-      const data = await UploadManually(values as UploadFormData);
-      showToast('Uploaded successfully', 'success');
-      setIsOpen(false); // Close the popup on successful upload
+      const data = await UploadManually(formData);
+    showToast('Uploaded successfully', 'success');
+      setIsOpen(false); 
+      onUploadSuccess();
     } catch (error) {
       console.error('Uploading error:', error);
       showToast('Uploading error: ' + (error as Error).message, 'error');
@@ -90,29 +113,62 @@ interface FormValues {
 
 
   return (
-    <div className="flex justify-center items-center">
-      <button
-        className="text-white bg-gradient-to-r from-[rgb(145,154,243)] to-[#7983FB] hover:bg-gradient-to-br font-bold py-2 px-4 rounded-full"
-        onClick={() => setIsOpen(true)}
-      >
-        Add User
-      </button>
+    <div className="flex  justify-center items-center">
+       <div className="w-full "> 
+       <div className='flex justify-end items-center'>
+  <button
+    className="text-white bg-gradient-to-r from-[rgb(145,154,243)] to-[#7983FB] hover:bg-gradient-to-br font-bold py-2 md:py-2 px-4 md:px-3 rounded-xl flex items-center shadow-xl transition-transform duration-200 ease-in-out transform hover:scale-105 mr-3 text-xs sm:text-sm md:text-base"
+    onClick={() => setIsOpen(true)}
+    aria-label="Add" // Accessible label for the button
+  >
+    <PlusIcon className="h-5 w-5" />
+    <span>Add User</span>
+  </button>
+</div>
+
+</div>
 
       {isOpen && (
         <div
-        className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-md flex justify-center items-center"
+        className="overflow-x-auto overflow-y-auto fixed inset-0 z-50 overflow bg-black bg-opacity-60 backdrop-blur-md flex justify-center items-center "
         onClick={() => setIsOpen(false)}
       >
         <div
           className="relative w-full max-w-2xl mx-auto bg-white rounded-xl shadow-2xl p-6 md:p-8 lg:p-12 transform transition-all"
           onClick={(e) => e.stopPropagation()}
+         
         >
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+           <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="absolute mt-3 right-3 text-gray-500 hover:text-gray-800"
+                aria-label="Close"
+              >
+                <AiOutlineClose size={24} />
+          </button>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 ">
             <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">Add New User</h2>
-            <div className="grid grid-cols-1 gap-6"><Field name="name" type="text" component={renderField} placeholder="Full Name" iconName={FaUser} />
+            <div className="grid grid-cols-1 gap-2">
+              <Field name="fullName" type="text" component={renderField} placeholder="Full Name" iconName={FaUser} />
             <Field name="userId" type="text" component={renderField} placeholder="User ID" iconName={FaIdBadge} />
             <Field name="email" type="email" component={renderField} placeholder="Email" iconName={FaEnvelope} />
-            <Field name="section" type="text" component={renderField} placeholder="Section" iconName={FaUsers} />
+            <p className="flex items-center"><FaUsers className="text-xl text-gray-700 mr-2"/>Section</p>
+            {
+              sections.map((section, index) => (
+                <input
+                  key={index}
+                  type='number'
+                  value={section}
+                  onChange={e => handleSectionChange(index, e.target.value)}
+                  className="flex-1 p-2 outline-none border rounded"
+                  placeholder={`Section ${index + 1}`}
+                  required
+                />
+              ))
+            }
+
+            
+            <button className="flex w-35 items-center bg-[#7983FB] bg-opacity-30 text-[#7983FB] hover:bg-[#7983FB] hover:bg-opacity-60 font-bold py-2 px-2 rounded-xl   mb-4" onClick={() => setSections([...sections, ''])}><FaPlus className="mr-2" />  Add Section</button>
             <Field
               name="role"
               component={renderField}
@@ -133,18 +189,11 @@ interface FormValues {
             >
               <option value="" disabled>Select a status...</option>
               <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+             
             </Field>
           </div>
             <div className="flex justify-end space-x-4">
-              <button
-                type="button"
-                className="btn btn-outline btn-error border-2 border-[#7983FB] rounded-xl hover:bg-[#919AF3] text-black py-2 px-4"
-                onClick={() => setIsOpen(false)}
-                
-              >
-                Cancel
-              </button>
+            
               <button
                 type="submit"
                 className="btn bg-[#7983FB] border-2 hover:bg-[#919AF3] text-white py-2 px-4 rounded-xl font-bold"
@@ -162,7 +211,7 @@ interface FormValues {
   );
 };
   
-const ConnectedUploadPopup = reduxForm<FormValues>({
+const ConnectedUploadPopup = reduxForm<FormValues, ExtraProps>({
   form: 'uploadpop',
   validate,
 })(UploadPopup);

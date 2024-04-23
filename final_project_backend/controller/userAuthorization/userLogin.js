@@ -8,12 +8,11 @@ const login = async (req, res) => {
     const { userId, password } = req.body;
 
     const user = await User.findOne({ where: { userId } });
+    if(!user){
+        return res.status(401).json({ message: 'Invalid userId or password' });
+    }
 
-    // if (!user || !bcrypt.compareSync(password, user.password)) {
-    //     return res.status(401).json({ message: 'Invalid userId or password' });
-    // }
-
-    if (!user || !bcrypt.compareSync(password, user.password)) {
+    if (!bcrypt.compareSync(password, user.password)) {
       
         user.loginAttempt += 1;
         await user.save();
@@ -46,9 +45,11 @@ const login = async (req, res) => {
         process.env.ACCESS_TOKEN_SECRET, 
     );
     const decodedToken = jwt.decode(token);
+    const role = decodedToken.role;
+    const fullName = user.fullName;
     console.log("decodedToken",decodedToken)
   
-    res.json({ token });
+    res.json({ token , role,fullName });
 
 }
 

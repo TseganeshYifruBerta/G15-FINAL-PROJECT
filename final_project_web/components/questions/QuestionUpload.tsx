@@ -17,14 +17,14 @@ const QuestionUploadForm: React.FC<InjectedFormProps<QuestionUploadFormData>> = 
   const [questionDifficulty, setQuestionDifficulty] = useState("");
   const [questionDescription, setQuestionDescription] = useState("");
   const [examples, setExamples] = useState<string>("");
-  const [testCases, setTestCases] = useState<testCaseProps[]>([{input:"{}", output:"{}"}]);
+  const [testCases, setTestCases] = useState<testCaseProps[]>([{input:"", output:""}]);
   const [showWarning, setShowWarning] = useState(false); // State for showing/hiding warning
 
   const dispatch: AppDispatch = useDispatch(); // Use AppDispatch type
   useSelector((state: RootState) => state.questionupload);
 
   const values = {
-    testCases: testCases,
+    testcases: testCases,
     title: questionTitle,
     difficulty: questionDifficulty,
     description: questionDescription,
@@ -40,13 +40,6 @@ const QuestionUploadForm: React.FC<InjectedFormProps<QuestionUploadFormData>> = 
   const onSubmit = async () => {
     
     try {
-const jsonInput = JSON.parse(values.testCases[0].input);
-const jsonOutput = JSON.parse(values.testCases[0].output);
-const jsonTestCases = {
-  input: jsonInput.input,
-  output: jsonOutput.output,
-};
-values.testCases = [jsonTestCases];
 
 
 
@@ -79,7 +72,7 @@ values.testCases = [jsonTestCases];
           </div>
           <div className="w-1/5 p-1">
             <select
-              placeholder="Question Difficulty"
+              // placeholder="Question Difficulty"
               className="border-2 border-primary font-light w-full p-1 rounded-md"
               value={questionDifficulty}
               onChange={(e) => setQuestionDifficulty(e.target.value)}

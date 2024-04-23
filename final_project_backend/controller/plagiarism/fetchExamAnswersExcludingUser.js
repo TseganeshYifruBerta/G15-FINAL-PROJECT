@@ -1,22 +1,21 @@
 const studentsExamAnswer = require("../../models/exam/studentsExamAnswer");
 const {Sequelize} = require("sequelize");
-const studentsExamDetail = require("../../models/exam/submittedExamDetail"); // Import the studentsExamDetail model
 
-const fetchAnswersExcludingUser = async ( userId, questionId ) => {
+const fetchAnswersExcludingUser = async (userId, questionId,examId) => {
+  // const { userId, questionId} = req.body;
   try {
-    const answers = await studentsExamDetail.findAll({
+    const answers = await studentsExamAnswer.findAll({
       where: {
         examQuestionId: questionId,
-
+        examId: examId,
         [Sequelize.Op.not]: [
           { '$studentsExamAnswer.UserinformationId$': userId }
         ]
       },
-      include: [{
-        model: studentsExamAnswer,
-      }]
+      
     });
     return  answers;
+    // return res.status(200).json({ answers });
   } catch (error) {
     console.error("Error fetching answers:", error);
     throw error; 
