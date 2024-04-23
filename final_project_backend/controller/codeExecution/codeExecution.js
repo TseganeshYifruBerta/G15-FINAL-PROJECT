@@ -96,28 +96,30 @@ const codeExecute = async (req, res) => {
       for (const testCase of testCases) {
         const { input, output } = testCase.dataValues;
         let nums, score, results;
+        var inputJson = input.replace(/'/g, '"');
 
-        if (typeof input === "object") {
-          const { nums, score } = input;
+        var inputObject = JSON.parse(inputJson);
+        
+       
+        var valuesArray = Object.values(inputObject);
+        if (valuesArray.length > 1) {
+          const { nums, score } = valuesArray;
           results = await runPythonCode(pythonCode, [nums, score]);
         } else {
           
-          const word = input;
-          const { num } = word;
-          const inputData = JSON.parse(input);
-          const key = Object.keys(inputData[0])[0]; // Get the first key dynamically
-          const score = inputData[0][key];
-          results = await runPythonCode(pythonCode, score);
+        nums = valuesArray[0];
+        results = await runPythonCode(pythonCode, nums);
+
         }
 
-        // const results = await runPythonCode(pythonCode, nums || word, target);
+       
 
         const testResults = {
           input: input,
-          expectedOutput: JSON.parse(output)[0],
+          expectedOutput: output,
           actualOutput: results.result,
           printed :results.printOutput,
-          passed: JSON.parse(output)[0] === results.result,
+          passed: output === results.result,
         };
 
         if (testResults.passed === true) {

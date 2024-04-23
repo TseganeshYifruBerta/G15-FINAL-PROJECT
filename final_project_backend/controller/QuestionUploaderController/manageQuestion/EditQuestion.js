@@ -36,12 +36,12 @@ const editQuestion = async (req, res) => {
       if (testcases) {
         await Promise.all(
           testcases.map(async (testCase) => {
-            const formattedOutput = Array.isArray(testCase.output) ? testCase.output : [testCase.output];
-            const formattedInput = Array.isArray(testCase.input) ? testCase.input : [testCase.input];
+            // const formattedOutput = Array.isArray(testCase.output) ? testCase.output : [testCase.output];
+            // const formattedInput = Array.isArray(testCase.input) ? testCase.input : [testCase.input];
             const testcaseId = testCase.id;
 
             await TestCase.update(
-              { input: formattedInput, output: formattedOutput },
+              { input: testCase.input, output: testCase.output },
               { where: { labQuestionId: id, id: testcaseId }, transaction }
             );
           })
@@ -51,10 +51,10 @@ const editQuestion = async (req, res) => {
 
       await transaction.commit();
       const updatedTestCases = await TestCase.findAll({ where: { labQuestionId: id } });
-      updatedTestCases.forEach(testCase => {
-        testCase.input = JSON.parse(testCase.input);
-        testCase.output = JSON.parse(testCase.output);
-    });
+    //   updatedTestCases.forEach(testCase => {
+    //     testCase.input = JSON.parse(testCase.input);
+    //     testCase.output = JSON.parse(testCase.output);
+    // });
       
       
       const editedQuestion = await Question.findAll({
