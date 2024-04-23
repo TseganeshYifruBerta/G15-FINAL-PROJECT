@@ -8,6 +8,26 @@ const getAllExamtakeStudent = async (req, res) => {
     const { examId , teacherId } = req.params;
     try {
 
+        const allUser  = await User.findAll({
+            where:{
+                role :"student"
+            },
+            include: {
+                model: section,
+                as: 'SectionsOfUser'}
+        })
+        const allAnswer   = await SubmittedExamAnswer.findAll({
+            examId:examId
+        })
+        
+        
+        const filteredUsers = allUser.filter(user => {
+            return !allAnswer.some(answer => user.id === answer.UserinformationId);
+        });
+
+       
+    
+
         const ExamTakeUser = await SubmittedExamAnswer.findAll({
             where: { 
                 examId: examId 
@@ -41,20 +61,21 @@ const getAllExamtakeStudent = async (req, res) => {
     
      } );  
     const users = ExamTakeUser.map(examTake => examTake.Userinformation);
+    // const studentWhoDoNotTakeExam = filteredUsers.map(stu => stu.id)
       
      const teacherSectionList = teacher.SectionsOfUser.map(section => section.section);
      console.log(teacherSectionList);
 
     const filterUser = users.filter(examTake => teacherSectionList.includes(examTake.SectionsOfUser[0].section));
-    console.log(filterUser);
+    const filteredstudentWhoDoNotTakeExam  = filteredUsers.filter(sec => teacherSectionList.includes(sec.SectionsOfUser[0].section) )
+    // console.log(filterUser);
     
-        res.status(200).json({filterUser,examId});
+        return res.status(200).json({filterUser,examId ,filteredstudentWhoDoNotTakeExam});
     } catch (error) {
         console.error('Failed to fetch exams:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
-
 
 const getSubmissionOfstudentByQuestionId = async (req, res) => {
     const { userId, questionId } = req.params;
