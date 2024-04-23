@@ -7,18 +7,23 @@ const UserProfile = require('../../models/auth/profile.model');
 // Define route for creating a profile
 const createProfile  = async (req, res) =>  {
     const{ id} = req.params;
+    const existingProfile = await UserProfile.findOne({ where: { id: id } });
+
+    if (existingProfile) {
+        return res.status(400).json({ message: "Profile already exists" });
+    }
     const { 
-        university, 
-        linkedin,
+         university, 
+         linkedin,
          github, 
          phoneNumber,
-          telegramUsername, 
-          gender,
-           department, 
-           shortBio,
-           photoUrl,
-
+         telegramUsername, 
+         gender,
+         department, 
+         shortBio,
+         photoUrl,
              } = req.body;
+
     try {
     const user = await User.findOne({where: {id: id}});
         if(!user){
@@ -46,12 +51,13 @@ const createProfile  = async (req, res) =>  {
     });
         
 
-    return res.status(201).json({message: "Profile created successfully", profile});
+    return res.status(201).json({message: "Profile created successfully", existingProfile});
 
     } catch (error) {
         return res.status(500).json({error: error});
     }
 }
+
 
 const getProfile = async (req, res) => {
     const { id } = req.params;
@@ -77,7 +83,7 @@ const getProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
     const { id } = req.params;
-    const { university, linkedin, github, phoneNumber, telegramUsername,gender,shortBio,photo,department} = req.body; 
+    const { university, linkedin, github, phoneNumber, telegramUsername,gender,shortBio,department} = req.body; 
     
     try {
         const
@@ -94,8 +100,6 @@ const updateProfile = async (req, res) => {
         profile.github = github;
         profile.phoneNumber = phoneNumber;
         profile.telegramUsername = telegramUsername;
-     
-        profile.phpoto = photo;
         profile.department = department;
         profile.shortBio = shortBio;
         profile.gender = gender;
@@ -109,6 +113,26 @@ const updateProfile = async (req, res) => {
     catch (error) {
         return res.status(500).json({error: error});
     }
+
+}
+const updateProfilePhoto = async (req, res) => {
+    const { id } = req.params;
+    const { photoUrl } = req.body;
+    try {
+        const profile = await UserProfile.findOne({where: {id: id}});
+        if(!profile){
+            return res.status(404).json({message: "Profile not found"});
+        }
+        profile.photoUrl = photoUrl;
+        await profile.save();
+        return res.status(200).json({message: "Profile photo updated successfully", profile});
+    }
+    catch (error) {
+        return res.status(500).json({error: error});
+    }
 }
 
-module.exports = {createProfile, getProfile, updateProfile};
+
+
+
+module.exports = {createProfile, getProfile, updateProfile , updateProfilePhoto};
