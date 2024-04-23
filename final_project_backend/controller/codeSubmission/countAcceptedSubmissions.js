@@ -8,67 +8,69 @@ const TestCase = require("../../models/question_testcase_submission/testCase");
 const fetchingAllAcceptedSubmittedQuestionsPerUser = async (req, res) => {
   const { userId } = req.params;
 
-  try {  
+  try {
+    // Check if the user exists
     const foundUser = await User.findOne({
-      where:{
-        id:userId
+      where: {
+        id: userId
       }
-    })
-    if(!foundUser) {
-      return res.status(400).json({message:"The user is not found"})
+    });
+    if (!foundUser) {
+      return res.status(400).json({ message: "The user is not found" });
     }
+
+    // Fetch all submissions for the user
     const questionSubmittedFetch = await codeSubmision.findAll({
       where: {
         userId: userId,
       },
     });
-   
-    const Ids = questionSubmittedFetch.map(
-      (submission) => submission.id
-    );
 
-    const allQuestions = [];
-    for (const id of Ids) {
-      const f = await codeSubmision.findOne({
-        where: {
-          id: id,
-        },
-      });
-      const questionsForId = await Question.findOne({
-        where: {
-          id: f.questionId,
-        },
-        include : [
-          {
-            model: TestCase,
-            where: {
-              labQuestionId: f.questionId
-            },
-            as: "TestCases"
-          }
-        ]
+    const acceptedQuestions = [];
 
-      });
+    // Iterate over each submission
+    for (const submission of questionSubmittedFetch) {
+      // Check if the submission has an "Accepted" status
       const questionStatus = await Status.findOne({
         where: {
-          submittedCodeId: id,
+          submittedCodeId: submission.id,
           status: "Accepted",
         },
       });
-      const a = {
-        questionsForId,
-        questionStatus,
-        id
-      };
-      allQuestions.push(a);
+
+      if (questionStatus) { // If the status is "Accepted"
+        // Fetch the associated question details
+        const questionsForId = await Question.findOne({
+          where: {
+            id: submission.questionId,
+          },
+          include: [
+            {
+              model: TestCase,
+              where: {
+                labQuestionId: submission.questionId
+              },
+              as: "TestCases"
+            }
+          ]
+        });
+
+        // Push the accepted question along with its status and submission id
+        acceptedQuestions.push({
+          questionsForId,
+          questionStatus,
+          id: submission.id
+        });
+      }
     }
 
-    return res.status(200).json(allQuestions);
+    return res.status(200).json(acceptedQuestions);
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 const fetchStatusForSpecificQuestion = async (req, res) => {
   const { userId, questionId } = req.params;
@@ -187,7 +189,57 @@ const countAcceptedSubmissionsOfUserBySection = async (req, res) => {
 
 }
 
+const countAcceptedSubmissionperDifficulty = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const acceptedSubmissions = await codeSubmision.findAll({
+      where: {
+        userId: userId,
+      },
+      include: [
+        {
+          model: Status,
+          as:"Status",
+          where: {
+            status: 'Accepted',
+          },
+        },
+      ],
+    });
+
+    let easyCount = 0;
+    let mediumCount = 0;
+    let hardCount = 0;
+    for (const submission of acceptedSubmissions) {
+      const question = await Question.findOne({
+        where: {
+          id: submission.questionId,
+        },
+      });
+      if (question.difficulty === 'easy') {
+        easyCount++;
+      }
+      if (question.difficulty === 'medium') {
+        mediumCount++;
+      }
+      if (question.difficulty === 'hard') {
+        hardCount++;
+      }
+    }
+    return res.status(200).json({ easyCount, mediumCount, hardCount });
+  }
+    catch (error) {
+      console.log(error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+
+    
+
+
+
 module.exports = {
+  countAcceptedSubmissionperDifficulty,
   fetchingAllAcceptedSubmittedQuestionsPerUser,
   fetchingDetailForAcceptedSubmittedQuestion,
   countAcceptedSubmissionsPerUser,

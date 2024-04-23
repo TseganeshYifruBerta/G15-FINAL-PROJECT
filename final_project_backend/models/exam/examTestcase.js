@@ -5,11 +5,11 @@ const sequelize = require("../../database/sequelize");
 const examTestCase = sequelize.define("examTestCase", {
    
   input: {
-    type: DataTypes.JSON,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   output: {
-    type: DataTypes.JSON,
+    type: DataTypes.STRING,
     allowNull: false,
   },
 });

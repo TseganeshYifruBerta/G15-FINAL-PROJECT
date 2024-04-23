@@ -47,12 +47,12 @@ const editExamQuestion = async (req, res) => {
       if (testcases) {
         await Promise.all(
           testcases.map(async (testCase) => {
-            const formattedOutput = Array.isArray(testCase.output) ? testCase.output : [testCase.output];
-            const formattedInput = Array.isArray(testCase.input) ? testCase.input : [testCase.input];
+            // const formattedOutput = Array.isArray(testCase.output) ? testCase.output : [testCase.output];
+            // const formattedInput = Array.isArray(testCase.input) ? testCase.input : [testCase.input];
             const testcaseId = testCase.id;
 
             await TestCase.update(
-              { input: formattedInput, output: formattedOutput },
+              { input: testCase.input, output: testCase.output },
               { where: { examQuestionId: examQuestionId, id: testcaseId }, transaction }
             );
           })
@@ -184,15 +184,15 @@ const AddTestcases = async (req, res) => {
     try {
       const createdTestCases = await Promise.all(
         testCases.map(async (testCase) => {
-          const formattedOutput = Array.isArray(testCase.output)
-           ? testCase.output
-            : [testCase.output];
-          const formattedInput = Array.isArray(testCase.input)
-           ? testCase.input
-            : [testCase.input];
+          // const formattedOutput = Array.isArray(testCase.output)
+          //  ? testCase.output
+          //   : [testCase.output];
+          // const formattedInput = Array.isArray(testCase.input)
+          //  ? testCase.input
+          //   : [testCase.input];
           const createdTestCase = await TestCase.create({
-            input: formattedInput,
-            output: formattedOutput,
+            input: testCase.input,
+            output: testCase.output,
             examQuestionId: examId
           }, { transaction });
           return createdTestCase;

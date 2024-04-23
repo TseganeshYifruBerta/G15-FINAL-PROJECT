@@ -32,10 +32,10 @@ const examQuestionDetailById = async (req, res) => {
       if (!examQuestionDetail) {
         return res.status(404).json({ message: "Exam question not found" });
       }
-      examQuestionDetail.examTestCase.forEach(testCase => {
-        testCase.input = JSON.parse(testCase.input);
-        testCase.output = JSON.parse(testCase.output);
-    });
+    //   examQuestionDetail.examTestCase.forEach(testCase => {
+    //     testCase.input = JSON.parse(testCase.input);
+    //     testCase.output = JSON.parse(testCase.output);
+    // });
     
 
       return res.status(200).json({ examQuestionDetail });

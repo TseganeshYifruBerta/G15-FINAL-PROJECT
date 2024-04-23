@@ -20,17 +20,11 @@ const AddTestcases = async (req, res) => {
     
       const createdTestCases = await Promise.all(
         testCases.map(async (testCase) => {
-          const formattedOutput = Array.isArray(testCase.output
-          )
-            ? testCase.output
-            : [testCase.output]; 
-          const formattedInput = Array.isArray(testCase.input)
-            ? testCase.input
-            : [testCase.input];
+          
           return await TestCase.create({
         
-            input: formattedInput,
-            output: formattedOutput,
+            input: testCase.input,
+            output: testCase.output,
             labQuestionId: questionId, // Associate the test case with the new LabQuestion
           }, { transaction });
         })

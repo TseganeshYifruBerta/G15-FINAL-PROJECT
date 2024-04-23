@@ -34,18 +34,18 @@ const getExamQuestionFilteredByTeacher = async (req, res) => {
       }
 
   
-    const allExamQuestionByTeacher = examQuestion.map((question) => {
-        question.examTestCase.forEach(testCase => {
-            testCase.input = JSON.parse(testCase.input);
-            testCase.output = JSON.parse(testCase.output);
-        });
-        return question;  
-    }
-    );
+    // const allExamQuestionByTeacher = examQuestion.map((question) => {
+    //     question.examTestCase.forEach(testCase => {
+    //         testCase.input = JSON.parse(testCase.input);
+    //         testCase.output = JSON.parse(testCase.output);
+    //     });
+    //     return question;  
+    // }
+    // );
   
 
 
-      return res.status(200).json({ allExamQuestionByTeacher });
+      return res.status(200).json({ examQuestion });
     });
   } catch (error) {
     

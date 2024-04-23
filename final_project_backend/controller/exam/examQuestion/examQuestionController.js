@@ -27,12 +27,14 @@ const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
     // Create and associate test cases with the new question within the transaction
     const createdTestCases = await Promise.all(
       testcases.map(async (testcase) => {
-        const formattedOutput = Array.isArray(testcase.output) ? testcase.output : [testcase.output];
-        const formattedInput = Array.isArray(testcase.input) ? testcase.input : [testcase.input];
+        // const formattedOutput = Array.isArray(testcase.output) ? testcase.output : [testcase.output];
+        // const formattedInput = Array.isArray(testcase.input) ? testcase.input : [testcase.input];
 
         return await examTestCase.create({
-          input: formattedInput,
-          output: formattedOutput,
+          // input: formattedInput,
+          // output: formattedOutput,
+          input: testcase.input,
+          output: testcase.output,
           examQuestionId: newQuestion.id,
         }, { transaction });
       })
