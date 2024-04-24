@@ -44,8 +44,8 @@ import { getAllEndedExamsApi } from "./plagiarism/get-all-ended-exams";
 import {fetchQuestionsFromPlagiarismCheckedExamApi} from "./plagiarism/fetch-questions-from-plagiarism-checked-exam";
 import {fetchAllPlagiarizedSectionApi} from "./plagiarism/get-all-plagiarized-section"
 import { upcomingExamsApi } from './../store/exam/upcoming-exam-api';
-import { getCountCodeSubmissionsForLastMonthApi } from "./submissions/get-all-last-month-submissions-by-id"; // Import your API file
-import { getAllDifficultyDataPerUserApi } from './submissions/get-all-difficulty-data-per-user'; // Import your difficulty data reducer
+import { getCountCodeSubmissionsForLastMonthApi } from "./../store/submissions/get-all-last-month-submissions-by-id"; 
+import { getAllDifficultyDataPerUserApi } from './../store/submissions/get-all-difficulty-data-per-user'; // Import your difficulty data reducer
 
 export const store = configureStore({
   reducer: {
