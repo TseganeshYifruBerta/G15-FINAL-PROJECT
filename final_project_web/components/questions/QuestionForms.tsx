@@ -41,7 +41,7 @@ const QuestionForms = () => {
     }
   }, []);
   const values = {
-    testcases: testCases,
+    testCases: testCases,
     title: questionTitle,
     difficulty: questionDifficulty,
     description: questionDescription,
