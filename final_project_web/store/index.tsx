@@ -15,7 +15,6 @@ import loginReducer from './login/login-slice'
 import examUploadReducer from './exam/upload-exam-slice'
 import examAnswerReducer from './exam/upload-exam-question-slice'
 import { questionApi } from "./question/get-all-questions";
-// import { getAllSubmissionsByIdApi } from "./submissions/get-all-submissions-by-id";
 import { getSubmissionDetailByIdApi } from "./submissions/get-submission-detail-by-id-api";
 import { getQuestionDetalApi } from "./question/get-questionById-api";
 import { getAllSubmissionsByIdApi } from "./submissions/get-all-submissions-by-id";
