@@ -38,8 +38,11 @@ import { getCountCodeSubmissionsForLastMonthApi } from "./submissions/get-all-la
 import { getAllDifficultyDataPerUserApi } from './submissions/get-all-difficulty-data-per-user'; // Import your difficulty data reducer
 import { getAllQuestionsByStudentIdApi } from "./exam/examAnswer/get-all-questions-by-student-id";
 import { getExamQuestionAnswerApi } from "./exam/examAnswer/get-exam-question-answer";
+import {fetchStudentsFromPlagiarismCheckedExamApi} from "./plagiarism/fetch-students-from-plagiarism-checked-exam";
 import {getAllPlagiarismCheckedExamsApi} from "./plagiarism/get-all-plagiarism-checked-exams";
 import { getAllEndedExamsApi } from "./plagiarism/get-all-ended-exams";
+import {fetchQuestionsFromPlagiarismCheckedExamApi} from "./plagiarism/fetch-questions-from-plagiarism-checked-exam";
+import {fetchAllPlagiarizedSectionApi} from "./plagiarism/get-all-plagiarized-section"
 export const store = configureStore({
   reducer: {
     form: formReducer,
@@ -82,6 +85,9 @@ export const store = configureStore({
     [getExamQuestionAnswerApi.reducerPath]: getExamQuestionAnswerApi.reducer,
     [getAllEndedExamsApi.reducerPath]: getAllEndedExamsApi.reducer,
     [getAllPlagiarismCheckedExamsApi.reducerPath]: getAllPlagiarismCheckedExamsApi.reducer,
+    [fetchStudentsFromPlagiarismCheckedExamApi.reducerPath]: fetchStudentsFromPlagiarismCheckedExamApi.reducer,
+    [fetchQuestionsFromPlagiarismCheckedExamApi.reducerPath]: fetchQuestionsFromPlagiarismCheckedExamApi.reducer,
+    [fetchAllPlagiarizedSectionApi.reducerPath]:fetchAllPlagiarizedSectionApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -107,7 +113,10 @@ export const store = configureStore({
       .concat(getAllQuestionsByStudentIdApi.middleware)
       .concat(getExamQuestionAnswerApi.middleware)
       .concat(getAllEndedExamsApi.middleware)
-      .concat(getAllPlagiarismCheckedExamsApi.middleware),
+      .concat(getAllPlagiarismCheckedExamsApi.middleware)
+      .concat(fetchStudentsFromPlagiarismCheckedExamApi.middleware)
+      .concat(fetchQuestionsFromPlagiarismCheckedExamApi.middleware)
+      .concat(fetchAllPlagiarizedSectionApi.middleware)
      
 });
 

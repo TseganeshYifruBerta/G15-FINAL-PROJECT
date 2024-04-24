@@ -1,5 +1,6 @@
 const Exam = require("../../models/exam/createExam")
-const User = require("../../models/auth/user.model")
+const User = require("../../models/auth/user.model");
+const Allplagiarism = require("../../models/plagiarism/allPlagiarism");
 const getAllEndedExams = async (req, res) => {
     try {
       const {teacherId} = req.params;
@@ -21,15 +22,33 @@ const getAllEndedExams = async (req, res) => {
         },
       });
 
+     
+       let final = []
        let exams = []
       if(!endedExams){
          exams = []
       }
       else{
-        exams = endedExams.map((exam) => ({
-                id: exam.id, // Including the exam ID
-                title: exam.title // Including the exam title
-            }));
+        const examFound = endedExams.map((exam) => ({examId:exam.id,examtitle:exam.title}));
+        // return res.status(200).json({exams: examFound});
+        for(const examId of examFound){
+          const examData = await Allplagiarism.findOne({
+            where: {
+                examId: examId.examId, 
+            },
+        });
+        // return res.status(200).json({exams: examData});
+        if(examData === null){
+          exams.push({
+            id: examId.examId,
+            title: examId.examtitle,
+
+          });
+        }
+        
+      
+        }
+        
       }
 
       return res.status(200).json({exams: exams});
