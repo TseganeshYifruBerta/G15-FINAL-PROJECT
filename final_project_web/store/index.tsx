@@ -3,8 +3,8 @@ import { reducer as formReducer } from 'redux-form';
 import { useDispatch } from 'react-redux';
 import signupTeacherReducer from './signup/signupSliceReducerTeacher';
 import signupStudentReducer from './signup/SignupSliceReducerStudent';
-import  UploadReducer from "@/store/upload/UploadSliceReducer";
-import  UploadManually  from "./upload/uploadmanuallyslicereducer";
+import UploadReducer from "@/store/upload/UploadSliceReducer";
+import UploadManually from "./upload/uploadmanuallyslicereducer";
 import signinStudentReducer from "./signin/student-signin-slice"
 import questionUploadReducer from "./question-upload/question-upload-slice"
 import examQuestionUploadReducer from './exam/upload-exam-question-slice'
@@ -25,15 +25,17 @@ import { getNumberOfAllQuestionApi } from "./profile/get-number-of-question-api"
 import { getAllExamsApi } from "./exam/get-all-exam-api";
 import { getExamQuestionByIdApi } from "./exam/get-all-exam-by-id";
 import { getAllStudentsApi } from "./teacherprofile/get-all-students";
-import {getTopSolvedQuestionsApi} from "./question/get-top-solved-questions"
+import { getTopSolvedQuestionsApi } from "./question/get-top-solved-questions"
 import { getWeeklyReportApi } from "./profile/get-weekly-report";
 import { getTopStudentsApi } from "./teacherprofile/get-top-students";
+import { getAllExamTakenStudentsApi } from "./exam/examAnswer/get-all-students";
 import teacherReducer from './admin/teacher_slice_reducer';
 import studentReducer from './admin/student_slice_reducer';
 import passwordReducer from '@/store/changnepassword/slicereducer'
 import { upcomingExamsApi } from './../store/exam/upcoming-exam-api';
 import { getCountCodeSubmissionsForLastMonthApi } from "./submissions/get-all-last-month-submissions-by-id"; // Import your API file
 import { getAllDifficultyDataPerUserApi } from './submissions/get-all-difficulty-data-per-user'; // Import your difficulty data reducer
+import { getAllQuestionByStudentIdApi } from "./exam/examAnswer/get-all-questions-by-student-id";
 
 export const store = configureStore({
   reducer: {
@@ -52,6 +54,7 @@ export const store = configureStore({
     addtestcase: addTestcaseReducer,
     addexamtestcase:addExamTestcaseReducer,
     uploadexam: examUploadReducer,
+    
     [getQuestionDetalApi.reducerPath]: getQuestionDetalApi.reducer,
     [questionApi.reducerPath]: questionApi.reducer,
     [getSubmissionDetailByIdApi.reducerPath]:
@@ -64,6 +67,8 @@ export const store = configureStore({
     [getEasyMediumHardByIdApi.reducerPath]: getEasyMediumHardByIdApi.reducer,
     [getNumberOfAllQuestionApi.reducerPath]: getNumberOfAllQuestionApi.reducer,
     [getAllStudentsApi.reducerPath]: getAllStudentsApi.reducer,
+    [getAllExamTakenStudentsApi.reducerPath]: getAllExamTakenStudentsApi.reducer,
+    [getAllQuestionByStudentIdApi.reducerPath]: getAllQuestionByStudentIdApi.reducer,
     [getExamQuestionByIdApi.reducerPath]: getExamQuestionByIdApi.reducer,
     [getAllExamsApi.reducerPath]: getAllExamsApi.reducer,
     [getTopSolvedQuestionsApi.reducerPath]: getTopSolvedQuestionsApi.reducer,

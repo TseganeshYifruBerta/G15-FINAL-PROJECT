@@ -8,12 +8,11 @@ const login = async (req, res) => {
     const { userId, password } = req.body;
 
     const user = await User.findOne({ where: { userId } });
+    if(!user){
+        return res.status(401).json({ message: 'Invalid userId or password' });
+    }
 
-    // if (!user || !bcrypt.compareSync(password, user.password)) {
-    //     return res.status(401).json({ message: 'Invalid userId or password' });
-    // }
-
-    if (!user || !bcrypt.compareSync(password, user.password)) {
+    if (!bcrypt.compareSync(password, user.password)) {
       
         user.loginAttempt += 1;
         await user.save();
