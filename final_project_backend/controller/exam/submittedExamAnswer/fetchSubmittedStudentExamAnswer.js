@@ -2,7 +2,6 @@ const ExamQuestion = require("../../../models/exam/uploadExamQuestion");
 const studentsExamAnswer = require("../../../models/exam/studentsExamAnswer");
 const Section = require("../../../models/auth/section.model");
 const User = require("../../../models/auth/user.model");
-const studentsExamDetail = require("../../../models/exam/submittedExamDetail"); // Import the studentsExamDetail model
 
 const fetchAllSubmittedStudentExamAnswerBySection = async (req, res) => {
     try {
@@ -43,19 +42,7 @@ const fetchAllSubmittedStudentExamAnswerBySection = async (req, res) => {
                     {
                         model: studentsExamAnswer,
                         as: "studentsExamAnswer",
-                        include: [
-                            {
-                                model: studentsExamDetail,
-                                as: "studentsExamDetails",
-                                include: [
-                                    {
-                                        model: ExamQuestion,
-
-                                    }
-
-                                ]
-                            },
-                        ],
+                        
                     },
 
 

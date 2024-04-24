@@ -8,23 +8,24 @@ const getAllExamtakeStudent = async (req, res) => {
     const { examId , teacherId } = req.params;
     try {
 
-
         const ExamTakeUser = await SubmittedExamAnswer.findAll({
             where: { 
                 examId: examId 
-                
-            
             },
+            group: ['Userinformation.id'] ,
             include: [{
                 model: User,
                 as: 'Userinformation',
+                
                include  : [{    
                 model:section,   
                 as: 'SectionsOfUser'
             
-            }]
+            }],
+            
 
-            }]
+            }],
+            
         });
         
 
@@ -59,6 +60,12 @@ const getSubmissionOfstudentByQuestionId = async (req, res) => {
     const { userId, questionId } = req.params;
 
     try {
+        const foundUser = await User.findOne({
+            where: {
+                id: userId
+            }
+        });
+        if(!foundUser) return res.status(404).json({ message: 'User not found' });
         const questionDetail = await ExamQuestion.findOne({
             where:{
                 id:questionId

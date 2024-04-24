@@ -112,15 +112,6 @@ const createExam = async (req, res) => {
    
          })
 
-       
-
-
-
-
-
-
-        // console.log(selectedQuestionsForExam);
-        
         async function selectQuestionsByDifficulty(difficultyCount) {
         //   // Fetch all questions for each difficulty level
           const questionsByDifficulty = {
