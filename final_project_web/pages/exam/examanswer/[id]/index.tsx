@@ -30,7 +30,6 @@ function AllExamTakenStudentsDetail() {
                 examTakenStudents = {examTakenStudents.filterUser}
                 examId = {examId}
                 
-                
             />
                       
                
