@@ -2,8 +2,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const jwt = require("jsonwebtoken");
 const baseUrl = "";
 
-export const getAllQuestionsByStudentIdApi = createApi({
-  reducerPath: "getAllQuestionsByStudentIdApi",
+export const getExamQuestionAnswerApi = createApi({
+  reducerPath: "getExamQuestionAnswerApi",
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
     prepareHeaders: (headers, { getState }) => {
@@ -16,13 +16,15 @@ export const getAllQuestionsByStudentIdApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getAllQuestionsByStudentId: builder.query({
+    getExamQuestionAnswer: builder.query({
       query: (params) => {
-        const {  examId } = params;
-        let url = "http://localhost:5000/exam/getExamByIdWithQuestions";
+        const {  userId , questionId } = params;
+        let url = "http://localhost:5000/exam/getSubmissionOfstudentByQuestionId";
         const queryParams = [];
 
-        queryParams.push(`${examId}`);
+        queryParams.push(`${userId}`);
+        queryParams.push(`${questionId}`);
+
 
         return {
           url: queryParams.length > 0 ? `${url}/${queryParams.join("/")}` : url,
@@ -33,4 +35,4 @@ export const getAllQuestionsByStudentIdApi = createApi({
   }),
 });
 
-export const { useGetAllQuestionsByStudentIdQuery } = getAllQuestionsByStudentIdApi;
+export const { useGetExamQuestionAnswerQuery } = getExamQuestionAnswerApi;

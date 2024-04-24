@@ -36,7 +36,7 @@
 
 // export const { useGetAllExamTakenStudentsQuery } = getAllExamTakenStudentsApi;
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
+const jwt = require("jsonwebtoken");
 const baseUrl = "";
 
 export const getAllExamTakenStudentsApi = createApi({
@@ -55,9 +55,12 @@ export const getAllExamTakenStudentsApi = createApi({
   endpoints: (builder) => ({
     getAllExamTakenStudents: builder.query({
       query: (params) => {
-        const { teacherId , examId } = params;
-        let url = "http://localhost:5000/exam/getAllExamTakenStudents";
+        const {  examId } = params;
+        let url = "http://localhost:5000/exam/getAllExamtakeStudent";
         const queryParams = [];
+        const token = localStorage.getItem("token");
+        const decodedToken = jwt.decode(token);
+        const teacherId = decodedToken?.id || null;
         queryParams.push(`${teacherId}`);
         queryParams.push(`${examId}`);
 

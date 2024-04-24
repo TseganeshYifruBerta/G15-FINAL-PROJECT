@@ -35,7 +35,8 @@ import passwordReducer from '@/store/changnepassword/slicereducer'
 import { upcomingExamsApi } from './../store/exam/upcoming-exam-api';
 import { getCountCodeSubmissionsForLastMonthApi } from "./submissions/get-all-last-month-submissions-by-id"; // Import your API file
 import { getAllDifficultyDataPerUserApi } from './submissions/get-all-difficulty-data-per-user'; // Import your difficulty data reducer
-import { getAllQuestionByStudentIdApi } from "./exam/examAnswer/get-all-questions-by-student-id";
+import { getAllQuestionsByStudentIdApi } from "./exam/examAnswer/get-all-questions-by-student-id";
+import { getExamQuestionAnswerApi } from "./exam/examAnswer/get-exam-question-answer";
 
 export const store = configureStore({
   reducer: {
@@ -62,13 +63,12 @@ export const store = configureStore({
     [getAllSubmissionsByIdApi.reducerPath]: getAllSubmissionsByIdApi.reducer,
     [getStudentProfileByIdApi.reducerPath]: getStudentProfileByIdApi.reducer,
     [getTeacherProfileByIdApi.reducerPath]: getTeacherProfileByIdApi.reducer,
-    [getAcceptedQuestionByIdApi.reducerPath]:
-      getAcceptedQuestionByIdApi.reducer,
+    [getAcceptedQuestionByIdApi.reducerPath]:getAcceptedQuestionByIdApi.reducer,
     [getEasyMediumHardByIdApi.reducerPath]: getEasyMediumHardByIdApi.reducer,
     [getNumberOfAllQuestionApi.reducerPath]: getNumberOfAllQuestionApi.reducer,
     [getAllStudentsApi.reducerPath]: getAllStudentsApi.reducer,
     [getAllExamTakenStudentsApi.reducerPath]: getAllExamTakenStudentsApi.reducer,
-    [getAllQuestionByStudentIdApi.reducerPath]: getAllQuestionByStudentIdApi.reducer,
+    [getAllQuestionsByStudentIdApi.reducerPath]: getAllQuestionsByStudentIdApi.reducer,
     [getExamQuestionByIdApi.reducerPath]: getExamQuestionByIdApi.reducer,
     [getAllExamsApi.reducerPath]: getAllExamsApi.reducer,
     [getTopSolvedQuestionsApi.reducerPath]: getTopSolvedQuestionsApi.reducer,
@@ -77,6 +77,8 @@ export const store = configureStore({
     [upcomingExamsApi.reducerPath]: upcomingExamsApi.reducer,
     [getCountCodeSubmissionsForLastMonthApi.reducerPath]: getCountCodeSubmissionsForLastMonthApi.reducer,
     [getAllDifficultyDataPerUserApi.reducerPath]: getAllDifficultyDataPerUserApi.reducer,
+    [getExamQuestionAnswerApi.reducerPath]: getExamQuestionAnswerApi.reducer,
+
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -97,7 +99,11 @@ export const store = configureStore({
       .concat(getExamQuestionByIdApi.middleware)
       .concat(upcomingExamsApi.middleware)
       .concat(getCountCodeSubmissionsForLastMonthApi.middleware)
-      .concat(getAllDifficultyDataPerUserApi.middleware),
+      .concat(getAllDifficultyDataPerUserApi.middleware)
+      .concat(getAllExamTakenStudentsApi.middleware)
+      .concat(getAllQuestionsByStudentIdApi.middleware)
+      .concat(getExamQuestionAnswerApi.middleware),
+
 });
 
 export type RootState = ReturnType<typeof store.getState>;

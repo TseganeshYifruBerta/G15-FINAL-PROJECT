@@ -1,17 +1,15 @@
-import Image from "next/image";
-import { useGetAllStudentsQuery } from "@/store/teacherprofile/get-all-students";
-import { useState } from "react";
 import Link from "next/link";
-
-const AllExamTakenStudents = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const { data: students, isLoading, isError } = useGetAllStudentsQuery("");
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  // Days of the week
+import { useState } from "react";
+interface AllStudentsProps {
+  examTakenStudents:any[],
+  examId :string
+}
+const AllExamTakenStudents: React.FC<AllStudentsProps> = ({
+  examTakenStudents,
+  
+  examId
+ 
+}) => {
   const days = [
     "Sunday",
     "Monday",
@@ -21,9 +19,10 @@ const AllExamTakenStudents = () => {
     "Friday",
     "Saturday",
   ];
+ 
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // Create a new array with modified data
-  const modifiedData = students?.userDatas.map((student: any) => {
+  const modifiedData = examTakenStudents?.map((student: any) => {
     const date = new Date(student.createdAt);
     const dayOfWeek = days[date.getDay()];
     const time = date.toLocaleTimeString();
@@ -37,15 +36,16 @@ const AllExamTakenStudents = () => {
       createdAt: dateFormat,
     };
   });
-
   const filteredStudents = modifiedData?.filter((student: any) =>
     student.fullName.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="px-4 py-6 md:px-6 xl:px-7.5 flex ">
         <h4 className="text-xl font-semibold text-black dark:text-white w-4/5">
-          All Students who took an exam
+          All Students
         </h4>
         <div className="flex mr-4 w-2/5">
           <input
@@ -71,13 +71,19 @@ const AllExamTakenStudents = () => {
           <p className="">Status</p>
         </div>
         <div className="col-span-1 flex items-center">
+          <p className="">Section</p>
+        </div>
+        <div className="col-span-1 flex items-center">
           <p className="">Joined At</p>
         </div>
       </div>
 
       {filteredStudents.map((student: any, key: any) => (
-        <Link href={`/exam/examanswer/${student.id}`} key={student.id}>
-        <div className="grid grid-cols-6 border-t border-stroke px-4 py-2 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 text-xs">
+        <Link href={`/exam/examanswer/examquestion/${student.id}/${examId}`}>
+        <div
+          className="grid grid-cols-6 border-t border-stroke px-4 py-2 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 text-xs"
+          key={key}
+        >
           <div className="col-span-2 flex items-center">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <p className=" text-black dark:text-white">{student.fullName}</p>
@@ -93,9 +99,12 @@ const AllExamTakenStudents = () => {
             <p className="text-sm text-meta-3">{student.status}</p>
           </div>
           <div className="col-span-1 flex items-center">
+            <p className="text-sm text-meta-3">{student.SectionsOfUser[0].section}</p>
+          </div>
+          <div className="col-span-1 flex items-center">
             <p className=" text-black dark:text-white">{student.createdAt}</p>
           </div>
-          </div>
+        </div>
         </Link>
       ))}
     </div>
@@ -103,3 +112,4 @@ const AllExamTakenStudents = () => {
 };
 
 export default AllExamTakenStudents;
+
