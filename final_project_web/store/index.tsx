@@ -33,9 +33,6 @@ import { getAllExamTakenStudentsApi } from "./exam/examAnswer/get-all-students";
 import teacherReducer from './admin/teacher_slice_reducer';
 import studentReducer from './admin/student_slice_reducer';
 import passwordReducer from '@/store/changnepassword/slicereducer'
-import { upcomingExamsApi } from './../store/exam/upcoming-exam-api';
-import { getCountCodeSubmissionsForLastMonthApi } from "./submissions/get-all-last-month-submissions-by-id"; // Import your API file
-import { getAllDifficultyDataPerUserApi } from './submissions/get-all-difficulty-data-per-user'; // Import your difficulty data reducer
 import { getAllQuestionsByStudentIdApi } from "./exam/examAnswer/get-all-questions-by-student-id";
 import { getExamQuestionAnswerApi } from "./exam/examAnswer/get-exam-question-answer";
 import {fetchStudentsFromPlagiarismCheckedExamApi} from "./plagiarism/fetch-students-from-plagiarism-checked-exam";
@@ -93,9 +90,6 @@ export const store = configureStore({
     [fetchStudentsFromPlagiarismCheckedExamApi.reducerPath]: fetchStudentsFromPlagiarismCheckedExamApi.reducer,
     [fetchQuestionsFromPlagiarismCheckedExamApi.reducerPath]: fetchQuestionsFromPlagiarismCheckedExamApi.reducer,
     [fetchAllPlagiarizedSectionApi.reducerPath]:fetchAllPlagiarizedSectionApi.reducer,
-    [upcomingExamsApi.reducerPath]: upcomingExamsApi.reducer,
-    [getCountCodeSubmissionsForLastMonthApi.reducerPath]: getCountCodeSubmissionsForLastMonthApi.reducer,
-    [getAllDifficultyDataPerUserApi.reducerPath]: getAllDifficultyDataPerUserApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
