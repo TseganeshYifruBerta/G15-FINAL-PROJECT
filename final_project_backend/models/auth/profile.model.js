@@ -36,7 +36,7 @@ const UserProfile = sequelize.define("UserProfileinformation", {
     type: DataTypes.TEXT,
   },
   photoUrl:{
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
   },
   userId: {
     type: DataTypes.STRING,},

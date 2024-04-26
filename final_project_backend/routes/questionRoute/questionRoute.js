@@ -5,7 +5,8 @@ const {
   getAllQuestions,
   getNumberOfAllQuestion,
   getAllQuestionsCreatedByTeacher,
-  getNumberOfAllQuestionsCreatedByTeacher
+  getNumberOfAllQuestionsCreatedByTeacher,
+  getNumberOfQuestionByDifficulty
 
   
 } = require("../../controller/QuestionUploaderController/fetch_all_question");
@@ -21,7 +22,7 @@ questionRouters.get("/getAllQuestions", getAllQuestions);
 questionRouters.get("/getAllQuestionsCreatedByTeacher/:teacherId", getAllQuestionsCreatedByTeacher); 
 questionRouters.get("/getNumberOfAllQuestionsCreatedByTeacher/:teacherId", getNumberOfAllQuestionsCreatedByTeacher); 
 questionRouters.get("/getNumberOfAllQuestion", getNumberOfAllQuestion);
-
+questionRouters.get("/getNumberOfQuestionByDifficulty", getNumberOfQuestionByDifficulty);
 
 
 questionRouters.get("/DetailOfSelectedQuestion/:questionId",DetailOfSelectedQuestion);
