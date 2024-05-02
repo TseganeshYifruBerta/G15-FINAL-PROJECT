@@ -7,11 +7,7 @@ const UserProfile = require('../../models/auth/profile.model');
 // Define route for creating a profile
 const createProfile  = async (req, res) =>  {
     const{ id} = req.params;
-    const existingProfile = await UserProfile.findOne({ where: { id: id } });
-
-    if (existingProfile) {
-        return res.status(400).json({ message: "Profile already exists" });
-    }
+ 
     const { 
          university, 
          linkedin,
@@ -23,6 +19,7 @@ const createProfile  = async (req, res) =>  {
          shortBio,
          photoUrl,
              } = req.body;
+   
 
     try {
     const user = await User.findOne({where: {id: id}});
@@ -32,8 +29,22 @@ const createProfile  = async (req, res) =>  {
     const fullName = user.fullName
     const email = user.email
     const userId = user.userId
-    const role = user.role
 
+
+    const role = user.role
+    const userInformationId = id
+    const existingProfile = await UserProfile.findOne(
+
+
+        {
+            where : { userInformationId : userInformationId }
+        }
+    )
+        if (existingProfile){
+            return res.status(400).json({message: "Profile already exists"});
+        }
+        else{
+    
     const profile = await UserProfile.create({
         fullName,
         email,
@@ -47,13 +58,13 @@ const createProfile  = async (req, res) =>  {
         department,
         shortBio,
         photoUrl,
-        role
+        role,
+        userInformationId
     });
         
+    return res.status(201).json({message: "Profile created successfully", profile });
 
-    return res.status(201).json({message: "Profile created successfully", existingProfile});
-
-    } catch (error) {
+    }} catch (error) {
         return res.status(500).json({error: error});
     }
 }
@@ -62,11 +73,7 @@ const createProfile  = async (req, res) =>  {
 const getProfile = async (req, res) => {
     const { id } = req.params;
     try {
-        // const user
-        //     = await User.findOne({where: {userId: id}});
-        // if(!user){
-        //     return res.status(404).json({message: "User not found"});
-        // }
+      
         const profile = await UserProfile.findOne({where: {id: id}});
 
         if(!profile){
@@ -80,6 +87,7 @@ const getProfile = async (req, res) => {
         return res.status(500).json({error: error});
     }
 }
+
 
 const updateProfile = async (req, res) => {
     const { id } = req.params;

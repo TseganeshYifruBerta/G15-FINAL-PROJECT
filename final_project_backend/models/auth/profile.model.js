@@ -13,7 +13,6 @@ const UserProfile = sequelize.define("UserProfileinformation", {
   university:{
     type: DataTypes.STRING,
   },
-  
   linkedin:{
     type: DataTypes.STRING,
   },
@@ -43,6 +42,10 @@ const UserProfile = sequelize.define("UserProfileinformation", {
 
   role: {
     type: DataTypes.ENUM('admin','student', 'teacher'),
+  },
+  userInformationId: {
+    type: DataTypes.INTEGER,
+    
   },
 
 }); 
