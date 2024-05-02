@@ -123,5 +123,30 @@ const getAllQuestions = async (req, res) => {
   }
 };
 
+const getNumberOfQuestionByDifficulty = async(req,res) =>{
+  try{
+    easyQuestionCount = await Question.count({
+      where: {
+        difficulty: 'easy'
+      }
+    });
+    mediumQuestionCount = await Question.count({
+      where: {
+        difficulty: 'medium'
+      }
+    });
+    hardQuestionCount = await Question.count({
+      where: {
+        difficulty: 'hard'
+      }
+    });
+    return res.status(200).json({easyQuestionCount,mediumQuestionCount,hardQuestionCount});
 
-module.exports = { getAllQuestions,  getNumberOfAllQuestion , getAllQuestionsCreatedByTeacher,getNumberOfAllQuestionsCreatedByTeacher};
+  }
+  catch(error){
+    console.log(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+
+}
+};
+module.exports = { getAllQuestions,  getNumberOfAllQuestion , getAllQuestionsCreatedByTeacher,getNumberOfAllQuestionsCreatedByTeacher,getNumberOfQuestionByDifficulty};
