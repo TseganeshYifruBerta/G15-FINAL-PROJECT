@@ -59,8 +59,7 @@ export default function SignInSide() {
     const regex = /^[A-Z]{3}\/\d{4}\/\d{2}$/;
     return regex.test(id);
   };
-
-  const handleSubmit = async (event: any) => {
+ const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     var error = false;
     const data = new FormData(event.currentTarget);
@@ -83,20 +82,29 @@ export default function SignInSide() {
       return;
     }
 
-    const values: LoginFormData = {
-      userId: data.get("id") as string,
-      password: data.get("password") as string,
-    };
-    const response = await login(values);
-    console.log(response, "response");
-    const token = response.token;
-   
-        const decodedToken = jwt.decode(token);
-       
-    const role = decodedToken.role;
-    router.push(`/${role}/dashboard`);
-    // Proceed with authentication...
+    try {
+      const response = await login({ userId: id, password: passwordd });
+      console.log(response, "response");
+
+      if (response.token) {
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("fullName", response.fullName); // Assuming fullName is part of the response
+        localStorage.setItem("role", response.role); // Assuming role is part of the response
+        
+        if (response.role === 'admin') {
+          // If the user is an admin, navigate to the 'upload' page
+          router.push('/admin/upload');
+        } else {
+          // For any other role, navigate to their respective dashboard
+          router.push(`/${response.role}/dashboard`);
+        }
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      // Handle error, maybe set an error state to display in the UI.
+    }
   };
+
 
   return (
     <div className="relative">
@@ -135,7 +143,8 @@ export default function SignInSide() {
                       color={`${idError ? "red" : "black"}`}
                       onChange={(e) => {
                         setId(e.target.value);
-                      } } onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                    />
+                      }}
+                    />
 
                     {idError && (
                       <p className="text-red-500 text-xs italic">{idError}</p>
@@ -153,7 +162,8 @@ export default function SignInSide() {
                       value={passwordd}
                       onChange={(e) => {
                         setPassword(e.target.value);
-                      } } onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                    />
+                      }}
+                    />
                     {passwordError && (
                       <p className="text-red-500 text-xs italic">
                         {passwordError}
