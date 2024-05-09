@@ -176,45 +176,6 @@ if (isErrorQuestion || isError) {
 
       {activeTab === "Lab Questions" && (
         <div className="rounded-sm bg-white  dark:border-strokedark dark:bg-boxdark">
-          {/* <div className="flex justify-between items-center my-4 mx-2">
-            <div className="flex mr-4 w-2/5">
-              <input
-                type="text"
-                placeholder="Search by title..."
-                className="w-full select select-bordered select-primary max-w-xs mr-2 px-2 py-2 rounded-md bg-white  focus:outline-none shadow text-xs"
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            <div className="flex items-center w-3/5">
-              <select
-                className="w-1/5 select select-bordered select-primary max-w-xs mr-2 px-2 py-2 rounded-md bg-white  focus:outline-none shadow text-xs"
-                onChange={(e) => setFilter(e.target.value)}
-                value={filter}
-              >
-                <option value="">Difficulties</option>
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
-              </select>
-              <button
-                onClick={handleSortOrderChange}
-                className="w-2/5 select select-bordered select-primary max-w-xs mr-2 px-2 py-2 rounded-md bg-white  focus:outline-none shadow text-xs"
-              >
-                Sort by Date {sortOrder === "asc" ? "↑" : "↓"}
-              </button>
-              <div className="w-2/5 select select-bordered select-primary max-w-xs mr-2 px-2 py-2 rounded-md bg-white  focus:outline-none shadow text-xs">
-                <label className="label cursor-pointer -pb-2">
-                  <span className="label-text mr-2 -mb-2">Created by Me</span>
-                </label>
-                <input
-                  type="checkbox"
-                  className="toggle toggle-primary text-primary"
-                  checked={createdByMe}
-                  onChange={(e) => setCreatedByMe(e.target.checked)}
-                />
-              </div>
-            </div>
-          </div> */}
           <div className="flex justify-between items-center my-4 mx-2">
             <div className="flex mr-4 w-2/5">
               <input

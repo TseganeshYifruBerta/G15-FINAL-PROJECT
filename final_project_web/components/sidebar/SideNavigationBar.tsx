@@ -47,7 +47,7 @@ const navigations: any = {
       href: "/plagiarism/plagiarism",
       name: "Plagiarism",
       icon: IoFolderOpenOutline,
-    }
+    },
   ],
   student: [
     {
@@ -75,6 +75,16 @@ const navigations: any = {
     {
       href: "/admin/upload",
       name: "Upload User",
+      icon: MdAutoGraph,
+    },
+    {
+      href: "/admin/studentlist",
+      name: "Students",
+      icon: MdAutoGraph,
+    },
+    {
+      href: "/admin/teacherlist",
+      name: "Teachers",
       icon: MdAutoGraph,
     },
   ],
