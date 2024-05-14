@@ -39,7 +39,13 @@ import { getAllQuestionsByStudentIdApi } from "./exam/examAnswer/get-all-questio
 import {getAllPlagiarismCheckedExamsApi} from "./plagiarism/get-all-plagiarism-checked-exams";
 import { getAllEndedExamsApi } from "./plagiarism/get-all-ended-exams";
 import {fetchQuestionsFromPlagiarismCheckedExamApi} from "./plagiarism/fetch-questions-from-plagiarism-checked-exam";
-import {fetchAllPlagiarizedSectionApi} from "./plagiarism/get-all-plagiarized-section"
+import {fetchAllPlagiarizedSectionApi} from "./plagiarism/get-all-plagiarized-section";
+import { getAllDifficultyDataPerUserApi } from "./submissions/get-all-difficulty-data-per-user";
+import { getCountCodeSubmissionsForLastMonthApi } from "./submissions/get-all-last-month-submissions-by-id";
+import { upcomingExamsApi } from "./exam/upcoming-exam-api";
+import { countAcceptedSubmissionsperDifficultyApi } from "./submissions/count-Accepted-submissions-per-Difficulty";
+
+
 export const store = configureStore({
   reducer: {
     form: formReducer,
@@ -85,8 +91,14 @@ export const store = configureStore({
     [getAllPlagiarismCheckedExamsApi.reducerPath]: getAllPlagiarismCheckedExamsApi.reducer,
     [fetchStudentsFromPlagiarismCheckedExamApi.reducerPath]: fetchStudentsFromPlagiarismCheckedExamApi.reducer,
     [fetchQuestionsFromPlagiarismCheckedExamApi.reducerPath]: fetchQuestionsFromPlagiarismCheckedExamApi.reducer,
-    [fetchAllPlagiarizedSectionApi.reducerPath]:fetchAllPlagiarizedSectionApi.reducer
+    [fetchAllPlagiarizedSectionApi.reducerPath]:fetchAllPlagiarizedSectionApi.reducer,
+    [getAllDifficultyDataPerUserApi.reducerPath]:getAllDifficultyDataPerUserApi.reducer,
+    [getCountCodeSubmissionsForLastMonthApi.reducerPath]:getCountCodeSubmissionsForLastMonthApi.reducer,
+    [upcomingExamsApi.reducerPath]:upcomingExamsApi.reducer,
+    [countAcceptedSubmissionsperDifficultyApi.reducerPath]:countAcceptedSubmissionsperDifficultyApi.reducer,
   },
+
+
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(getQuestionDetalApi.middleware)
@@ -112,6 +124,10 @@ export const store = configureStore({
       .concat(fetchStudentsFromPlagiarismCheckedExamApi.middleware)
       .concat(fetchQuestionsFromPlagiarismCheckedExamApi.middleware)
       .concat(fetchAllPlagiarizedSectionApi.middleware)
+      .concat(getAllDifficultyDataPerUserApi.middleware)
+      .concat(getCountCodeSubmissionsForLastMonthApi.middleware)
+      .concat(upcomingExamsApi.middleware)
+      .concat(countAcceptedSubmissionsperDifficultyApi.middleware)
      
 });
 
