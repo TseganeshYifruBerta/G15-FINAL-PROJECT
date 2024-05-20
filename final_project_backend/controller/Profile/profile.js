@@ -127,7 +127,7 @@ const updateProfilePhoto = async (req, res) => {
     const { id } = req.params;
     const { photoUrl } = req.body;
     try {
-        const profile = await UserProfile.findOne({where: {id: id}});
+        const profile = await UserProfile.findOne({where: {userInformationId: id}});
         if(!profile){
             return res.status(404).json({message: "Profile not found"});
         }
