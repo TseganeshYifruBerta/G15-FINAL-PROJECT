@@ -1,7 +1,13 @@
 // pages/passwordChangePage.tsx
 import React from 'react';
-import PasswordChangeComponent from '@/components/changepassword/changepasswordpopup';
+import dynamic from "next/dynamic";
 
+const PasswordChangeComponent = dynamic(
+  () => import("@/components/changepassword/changepasswordpopup"),
+  {
+    ssr: false,
+  }
+);
 const PasswordChangePage: React.FC = () => {
     return (
         <div className="container mx-auto p-4">
