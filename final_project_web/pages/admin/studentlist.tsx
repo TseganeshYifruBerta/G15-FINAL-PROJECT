@@ -1,8 +1,13 @@
 // src/pages/TeachersPage.tsx
 import React from "react";
-import StudentList from "@/components/components/Tables/AllStudentAdmin";
-import UploadPopup from "@/components/upload/popupform";
+import dynamic from 'next/dynamic';
 
+const StudentList = dynamic(
+  () => import("@/components/components/Tables/AllStudentAdmin"),
+  {
+    ssr: false,
+  }
+);
 const StudentsPage: React.FC = () => {
   return (
     <div className="container mx-auto px-4">

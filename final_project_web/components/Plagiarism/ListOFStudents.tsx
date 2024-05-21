@@ -90,7 +90,7 @@ const AllStudentsInPLagiarism: React.FC<AllStudentsProps> = ({
       )}
 
       {filteredStudents.map((student: any, key: any) => (
-        <Link href={`/plagiarism/question/${student.id}/${examId}`}>
+        <Link href={`/plagiarism/question/${student.id}/${examId}`} key={student.id}>
         <div
           className="grid grid-cols-6  px-4 py-2 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 text-xs"
           key={key}

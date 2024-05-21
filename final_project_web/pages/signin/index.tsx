@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, ChangeEvent } from "react";
 import { TEInput, TERipple } from "tw-elements-react";
 
 import { Input, Typography } from "@material-tailwind/react";
@@ -140,10 +140,13 @@ export default function SignInSide() {
                       label="User ID"
                       crossOrigin={true}
                       value={id}
-                      color={`${idError ? "red" : "black"}`}
-                      onChange={(e) => {
+                      color={idError ? "red" : "black"}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
                         setId(e.target.value);
                       }}
+                      type="text"
+                      onPointerEnterCapture={() => {}}
+                      onPointerLeaveCapture={() => {}}
                     />
 
                     {idError && (
@@ -155,14 +158,16 @@ export default function SignInSide() {
                     <Input
                       id="password"
                       name="password"
-                      color={`${passwordError ? "red" : "black"}`}
-                      type="password"
                       label="Password"
-                      crossOrigin={undefined}
+                      crossOrigin={true}
                       value={passwordd}
-                      onChange={(e) => {
+                      color={passwordError ? "red" : "black"}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
                         setPassword(e.target.value);
                       }}
+                      type="password"
+                      onPointerEnterCapture={() => {}}
+                      onPointerLeaveCapture={() => {}}
                     />
                     {passwordError && (
                       <p className="text-red-500 text-xs italic">

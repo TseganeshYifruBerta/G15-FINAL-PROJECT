@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-
 import Submissions from "@/components/codeeditor/Submissions";
 import QuestionSet from "@/components/questions/QuestionSet";
 import {
@@ -75,16 +74,25 @@ const QuestionSetTab: React.FC<QuestionSetProps> = ({
 const QuestionById: React.FC = () => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("questionSet");
+  const [userId, setUserId] = useState("");
 
   const questionId = router.query.id as string;
   const pythonCode =
     "def grade_checker(score):\n    if score >= 70:\n        return 'A'\n    elif score >= 80:\n        return 'B'\n    elif score >= 70:\n        return 'C'\n    elif score >= 60:\n        return 'D'\n    else:\n        return 'F'";
-
-  const userData = useSelector((state: any) => state.studentsignin.userId);
-
-  const token = localStorage.getItem("token");
-const decodedToken = jwt.decode(token);
-const userId = decodedToken?.id || null;
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/login");
+    } else {
+      const decodedToken = jwt.decode(token);
+      setUserId(decodedToken?.id || null);
+      if (!userId) {
+        router.push("/login");
+      }
+    }
+  }
+}, [router]);
   const {
     data: questionDetails,
     isLoading,
@@ -98,7 +106,6 @@ const userId = decodedToken?.id || null;
   if (isError) {
     return <div>Errroe</div>;
   }
-  console.log(questionDetails, "ddddddddddd");
   const question = questionDetails.questionDetail;
   const allstatus = questionDetails.allStatus;
   const { createdAt, description, difficulty, example, id, title, updatedAt } =
