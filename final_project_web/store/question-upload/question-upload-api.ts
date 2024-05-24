@@ -5,7 +5,7 @@ export type QuestionUploadFormData = {
   difficulty: string;
   description: string;
   example: string;
-  testcases: testCaseProps[];
+  testCases: testCaseProps[];
 };
 
 

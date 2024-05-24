@@ -87,9 +87,7 @@ useEffect(() => {
     } else {
       const decodedToken = jwt.decode(token);
       setUserId(decodedToken?.id || null);
-      if (!userId) {
-        router.push("/login");
-      }
+      console.log(decodedToken);
     }
   }
 }, [router]);

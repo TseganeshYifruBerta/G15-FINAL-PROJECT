@@ -61,13 +61,13 @@ const navigations: any = {
       icon: MdOutlineQuiz,
     },
     {
-      href: "/teacher/submissions",
+      href: "/student/submissions",
       name: "Submissions",
       icon: RiGroupLine,
     },
     {
       href: "/student/exams",
-      name: "Students",
+      name: "Exams",
       icon: IoFolderOpenOutline,
     },
   ],
