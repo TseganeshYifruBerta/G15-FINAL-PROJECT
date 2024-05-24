@@ -21,7 +21,8 @@ export const getNumberOfAllQuestionApi = createApi({
   endpoints: (builder) => ({
     getNumberOfAllQuestion: builder.query({
       query: (params) => {
-        let url = "http://localhost:5000/question/getNumberOfAllQuestion";
+        let url =
+          "https://g15-final-project-backend.onrender.com/question/getNumberOfAllQuestion";
 
         return {
           url: url,

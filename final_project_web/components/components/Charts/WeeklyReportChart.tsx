@@ -122,8 +122,6 @@ const WeeklyReportChart: React.FC<ReportsProps> = ({ reports }) => {
     date.push(dayName.slice(0, 3));
   }
 
-  console.log(reportss, "reportss");
-  console.log(date, "date");
   if (options.xaxis) {
     options.xaxis.categories = date;
   } else {

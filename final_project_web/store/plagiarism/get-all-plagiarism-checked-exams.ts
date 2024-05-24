@@ -19,7 +19,8 @@ export const getAllPlagiarismCheckedExamsApi = createApi({
     getAllPlagiarismCheckedExams: builder.query({
       query: () => {
       
-        let url = "http://localhost:5000/plagiarism/fetchAllPlagiarismCheckedExams";
+        let url =
+          "https://g15-final-project-backend.onrender.com/plagiarism/fetchAllPlagiarismCheckedExams";
         // const queryParams = [];
 
         // const token = localStorage.getItem("token");

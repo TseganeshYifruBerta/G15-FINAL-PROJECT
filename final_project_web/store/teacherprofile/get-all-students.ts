@@ -27,7 +27,7 @@ export const getAllStudentsApi = createApi({
       query: () => {
         const token = localStorage.getItem("token");
         const decodedToken = jwt.decode(token);
-        let url = `http://localhost:5000/upload/fetchAllStudentBasedOnSection/${decodedToken.id}`;
+        let url = `https://g15-final-project-backend.onrender.com/upload/fetchAllStudentBasedOnSection/${decodedToken.id}`;
         return {
           url: url,
           method: "GET",

@@ -26,8 +26,7 @@ export const getWeeklyReportApi = createApi({
         const decodedToken = jwt.decode(token);
         const today = new Date().toISOString().split("T")[0];
 
-        let url =
-          `http://localhost:5000/codeSubmission/countCodeSubmissionsForLastWeek/${today}/${decodedToken.id}`;
+        let url = `https://g15-final-project-backend.onrender.com/codeSubmission/countCodeSubmissionsForLastWeek/${today}/${decodedToken.id}`;
 
         return {
           url: url,

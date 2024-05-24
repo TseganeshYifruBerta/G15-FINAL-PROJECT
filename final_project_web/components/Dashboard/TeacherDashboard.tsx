@@ -47,10 +47,6 @@ const TeacherDashboard: React.FC = () => {
   if (weeklyLoading || isLoading || topSolvedLoading || questionsLoading) {
     return <div>Loading...</div>;
   }
-  console.log(weeklyReport, "weeklyReport");
-  console.log(numberofquestions, "data");
-  console.log(topStudents, "topStudents");
-  console.log(questions, "questions");
 
   return (
     <div className="w-full min-h-screen">

@@ -45,7 +45,6 @@ const [teacherId, setTeacherId] = useState("")
   if (isLoadingTop) {
     return <div>Loading...</div>;
   }
-  console.log(allexamlist, "allexams");
   return (
     <div className="col-span-12 rounded-sm  bg-white py-6 shadow-md dark:border-strokedark dark:bg-boxdark xl:col-span-4">
       {allexamlist?.exams.length == undefined ||

@@ -19,7 +19,8 @@ export const fetchStudentsFromPlagiarismCheckedExamApi = createApi({
     fetchStudentsFromPlagiarismCheckedExam: builder.query({
       query: (params) => {
         const {  examId } = params;
-        let url = "http://localhost:5000/plagiarism/fetchStudentsFromPlagiarismCheckedExam";
+        let url =
+          "https://g15-final-project-backend.onrender.com/plagiarism/fetchStudentsFromPlagiarismCheckedExam";
         const queryParams = [];
 
         queryParams.push(`${examId}`);

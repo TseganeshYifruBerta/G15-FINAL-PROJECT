@@ -19,7 +19,8 @@ export const getAllEndedExamsApi = createApi({
     getAllEndedExams: builder.query({
       query: () => {
       
-        let url = "http://localhost:5000/plagiarism/fetchAllEndedExams";
+        let url =
+          "https://g15-final-project-backend.onrender.com/plagiarism/fetchAllEndedExams";
         const queryParams = [];
 
         const token = localStorage.getItem("token");

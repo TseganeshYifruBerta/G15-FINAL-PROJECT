@@ -7,7 +7,7 @@ export const uploadFile = async (file: File) => {
 
   try {
     const response = await fetch(
-      "http://localhost:5000/upload/userDataUploader",
+      "https://g15-final-project-backend.onrender.com/upload/userDataUploader",
       {
         method: "POST",
         body: formData,

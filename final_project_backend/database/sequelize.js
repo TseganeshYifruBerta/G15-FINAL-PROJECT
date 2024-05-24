@@ -1,4 +1,4 @@
-const { Sequelize } = require('sequelize');
+const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize("sql8708187", "sql8708187", "U1der92rig", {
   host: "sql8.freemysqlhosting.net",
@@ -7,4 +7,3 @@ const sequelize = new Sequelize("sql8708187", "sql8708187", "U1der92rig", {
 });
 
 module.exports = sequelize;
-

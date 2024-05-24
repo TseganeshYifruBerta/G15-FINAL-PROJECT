@@ -100,8 +100,6 @@ const UseExamsTable: React.FC<ExamsProps> = ({
     }
     setLoading(false);
   };
-
-  console.log(exam, "ssssssss");
   return (
     <div>
       <div className="my-1">

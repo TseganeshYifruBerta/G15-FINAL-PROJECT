@@ -33,7 +33,8 @@ export const getAllDifficultyDataPerUserApi = createApi({
         const token = localStorage.getItem("token");
         const decodedToken: { id: number } = jwt.decode(token) as { id: number };
         const userId = decodedToken.id;
-        let url = "http://localhost:5000/codeSubmission/getAllDifficultyDataPerUser";
+        let url =
+          "https://g15-final-project-backend.onrender.com/codeSubmission/getAllDifficultyDataPerUser";
         return {
           url: `${url}/${userId}`,
           method: "GET",

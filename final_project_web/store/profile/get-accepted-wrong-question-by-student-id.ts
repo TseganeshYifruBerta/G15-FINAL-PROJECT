@@ -12,7 +12,7 @@ export const getAcceptedQuestionByIdApi = createApi({
       query: (params) => {
         const { userId } = params;
         let url =
-          "http://localhost:5000/question/countAcceptedSubmissionsForUser";
+          "https://g15-final-project-backend.onrender.com/question/countAcceptedSubmissionsForUser";
         console.log(params);
         const queryParams = [];
         queryParams.push(`${userId}`);

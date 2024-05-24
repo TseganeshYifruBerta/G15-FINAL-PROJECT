@@ -19,7 +19,8 @@ export const getAllQuestionsByStudentIdApi = createApi({
     getAllQuestionsByStudentId: builder.query({
       query: (params) => {
         const {  examId } = params;
-        let url = "http://localhost:5000/exam/getExamByIdWithQuestions";
+        let url =
+          "https://g15-final-project-backend.onrender.com/exam/getExamByIdWithQuestions";
         const queryParams = [];
 
         queryParams.push(`${examId}`);

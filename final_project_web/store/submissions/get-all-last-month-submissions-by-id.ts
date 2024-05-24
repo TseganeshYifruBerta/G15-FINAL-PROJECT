@@ -35,7 +35,8 @@ export const getCountCodeSubmissionsForLastMonthApi = createApi({
         const decodedToken: { id: number } = jwt.decode(token) as { id: number };
         const userId = decodedToken.id;
         const currentDate = getCurrentDate();
-        let url = "http://localhost:5000/codeSubmission/countCodeSubmissionsForLastMonth";
+        let url =
+          "https://g15-final-project-backend.onrender.com/codeSubmission/countCodeSubmissionsForLastMonth";
         return {
           url: `${url}/${currentDate}/${userId}`,
           method: "GET",

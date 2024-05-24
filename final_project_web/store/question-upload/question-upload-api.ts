@@ -14,7 +14,7 @@ export const uploadquestion = async (formData: QuestionUploadFormData) => {
    const token = localStorage.getItem("token");
   try {
     const response = await fetch(
-      "http://localhost:5000/question/submitQuestion",
+      "https://g15-final-project-backend.onrender.com/question/submitQuestion",
       {
         method: "POST",
         body: JSON.stringify(formData),
