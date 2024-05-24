@@ -141,7 +141,7 @@ interface FormValues {
            <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="absolute mt-3 right-3 text-gray-500 hover:text-gray-800"
+                className="absolute right-3 text-gray-500 hover:text-gray-800"
                 aria-label="Close"
               >
                 <AiOutlineClose size={24} />
