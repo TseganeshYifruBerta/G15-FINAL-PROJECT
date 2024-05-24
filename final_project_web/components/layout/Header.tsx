@@ -89,26 +89,21 @@ const Header: React.FC = () => {
               Description
             </LinkScroll>
             <LinkScroll
-              activeClass="active"
-              to="testimoni"
-              spy={true}
-              smooth={true}
-              duration={1000}
-              onSetActive={() => {
-                setActiveLink("testimoni");
-              }}
-              // className={
-              //   "px-4 py-2 mx-2 cursor-pointer animation-hover inline-block relative " +
-              //   (activeLink === "testmoni"
-              //     ? "text-[#7983FB] animation-active border-b-2 border-[#7983FB] "
-              //     : "text-black-500 hover:text-[#7983FB] hover:border-b-2 hover:border-[#7983FB] ")
-              // }
-              className={`px-4 py-2 mx-2 cursor-pointer animation-hover inline-block relative ${
-                (activeLink as string) === "testmoni"
-                  ? "text-[#7983FB] animation-active border-b-2 border-[#7983FB]"
-                  : "text-black hover:text-[#7983FB] hover:border-b-2 hover:border-[#7983FB]"
-              }`}
-            >
+                activeClass="active"
+                to="testimoni"
+                spy={true}
+                smooth={true}
+                duration={1000}
+                onSetActive={() => {
+                  setActiveLink("testimoni");
+                }}
+                className={
+                  "px-4 py-2 mx-2 text-sm cursor-pointer animation-hover inline-block relative " +
+                  (activeLink === "testimoni"
+                    ? "text-[#4285F4] animation-active border-b-2 border-[#4285F4] "
+                    : "text-white hover:text-[#4285F4] hover:border-b-2 hover:border-[#4285F4]")
+                }
+              >
               Features
             </LinkScroll>
           </ul>

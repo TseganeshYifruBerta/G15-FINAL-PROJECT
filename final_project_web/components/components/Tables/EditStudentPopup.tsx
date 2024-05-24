@@ -107,12 +107,14 @@ export const EditStudentPopup: React.FC<FormProps> = (props) => {
   const [students, setStudents] = useState<Student[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(''); 
- 
+  const token = localStorage.getItem("token");
+
   const getStudents = async () => {
+    if (!token) return;
     setIsLoading(true);
     setError('');
     try {
-      const response = await fetchAllStudents();
+      const response = await fetchAllStudents(token);
       if (response.user) {
         console.log(response.user); // After fetchAllStudents call
         
@@ -140,10 +142,13 @@ console.log(students); // This might not log updated state immediately due to se
   }, [student, initialize]);
 
   const handleDeleteSection = async (sectionId: number) => {
-   
+    if (!token) {
+      showToast("No authentication token found", "error");
+      return;
+    }
     try {
-      const response = await deleteSection(sectionId);
-      showToast(`Section ${sectionId} deleted successfully`, "success");
+      const response = await deleteSection(token, sectionId);
+      showToast(`Section deleted successfully`, "success");
       const updatedSections = sections.filter(sec => sec.id !== sectionId);
       setSections(updatedSections);
       console.log("svdiluCWEVFUI",updatedSections)
@@ -160,13 +165,13 @@ console.log(students); // This might not log updated state immediately due to se
   const handleAddSection = async (sectionInput: { section: string }) => {
     const section = sectionInput.section;
       const userId = student.id.toString();
-   
-      
-     
-     
+      if (!token) {
+        showToast("No authentication token found", "error");
+        return;
+      }
       try {
         console.log("Adding section:", section);  // Debug: Log the section being added
-        const response = await addSections({ userId, sections: section });
+        const response = await addSections(token, { userId, sections: section });
         console.log("API response:", response);  // Debug: Log the complete API response
         showToast("Section added successfully", "success");
         // Check if 'sections' is present and has at least one item
@@ -252,7 +257,10 @@ interface RenderSectionsProps {
   const onSubmit = async (formValues:FormStudent) => {
     // Destructure formValues to separate sections from other data
     const { SectionsOfUser, ...studentData } = formValues;
-
+    if (!token) {
+      showToast("No authentication token found", "error");
+      return;
+    }
     // Assuming SectionsOfUser might already be in the correct format or just needs filtering out undefined ids
     const sectionsTransformed = SectionsOfUser.map(section => ({
       ...(section.id && { id: section.id.toString() }),// Convert id to string, handle undefined safely
@@ -270,10 +278,9 @@ interface RenderSectionsProps {
     };
 
     console.log("Final payload being sent to server:", JSON.stringify(finalPayload));
-
     try {
         // Replace `updateStudent` with the actual function call to your API
-        const response = await updateStudent({ id: studentData.id, updateData: finalPayload });
+        const response = await updateStudent(token,{ id: studentData.id, updateData: finalPayload });
         console.log("Update response:", response);
         showToast("Updated successfully", "success");
         onSave(response); // Assuming this is how you update the local state to reflect the changes

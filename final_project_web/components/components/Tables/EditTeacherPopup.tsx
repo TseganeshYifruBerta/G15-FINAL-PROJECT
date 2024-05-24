@@ -105,7 +105,8 @@ export const EditTeacherPopup: React.FC<FormProps> = (props) => {
   const dispatch = useDispatch(); // Use useDispatch to get the dispatch function
   const [sectionsToDelete, setSectionsToDelete] = useState<number[]>([]);
   const [sections, setSections] = useState(teacher.SectionsOfUser || []);
-  
+  const token = localStorage.getItem("token");
+
   const handlePopupClose = () => {
     dispatch(reset("editteacher")); // Dispatch the reset action with your form name
     onClose(); // Then call the onClose prop to close the popup
@@ -117,10 +118,13 @@ export const EditTeacherPopup: React.FC<FormProps> = (props) => {
   }, [teacher, initialize]);
 
   const handleDeleteSection = async (sectionId: number) => {
-   
+    if (!token) {
+      showToast("No authentication token found", "error");
+      return;
+    }
     try {
-      const response = await deleteSection(sectionId);
-      showToast(`Section ${sectionId} deleted successfully`, "success");
+      const response = await deleteSection(token, sectionId);
+      showToast(`Section deleted successfully`, "success");
       const updatedSections = sections.filter(sec => sec.id !== sectionId);
       setSections(updatedSections);
      
@@ -135,7 +139,10 @@ export const EditTeacherPopup: React.FC<FormProps> = (props) => {
 
 
   const handleAddSection = async (sectionInput: { section: string }) => {
-  
+    if (!token) {
+      showToast("No authentication token found", "error");
+      return;
+    }
       // Extract the section number from the input object
       const section = sectionInput.section;
       const userId = teacher.id.toString();
@@ -144,7 +151,7 @@ export const EditTeacherPopup: React.FC<FormProps> = (props) => {
  
       try {
         console.log("Adding section:", section);  // Debug: Log the section being added
-        const response = await addSections({ userId, sections: section });
+        const response = await addSections(token, { userId, sections: section });
         console.log("API response:", response);  // Debug: Log the complete API response
         showToast("Section added successfully", "success");
         // Check if 'sections' is present and has at least one item
@@ -214,7 +221,10 @@ export const EditTeacherPopup: React.FC<FormProps> = (props) => {
   // Define onSubmit within the component to use closure variables
   const onSubmit = async (formValues:FormTeacher) => {
     const { SectionsOfUser, ...teacherData } = formValues;
-
+    if (!token) {
+      showToast("No authentication token found", "error");
+      return;
+    }
 
     // Assuming SectionsOfUser might already be in the correct format or just needs filtering out undefined ids
     const sectionsTransformed = SectionsOfUser.map(section => ({
@@ -237,7 +247,7 @@ export const EditTeacherPopup: React.FC<FormProps> = (props) => {
 
   try {
       
-      const response = await updateTeacher({ id: teacherData.id, updateData: finalPayload });
+      const response = await updateTeacher(token,{ id: teacherData.id, updateData: finalPayload });
 
       console.log("Update response:", response);
       showToast("Updated successfully", "success");

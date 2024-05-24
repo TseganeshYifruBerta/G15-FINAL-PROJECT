@@ -26,19 +26,16 @@ export type Section = {
       sections: string;
     }
     
-     const token = localStorage.getItem("token");
-    export const fetchAllStudents = async (): Promise<StudentApiResponse> => {
+     
+    export const fetchAllStudents = async (token: string | null): Promise<StudentApiResponse> => {
       try {
-        const response = await fetch(
-          "https://g15-final-project-backend.onrender.com/upload/fetchAllStudents?_=${new Date().getTime()}",
-          {
-            method: "GET",
-            headers: {
-              ...(token ? { Authorization: `Bearer ${token}` } : {}),
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await fetch('http://localhost:5000/upload/fetchAllStudents?_=${new Date().getTime()}', {
+          method: "GET",
+          headers: {
+            'Authorization': token ? `Bearer ${token}` : '',
+            'Content-Type': 'application/json'
+          },
+        });
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -51,15 +48,15 @@ export type Section = {
         throw error;
       }
     };
-    export const updateStudent = async ({ id, updateData }: UpdateStudentParams): Promise<any> => {
+    export const updateStudent = async (token: string | null,{ id, updateData }: UpdateStudentParams): Promise<any> => {
       try {
         console.log('Sending update payload to server:', JSON.stringify(updateData)); // Debugging line
         const response = await fetch(
-          `https://g15-final-project-backend.onrender.com/upload/updateUser/${id}`,
+          `http://localhost:5000/upload/updateUser/${id}`,
           {
             method: "PUT",
             headers: {
-              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+              'Authorization': token ? `Bearer ${token}` : '',
               "Content-Type": "application/json",
             },
             body: JSON.stringify(updateData),
@@ -80,22 +77,20 @@ export type Section = {
     
    
     
-    export const addSections = async ({ userId, sections }: { userId: string, sections: string }): Promise<any> => {
+    export const addSections = async (token: string | null,{ userId, sections }: { userId: string, sections: string }): Promise<any> => {
       try {
         console.log("Sending payload to server:", JSON.stringify({ userId, sections }));
 
     
-        const response = await fetch(
-          `https://g15-final-project-backend.onrender.com/upload/AddSections`,
-          {
-            method: "POST",
-            headers: {
-              ...(token ? { Authorization: `Bearer ${token}` } : {}),
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ userId, sections }),
-          }
-        );
+        const response = await fetch(`http://localhost:5000/upload/AddSections`, {
+          method: 'POST',
+          headers: {
+            'Authorization': token ? `Bearer ${token}` : '',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ userId, sections }),
+          
+        });
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -107,17 +102,14 @@ export type Section = {
       }
     };
     
-    export const deleteSection = async (sectionId: number): Promise<any> => {
+    export const deleteSection = async (token: string | null, sectionId: number): Promise<any> => {
       try {
-        const response = await fetch(
-          `https://g15-final-project-backend.onrender.com/upload/DeleteSections/${sectionId}`,
-          {
-            method: "DELETE",
-            headers: {
-              ...(token ? { Authorization: `Bearer ${token}` } : {}),
-            },
-          }
-        );
+        const response = await fetch(`http://localhost:5000/upload/DeleteSections/${sectionId}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': token ? `Bearer ${token}` : '',
+          },
+        });
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -129,18 +121,15 @@ export type Section = {
       }
     };
     
-    export const deleteUser = async ( id: number): Promise<any> => {
+    export const deleteUser = async ( token: string | null, id: number): Promise<any> => {
       try {
         
-        const response = await fetch(
-          `https://g15-final-project-backend.onrender.com/upload/deleteUser/${id}`,
-          {
-            method: "DELETE",
-            headers: {
-              ...(token ? { Authorization: `Bearer ${token}` } : {}),
-            },
-          }
-        );
+        const response = await fetch(`http://localhost:5000/upload/deleteUser/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': token ? `Bearer ${token}` : '',
+          },
+        });
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -151,4 +140,31 @@ export type Section = {
         throw error;
       }
     };
-   
+    export const activateUser = async (token: string | null, userId: number): Promise<any> => {
+      if (!token) {
+          throw new Error("Authentication token not found");
+      }
+  
+      try {
+          const response = await fetch(`http://localhost:5000/activateUser/activateUser`, {
+              method: "POST",
+              headers: {
+                  'Authorization': `Bearer ${token}`,
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ userId })
+          });
+  
+          const data = await response.json();
+  
+          if (!response.ok) {
+              throw new Error(data.message || 'Failed to activate user');
+          }
+  
+          return data; // This might include some user details and new password
+      } catch (error) {
+          console.error('Error activating user:', error);
+          throw error; // Rethrow the error to be handled by the caller
+      }
+  };
+  

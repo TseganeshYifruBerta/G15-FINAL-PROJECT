@@ -1,7 +1,7 @@
 // Allstudent.tsx
 import React, { useEffect, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { deleteUser,updateStudent,Student,fetchAllStudents } from '@/store/admin/get-all-students';
+import { deleteUser,updateStudent,Student,fetchAllStudents, activateUser } from '@/store/admin/get-all-students';
 import { updateTeacher,Teacher,fetchAllTeachers } from '@/store/admin/get-all-teachers';
 import EditStudentPopup from './EditStudentPopup';
 import UploadPopup from "@/components/upload/popupform";
@@ -21,22 +21,25 @@ const AllStudent: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [newPassword, setNewPassword] = useState('');
+  const [token, setToken] = useState<string | null>(null);
 
-   const token = localStorage.getItem("token");
-
+  useEffect(() => {
+    // Ensure that localStorage access is client-side only
+    if (typeof window !== 'undefined') {
+      const storedToken = localStorage.getItem("token");
+      setToken(storedToken);
+    }
+  }, []);
+   
   const getStudents = async () => {
+    if (!token) return; // Ensure token is available
     setIsLoading(true);
     setError('');
     try {
-      const response = await fetchAllStudents();
+      const response = await fetchAllStudents(token);
       if (response.user) {
-        console.log(response.user); // After fetchAllStudents call
-        
-       setStudents(response.user);
-console.log(students); // This might not log updated state immediately due to setState being asynchronous
-
+        setStudents(response.user);
       } else {
-        console.error('Error: response does not have a user property', response);
         setError('Failed to load students due to unexpected data format.');
       }
     } catch (error) {
@@ -46,11 +49,13 @@ console.log(students); // This might not log updated state immediately due to se
       setIsLoading(false);
     }
   };
+
   const getTeachers = async () => {
+    if (!token) return; 
     setIsLoading(true);
     setError('');
     try {
-      const response = await fetchAllTeachers();
+      const response = await fetchAllTeachers(token);
         if (response.user) {
           setTeachers(response.user);
         } else {
@@ -66,13 +71,12 @@ console.log(students); // This might not log updated state immediately due to se
   };
   
 
-  useEffect(() => {
-    getStudents();
-  }, []);
-
-  useEffect(() => {
-    getTeachers();
-  }, []);
+ useEffect(() => {
+    if (token) {
+      getStudents(); // Fetch students only if token is available
+      getTeachers();
+    }
+  }, [token]);
 
 
   useEffect(() => {
@@ -87,46 +91,31 @@ console.log(students); // This might not log updated state immediately due to se
   
 
   
-const handleActivateUser = async (id: number) => {
-  setIsLoading(true);
-  try {
-    const response = await fetch(
-      `http://localhost:5000/activateUser/activateUser`,
-      {
-        method: "POST",
-
-        headers: {
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({ userId: id.toString() }), // Send userId as a string in the body
-      }
-    );
-    const data = await response.json();
-    if (response.ok) {
-      setNewPassword(data.newPassword); // Save the new password
-      setShowPasswordModal(true);
-      showToast(`Student activated successfully. New password: ${data.newPassword}`, 'success');
-      await getStudents(); // Refresh the list after activation
-    } else {
-      throw new Error(data.message || 'Failed to activate user');
+  const handleActivateUser = async (token: string | null, id: number) => {
+    try {
+      const data = await activateUser(token, id);
+        setNewPassword(data.newPassword); // Save the new password
+        setShowPasswordModal(true);
+        showToast(`Student activated successfully. New password: ${data.newPassword}`, 'success');
+        await getStudents(); // Refresh the list after activation
+      
+    } catch (error) {
+      showToast('Error activating user: ' + (error as Error).message, 'error');
+      console.error('Error activating user:', error);
+    } finally {
+      setIsLoading(false);
     }
-  } catch (error) {
-    showToast('Error activating user: ' + (error as Error).message, 'error');
-    console.error('Error activating user:', error);
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
+  
 
 // Render function and other parts of the component remain the same
 
   
   const handleDeleteUser = async (id:number) => {
+
     if (window.confirm('Are you sure you want to delete this student?')) { // Confirmation before deleting
       try {
-        await deleteUser(id);
+        await deleteUser(token,id);
         showToast(`Student deleted successfully`, "success");
         await getStudents(); // Refresh the list after deleting
       } catch (error) {
@@ -174,6 +163,7 @@ const PasswordModal = ({ isOpen, newPassword, onClose }:any) => {
 );
 
 };
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -182,14 +172,14 @@ const PasswordModal = ({ isOpen, newPassword, onClose }:any) => {
   return (
     <div className="overflow-x-auto overflow-y-auto ">
      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
-      <div className="bg-gray-50 rounded-xl shadow-xl p-4 flex items-center justify-between">
+      <div className="bg-gray-50 rounded-xl shadow-lg p-4 flex items-center justify-between">
           <div>
             <h4 className="text-xl font-semibold text-[#7983FB]">Teachers</h4>
             <p className="text-2xl font-bold text-[#7983FB]">{teachers.length}</p>
           </div>
           <AcademicCapIcon className="h-12 w-12 text-[#7983FB]" />
           </div>
-          <div className="bg-gray-50 rounded-xl shadow-xl p-4 flex items-center justify-between">
+          <div className="bg-gray-50 rounded-xl shadow-lg p-4 flex items-center justify-between">
           <div>
             <h4 className="text-xl font-semibold text-[#7983FB]">Students</h4>
           <p className="text-2xl font-bold text-[#7983FB]">{students.length}</p>
@@ -246,7 +236,7 @@ const PasswordModal = ({ isOpen, newPassword, onClose }:any) => {
       ) : (
         <button
           className="bg-[#7983FB] bg-opacity-30 text-[#7983FB] hover:bg-[#7983FB] hover:bg-opacity-60 px-2 py-2 rounded shadow "
-          onClick={() => handleActivateUser(student.id)}
+          onClick={() => handleActivateUser(token, student.id)}
         >
           Activate 
         </button>
