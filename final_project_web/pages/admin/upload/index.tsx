@@ -56,19 +56,19 @@ const Upload: React.FC<InjectedFormProps<FileForm>> = ({ handleSubmit }) => {
        
         <div className="flex flex-col items-center justify-center h-screen">
         <div className="mt-2 w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 mx-auto h-screen"> 
-         <div className="mt-8 mx-auto p-6 max-w-md bg-[#7983FB] bg-opacity-30 rounded-xl shadow-xl mb-20">
+         <div className="mt-8 mx-auto p-6 max-w-md bg-[#7983FB] bg-opacity-10 rounded-xl shadow-xl mb-20">
           <div className="flex flex-col items-center">
             <h3 className={`${styles.typingEffect} text-lg text-[#7983FB] font-bold mb-4`}>
               Upload File Instructions 📤
             </h3>
-            <p className={`text-black text-sm sm:text-xs md:text-sm lg:text-base`}>
+            <p className={`text-gray-700 text-sm sm:text-xs md:text-sm lg:text-base`}>
               📄 File must be in .xlsx format with columns for fullName, userId, email, section, role, and status.
             </p>
           </div>
        </div>
               <div className="mt-2 mb-20">
               <div
-  className={`border ${isDragActive ? "border-blue-500" : "border-gray-200"} bg-[#7983FB] bg-opacity-30 rounded-3xl shadow-xl`}
+  className={`border ${isDragActive ? "border-blue-500" : "border-gray-200"} bg-[#7983FB] bg-opacity-10 rounded-3xl shadow-xl`}
                   {...getRootProps()}
                 >
                   <input {...getInputProps()} />
