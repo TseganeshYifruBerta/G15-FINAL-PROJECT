@@ -18,7 +18,8 @@ export const getStudentProfileByIdApi = createApi({
     getStudentProfileById: builder.query({
       query: (params) => {
         const { userId } = params;
-        let url = "http://localhost:5000/upload/findStudentByID";
+        let url =
+          "https://g15-final-project-backend.onrender.com/upload/findStudentByID";
         console.log(params);
         const queryParams = [];
         queryParams.push(`${userId}`);

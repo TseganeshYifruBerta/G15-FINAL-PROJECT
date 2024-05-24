@@ -22,7 +22,7 @@ export const getTopSolvedQuestionsApi = createApi({
     getTopSolvedQuestions: builder.query({
       query: () => {
         let url =
-          "http://localhost:5000/codeSubmission/fetchTopSolvedQuestions";
+          "https://g15-final-project-backend.onrender.com/codeSubmission/fetchTopSolvedQuestions";
 
         return {
           url: url,

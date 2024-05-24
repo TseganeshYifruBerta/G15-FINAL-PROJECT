@@ -13,15 +13,17 @@ export type UploadFormData = {
      const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch("http://localhost:5000/upload/inputUserDataUploader", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify(formData),
-
-      });
+      const response = await fetch(
+        "https://g15-final-project-backend.onrender.com/upload/inputUserDataUploader",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify(formData),
+        }
+      );
   
       if (!response.ok) {
         const errorData = await response.json();

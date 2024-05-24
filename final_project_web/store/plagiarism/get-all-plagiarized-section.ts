@@ -19,7 +19,8 @@ export const fetchAllPlagiarizedSectionApi = createApi({
     fetchAllPlagiarizedSection: builder.query({
       query: (params) => {
         const {  examId , studentId , questionId} = params;
-        let url = "http://localhost:5000/plagiarism/fetchAllPlagiarizedSections";
+        let url =
+          "https://g15-final-project-backend.onrender.com/plagiarism/fetchAllPlagiarizedSections";
         const queryParams = [];
 
         queryParams.push(`${examId}`);

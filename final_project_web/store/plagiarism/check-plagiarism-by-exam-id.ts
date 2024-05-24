@@ -4,15 +4,13 @@ export type PlagiarismExamId = {
 
 export const checkPlagiarismByExamId = async (formData: PlagiarismExamId) => {
      
-     const token = localStorage.getItem("token");
-      console.log("formdatakkkkkkkkkkkkkkkkkk",formData)
-      
+     const token = localStorage.getItem("token");      
   try {
     const response = await fetch(
-      "http://localhost:5000/plagiarism/checkPlagiarsm",
+      "https://g15-final-project-backend.onrender.com/plagiarism/checkPlagiarsm",
       {
         method: "POST",
-        
+
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",

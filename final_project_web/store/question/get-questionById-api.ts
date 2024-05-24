@@ -22,7 +22,8 @@ export const getQuestionDetalApi = createApi({
     getQuestionDetails: builder.query({
       query: (params) => {
         const { questionId } = params;
-        let url = "http://localhost:5000/question/getAllQuestionsById";
+        let url =
+          "https://g15-final-project-backend.onrender.com/question/getAllQuestionsById";
         const queryParams = [];
         const token = localStorage.getItem("token");
         const decodedToken = jwt.decode(token);
@@ -41,7 +42,8 @@ export const getQuestionDetalApi = createApi({
     getQuestionDetailEdit: builder.query({
       query: (params) => {
         const { questionId } = params;
-        let url = "http://localhost:5000/question/DetailOfSelectedQuestion";
+        let url =
+          "https://g15-final-project-backend.onrender.com/question/DetailOfSelectedQuestion";
         const queryParams = [];
         queryParams.push(`${questionId}`);
         return {

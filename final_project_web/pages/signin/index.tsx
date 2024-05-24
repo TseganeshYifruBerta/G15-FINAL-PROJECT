@@ -1,11 +1,8 @@
 const jwt = require("jsonwebtoken");
 import Link from "next/link";
 import React, { useEffect, useRef, useState, ChangeEvent } from "react";
-import { TEInput, TERipple } from "tw-elements-react";
-
-import { Input, Typography } from "@material-tailwind/react";
-import { error } from "console";
-import { LoginFormData, login } from "@/store/login/login-api";
+import { Input } from "@material-tailwind/react";
+import { login } from "@/store/login/login-api";
 import { useRouter } from "next/router";
 
 function Copyright() {
@@ -27,6 +24,7 @@ export default function SignInSide() {
   const [idError, setIdError] = useState("");
   const [passwordd, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
   // Function to close modal
@@ -81,19 +79,18 @@ export default function SignInSide() {
     if (error) {
       return;
     }
-
+setIsLoading(true);
     try {
       const response = await login({ userId: id, password: passwordd });
-      console.log(response, "response");
 
       if (response.token) {
         localStorage.setItem("token", response.token);
         localStorage.setItem("fullName", response.fullName); // Assuming fullName is part of the response
         localStorage.setItem("role", response.role); // Assuming role is part of the response
-        
-        if (response.role === 'admin') {
+
+        if (response.role === "admin") {
           // If the user is an admin, navigate to the 'upload' page
-          router.push('/admin/upload');
+          router.push("/admin/upload");
         } else {
           // For any other role, navigate to their respective dashboard
           router.push(`/${response.role}/dashboard`);
@@ -102,6 +99,8 @@ export default function SignInSide() {
     } catch (error) {
       console.error("Error during login:", error);
       // Handle error, maybe set an error state to display in the UI.
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -176,11 +175,40 @@ export default function SignInSide() {
                     )}
                   </div>
                 </div>
-                <button
+                {/* <button
                   type="submit"
                   className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-hover focus:outline-none"
                 >
                   Log in
+                </button> */}
+                <button
+                  type="submit"
+                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-hover focus:outline-none"
+                >
+                  {isLoading ? (
+                    <svg
+                      className="animate-spin h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                  ) : (
+                    "Log in"
+                  )}
                 </button>
                 <div className="mt-4"></div>
               </form>

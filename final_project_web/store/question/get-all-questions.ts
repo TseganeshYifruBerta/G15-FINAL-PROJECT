@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const baseUrl = "http://localhost:5000/question/";
+const baseUrl = "https://g15-final-project-backend.onrender.com/question/";
 
 export const questionApi = createApi({
   reducerPath: "questionApi",

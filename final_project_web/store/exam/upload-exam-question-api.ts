@@ -16,7 +16,7 @@ export const uploadexamquestion = async (formData: ExamQuestionUploadFormData) =
 
   try {
     const response = await fetch(
-      "http://localhost:5000/exam/uploadExamQuestion",
+      "https://g15-final-project-backend.onrender.com/exam/uploadExamQuestion",
       {
         method: "POST",
         headers: {

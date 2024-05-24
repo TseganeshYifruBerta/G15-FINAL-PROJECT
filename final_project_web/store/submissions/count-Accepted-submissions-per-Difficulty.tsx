@@ -28,7 +28,8 @@ export const countAcceptedSubmissionsperDifficultyApi = createApi({
         const token = localStorage.getItem("token");
         const decodedToken: { id: number } = jwt.decode(token) as { id: number };
         const userId = decodedToken.id;
-        let url = "http://localhost:5000/codeSubmission/countAcceptedSubmissionsPerUser";
+        let url =
+          "https://g15-final-project-backend.onrender.com/codeSubmission/countAcceptedSubmissionsPerUser";
         return {
           url: `${url}/${userId}`,
           method: "GET",

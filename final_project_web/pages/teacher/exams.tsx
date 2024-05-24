@@ -8,7 +8,6 @@ if (isLoading) {
     return <div>loading...</div>;
 }
 
-console.log("allexams", allexams)
   return (
     <div className="dark:bg-boxdark h-screen">
       <div className="flex flex-col gap-10">

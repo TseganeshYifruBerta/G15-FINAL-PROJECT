@@ -56,7 +56,8 @@ export const getAllExamTakenStudentsApi = createApi({
     getAllExamTakenStudents: builder.query({
       query: (params) => {
         const {  examId } = params;
-        let url = "http://localhost:5000/exam/getAllExamtakeStudent";
+        let url =
+          "https://g15-final-project-backend.onrender.com/exam/getAllExamtakeStudent";
         const queryParams = [];
         const token = localStorage.getItem("token");
         const decodedToken = jwt.decode(token);

@@ -32,13 +32,16 @@ export type Teacher = {
   const token = localStorage.getItem("token");
   export const fetchAllTeachers = async (): Promise<TeacherApiResponse> => {
     try {
-      const response = await fetch('http://localhost:5000/upload/fetchAllTeachers?_=${new Date().getTime()}', {
-        method: "GET",
-        headers: {
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          'Content-Type': 'application/json'
-        },
-      });
+      const response = await fetch(
+        "https://g15-final-project-backend.onrender.com/upload/fetchAllTeachers?_=${new Date().getTime()}",
+        {
+          method: "GET",
+          headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -56,16 +59,17 @@ export type Teacher = {
    
     try {
       console.log('Sending update payload to server:', JSON.stringify(updateData)); // Debugging line
-      const response = await fetch(`http://localhost:5000/upload/updateUser/${id}`, {
-        method: 'PUT',
-        headers: {
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updateData),
-
-
-      });
+      const response = await fetch(
+        `https://g15-final-project-backend.onrender.com/upload/updateUser/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updateData),
+        }
+      );
  
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -85,15 +89,17 @@ export type Teacher = {
 
 
  
-      const response = await fetch(`http://localhost:5000/upload/AddSections`, {
-        method: 'POST',
-        headers: {
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ userId, sections }),
-       
-      });
+      const response = await fetch(
+        `https://g15-final-project-backend.onrender.com/upload/AddSections`,
+        {
+          method: "POST",
+          headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId, sections }),
+        }
+      );
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -107,12 +113,15 @@ export type Teacher = {
  
   export const deleteSection = async (sectionId: number): Promise<any> => {
     try {
-      const response = await fetch(`http://localhost:5000/upload/DeleteSections/${sectionId}`, {
-        method: 'DELETE',
-        headers: {
-         ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-      });
+      const response = await fetch(
+        `https://g15-final-project-backend.onrender.com/upload/DeleteSections/${sectionId}`,
+        {
+          method: "DELETE",
+          headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -127,12 +136,15 @@ export type Teacher = {
   export const deleteUser = async ( id: number): Promise<any> => {
     try {
      
-      const response = await fetch(`http://localhost:5000/upload/deleteUser/${id}`, {
-        method: 'DELETE',
-        headers: {
-         ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-      });
+      const response = await fetch(
+        `https://g15-final-project-backend.onrender.com/upload/deleteUser/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }

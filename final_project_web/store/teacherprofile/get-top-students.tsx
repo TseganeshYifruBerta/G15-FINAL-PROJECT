@@ -21,7 +21,7 @@ export const getTopStudentsApi = createApi({
   endpoints: (builder) => ({
     getTopStudents: builder.query({
       query: () => {
-        let url = `http://localhost:5000/codeSubmission/getTopStudents`;
+        let url = `https://g15-final-project-backend.onrender.com/codeSubmission/getTopStudents`;
         return {
           url: url,
           method: "GET",

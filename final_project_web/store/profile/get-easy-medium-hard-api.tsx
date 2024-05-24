@@ -12,7 +12,7 @@ export const getEasyMediumHardByIdApi = createApi({
       query: (params) => {
         const { userId } = params;
         let url =
-          "http://localhost:5000/execution/getSubmittedDifficulty";
+          "https://g15-final-project-backend.onrender.com/execution/getSubmittedDifficulty";
         console.log(params);
         const queryParams = [];
         queryParams.push(`${userId}`);

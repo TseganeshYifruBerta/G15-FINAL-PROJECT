@@ -12,7 +12,6 @@ const TopSovedQuestions: React.FC = () => {
   if (isLoadingTop) {
     return <div>Loading...</div>;
   }
-  console.log(topsolved, "topsolved");
   return (
     <div className="col-span-12 rounded-sm  bg-white py-6 shadow-md dark:border-strokedark dark:bg-boxdark xl:col-span-4">
       <h4 className="mb-6 px-7.5 text-md font-semibold text-black dark:text-white">

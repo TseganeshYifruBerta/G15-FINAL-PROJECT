@@ -96,7 +96,6 @@ const ExamsTable: React.FC<UserTableProps> = ({
       // refetch();
     } catch (error) {
       // Handle error
-      console.log("error deleting");
     }
   };
 

@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { FaEllipsisV } from "react-icons/fa"; // Assuming you're using React Icons
 import UseQuestionsTable from "./UseQuestionsTable";
 import TopSovedQuestions from "../Chat/TopSolvedCard";
 import { useGetAllExamsQuery } from "@/store/exam/get-all-exam-api";
@@ -12,10 +11,6 @@ import UseExamsTable from "./UseExamsTable";
 import Loading from "@/components/common/Loading";
 import FetchError from "@/components/common/Error";
 
-interface QuestionsProps {
-  questions: any;
-  deletequestion: any;
-}
 
 interface CreateQuestionButtonProps {
   onClick: () => void;
@@ -69,7 +64,6 @@ const QuestionTable: React.FC = () => {
         const decodedToken = jwt.decode(token);
         const userId = decodedToken?.id || null;
         setCurrentTeacherId(userId);
-        console.log(currentTeacherId);
       } else {
         router.push("/login");
       }
@@ -132,7 +126,7 @@ if (isErrorQuestion || isError) {
     setExamSortOrder(sortExamOrder === "asc" ? "desc" : "asc");
   };
 
-  const filteredAndSortedExamQuestions = allexams?.combinedResult?.filter(
+  const filteredAndSortedExamQuestions = allexams?.allQuestions?.filter(
       (question: any) =>
         question.title.toLowerCase().includes(searchExamTerm.toLowerCase()) &&
         (examfilter ? question.difficulty === examfilter : true) &&
@@ -149,6 +143,7 @@ if (isErrorQuestion || isError) {
         );
       }
     });
+
   return (
     <div className="rounded-sm bg-white  dark:border-strokedark dark:bg-boxdark">
       <div className="text-xs ml-4 py-2 px-2">
@@ -199,7 +194,7 @@ if (isErrorQuestion || isError) {
                 <input
                   type="checkbox"
                   className="toggle toggle-primary text-primary"
-                  checked={createdExamByMe}
+                  checked={createdByMe}
                   onChange={(e) => setCreatedByMe(e.target.checked)}
                 />
               </div>

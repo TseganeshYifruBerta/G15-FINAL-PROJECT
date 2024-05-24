@@ -9,7 +9,7 @@ export const addtestcase = async (formData: AddTestcaseFormData) => {
   const token = localStorage.getItem("token");
   try {
     const response = await fetch(
-      "http://localhost:5000/question/AddTestcases",
+      "https://g15-final-project-backend.onrender.com/question/AddTestcases",
       {
         method: "POST",
         body: JSON.stringify(formData),

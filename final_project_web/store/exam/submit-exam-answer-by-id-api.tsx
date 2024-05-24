@@ -12,7 +12,7 @@ export const uploadexamanswer = async (formData: ExamAnswerUploadFormData) => {
 
   try {
     const response = await fetch(
-      "http://localhost:5000/exam/submitExamAnswerByStudent",
+      "https://g15-final-project-backend.onrender.com/exam/submitExamAnswerByStudent",
       {
         method: "POST",
         headers: {

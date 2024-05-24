@@ -11,7 +11,8 @@ export const getTeacherProfileByIdApi = createApi({
     getTeacherProfileById: builder.query({
       query: (params) => {
         const { userId } = params;
-        let url = "http://localhost:5000/question/getAllQuestionsById";
+        let url =
+          "https://g15-final-project-backend.onrender.com/question/getAllQuestionsById";
         console.log(params);
         const queryParams = [];
         queryParams.push(`${userId}`);

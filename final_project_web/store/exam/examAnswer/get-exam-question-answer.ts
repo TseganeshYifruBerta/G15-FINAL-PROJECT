@@ -19,7 +19,8 @@ export const getExamQuestionAnswerApi = createApi({
     getExamQuestionAnswer: builder.query({
       query: (params) => {
         const {  userId , questionId } = params;
-        let url = "http://localhost:5000/exam/getSubmissionOfstudentByQuestionId";
+        let url =
+          "https://g15-final-project-backend.onrender.com/exam/getSubmissionOfstudentByQuestionId";
         const queryParams = [];
 
         queryParams.push(`${userId}`);

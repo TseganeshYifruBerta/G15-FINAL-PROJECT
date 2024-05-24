@@ -9,7 +9,7 @@ export const codesubmission = async (formData: SubmissionFormData) => {
 console.log(formData, "formdata")
   try {
     const response = await fetch(
-      "http://localhost:5000/codeSubmission/submitCode",
+      "https://g15-final-project-backend.onrender.com/codeSubmission/submitCode",
       {
         method: "POST",
         // CC

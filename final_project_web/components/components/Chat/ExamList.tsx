@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useGetTopSolvedQuestionsQuery } from "@/store/question/get-top-solved-questions";
 import { useGetAllExamListQuery } from "@/store/exam/get-all-exam-api";
 
 const ExamList: React.FC = () => {
@@ -13,7 +12,6 @@ const ExamList: React.FC = () => {
   if (isLoadingTop) {
     return <div>Loading...</div>;
   }
-  console.log(allexamlist, "allexams");
   return (
     <div className="col-span-12 rounded-sm  bg-white py-6 shadow-md dark:border-strokedark dark:bg-boxdark xl:col-span-4">
       <h4 className="mb-6 px-7.5 text-md font-semibold text-black dark:text-white">
