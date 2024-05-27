@@ -40,37 +40,52 @@ const runPythonCode = (pythonCode, nums) => {
         return reject(err);
       }
 
-      const pythonProcess = spawn("python", [tempFilePath, nums]);
+      const trySpawnPython = (pythonExecutable) => {
+        const pythonProcess = spawn(pythonExecutable, [tempFilePath]);
 
-      let result = "";
-      let printOutput = "";
+        let result = "";
+        let printOutput = "";
 
-      pythonProcess.stdout.on("data", (data) => {
-        result += data.toString();
-      });
+        pythonProcess.stdout.on("data", (data) => {
+          result += data.toString();
+        });
 
-      pythonProcess.stderr.on("data", (data) => {
-        printOutput += data.toString();
-        logger.error(`Python process error: ${data.toString()}`);
-      });
+        pythonProcess.stderr.on("data", (data) => {
+          printOutput += data.toString();
+          logger.error(`Python process error: ${data.toString()}`);
+        });
 
-      pythonProcess.on("close", (code) => {
-        fs.unlink(tempFilePath, (unlinkErr) => {
-          if (unlinkErr) {
-            logger.error(`Failed to delete temporary file: ${unlinkErr.message}`);
+        pythonProcess.on("close", (code) => {
+          fs.unlink(tempFilePath, (unlinkErr) => {
+            if (unlinkErr) {
+              logger.error(`Failed to delete temporary file: ${unlinkErr.message}`);
+            }
+          });
+
+          if (code === 0) {
+            resolve({ result: result.trim(), printOutput: printOutput.trim() });
+          } else {
+            const errorTypeMatch = printOutput.match(/(\w+Error):/);
+            if (errorTypeMatch) {
+              errorType = errorTypeMatch[1];
+            }
+            reject(new Error(`Python process exited with code ${code}. Error: ${printOutput.trim()}`));
           }
         });
 
-        if (code === 0) {
-          resolve({ result: result.trim(), printOutput: printOutput.trim() });
-        } else {
-          const errorTypeMatch = printOutput.match(/(\w+Error):/);
-          if (errorTypeMatch) {
-            errorType = errorTypeMatch[1];
+        pythonProcess.on("error", (err) => {
+          if (pythonExecutable === "python") {
+            // If 'python' fails, try 'python3'
+            trySpawnPython("python3");
+          } else {
+            // If both 'python' and 'python3' fail, reject the promise
+            reject(new Error(`Failed to start Python process: ${err.message}`));
           }
-          reject(new Error(`Python process exited with code ${code}. Error: ${printOutput.trim()}`));
-        }
-      });
+        });
+      };
+
+      // Start with 'python' and fall back to 'python3' if needed
+      trySpawnPython("python");
     });
   });
 };
