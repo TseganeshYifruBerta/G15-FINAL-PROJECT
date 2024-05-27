@@ -93,6 +93,7 @@ const codeExecute = async (req, res) => {
         const { input, output } = testCase.dataValues;
         const inputJson = input.replace(/'/g, '"');
         logger.info(`Input JSON: ${inputJson}`);
+        inputJson = `{${inputJson}}`;
         const inputObject = JSON.parse(inputJson);
         const valuesArray = Object.values(inputObject);
         let results;
