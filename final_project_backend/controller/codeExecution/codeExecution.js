@@ -2,7 +2,7 @@ const TestCase = require("../../models/question_testcase_submission/testCase");
 const { spawn } = require("child_process");
 const fs = require("fs");
 const path = require("path");
-const logger = require('./logger');
+const logger = require('../../logger');
 
 const getQuestionById = async (questionId) => {
   try {
