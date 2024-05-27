@@ -40,6 +40,8 @@ const runPythonCode = (pythonCode, nums) => {
         return reject(err);
       }
 
+      logger.info(`Temporary Python file written to ${tempFilePath}`);
+
       const trySpawnPython = (pythonExecutable) => {
         const pythonProcess = spawn(pythonExecutable, [tempFilePath]);
 
