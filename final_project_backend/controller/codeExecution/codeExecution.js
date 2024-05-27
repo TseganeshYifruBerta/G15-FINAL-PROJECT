@@ -26,6 +26,7 @@ var errorType = "";
 const runPythonCode = (pythonCode, nums) => {
   return new Promise((resolve, reject) => {
     const tempFilePath = path.join(__dirname, "tempkol.py");
+    logger.info(`Temporary Python file path: ${__dirname}`);
     const functionNameMatch = pythonCode.match(/def\s+(\w+)\s*\(/);
     const functionName = functionNameMatch ? functionNameMatch[1] : "UnknownFunction";
 
