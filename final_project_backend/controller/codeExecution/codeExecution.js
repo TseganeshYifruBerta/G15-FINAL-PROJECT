@@ -3,6 +3,7 @@ const { spawn } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const logger = require('../../logger');
+const tempPythonDir = process.env.TEMP_PYTHON_DIR;
 
 const getQuestionById = async (questionId) => {
   try {
@@ -25,8 +26,8 @@ var errorType = "";
 
 const runPythonCode = (pythonCode, nums) => {
   return new Promise((resolve, reject) => {
-    const tempFilePath = path.join(__dirname, "tempkol.py");
-    logger.info(`Temporary Python file path: ${__dirname}`);
+    const tempFilePath = path.join(tempPythonDir, "tempkol.py");
+    logger.info(`Temporary Python file path: ${tempPythonDir}`);
     const functionNameMatch = pythonCode.match(/def\s+(\w+)\s*\(/);
     const functionName = functionNameMatch ? functionNameMatch[1] : "UnknownFunction";
 
