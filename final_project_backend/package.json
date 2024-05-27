@@ -6,10 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
-    },
-    
-
-  
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -31,7 +28,8 @@
     "sequelize": "^6.35.1",
     "sequelize-cli": "^6.6.2",
     "speakeasy": "^2.0.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "winston": "^3.13.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
