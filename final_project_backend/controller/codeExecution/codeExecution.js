@@ -97,6 +97,8 @@ const codeExecute = async (req, res) => {
         const valuesArray = Object.values(inputObject);
         let results;
 
+        logger.info(`Values Array: ${valuesArray}`);
+
         if (valuesArray.length > 1) {
           const { nums, score } = valuesArray;
           results = await runPythonCode(pythonCode, [nums, score]);
