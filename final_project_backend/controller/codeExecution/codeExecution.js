@@ -79,11 +79,14 @@ const runPythonCode = (pythonCode, nums) => {
       const trySpawnPython = (pythonExecutable) => {
         const pythonProcess = spawn(pythonExecutable, [tempFilePath]);
 
+        logger.info(`Python process started with executable: ${pythonProcess.spawnargs[0]}`);
         let result = "";
         let printOutput = "";
 
         pythonProcess.stdout.on("data", (data) => {
           result += data.toString();
+          logger.info(`Python process output: ${data.toString()}`);
+          logger.info(`Python process output: ${result.trim()}`);
         });
 
         pythonProcess.stderr.on("data", (data) => {
