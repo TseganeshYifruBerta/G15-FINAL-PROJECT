@@ -52,6 +52,16 @@ const runPythonCode = (pythonCode, nums) => {
 
       logger.info(`Temporary Python file written to ${tempFilePath}`);
 
+      // Check if the file exists after writing
+      if (!fs.existsSync(tempFilePath)) {
+        logger.error(`Temporary file does not exist: ${tempFilePath}`);
+        return reject(new Error(`Temporary file does not exist: ${tempFilePath}`));
+      }
+
+      // Log the contents of the file
+      const fileContents = fs.readFileSync(tempFilePath, 'utf8');
+      logger.info(`Temporary Python file contents:\n${fileContents}`);
+
       const trySpawnPython = (pythonExecutable) => {
         const pythonProcess = spawn(pythonExecutable, [tempFilePath]);
 
