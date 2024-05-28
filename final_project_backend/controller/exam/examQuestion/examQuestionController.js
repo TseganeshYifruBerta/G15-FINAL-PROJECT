@@ -5,7 +5,7 @@ const sequelize = require("../../../database/sequelize");
 
 const User = require("../../../models/auth/user.model");
 const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
-  const { title, difficulty, description, example, testcases, solutions, teacherId ,tag ,chapter} = req.body;
+  const { title, difficulty, description, example, testcases, solutions, teacherId ,tag ,chapter ,plagiarismRatio} = req.body;
 
   try {
     const transaction = await sequelize.transaction(); 
@@ -21,7 +21,9 @@ const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
       example,
       teacherId,
       tag,
-      chapter
+      chapter,
+      plagiarismRatio
+
     }, { transaction });
 
     // Create and associate test cases with the new question within the transaction

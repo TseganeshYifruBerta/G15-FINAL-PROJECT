@@ -14,6 +14,11 @@ const creatExam = sequelize.define("exam", {
     type: DataTypes.STRING, // Consider using DataTypes.DATE for actual date comparison
     allowNull: false,
   },
+  start_time: {
+    type: DataTypes.STRING,
+    allowNull: false,
+
+  },
   instruction: {
     type: DataTypes.STRING,
     allowNull: false,

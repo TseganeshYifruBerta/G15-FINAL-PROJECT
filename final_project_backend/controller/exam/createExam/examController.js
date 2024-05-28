@@ -188,10 +188,11 @@ const startCreatedExam = async (req, res) => {
     const exam = await CreatExam.findByPk(id);
     if (!exam) {
       return res.status(404).json({ error: 'Exam not found' });
-    }
+    } 
+    start_time = new Date()
 
     // Update the exam status to "running"
-    await exam.update({ status: 'running' });
+    await exam.update({ status: 'running' , start_time: start_time});
 
     // Schedule to update the status to "ended" after the exam's duration
     const durationInMilliseconds = exam.duration * 60000; // Convert duration from minutes to milliseconds
