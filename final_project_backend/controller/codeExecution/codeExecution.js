@@ -90,7 +90,7 @@ const runPythonCode = (pythonCode, nums) => {
               const pythonProcess = spawn(pythonExecutable, fileContents.split(/\r?\n/), { shell: true });
               // logger.info(`Python pooooooooooo: ${tempFilePath}`);
 
-              logger.info(`Python process started with executable: ${pythonProcess.spawnargs[1]}`);
+              logger.info(`Python process started with executable: ${pythonProcess}`);
               let result = "";
               let printOutput = "";
 
