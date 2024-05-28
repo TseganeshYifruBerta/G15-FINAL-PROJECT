@@ -3,15 +3,29 @@ const { spawn } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const logger = require('../../logger');
-const tempPythonDir = process.env.TEMP_PYTHON_DIR || __dirname;
+const tempPythonDir = process.env.TEMP_PYTHON_DIR || path.resolve(__dirname);
 
-// Ensure the directory exists
+// Ensure the directory exists and check permissions
 if (!fs.existsSync(tempPythonDir)) {
   fs.mkdirSync(tempPythonDir, { recursive: true });
   logger.info(`Directory created: ${tempPythonDir}`);
 } else {
   logger.info(`Directory already exists: ${tempPythonDir}`);
 }
+
+// Function to check directory permissions
+const checkDirectoryPermissions = (dirPath) => {
+  try {
+    fs.accessSync(dirPath, fs.constants.R_OK | fs.constants.W_OK);
+    logger.info(`Read and write permissions verified for directory: ${dirPath}`);
+  } catch (err) {
+    logger.error(`Permission issue for directory: ${dirPath}, Error: ${err.message}`);
+    throw new Error(`Permission issue for directory: ${dirPath}`);
+  }
+};
+
+// Check permissions for the temporary directory
+checkDirectoryPermissions(tempPythonDir);
 
 const getQuestionById = async (questionId) => {
   try {
