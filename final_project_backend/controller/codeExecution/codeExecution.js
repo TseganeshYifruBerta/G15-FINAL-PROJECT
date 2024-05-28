@@ -3,6 +3,7 @@ const { spawn } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const logger = require('../../logger');
+
 const tempPythonDir = process.env.TEMP_PYTHON_DIR || path.resolve(__dirname);
 
 // Ensure the directory exists and check permissions
@@ -58,6 +59,7 @@ const runPythonCode = (pythonCode, nums) => {
 
     const pythonScript = `${modifiedPythonCode}\n\nimport sys\nsys.stdout.write(str(${functionCall}))`;
 
+    // Write the Python script to a temporary file
     fs.writeFile(tempFilePath, pythonScript, (err) => {
       if (err) {
         logger.error(`Failed to write temporary Python file: ${err.message}`);
@@ -67,64 +69,71 @@ const runPythonCode = (pythonCode, nums) => {
       logger.info(`Temporary Python file written to ${tempFilePath}`);
 
       // Check if the file exists after writing
-      if (!fs.existsSync(tempFilePath)) {
-        logger.error(`Temporary file does not exist: ${tempFilePath}`);
-        return reject(new Error(`Temporary file does not exist: ${tempFilePath}`));
-      }
+      fs.access(tempFilePath, fs.constants.F_OK, (accessErr) => {
+        if (accessErr) {
+          logger.error(`Temporary file does not exist: ${tempFilePath}`);
+          return reject(new Error(`Temporary file does not exist: ${tempFilePath}`));
+        }
 
-      // Log the contents of the file
-      const fileContents = fs.readFileSync(tempFilePath, 'utf8');
-      logger.info(`Temporary Python file contents:\n${fileContents}`);
-
-      const trySpawnPython = (pythonExecutable) => {
-        const pythonProcess = spawn(pythonExecutable, [tempFilePath]);
-
-        logger.info(`Python process started with executable: ${pythonProcess.spawnargs[0]}`);
-        let result = "";
-        let printOutput = "";
-
-        pythonProcess.stdout.on("data", (data) => {
-          result += data.toString();
-          logger.info(`Python process output: ${data.toString()}`);
-          logger.info(`Python process output: ${result.trim()}`);
-        });
-
-        pythonProcess.stderr.on("data", (data) => {
-          printOutput += data.toString();
-          logger.error(`Python process error: ${data.toString()}`);
-        });
-
-        pythonProcess.on("close", (code) => {
-          fs.unlink(tempFilePath, (unlinkErr) => {
-            if (unlinkErr) {
-              logger.error(`Failed to delete temporary file: ${unlinkErr.message}`);
-            }
-          });
-
-          if (code === 0) {
-            resolve({ result: result.trim(), printOutput: printOutput.trim() });
-          } else {
-            const errorTypeMatch = printOutput.match(/(\w+Error):/);
-            if (errorTypeMatch) {
-              errorType = errorTypeMatch[1];
-            }
-            reject(new Error(`Python process exited with code ${code}. Error: ${printOutput.trim()}`));
+        // Log the contents of the file
+        fs.readFile(tempFilePath, 'utf8', (readErr, fileContents) => {
+          if (readErr) {
+            logger.error(`Failed to read temporary Python file: ${readErr.message}`);
+            return reject(readErr);
           }
-        });
 
-        pythonProcess.on("error", (err) => {
-          if (pythonExecutable === "python") {
-            // If 'python' fails, try 'python3'
-            trySpawnPython("python3");
-          } else {
-            // If both 'python' and 'python3' fail, reject the promise
-            reject(new Error(`Failed to start Python process: ${err.message}`));
-          }
-        });
-      };
+          logger.info(`Temporary Python file contents:\n${fileContents}`);
 
-      // Start with 'python' and fall back to 'python3' if needed
-      trySpawnPython("python");
+          const trySpawnPython = (pythonExecutable) => {
+            const pythonProcess = spawn(pythonExecutable, [tempFilePath]);
+
+            logger.info(`Python process started with executable: ${pythonProcess.spawnargs[0]}`);
+            let result = "";
+            let printOutput = "";
+
+            pythonProcess.stdout.on("data", (data) => {
+              result += data.toString();
+              logger.info(`Python process stdout: ${data.toString()}`);
+            });
+
+            pythonProcess.stderr.on("data", (data) => {
+              printOutput += data.toString();
+              logger.error(`Python process stderr: ${data.toString()}`);
+            });
+
+            pythonProcess.on("close", (code) => {
+              fs.unlink(tempFilePath, (unlinkErr) => {
+                if (unlinkErr) {
+                  logger.error(`Failed to delete temporary file: ${unlinkErr.message}`);
+                }
+              });
+
+              if (code === 0) {
+                resolve({ result: result.trim(), printOutput: printOutput.trim() });
+              } else {
+                const errorTypeMatch = printOutput.match(/(\w+Error):/);
+                if (errorTypeMatch) {
+                  errorType = errorTypeMatch[1];
+                }
+                reject(new Error(`Python process exited with code ${code}. Error: ${printOutput.trim()}`));
+              }
+            });
+
+            pythonProcess.on("error", (err) => {
+              if (pythonExecutable === "python") {
+                // If 'python' fails, try 'python3'
+                trySpawnPython("python3");
+              } else {
+                // If both 'python' and 'python3' fail, reject the promise
+                reject(new Error(`Failed to start Python process: ${err.message}`));
+              }
+            });
+          };
+
+          // Start with 'python' and fall back to 'python3' if needed
+          trySpawnPython("python");
+        });
+      });
     });
   });
 };
