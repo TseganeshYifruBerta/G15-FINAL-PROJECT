@@ -3,7 +3,15 @@ const { spawn } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const logger = require('../../logger');
-const tempPythonDir = process.env.TEMP_PYTHON_DIR;
+const tempPythonDir = process.env.TEMP_PYTHON_DIR || __dirname;
+
+// Ensure the directory exists
+if (!fs.existsSync(tempPythonDir)) {
+  fs.mkdirSync(tempPythonDir, { recursive: true });
+  logger.info(`Directory created: ${tempPythonDir}`);
+} else {
+  logger.info(`Directory already exists: ${tempPythonDir}`);
+}
 
 const getQuestionById = async (questionId) => {
   try {
@@ -26,8 +34,8 @@ var errorType = "";
 
 const runPythonCode = (pythonCode, nums) => {
   return new Promise((resolve, reject) => {
-    const tempFilePath = path.join(__dirname, "tempkol.py");
-    logger.info(`Temporary Python file path: ${tempPythonDir}`);
+    const tempFilePath = path.join(tempPythonDir, "tempkol.py");
+    logger.info(`Temporary Python file path: ${tempFilePath}`);
     const functionNameMatch = pythonCode.match(/def\s+(\w+)\s*\(/);
     const functionName = functionNameMatch ? functionNameMatch[1] : "UnknownFunction";
 
