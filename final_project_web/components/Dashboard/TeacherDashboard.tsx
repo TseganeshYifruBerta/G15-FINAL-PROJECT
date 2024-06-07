@@ -8,6 +8,7 @@ import WeeklyReportChart from "../components/Charts/WeeklyReportChart";
 import { useGetTopStudentsQuery } from "@/store/teacherprofile/get-top-students";
 import SolvedQuestionPerSectionChart from "../components/Charts/SolvedQuestionPerSectionChart";
 import { useGetAllQuestionsQuery } from "@/store/question/get-all-questions";
+import Loading from "../common/Loading";
 
 const TeacherDashboard: React.FC = () => {
   const [easy, setEasy] = React.useState(0);
@@ -45,7 +46,10 @@ const TeacherDashboard: React.FC = () => {
     }
   }, [questions]);
   if (weeklyLoading || isLoading || topSolvedLoading || questionsLoading) {
-    return <div>Loading...</div>;
+    return 
+      <div>
+        <Loading />
+      </div>;
   }
 
   return (

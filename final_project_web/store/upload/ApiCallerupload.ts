@@ -1,3 +1,5 @@
+import { URL } from "../host";
+
 export const uploadFile = async (file: File) => {
   const formData = new FormData();
   formData.append("usersExcelFile", file); // Make sure 'file' matches the expected field name in your backend.
@@ -6,30 +8,26 @@ export const uploadFile = async (file: File) => {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch(
-      "https://g15-final-project-backend.onrender.com/upload/userDataUploader",
-      {
-        method: "POST",
-        body: formData,
-        headers: {
-          // Include the Authorization header with the bearer token if it exists
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-      }
-    );
+    const response = await fetch(`${URL}/upload/userDataUploader`, {
+      method: "POST",
+      body: formData,
+      headers: {
+        // Include the Authorization header with the bearer token if it exists
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
 
+    console.log(response);
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message); // Throw an error with the error message from the backend
+    }
 
-console.log(response)
-if (!response.ok) {
-  const errorData = await response.json();
-  throw new Error(errorData.message); // Throw an error with the error message from the backend
-}
-
-const data = await response.json();
-console.log("Success:", data);
-return data; // Return the data for further processing
-} catch (error) {
-console.error("Error:", error);
-throw error; // Re-throw the error for handling in the calling code
-}
+    const data = await response.json();
+    console.log("Success:", data);
+    return data; // Return the data for further processing
+  } catch (error) {
+    console.error("Error:", error);
+    throw error; // Re-throw the error for handling in the calling code
+  }
 };

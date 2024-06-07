@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { URL } from "../host";
 
 const baseUrl = "";
 
@@ -11,8 +12,7 @@ export const getAcceptedQuestionByIdApi = createApi({
     getAcceptedQuestionById: builder.query({
       query: (params) => {
         const { userId } = params;
-        let url =
-          "https://g15-final-project-backend.onrender.com/question/countAcceptedSubmissionsForUser";
+        let url = `${URL}/question/countAcceptedSubmissionsForUser`;
         console.log(params);
         const queryParams = [];
         queryParams.push(`${userId}`);

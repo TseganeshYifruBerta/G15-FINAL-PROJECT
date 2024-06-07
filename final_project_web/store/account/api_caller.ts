@@ -1,6 +1,7 @@
 // services/apiCaller.ts
 const jwt = require("jsonwebtoken");
 import type { NextApiRequest, NextApiResponse } from 'next'
+import {URL} from '../host';
 interface UserProfile { 
     university: string;
     linkedin: string;
@@ -17,14 +18,17 @@ interface UserProfile {
     
     try {
       console.log("createUserProfilebdfijsbibsib", JSON.stringify(profileData));
-    const response = await fetch(`http://localhost:5000/userProfile/CreateUserProfile/${id}`, {
-      method: 'POST',
-      headers: {
-        'Authorization': token ? `Bearer ${token}` : '',
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(profileData),
-    });
+    const response = await fetch(
+      `${URL}/userProfile/CreateUserProfile/${id}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(profileData),
+      }
+    );
   
     if (!response.ok) {
         const errorData = await response.json();

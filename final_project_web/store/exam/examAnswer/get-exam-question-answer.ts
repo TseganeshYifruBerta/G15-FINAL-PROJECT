@@ -1,3 +1,5 @@
+import { URL } from "../../host";
+
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const jwt = require("jsonwebtoken");
 const baseUrl = "";
@@ -18,14 +20,12 @@ export const getExamQuestionAnswerApi = createApi({
   endpoints: (builder) => ({
     getExamQuestionAnswer: builder.query({
       query: (params) => {
-        const {  userId , questionId } = params;
-        let url =
-          "https://g15-final-project-backend.onrender.com/exam/getSubmissionOfstudentByQuestionId";
+        const { userId, questionId } = params;
+        let url = `${URL}/exam/getSubmissionOfstudentByQuestionId`;
         const queryParams = [];
 
         queryParams.push(`${userId}`);
         queryParams.push(`${questionId}`);
-
 
         return {
           url: queryParams.length > 0 ? `${url}/${queryParams.join("/")}` : url,

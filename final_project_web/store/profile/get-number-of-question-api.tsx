@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { URL } from "../host";
 
 const baseUrl = "";
 
@@ -21,8 +22,7 @@ export const getNumberOfAllQuestionApi = createApi({
   endpoints: (builder) => ({
     getNumberOfAllQuestion: builder.query({
       query: (params) => {
-        let url =
-          "https://g15-final-project-backend.onrender.com/question/getNumberOfAllQuestion";
+        let url = `${URL}/question/getNumberOfAllQuestion`;
 
         return {
           url: url,

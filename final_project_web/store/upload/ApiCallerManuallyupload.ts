@@ -1,4 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { URL } from "../host";
+
 export type UploadFormData = {
     fullName?: string;
     userId?: string;
@@ -13,17 +15,14 @@ export type UploadFormData = {
      const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch(
-        "https://g15-final-project-backend.onrender.com/upload/inputUserDataUploader",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${URL}/upload/inputUserDataUploader`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify(formData),
+      });
   
       if (!response.ok) {
         const errorData = await response.json();

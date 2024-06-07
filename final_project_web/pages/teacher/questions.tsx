@@ -1,9 +1,4 @@
 import QuestionTable from "@/components/components/Tables/QuestionTable";
-import {
-  useDeleteQuestionMutation,
-  useGetAllQuestionsQuery,
-  useUpdateQuestionMutation,
-} from "@/store/question/get-all-questions";
 import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Next.js Tables | TailAdmin - Next.js Dashboard Template",

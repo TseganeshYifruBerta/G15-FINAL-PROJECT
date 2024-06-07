@@ -1,4 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { URL } from "../host";
+
 const jwt = require("jsonwebtoken");
 
 const baseUrl = ""; 
@@ -35,8 +37,7 @@ export const getCountCodeSubmissionsForLastMonthApi = createApi({
         const decodedToken: { id: number } = jwt.decode(token) as { id: number };
         const userId = decodedToken.id;
         const currentDate = getCurrentDate();
-        let url =
-          "https://g15-final-project-backend.onrender.com/codeSubmission/countCodeSubmissionsForLastMonth";
+        let url = `${URL}/codeSubmission/countCodeSubmissionsForLastMonth`;
         return {
           url: `${url}/${currentDate}/${userId}`,
           method: "GET",

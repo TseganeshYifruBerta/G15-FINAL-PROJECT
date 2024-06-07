@@ -1,4 +1,6 @@
 const jwt = require("jsonwebtoken");
+import { URL } from "../host";
+
 export type ExamUploadFormData = {
     
     teacherId:string,
@@ -22,19 +24,16 @@ const decodedToken = jwt.decode(token);
 const userId = decodedToken?.id || null;
 formData.teacherId = userId;
   try {
-    const response = await fetch(
-      "https://g15-final-project-backend.onrender.com/exam/createExam",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
+    const response = await fetch(`${URL}/exam/createExam`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
 
-        body: JSON.stringify(formData),
-      }
-    );
+      body: JSON.stringify(formData),
+    });
     const data = await response.json();
     console.log("Success:", data);
     return data;

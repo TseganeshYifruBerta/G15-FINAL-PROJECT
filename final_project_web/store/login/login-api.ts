@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+import { URL } from "../host";
 
 export type LoginFormData = {
   userId: string;
@@ -6,18 +7,16 @@ export type LoginFormData = {
 };
 
 export const login = async (formData: LoginFormData) => {
+  console.log("URL", URL)
   try {
-    const response = await fetch(
-      "https://g15-final-project-backend.onrender.com/userLogin",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(formData),
-      }
-    );
+    const response = await fetch(`${URL}/userLogin`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
 
     if (response.ok) {
       const responseData = await response.json();

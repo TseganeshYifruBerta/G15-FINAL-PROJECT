@@ -3,15 +3,13 @@ import Submissions from "@/components/codeeditor/Submissions";
 import QuestionSet from "@/components/questions/QuestionSet";
 import {
   useGetQuestionDetailEditQuery,
-  useGetQuestionDetailsQuery,
 } from "@/store/question/get-questionById-api";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import Image from "next/image";
-import SplitPane, { Pane } from "react-split-pane-next";
-import styles from "@/styles/SplitPaneStyles.module.css";
+import SplitPane from "react-split-pane-next";
 import CodeEditorBox from "@/components/codeeditor/CodeEditorBox";
+import Loading from "@/components/common/Loading";
 interface QuestionSubmissionProps {
   submissions: any;
 }
@@ -60,7 +58,7 @@ const QuestionSetTab: React.FC<QuestionSetProps> = ({
   difficulty
 }) => {
   return (
-    <div className="ml-4">
+    <div className="ml-4 min-h-screen">
       <QuestionSet
         questionTitle={questionTitle}
         questionDescription={questionDescription}
@@ -87,9 +85,7 @@ useEffect(() => {
     } else {
       const decodedToken = jwt.decode(token);
       setUserId(decodedToken?.id || null);
-      if (!userId) {
-        router.push("/login");
-      }
+      console.log(decodedToken);
     }
   }
 }, [router]);
@@ -101,7 +97,9 @@ useEffect(() => {
     questionId: questionId,
   });
   if (isLoading) {
-    return <div>loading</div>;
+    return <div>
+      <Loading />
+    </div>;
   }
   if (isError) {
     return <div>Errroe</div>;
@@ -113,7 +111,7 @@ useEffect(() => {
   const currentCode = !questionDetails.allStatus ? "" : pythonCode;
   return (
     <SplitPane split="vertical">
-      <div className="ml-4">
+      <div className="ml-4 min-h-screen">
         {/* Buttons for tab navigation */}
         <div className="text-xs ml-4 py-2 px-2">
           <button

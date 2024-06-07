@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useDeleteExamMutation, useGetAllExamListQuery, useUpdateExamMutation } from "@/store/exam/get-all-exam-api";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import Loading from "@/components/common/Loading";
 
 const ListOfExam: React.FC = () => {
 const router = useRouter()
@@ -43,7 +44,9 @@ const [teacherId, setTeacherId] = useState("")
       }
     };
   if (isLoadingTop) {
-    return <div>Loading...</div>;
+    return <div>
+      <Loading />
+    </div>;
   }
   return (
     <div className="col-span-12 rounded-sm  bg-white py-6 shadow-md dark:border-strokedark dark:bg-boxdark xl:col-span-4">
