@@ -1,8 +1,8 @@
 const { Sequelize } = require("sequelize");
 
-const sequelize = new Sequelize("if0_36689291_final", "if0_36689291", "Tg086whQSE", {
-  host: "sql113.infinityfree.com",
-  dialect: "mysql",
+const sequelize = new Sequelize("sql12712404", "sql12712404", "CWVcNymWhE", {
+  host: "sql12.freemysqlhosting.net",
+  dialect: "localhost",
   port: 3306,
 });
 
