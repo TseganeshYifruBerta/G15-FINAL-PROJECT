@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { URL } from "../host";
 
 const baseUrl = "";
 
@@ -22,8 +23,7 @@ export const getQuestionDetalApi = createApi({
     getQuestionDetails: builder.query({
       query: (params) => {
         const { questionId } = params;
-        let url =
-          "https://g15-final-project-backend.onrender.com/question/getAllQuestionsById";
+        let url = `${URL}/question/getAllQuestionsById`;
         const queryParams = [];
         const token = localStorage.getItem("token");
         const decodedToken = jwt.decode(token);
@@ -42,8 +42,7 @@ export const getQuestionDetalApi = createApi({
     getQuestionDetailEdit: builder.query({
       query: (params) => {
         const { questionId } = params;
-        let url =
-          "https://g15-final-project-backend.onrender.com/question/DetailOfSelectedQuestion";
+        let url = `${URL}/question/DetailOfSelectedQuestion`;
         const queryParams = [];
         queryParams.push(`${questionId}`);
         return {

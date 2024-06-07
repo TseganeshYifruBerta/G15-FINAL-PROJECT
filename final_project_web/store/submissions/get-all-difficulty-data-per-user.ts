@@ -1,4 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { URL } from "../host";
+
 const jwt = require("jsonwebtoken");
 
 const baseUrl = ""; 
@@ -33,8 +35,7 @@ export const getAllDifficultyDataPerUserApi = createApi({
         const token = localStorage.getItem("token");
         const decodedToken: { id: number } = jwt.decode(token) as { id: number };
         const userId = decodedToken.id;
-        let url =
-          "https://g15-final-project-backend.onrender.com/codeSubmission/getAllDifficultyDataPerUser";
+        let url = `${URL}/codeSubmission/getAllDifficultyDataPerUser`;
         return {
           url: `${url}/${userId}`,
           method: "GET",

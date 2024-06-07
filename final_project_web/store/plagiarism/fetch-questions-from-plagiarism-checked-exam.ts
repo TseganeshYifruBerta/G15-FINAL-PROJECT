@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const jwt = require("jsonwebtoken");
+import { URL } from "../host";
+
 const baseUrl = "";
 
 export const fetchQuestionsFromPlagiarismCheckedExamApi = createApi({
@@ -19,8 +21,7 @@ export const fetchQuestionsFromPlagiarismCheckedExamApi = createApi({
     fetchQuestionsFromPlagiarismCheckedExam: builder.query({
       query: (params) => {
         const {  examId } = params;
-        let url =
-          "https://g15-final-project-backend.onrender.com/plagiarism/fetchListOfQuestionsByExamId";
+        let url = `${URL}/plagiarism/fetchListOfQuestionsByExamId`;
         const queryParams = [];
 
         queryParams.push(`${examId}`);

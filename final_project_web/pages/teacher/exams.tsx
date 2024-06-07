@@ -1,3 +1,4 @@
+import Loading from '@/components/common/Loading';
 import ExamTable from '@/components/components/Tables/ExamTable';
 import { useGetAllExamsQuery } from '@/store/exam/get-all-exam-api';
 import React from 'react'
@@ -5,7 +6,9 @@ import React from 'react'
 function Exams() {
     const { data: allexams, isLoading, isError, refetch } = useGetAllExamsQuery("");
 if (isLoading) {
-    return <div>loading...</div>;
+    return <div>
+      <Loading />
+    </div>;
 }
 
   return (

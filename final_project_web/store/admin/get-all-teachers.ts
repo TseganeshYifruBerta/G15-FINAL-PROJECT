@@ -1,4 +1,6 @@
 // src/api/teacherApi.ts
+import { URL } from "../host";
+
 export type Section = {
   id?: number;
   section: string;
@@ -32,13 +34,16 @@ export type Teacher = {
   
   export const fetchAllTeachers = async (token: string | null): Promise<TeacherApiResponse> => {
     try {
-      const response = await fetch('http://localhost:5000/upload/fetchAllTeachers?_=${new Date().getTime()}', {
-        method: "GET",
-        headers: {
-          'Authorization': token ? `Bearer ${token}` : '',
-          'Content-Type': 'application/json'
-        },
-      });
+      const response = await fetch(
+        `${URL}/upload/fetchAllTeachers`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -56,15 +61,13 @@ export type Teacher = {
    
     try {
       console.log('Sending update payload to server:', JSON.stringify(updateData)); // Debugging line
-      const response = await fetch(`http://localhost:5000/upload/updateUser/${id}`, {
-        method: 'PUT',
+      const response = await fetch(`${URL}/upload/updateUser/${id}`, {
+        method: "PUT",
         headers: {
-          'Authorization': token ? `Bearer ${token}` : '',
-          'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : "",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(updateData),
-
-
       });
  
       if (!response.ok) {
@@ -85,14 +88,13 @@ export type Teacher = {
 
 
  
-      const response = await fetch(`http://localhost:5000/upload/AddSections`, {
-        method: 'POST',
+      const response = await fetch(`${URL}/upload/AddSections`, {
+        method: "POST",
         headers: {
-          'Authorization': token ? `Bearer ${token}` : '',
-          'Content-Type': 'application/json'
+          Authorization: token ? `Bearer ${token}` : "",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ userId, sections }),
-       
       });
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -107,12 +109,15 @@ export type Teacher = {
  
   export const deleteSection = async (token: string | null,sectionId: number): Promise<any> => {
     try {
-      const response = await fetch(`http://localhost:5000/upload/DeleteSections/${sectionId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': token ? `Bearer ${token}` : '',
-        },
-      });
+      const response = await fetch(
+        `${URL}/upload/DeleteSections/${sectionId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -127,10 +132,10 @@ export type Teacher = {
   export const deleteUser = async (token: string | null, id: number): Promise<any> => {
     try {
      
-      const response = await fetch(`http://localhost:5000/upload/deleteUser/${id}`, {
-        method: 'DELETE',
+      const response = await fetch(`${URL}/upload/deleteUser/${id}`, {
+        method: "DELETE",
         headers: {
-          'Authorization': token ? `Bearer ${token}` : '',
+          Authorization: token ? `Bearer ${token}` : "",
         },
       });
       if (!response.ok) {

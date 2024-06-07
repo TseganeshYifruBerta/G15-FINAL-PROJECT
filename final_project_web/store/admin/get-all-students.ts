@@ -1,4 +1,6 @@
 // src/api/StudentApi.ts
+import { URL } from "../host";
+
 export type Section = {
   id?: number;
   section: string;
@@ -29,13 +31,16 @@ export type Section = {
      
     export const fetchAllStudents = async (token: string | null): Promise<StudentApiResponse> => {
       try {
-        const response = await fetch('http://localhost:5000/upload/fetchAllStudents?_=${new Date().getTime()}', {
-          method: "GET",
-          headers: {
-            'Authorization': token ? `Bearer ${token}` : '',
-            'Content-Type': 'application/json'
-          },
-        });
+        const response = await fetch(
+          `${URL}/upload/fetchAllStudents`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -51,17 +56,14 @@ export type Section = {
     export const updateStudent = async (token: string | null,{ id, updateData }: UpdateStudentParams): Promise<any> => {
       try {
         console.log('Sending update payload to server:', JSON.stringify(updateData)); // Debugging line
-        const response = await fetch(
-          `http://localhost:5000/upload/updateUser/${id}`,
-          {
-            method: "PUT",
-            headers: {
-              'Authorization': token ? `Bearer ${token}` : '',
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updateData),
-          }
-        );
+        const response = await fetch(`${URL}/upload/updateUser/${id}`, {
+          method: "PUT",
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updateData),
+        });
     
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -82,14 +84,13 @@ export type Section = {
         console.log("Sending payload to server:", JSON.stringify({ userId, sections }));
 
     
-        const response = await fetch(`http://localhost:5000/upload/AddSections`, {
-          method: 'POST',
+        const response = await fetch(`${URL}/upload/AddSections`, {
+          method: "POST",
           headers: {
-            'Authorization': token ? `Bearer ${token}` : '',
-            'Content-Type': 'application/json'
+            Authorization: token ? `Bearer ${token}` : "",
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({ userId, sections }),
-          
         });
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -104,12 +105,15 @@ export type Section = {
     
     export const deleteSection = async (token: string | null, sectionId: number): Promise<any> => {
       try {
-        const response = await fetch(`http://localhost:5000/upload/DeleteSections/${sectionId}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': token ? `Bearer ${token}` : '',
-          },
-        });
+        const response = await fetch(
+          `${URL}/upload/DeleteSections/${sectionId}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
+        );
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -124,10 +128,10 @@ export type Section = {
     export const deleteUser = async ( token: string | null, id: number): Promise<any> => {
       try {
         
-        const response = await fetch(`http://localhost:5000/upload/deleteUser/${id}`, {
-          method: 'DELETE',
+        const response = await fetch(`${URL}/upload/deleteUser/${id}`, {
+          method: "DELETE",
           headers: {
-            'Authorization': token ? `Bearer ${token}` : '',
+            Authorization: token ? `Bearer ${token}` : "",
           },
         });
         if (!response.ok) {
@@ -146,14 +150,17 @@ export type Section = {
       }
   
       try {
-          const response = await fetch(`http://localhost:5000/activateUser/activateUser`, {
+          const response = await fetch(
+            `${URL}/activateUser/activateUser`,
+            {
               method: "POST",
               headers: {
-                  'Authorization': `Bearer ${token}`,
-                  "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
               },
-              body: JSON.stringify({ userId })
-          });
+              body: JSON.stringify({ userId }),
+            }
+          );
   
           const data = await response.json();
   

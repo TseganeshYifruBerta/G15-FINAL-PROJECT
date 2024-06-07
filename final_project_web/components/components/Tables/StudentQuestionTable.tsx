@@ -38,7 +38,6 @@ const CreateQuestionButton: React.FC<CreateQuestionButtonProps> = ({
 };
 
 const StudentQuestionTable: React.FC = () => {
-  const [selectedQuestionId, setSelectedQuestionId] = useState(null);
 
   const [filter, setFilter] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
@@ -46,7 +45,6 @@ const StudentQuestionTable: React.FC = () => {
   const [sortExamOrder, setExamSortOrder] = useState("asc");
   const router = useRouter();
   const [currentTeacherId, setCurrentTeacherId] = useState("");
-  const [activeTab, setActiveTab] = useState("Lab Questions");
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -107,18 +105,6 @@ const StudentQuestionTable: React.FC = () => {
 
   return (
     <div className="rounded-sm bg-white  dark:border-strokedark dark:bg-boxdark">
-      <div className="text-xs ml-4 py-2 px-2">
-        <button
-          className={`mr-4 py-2 px-4 rounded-lg transition-colors duration-150 ${
-            activeTab === "Lab Questions"
-              ? "bg-primary bg-opacity-20 text-primary shadow-lg"
-              : "bg-gray-200 text-gray-800 hover:bg-opacity-20 hover:bg-primary"
-          }`}
-          onClick={() => setActiveTab("Lab Questions")}
-        >
-          Lab Questions
-        </button>
-      </div>
 <div className="rounded-sm bg-white  dark:border-strokedark dark:bg-boxdark">
           <div className="flex justify-between items-center my-4 mx-2">
             <div className="flex mr-4 w-2/5">

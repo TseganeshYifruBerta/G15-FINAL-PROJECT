@@ -1,13 +1,16 @@
 import Image from "next/image";
 import { useGetAllStudentsQuery } from "@/store/teacherprofile/get-all-students";
 import { useState } from "react";
+import Loading from "@/components/common/Loading";
 
 const AllStudents = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const { data: students, isLoading, isError } = useGetAllStudentsQuery("");
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>
+      <Loading />
+    </div>;
   }
 
   // Days of the week

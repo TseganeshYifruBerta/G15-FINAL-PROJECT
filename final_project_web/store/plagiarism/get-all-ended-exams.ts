@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const jwt = require("jsonwebtoken");
+import { URL } from "../host";
+
 const baseUrl = "";
 
 export const getAllEndedExamsApi = createApi({
@@ -19,8 +21,7 @@ export const getAllEndedExamsApi = createApi({
     getAllEndedExams: builder.query({
       query: () => {
       
-        let url =
-          "https://g15-final-project-backend.onrender.com/plagiarism/fetchAllEndedExams";
+        let url = `${URL}/plagiarism/fetchAllEndedExams`;
         const queryParams = [];
 
         const token = localStorage.getItem("token");

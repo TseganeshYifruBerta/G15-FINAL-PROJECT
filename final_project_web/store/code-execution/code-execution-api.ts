@@ -1,24 +1,23 @@
+import { URL } from "../host";
+
 export type ExecutionFormData = {
   questionId: string;
   pythonCode: string;
 };
 
 export const codeexecution = async (formData: ExecutionFormData) => {
-       const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch(
-      "https://g15-final-project-backend.onrender.com/execution/run",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify(formData),
-      }
-    );
+    const response = await fetch(`${URL}/execution/run`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify(formData),
+    });
 
     if (!response.ok) {
       const errorData = await response.json();

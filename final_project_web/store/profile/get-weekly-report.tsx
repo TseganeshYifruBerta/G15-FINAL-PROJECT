@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { URL } from "../host";
 
 const baseUrl = "";
 
@@ -26,7 +27,7 @@ export const getWeeklyReportApi = createApi({
         const decodedToken = jwt.decode(token);
         const today = new Date().toISOString().split("T")[0];
 
-        let url = `https://g15-final-project-backend.onrender.com/codeSubmission/countCodeSubmissionsForLastWeek/${today}/${decodedToken.id}`;
+        let url = `${URL}/codeSubmission/countCodeSubmissionsForLastWeek/${today}/${decodedToken.id}`;
 
         return {
           url: url,

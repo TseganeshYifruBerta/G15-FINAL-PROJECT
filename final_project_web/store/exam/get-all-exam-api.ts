@@ -1,4 +1,6 @@
 const jwt = require("jsonwebtoken");
+import { URL } from "../host";
+
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseUrl = "";
@@ -21,8 +23,7 @@ export const getAllExamsApi = createApi({
   endpoints: (builder) => ({
     getAllExams: builder.query({
       query: (params) => {
-        let url =
-          "https://g15-final-project-backend.onrender.com/exam/getAllExamQuestions";
+        let url = `${URL}/exam/getAllExamQuestions`;
 
         return {
           url: url,
@@ -32,8 +33,7 @@ export const getAllExamsApi = createApi({
     }),
     getAllExamList: builder.query({
       query: (params) => {
-        let url =
-          "https://g15-final-project-backend.onrender.com/exam/getAllCreatedExams";
+        let url = `${URL}/exam/getAllCreatedExams`;
 
         return {
           url: url,
@@ -46,7 +46,7 @@ export const getAllExamsApi = createApi({
         const token = localStorage.getItem("token");
         const userId = jwt.decode(token).id;
         return {
-          url: `https://g15-final-project-backend.onrender.com/exam/updateExamQuestionById/${userId}/${question.questionId}`, // Assuming the question object has an 'id' property
+          url: `${URL}/exam/updateExamQuestionById/${userId}/${question.questionId}`, // Assuming the question object has an 'id' property
           method: "PUT",
           body: question,
         };
@@ -58,7 +58,7 @@ export const getAllExamsApi = createApi({
         const token = localStorage.getItem("token");
         const userId = jwt.decode(token).id;
         return {
-          url: `https://g15-final-project-backend.onrender.com/exam/deleteExamQuestionById/${userId}/${questionId}`,
+          url: `${URL}/exam/deleteExamQuestionById/${userId}/${questionId}`,
           method: "DELETE",
         };
       },
@@ -70,7 +70,7 @@ export const getAllExamsApi = createApi({
         const userId = jwt.decode(token).id;
         const examId = question.examId
         return {
-          url: `https://g15-final-project-backend.onrender.com/exam/updateExam/${userId}/${examId}`, // Assuming the question object has an 'id' property
+          url: `${URL}/exam/updateExam/${userId}/${examId}`, // Assuming the question object has an 'id' property
           method: "PUT",
           body: question,
         };
@@ -83,7 +83,7 @@ export const getAllExamsApi = createApi({
         const token = localStorage.getItem("token");
         const userId = jwt.decode(token).id;
         return {
-          url: `https://g15-final-project-backend.onrender.com/exam/deleteExam/${userId}/${questionId}`,
+          url: `${URL}/exam/deleteExam/${userId}/${questionId}`,
           method: "DELETE",
         };
       },

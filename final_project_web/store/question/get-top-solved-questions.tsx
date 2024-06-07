@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { URL } from "../host";
 
 const baseUrl = "";
 
@@ -21,8 +22,7 @@ export const getTopSolvedQuestionsApi = createApi({
   endpoints: (builder) => ({
     getTopSolvedQuestions: builder.query({
       query: () => {
-        let url =
-          "https://g15-final-project-backend.onrender.com/codeSubmission/fetchTopSolvedQuestions";
+        let url = `${URL}/codeSubmission/fetchTopSolvedQuestions`;
 
         return {
           url: url,

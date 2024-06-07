@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { URL } from "../host";
 
 const baseUrl = "";
 
@@ -19,7 +20,7 @@ export const getStudentProfileByIdApi = createApi({
       query: (params) => {
         const { userId } = params;
         let url =
-          "https://g15-final-project-backend.onrender.com/upload/findStudentByID";
+          `${URL}/upload/findStudentByID`;
         console.log(params);
         const queryParams = [];
         queryParams.push(`${userId}`);

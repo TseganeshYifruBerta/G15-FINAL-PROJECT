@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { URL } from "../host";
 
 // Assuming the access token is stored in localStorage for this example.
 // You might be storing it differently, adjust accordingly.
@@ -27,7 +28,7 @@ export const getAllStudentsApi = createApi({
       query: () => {
         const token = localStorage.getItem("token");
         const decodedToken = jwt.decode(token);
-        let url = `https://g15-final-project-backend.onrender.com/upload/fetchAllStudentBasedOnSection/${decodedToken.id}`;
+        let url = `${URL}/upload/fetchAllStudentBasedOnSection/${decodedToken.id}`;
         return {
           url: url,
           method: "GET",

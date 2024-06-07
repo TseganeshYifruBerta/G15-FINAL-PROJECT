@@ -89,21 +89,21 @@ const Header: React.FC = () => {
               Description
             </LinkScroll>
             <LinkScroll
-                activeClass="active"
-                to="testimoni"
-                spy={true}
-                smooth={true}
-                duration={1000}
-                onSetActive={() => {
-                  setActiveLink("testimoni");
-                }}
-                className={
-                  "px-4 py-2 mx-2 text-sm cursor-pointer animation-hover inline-block relative " +
-                  (activeLink === "testimoni"
-                    ? "text-[#4285F4] animation-active border-b-2 border-[#4285F4] "
-                    : "text-white hover:text-[#4285F4] hover:border-b-2 hover:border-[#4285F4]")
-                }
-              >
+              activeClass="active"
+              to="testimoni"
+              spy={true}
+              smooth={true}
+              duration={1000}
+              onSetActive={() => {
+                setActiveLink("testimoni");
+              }}
+              className={
+                "px-4 py-2 mx-2 text-sm cursor-pointer animation-hover inline-block relative " +
+                (activeLink === "testimoni"
+                  ? "text-[#4285F4] animation-active border-b-2 border-[#4285F4] "
+                  : "text-white hover:text-[#4285F4] hover:border-b-2 hover:border-[#4285F4]")
+              }
+            >
               Features
             </LinkScroll>
           </ul>
@@ -215,10 +215,10 @@ const Header: React.FC = () => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  d="M4 5h16M4 10h16M4 15h16M4 20h16"
                 />
               </svg>
-              Pricing
+              Description
             </LinkScroll>
             <LinkScroll
               activeClass="active"

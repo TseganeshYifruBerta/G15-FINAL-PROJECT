@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { URL } from "../host";
 
 const baseUrl = ""; // Ensure this is set to your API's base URL if it's not the same as your app's URL
 
@@ -21,7 +22,7 @@ export const getTopStudentsApi = createApi({
   endpoints: (builder) => ({
     getTopStudents: builder.query({
       query: () => {
-        let url = `https://g15-final-project-backend.onrender.com/codeSubmission/getTopStudents`;
+        let url = `${URL}/codeSubmission/getTopStudents`;
         return {
           url: url,
           method: "GET",

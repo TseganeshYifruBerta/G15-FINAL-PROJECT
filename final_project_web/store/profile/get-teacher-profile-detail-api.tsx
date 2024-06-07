@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { URL } from "../host";
 
 const baseUrl = "";
 
@@ -11,8 +12,7 @@ export const getTeacherProfileByIdApi = createApi({
     getTeacherProfileById: builder.query({
       query: (params) => {
         const { userId } = params;
-        let url =
-          "https://g15-final-project-backend.onrender.com/question/getAllQuestionsById";
+        let url = `${URL}/question/getAllQuestionsById`;
         console.log(params);
         const queryParams = [];
         queryParams.push(`${userId}`);

@@ -53,7 +53,7 @@ return (
   
 }
 const CodeEditorBox: React.FC<editorProps> = ({userId, questionId}) => {
-  const MAX_HEIGHT = 400;
+  const MAX_HEIGHT = 500;
   const [submitStatus, setSubmitStatus] = useState("");
   const [currentCode, setCurrentCode] = useState("def grade_checker(score):\n");
   const [currentInput, setCurrentInput] = useState<string[]>([]);
@@ -62,7 +62,7 @@ const CodeEditorBox: React.FC<editorProps> = ({userId, questionId}) => {
   );
   const [currentActualOutput, setCurrentActualOutput] = useState<string[]>([]);
   const [currentPassedStatus, setCurrentPassesStatus] = useState<boolean[]>([]);
-  const [editorHeight, setEditorHeight] = useState("300px"); // Initial editor height
+  const [editorHeight, setEditorHeight] = useState("670px"); // Initial editor height
   const editorContainerRef = useRef(null); // Ref for the editor's container div
   const submissionResultsRef = useRef(null); // Only if you need to track or manipulate this section
 
@@ -141,7 +141,7 @@ const CodeEditorBox: React.FC<editorProps> = ({userId, questionId}) => {
   console.log(questionId, "question ID");
   console.log(userId, "userr ID");
   return (
-    <SplitPane split="horizontal" minSize="25%">
+    <SplitPane split="horizontal" className="min-h-screen">
       <Pane initialSize="5%" minSize="5%" maxSize="5%" className="flex text-xs">
         <select onChange={(e) => setLanguage(e.target.value)} value={language}>
           <option value="javascript">JavaScript</option>
@@ -155,13 +155,11 @@ const CodeEditorBox: React.FC<editorProps> = ({userId, questionId}) => {
         
       </Pane>
       <Pane
-        initialSize="55%"
-        minSize="10%"
-        maxSize="80%"
+
         className="overflow-hidden"
       >
-        <div>
-          <div>
+    
+        
             <Editor
               height={editorHeight}
               className=""
@@ -179,14 +177,12 @@ const CodeEditorBox: React.FC<editorProps> = ({userId, questionId}) => {
                 }
               }}
             />
-          </div>
-        </div>
+          
+      
       </Pane>
 
       <Pane
-        initialSize="45%"
-        minSize="40%"
-        maxSize="100%"
+
         className="overflow-hidden"
       >
         <div>

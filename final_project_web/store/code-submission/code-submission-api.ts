@@ -1,26 +1,25 @@
+import { URL } from "../host";
+
 export type SubmissionFormData = {
   questionId: string;
   pythonCode: string;
-  id : string
+  id: string;
 };
 
 export const codesubmission = async (formData: SubmissionFormData) => {
-     const token = localStorage.getItem("token");
-console.log(formData, "formdata")
+  const token = localStorage.getItem("token");
+  console.log(formData, "formdata");
   try {
-    const response = await fetch(
-      "https://g15-final-project-backend.onrender.com/codeSubmission/submitCode",
-      {
-        method: "POST",
-        // CC
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify(formData),
-      }
-    );
+    const response = await fetch(`${URL}/codeSubmission/submitCode`, {
+      method: "POST",
+      // CC
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify(formData),
+    });
 
     if (!response.ok) {
       const errorData = await response.json();
