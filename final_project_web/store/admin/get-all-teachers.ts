@@ -136,6 +136,7 @@ export type Teacher = {
         method: "DELETE",
         headers: {
           Authorization: token ? `Bearer ${token}` : "",
+
         },
       });
       if (!response.ok) {
