@@ -33,20 +33,20 @@ const submitQuestionWithTestCases = async (req, res) => {
 
       const createdTestCases = await Promise.all(
         testCases.map(async (testCase) => {
-          // const formattedOutput = Array.isArray(testCase.output
-          // )
-          //   ? testCase.output
-          //   : [testCase.output]; // Ensure output is an array
-          // const formattedInput = Array.isArray(testCase.input)
-          //   ? testCase.input
-          //   : [testCase.input];
+          const formattedOutput = Array.isArray(testCase.output
+          )
+            ? testCase.output
+            : [testCase.output]; // Ensure output is an array
+          const formattedInput = Array.isArray(testCase.input)
+            ? testCase.input
+            : [testCase.input];
           return await TestCase.create({
             // nums: testCase.input.nums,
             // target: testCase.input.target,
-              input : testCase.input,
-              output: testCase.output,
-            // input: formattedInput,
-            // output: formattedOutput,
+              // input : testCase.input,
+              // output: testCase.output,
+            input: formattedInput,
+            output: formattedOutput,
             labQuestionId: newQuestion.id, // Associate the test case with the new LabQuestion
           }, { transaction });
         })
