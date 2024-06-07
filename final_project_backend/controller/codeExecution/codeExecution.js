@@ -30,7 +30,9 @@ checkDirectoryPermissions(tempPythonDir);
 
 const getQuestionById = async (questionId) => {
   try {
-    const question = await TestCase.findAll({ where: { labQuestionId: questionId } });
+    const question = await TestCase.findAll({
+      where: { labQuestionId: questionId },
+    });
 
     if (question.length === 0) {
       return null;
@@ -85,9 +87,12 @@ const runPythonCode = (pythonCode, nums) => {
             logger.info(`Temporary Python file contents:\n${fileContents}`);
 
             const trySpawnPython = (pythonExecutable) => {
-              const pythonProcess = spawn(pythonExecutable, [tempFilePath], { shell: true });
-              logger.info(`Python process started with executable: ${pythonExecutable}`);
+              const pythonProcess = spawn(pythonExecutable, fileContents.split(/\r?\n/), { shell: true });
+              // logger.info(`Python pooooooooooo: ${tempFilePath}`);
+              logger.info(`Python processssssssssss: ${pythonProcess.spawnargs[0]}`);
+              logger.info(`Python processkkkkkkkkkkk: ${pythonProcess.spawnargs[1]}`);
 
+              logger.info(`Python process started with executable: ${pythonProcess}`);
               let result = "";
               let printOutput = "";
 
@@ -134,7 +139,7 @@ const runPythonCode = (pythonCode, nums) => {
             trySpawnPython("python");
           });
         });
-      }, 1000); // Delay of 1000 milliseconds
+      }, 1000); // Delay of 100 milliseconds
     });
   });
 };
