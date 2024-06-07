@@ -45,8 +45,6 @@ const getQuestionById = async (questionId) => {
   }
 };
 
-var errorType = "";
-
 const runPythonCode = (pythonCode, nums) => {
   return new Promise((resolve, reject) => {
     const tempFilePath = path.join(tempPythonDir, "tempkol.py");
@@ -87,7 +85,8 @@ const runPythonCode = (pythonCode, nums) => {
             logger.info(`Temporary Python file contents:\n${fileContents}`);
 
             const trySpawnPython = (pythonExecutable) => {
-              const pythonProcess = spawn(pythonExecutable, [tempFilePath], { shell: true });
+              const pythonProcess = spawn(pythonExecutable, [tempFilePath]);
+
               logger.info(`Python process started with executable: ${pythonExecutable}`);
 
               let result = "";
@@ -113,10 +112,6 @@ const runPythonCode = (pythonCode, nums) => {
                 if (code === 0) {
                   resolve({ result: result.trim(), printOutput: printOutput.trim() });
                 } else {
-                  const errorTypeMatch = printOutput.match(/(\w+Error):/);
-                  if (errorTypeMatch) {
-                    errorType = errorTypeMatch[1];
-                  }
                   reject(new Error(`Python process exited with code ${code}. Error: ${printOutput.trim()}`));
                 }
               });
@@ -127,8 +122,8 @@ const runPythonCode = (pythonCode, nums) => {
               });
             };
 
-            // Start with 'python' and fall back to 'python3' if needed
-            trySpawnPython("python");
+            // Start with 'python3' and fall back to 'python' if needed
+            trySpawnPython("python3");
           });
         });
       }, 1000); // Delay of 1000 milliseconds
@@ -154,8 +149,7 @@ const codeExecute = async (req, res) => {
         const { input, output } = testCase.dataValues;
         const inputJson = input.replace(/'/g, '"');
         logger.info(`Input JSON: ${inputJson}`);
-        var inputJsons = `{${inputJson}}`;
-        const inputObject = JSON.parse(inputJsons);
+        const inputObject = JSON.parse(`{${inputJson}}`);
         const valuesArray = Object.values(inputObject);
         let results;
 
