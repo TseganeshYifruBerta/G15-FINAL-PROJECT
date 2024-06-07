@@ -24,7 +24,7 @@ const QuestionUploadForm: React.FC<InjectedFormProps<QuestionUploadFormData>> = 
   useSelector((state: RootState) => state.questionupload);
 
   const values = {
-    testcases: testCases,
+    testCases: testCases,
     title: questionTitle,
     difficulty: questionDifficulty,
     description: questionDescription,
