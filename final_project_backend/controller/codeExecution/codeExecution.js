@@ -87,12 +87,9 @@ const runPythonCode = (pythonCode, nums) => {
             logger.info(`Temporary Python file contents:\n${fileContents}`);
 
             const trySpawnPython = (pythonExecutable) => {
-              const pythonProcess = spawn(pythonExecutable, fileContents.split(/\r?\n/), { shell: true });
-              // logger.info(`Python pooooooooooo: ${tempFilePath}`);
-              logger.info(`Python processssssssssss: ${pythonProcess.spawnargs[0]}`);
-              logger.info(`Python processkkkkkkkkkkk: ${pythonProcess.spawnargs[1]}`);
+              const pythonProcess = spawn(pythonExecutable, [tempFilePath], { shell: true });
+              logger.info(`Python process started with executable: ${pythonExecutable}`);
 
-              logger.info(`Python process started with executable: ${pythonProcess}`);
               let result = "";
               let printOutput = "";
 
@@ -125,13 +122,8 @@ const runPythonCode = (pythonCode, nums) => {
               });
 
               pythonProcess.on("error", (err) => {
-                if (pythonExecutable === "python") {
-                  // If 'python' fails, try 'python3'
-                  trySpawnPython("python3");
-                } else {
-                  // If both 'python' and 'python3' fail, reject the promise
-                  reject(new Error(`Failed to start Python process: ${err.message}`));
-                }
+                logger.error(`Failed to start Python process: ${err.message}`);
+                reject(new Error(`Failed to start Python process: ${err.message}`));
               });
             };
 
@@ -139,7 +131,7 @@ const runPythonCode = (pythonCode, nums) => {
             trySpawnPython("python");
           });
         });
-      }, 1000); // Delay of 100 milliseconds
+      }, 1000); // Delay of 1000 milliseconds
     });
   });
 };
