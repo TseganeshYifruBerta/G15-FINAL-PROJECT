@@ -8,7 +8,30 @@ const Question = require("../../models/question_testcase_submission/question");
 const Difficulty = require("../../models/codeSubmision/difficultyCounter");
 const User = require("../../models/auth/user.model");
 const Section = require("../../models/auth/section.model");
+const logger = require('../../logger');
+const tempPythonDir = process.env.TEMP_PYTHON_DIR || path.resolve(__dirname);
 
+// Ensure the directory exists and check permissions
+if (!fs.existsSync(tempPythonDir)) {
+  fs.mkdirSync(tempPythonDir, { recursive: true });
+  logger.info(`Directory created: ${tempPythonDir}`);
+} else {
+  logger.info(`Directory already exists: ${tempPythonDir}`);
+}
+
+// Function to check directory permissions
+const checkDirectoryPermissions = (dirPath) => {
+  try {
+    fs.accessSync(dirPath, fs.constants.R_OK | fs.constants.W_OK);
+    logger.info(`Read and write permissions verified for directory: ${dirPath}`);
+  } catch (err) {
+    logger.error(`Permission issue for directory: ${dirPath}, Error: ${err.message}`);
+    throw new Error(`Permission issue for directory: ${dirPath}`);
+  }
+};
+
+// Check permissions for the temporary directory
+checkDirectoryPermissions(tempPythonDir);
 const getQuestionById = async (questionId) => {
   try {
     const question = await TestCase.findAll({
@@ -24,63 +47,103 @@ const getQuestionById = async (questionId) => {
     return question;
   } catch (error) {
     console.error("Error fetching question by ID:", error);
+    logger.error(`An error occurred while fetching question by ID: ${error.message}`);
+
     throw new Error("Failed to fetch question by ID");
   }
 };
 
 var errorType =""
-const runPythonCode = (pythonCode, nums) => {
+const runPythonCode = (pythonCode, inputs) => {
   return new Promise((resolve, reject) => {
-    const tempFilePath = path.join(__dirname, "tempkol.py");
+    const tempFilePath = path.join(tempPythonDir, "tempkol.py");
+    logger.info(`Temporary Python file path: ${tempFilePath}`);
     const functionNameMatch = pythonCode.match(/def\s+(\w+)\s*\(/);
     const functionName = functionNameMatch ? functionNameMatch[1] : "UnknownFunction";
     
+    const inputString = inputs.map(input => JSON.stringify(input)).join(', ');
+    console.log("Input String:", inputString);
+    const functionCall = `${functionName}(${inputString})`;
+
     const modifiedPythonCode = pythonCode.replace(/print\(/g, 'sys.stderr.write(');
-    const functionCall = `${functionName}(${JSON.stringify(nums)})`;
-    
     const pythonScript = `${modifiedPythonCode}\n\nimport sys\nsys.stdout.write(str(${functionCall}))`;
-     
-    console.log("Python script:", pythonScript);
+
+
+    // const modifiedPythonCode = pythonCode.replace(/print\(/g, 'sys.stderr.write(');
+    // const functionCall = `${functionName}(${JSON.stringify(nums)})`;
+
+    // const pythonScript = `${modifiedPythonCode}\n\nimport sys\nsys.stdout.write(str(${functionCall}))`;
+
+    // Write the Python script to a temporary file
     fs.writeFile(tempFilePath, pythonScript, (err) => {
       if (err) {
-        reject(err);
-      } else {
-        const pythonProcess = spawn("python", [tempFilePath,nums]);
-        
-        let result = "";
-        let printOutput = ""; 
-
-        pythonProcess.stdout.on("data", (data) => {
-          result += data.toString();
-        });
-
-        pythonProcess.stderr.on("data", (data) => {
-          printOutput += data.toString();
-          console.error(`Python process error: ${data}`);
-        });
-        
-        pythonProcess.on("close", (code) => {
-          fs.unlink(tempFilePath, (unlinkErr) => {
-            if (unlinkErr) {
-              console.error("Error deleting temporary file:", unlinkErr);
-            }
-          });
-        
-          if (code === 0) {
-            resolve({ result: result.trim(), printOutput: printOutput.trim() });
-          } else {
-            const errorTypeMatch = printOutput.match(/(\w+Error):/);
-            if (errorTypeMatch) {
-              errorType = errorTypeMatch[1];
-             
-            } 
-            else {}
-            // If the process exits with a non-zero code, consider it an error and reject the promise.
-            reject(new Error(`Python process exited with code ${code}. Error: ${printOutput.trim()}`));
-          }
-        });
-        
+        logger.error(`Failed to write temporary Python file: ${err.message}`);
+        return reject(err);
       }
+
+      logger.info(`Temporary Python file written to ${tempFilePath}`);
+
+      // Add a short delay to ensure the file system has fully registered the file
+      setTimeout(() => {
+        // Check if the file exists after writing
+        fs.access(tempFilePath, fs.constants.F_OK, (accessErr) => {
+          if (accessErr) {
+            logger.error(`Temporary file does not exist: ${tempFilePath}`);
+            return reject(new Error(`Temporary file does not exist: ${tempFilePath}`));
+          }
+
+          // Log the contents of the file
+          fs.readFile(tempFilePath, 'utf8', (readErr, fileContents) => {
+            if (readErr) {
+              logger.error(`Failed to read temporary Python file: ${readErr.message}`);
+              return reject(readErr);
+            }
+
+            logger.info(`Temporary Python file contents:\n${fileContents}`);
+
+            const trySpawnPython = (pythonExecutable) => {
+              const pythonProcess = spawn(pythonExecutable, [tempFilePath]);
+
+              logger.info(`Python process started with executable: ${pythonExecutable}`);
+
+              let result = "";
+              let printOutput = "";
+
+              pythonProcess.stdout.on("data", (data) => {
+                result += data.toString();
+                logger.info(`Python process stdout: ${data.toString()}`);
+              });
+
+              pythonProcess.stderr.on("data", (data) => {
+                printOutput += data.toString();
+                logger.error(`Python process stderr: ${data.toString()}`);
+              });
+
+              pythonProcess.on("close", (code) => {
+                fs.unlink(tempFilePath, (unlinkErr) => {
+                  if (unlinkErr) {
+                    logger.error(`Failed to delete temporary file: ${unlinkErr.message}`);
+                  }
+                });
+
+                if (code === 0) {
+                  resolve({ result: result.trim(), printOutput: printOutput.trim() });
+                } else {
+                  reject(new Error(`Python process exited with code ${code}. Error: ${printOutput.trim()}`));
+                }
+              });
+
+              pythonProcess.on("error", (err) => {
+                logger.error(`Failed to start Python process: ${err.message}`);
+                reject(new Error(`Failed to start Python process: ${err.message}`));
+              });
+            };
+
+            // Start with 'python3' and fall back to 'python' if needed
+            trySpawnPython("python3");
+          });
+        });
+      }, 1000); // Delay of 1000 milliseconds
     });
   });
 };
@@ -137,32 +200,48 @@ const submitCode = async (req, res) => {
     
 
     for (const testCase of testCases) {
-      const { input, output } = testCase.dataValues;
-      let nums, score, results;
-      var inputJson = input.replace(/'/g, '"');
-
-      var inputObject = JSON.parse(inputJson);
-      
-     
-      var valuesArray = Object.values(inputObject);
-      if (valuesArray.length > 1) {
-        const { nums, score } = valuesArray;
-        results = await runPythonCode(pythonCode, [nums, score]);
-      } else {
-        
-      nums = valuesArray[0];
-      results = await runPythonCode(pythonCode, nums);
-
+     const { input, output } = testCase.dataValues;
+        let inputValues;
+      try {
+        if (input.trim().startsWith('[') && input.trim().endsWith(']')) {
+          console.log("Input is a single JSON array, parsing directly...");
+          inputValues = [JSON.parse(input.trim().replace(/'/g, '"'))];
+        } else {
+          console.log("Input contains individual values, splitting...");
+          inputValues = input.split(',').map(value => {
+            const trimmedValue = value.trim();
+            const validJsonValue = trimmedValue.replace(/'/g, '"');
+            const parsedValue = JSON.parse(validJsonValue);
+            console.log("Parsed Value:", parsedValue);
+            return parsedValue;
+          });
+        }
+      } catch (e) {
+        console.error(`Error parsing input: ${input.trim()}`, e);
+        throw new Error(`Error parsing input: ${input.trim()}`);
       }
 
-     
+      // Log the parsed input values before executing the Python code
+      console.log("Final Parsed Input Values:", inputValues);
+
+      // Ensure input values are ready before calling runPythonCode
+      const results = await runPythonCode(pythonCode, inputValues);
+
+      let expectedOutput, actualOutput;
+      try {
+        expectedOutput = JSON.parse(output);
+        actualOutput = JSON.parse(results.result);
+      } catch (e) {
+        expectedOutput = output;
+        actualOutput = results.result;
+      }
 
       const testResults = {
-        input: input,
-        expectedOutput: output,
-        actualOutput: results.result,
-        printed :results.printOutput,
-        passed: output === results.result,
+        input,
+        expectedOutput: JSON.stringify(expectedOutput),
+        actualOutput: JSON.stringify(actualOutput),
+        printed: results.printOutput,
+        passed: JSON.stringify(expectedOutput) === JSON.stringify(actualOutput),
       };
      
        if(testResults.passed === true){
