@@ -45,17 +45,25 @@ const getQuestionById = async (questionId) => {
   }
 };
 
-const runPythonCode = (pythonCode, nums) => {
+const runPythonCode = (pythonCode, inputs) => {
   return new Promise((resolve, reject) => {
     const tempFilePath = path.join(tempPythonDir, "tempkol.py");
     logger.info(`Temporary Python file path: ${tempFilePath}`);
     const functionNameMatch = pythonCode.match(/def\s+(\w+)\s*\(/);
     const functionName = functionNameMatch ? functionNameMatch[1] : "UnknownFunction";
+    
+    const inputString = inputs.map(input => JSON.stringify(input)).join(', ');
+    console.log("Input String:", inputString);
+    const functionCall = `${functionName}(${inputString})`;
 
     const modifiedPythonCode = pythonCode.replace(/print\(/g, 'sys.stderr.write(');
-    const functionCall = `${functionName}(${JSON.stringify(nums)})`;
-
     const pythonScript = `${modifiedPythonCode}\n\nimport sys\nsys.stdout.write(str(${functionCall}))`;
+
+
+    // const modifiedPythonCode = pythonCode.replace(/print\(/g, 'sys.stderr.write(');
+    // const functionCall = `${functionName}(${JSON.stringify(nums)})`;
+
+    // const pythonScript = `${modifiedPythonCode}\n\nimport sys\nsys.stdout.write(str(${functionCall}))`;
 
     // Write the Python script to a temporary file
     fs.writeFile(tempFilePath, pythonScript, (err) => {
@@ -147,29 +155,71 @@ const codeExecute = async (req, res) => {
 
       for (const testCase of testCases) {
         const { input, output } = testCase.dataValues;
-        const inputJson = input.replace(/'/g, '"');
-        logger.info(`Input JSON: ${inputJson}`);
-        const inputObject = JSON.parse(`{${inputJson}}`);
-        const valuesArray = Object.values(inputObject);
-        let results;
-
-        logger.info(`Values Array: ${valuesArray}`);
-
-        if (valuesArray.length > 1) {
-          const { nums, score } = valuesArray;
-          results = await runPythonCode(pythonCode, [nums, score]);
+        let inputValues;
+      try {
+        if (input.trim().startsWith('[') && input.trim().endsWith(']')) {
+          console.log("Input is a single JSON array, parsing directly...");
+          inputValues = [JSON.parse(input.trim().replace(/'/g, '"'))];
         } else {
-          const nums = valuesArray[0];
-          results = await runPythonCode(pythonCode, nums);
+          console.log("Input contains individual values, splitting...");
+          inputValues = input.split(',').map(value => {
+            const trimmedValue = value.trim();
+            const validJsonValue = trimmedValue.replace(/'/g, '"');
+            const parsedValue = JSON.parse(validJsonValue);
+            console.log("Parsed Value:", parsedValue);
+            return parsedValue;
+          });
         }
+      } catch (e) {
+        console.error(`Error parsing input: ${input.trim()}`, e);
+        throw new Error(`Error parsing input: ${input.trim()}`);
+      }
 
-        const testResults = {
-          input,
-          expectedOutput: output,
-          actualOutput: results.result,
-          printed: results.printOutput,
-          passed: output === results.result,
-        };
+      // Log the parsed input values before executing the Python code
+      console.log("Final Parsed Input Values:", inputValues);
+
+      // Ensure input values are ready before calling runPythonCode
+      const results = await runPythonCode(pythonCode, inputValues);
+
+      let expectedOutput, actualOutput;
+      try {
+        expectedOutput = JSON.parse(output);
+        actualOutput = JSON.parse(results.result);
+      } catch (e) {
+        expectedOutput = output;
+        actualOutput = results.result;
+      }
+
+      const testResults = {
+        input,
+        expectedOutput: JSON.stringify(expectedOutput),
+        actualOutput: JSON.stringify(actualOutput),
+        printed: results.printOutput,
+        passed: JSON.stringify(expectedOutput) === JSON.stringify(actualOutput),
+      };
+        // const inputJson = input.replace(/'/g, '"');
+        // logger.info(`Input JSON: ${inputJson}`);
+        // const inputObject = JSON.parse(`{${inputJson}}`);
+        // const valuesArray = Object.values(inputObject);
+        // let results;
+
+        // logger.info(`Values Array: ${valuesArray}`);
+
+        // if (valuesArray.length > 1) {
+        //   const { nums, score } = valuesArray;
+        //   results = await runPythonCode(pythonCode, [nums, score]);
+        // } else {
+        //   const nums = valuesArray[0];
+        //   results = await runPythonCode(pythonCode, nums);
+        // }
+
+        // const testResults = {
+        //   input,
+        //   expectedOutput: output,
+        //   actualOutput: results.result,
+        //   printed: results.printOutput,
+        //   passed: output === results.result,
+        // };
 
         statusData.push(testResults.passed ? "Accepted" : "Wrong Answer");
         allTestResults.push(testResults);
