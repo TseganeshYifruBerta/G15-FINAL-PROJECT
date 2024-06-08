@@ -79,6 +79,7 @@ const checkPlagiarism = async (req, res) => {
               if(filePath2){
                 fs.unlinkSync(filePath2)
               }
+              if(plagiarismResult.ratio > 0){
 
               
               const plagiarismResults = await Allplagiarism.create({
@@ -97,11 +98,7 @@ const checkPlagiarism = async (req, res) => {
                   }, { transaction });
                 })
 
-           
-            
-            
-                
-              
+    
               const user = await User.findAll({
                 where: { id: answer.UserinformationId },
                 attributes: ['id', 'fullName', 'email', 'userId', 'role'],
@@ -117,6 +114,8 @@ const checkPlagiarism = async (req, res) => {
                 users: user,
                 questionId: questionId
               });
+
+            }
               
             }
             

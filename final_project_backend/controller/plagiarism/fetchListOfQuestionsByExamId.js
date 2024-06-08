@@ -5,10 +5,11 @@ const { all } = require("axios");
 
 const fetchListOfQuestionsByExamId = async (req, res) => {
     try {
-        const { examId } = req.params;
+        const { examId,studentId} = req.params;
         const examFound = await Allplagiarism.findOne({
             where: {
-                examId: examId,
+                examId: examId
+               
             },
 
         });
@@ -21,6 +22,7 @@ const fetchListOfQuestionsByExamId = async (req, res) => {
         const AllQuestions = await Allplagiarism.findAll({
             where: {
                 examId: examId,
+                userId: studentId,
 
             },
             group: ['question'],
