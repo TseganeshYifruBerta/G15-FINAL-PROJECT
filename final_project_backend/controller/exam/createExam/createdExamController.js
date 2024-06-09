@@ -13,7 +13,8 @@ const SelectedChapter = require("../../../models/exam/SelectedChapter");
 const createExam = async (req, res) => {
   const {
     title,
-    date_and_time,
+    examDate,
+    examTime,
     instruction,
     sections,
     duration,
@@ -22,7 +23,9 @@ const createExam = async (req, res) => {
     easy_questions,
     medium_questions,
     hard_questions,
-    teacherId
+    teacherId,
+    passKey,
+
 
     
   } 
@@ -191,14 +194,18 @@ const createExam = async (req, res) => {
     // Create exam within the transaction
     const exam = await Exam.create({
       title,
-      date_and_time,
+      examDate,
+      examTime,
+      passKey,
+      start_time,
       instruction,
       duration,
       teacherId,
       tag,
       easy_questions,
       medium_questions,
-      hard_questions
+      hard_questions,
+
 
     }, { transaction }); // Pass transaction to the create method
 
