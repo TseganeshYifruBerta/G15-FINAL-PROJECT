@@ -11,7 +11,7 @@ const Status = sequelize.define("statusData", {
     allowNull: false,
   },
   userCode: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false,
     defaultValue: "",
   },
