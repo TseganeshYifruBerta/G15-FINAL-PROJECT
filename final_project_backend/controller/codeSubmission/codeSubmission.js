@@ -129,7 +129,16 @@ const runPythonCode = (pythonCode, inputs) => {
                 if (code === 0) {
                   resolve({ result: result.trim(), printOutput: printOutput.trim() });
                 } else {
+                  // reject(new Error(`Python process exited with code ${code}. Error: ${printOutput.trim()}`));
+                  const errorTypeMatch = printOutput.match(/(\w+Error):/);
+                  if (errorTypeMatch) {
+                    errorType = errorTypeMatch[1];
+                   
+                  } 
+                  else {}
+                  // If the process exits with a non-zero code, consider it an error and reject the promise.
                   reject(new Error(`Python process exited with code ${code}. Error: ${printOutput.trim()}`));
+                  
                 }
               });
 
