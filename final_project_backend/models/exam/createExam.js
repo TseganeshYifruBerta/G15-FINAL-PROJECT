@@ -15,14 +15,14 @@ const creatExam = sequelize.define("exam", {
     allowNull: false,
   },
 
-  eXamTime :{
+  examTime :{
     type: DataTypes.STRING,
     allowNull: false,
 
   },
   start_time: {
     type: DataTypes.STRING,
-    allowNull: "00:00",
+    defaultValue: "00:00",
 
   },
   instruction: {
