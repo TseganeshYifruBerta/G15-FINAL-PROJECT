@@ -68,7 +68,7 @@ const checkPlagiarism = async (req, res) => {
               formData.append('file1', fs.createReadStream(filePath1));
               formData.append('file2', fs.createReadStream(filePath2));
               
-              const response = await axios.post('https://plagiarism-checker-cr9l.onrender.com/check_plagiarism', formData, {
+              const response = await axios.post('https://g15-final-project.onrender.com/check_plagiarism', formData, {
                 headers: { ...formData.getHeaders() },
               });
               const plagiarismResult = response.data;
