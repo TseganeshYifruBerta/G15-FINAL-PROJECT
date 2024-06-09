@@ -1,9 +1,12 @@
 const { Sequelize } = require("sequelize");
 
-const sequelize = new Sequelize("sql12712404", "sql12712404", "CWVcNymWhE", {
-  host: "sql12.freemysqlhosting.net",
+const sequelize = new Sequelize("final", "root", "", {
+  host: "localhost",
   dialect: "mysql",
-  port: 3306,
+  port: 3308,
+  dialectOptions: {
+    connectTimeout: 60000  // 60 seconds
+  }
 });
 
 module.exports = sequelize;
