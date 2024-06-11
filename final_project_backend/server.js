@@ -15,7 +15,7 @@ const plagiarismRouter = require("./routes/plagiarism/plagiarismRoute.js");
 const ActivateRouter = require(
   "./routes/Activate/activateUserRoute.js"
 ) 
-const userProfile = require("./routes/profile/profile.route.js")
+
 const verifyJWT = require("./middleware/verifyJWT.js")
 const checkUserStatus = require("./middleware/userStatus.js")
 const seedAdminData = require("./models/auth/seed.js");
@@ -57,8 +57,7 @@ app.use(checkUserStatus)
 // Routes for ActivateUser
 app.use("/activateUser",ActivateRouter);
 
-// Routes for userProfile
-app.use("/userProfile",userProfile);
+
 
 //  Routes related to Question
 app.use("/question", questionRouters);
@@ -84,4 +83,6 @@ app.use("/grading", gradingRouter);
 
 
 const port = process.env.PORT || 4000;
-app.listen(port, () => console.log(`BACK_END_SERVICE_PORT: ${port}`));
+
+const ipAddress = process.env.IP_ADDRESS || '127.0.0.1';
+app.listen(port, () => console.log(`BACK_END_SERVICE_PORT: ${port}: ${ipAddress}`));
