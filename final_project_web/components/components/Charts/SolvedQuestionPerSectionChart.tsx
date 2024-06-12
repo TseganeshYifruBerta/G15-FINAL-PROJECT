@@ -54,7 +54,7 @@ const options: ApexOptions = {
 const SolvedQuestionPerSectionChart: React.FC = () => {
   // const
   const [state, setState] = useState<ChartThreeState>({
-    series: [1, 3, 4, 5],
+    series: [5, 2, 1, 3],
   });
 
   const handleReset = () => {
@@ -64,12 +64,14 @@ const SolvedQuestionPerSectionChart: React.FC = () => {
     }));
   };
   handleReset;
+const sections = [1, 2, 3, 10, 6];
+  const isOdd = sections.length % 2 !== 0;
 
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-5">
+    <div className="h-[420px] col-span-12 rounded-xl bg-primary bg-opacity-5 px-5 pb-5 pt-7.5 shadow-lg dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-5">
       <div className="mb-3 justify-between gap-4 sm:flex">
         <div>
-          <h5 className="text-md font-semibold text-black dark:text-white">
+          <h5 className="text-lg font-semibold text-black dark:text-white">
             Question Solved Per Section
           </h5>
         </div>
@@ -86,42 +88,34 @@ const SolvedQuestionPerSectionChart: React.FC = () => {
       </div>
 
       <div className="-mx-8 flex flex-wrap items-center justify-center gap-y-3">
-        <div className="w-full px-8 sm:w-1/2">
-          <div className="flex w-full items-center">
-            <span className="mr-2 block h-2 w-3/5 max-w-3 rounded-full bg-primary"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
-              <span> Section 1 </span>
-              <span> 1 </span>
-            </p>
+        {sections.map((number, index) => (
+          <div key={index} className="w-full px-8 sm:w-1/2">
+            <div className="flex w-full items-center">
+              <span
+                className={`mr-2 block h-2 w-3/5 max-w-3 rounded-full ${
+                  index % 4 === 0
+                    ? "bg-primary"
+                    : index % 4 === 1
+                    ? "bg-[#6577F3]"
+                    : index % 4 === 2
+                    ? "bg-[#757676]"
+                    : "bg-[#0FADCF]"
+                }`}
+              ></span>
+              <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
+                <span> Section {index + 1} </span>
+                <span className={`${number < 0 ? "text-gray-400" : ""}`}>
+                  {number}
+                </span>
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="w-full px-8 sm:w-1/2">
-          <div className="flex w-full items-center">
-            <span className="mr-2 block h-2 w-3/5 max-w-3 rounded-full bg-[#6577F3]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
-              <span> Section 2 </span>
-              <span> 2 </span>
-            </p>
+        ))}
+        {isOdd && (
+          <div className="w-full px-8 sm:w-1/2">
+            {/* Placeholder element to ensure proper alignment */}
           </div>
-        </div>
-        <div className="w-full px-8 sm:w-1/2">
-          <div className="flex w-full items-center">
-            <span className="mr-2 block h-2 w-3/5 max-w-3 rounded-full bg-[#757676]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
-              <span> Section 3 </span>
-              <span> 3 </span>
-            </p>
-          </div>
-        </div>
-        <div className="w-full px-8 sm:w-1/2">
-          <div className="flex w-full items-center">
-            <span className="mr-2 block h-2 w-3/5 max-w-3 rounded-full bg-[#0FADCF]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
-              <span> Section 4 </span>
-              <span className="text-gray-400"> -4 </span>
-            </p>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

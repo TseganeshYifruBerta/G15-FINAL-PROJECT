@@ -6,6 +6,9 @@ import { useGetAllQuestionsQuery } from "@/store/question/get-all-questions";
 import Loading from "@/components/common/Loading";
 import FetchError from "@/components/common/Error";
 import StudentUseQuestionsTable from "./StudentUseQuestionsTable";
+import CardDataStats from "../CardDataStats";
+import Link from "next/link";
+import { FiSearch } from "react-icons/fi";
 
 interface CreateQuestionButtonProps {
   onClick: () => void;
@@ -105,44 +108,93 @@ const StudentQuestionTable: React.FC = () => {
 
   return (
     <div className="rounded-sm bg-white  dark:border-strokedark dark:bg-boxdark">
-<div className="rounded-sm bg-white  dark:border-strokedark dark:bg-boxdark">
-          <div className="flex justify-between items-center my-4 mx-2">
-            <div className="flex mr-4 w-2/5">
+      <div className="flex mt-4 justify-center">
+        <div className="w-1/3 px-2">
+          <CardDataStats
+            title="Easy"
+            total={3}
+            rate=""
+            icon="easy"
+            bg="bg-easy"
+            text=""
+          >
+            <div></div>
+          </CardDataStats>
+        </div>
+
+        <div className="w-1/3 px-2">
+          <CardDataStats
+            title="Medium"
+            total={1}
+            rate=""
+            icon="medium"
+            bg="s"
+            text=""
+          >
+            <div></div>
+          </CardDataStats>
+        </div>
+        <div className="w-1/3 px-2">
+          <CardDataStats
+            title="Hard"
+            total={2}
+            rate=""
+            icon="hardd"
+            bg="bg-mid"
+            text=""
+          >
+            <div></div>
+          </CardDataStats>
+        </div>
+      </div>
+
+      <div className="rounded-sm bg-white  dark:border-strokedark dark:bg-boxdark  mt-4">
+        <div className="flex items-center  mx-2 w-2/3">
+          <div className="flex items-center justify-between mr-2 space-x-4 w-3/6">
+            <div className="flex items-center space-x-2 w-full max-w-lg border-2 border-gray-200 bg-primary bg-opacity-5 rounded-xl overflow-hidden">
+              <FiSearch className="ml-4 text-[#7983FB]" />
               <input
                 type="text"
-                placeholder="Search by title..."
-                className="w-full select select-bordered select-primary max-w-xs mr-2 px-2 py-2 rounded-md bg-white  focus:outline-none shadow text-xs"
+                className="w-full p-2 outline-none"
+                placeholder="Search ..."
+                value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div className="flex items-center w-4/5">
+          </div>
+          <div className="flex items-center justify-between space-x-4 w-1/6 mr-2">
+            <div className="flex items-center space-x-2 w-full max-w-lg border-2  rounded-xl overflow-hidden">
               <button
                 onClick={handleSortOrderChange}
-                className="w-1/5 select select-bordered select-primary max-w-xs mr-2 px-2 py-2 rounded-md bg-white  focus:outline-none shadow text-xs"
+                className="w-full p-[10px] outline-none text-sm "
               >
-                Sort by Date {sortExamOrder === "asc" ? "↑" : "↓"}
+                Sort by Date {sortOrder === "asc" ? "↑" : "↓"}
               </button>
+            </div>
+          </div>
 
-            </div>
-          </div>
-          <div className="px-4 py-6 md:px-6 xl:px-7.5 flex">
-            <h4 className="w-4/5 text-xl font-semibold text-black dark:text-white">
-              Lab Questions
-            </h4>
-          </div>
-          <div className="flex">
-            <div className="w-2/3">
-              <StudentUseQuestionsTable
-                questions={filteredAndSortedQuestions}
-                teacherId={currentTeacherId}
-              />
-            </div>
-            <div className="w-1/3">
-              <TopSovedQuestions />
-            </div>
-          </div>
+          
+
+        
         </div>
 
+        
+      </div>
+      <div className="rounded-sm bg-white  dark:border-strokedark dark:bg-boxdark">
+        <div className="px-4 md:px-6 xl:px-7.5 flex">
+        </div>
+        <div className="flex">
+          <div className="w-2/3">
+            <StudentUseQuestionsTable
+              questions={filteredAndSortedQuestions}
+              teacherId={currentTeacherId}
+            />
+          </div>
+          <div className="w-1/3">
+            <TopSovedQuestions />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

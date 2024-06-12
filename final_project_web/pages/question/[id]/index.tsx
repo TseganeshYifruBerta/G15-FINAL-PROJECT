@@ -58,7 +58,7 @@ const QuestionSetTab: React.FC<QuestionSetProps> = ({
   difficulty
 }) => {
   return (
-    <div className="ml-4 min-h-screen">
+    <div className="ml-4">
       <QuestionSet
         questionTitle={questionTitle}
         questionDescription={questionDescription}
@@ -81,7 +81,7 @@ useEffect(() => {
   if (typeof window !== "undefined") {
     const token = localStorage.getItem("token");
     if (!token) {
-      router.push("/login");
+      router.push("/");
     } else {
       const decodedToken = jwt.decode(token);
       setUserId(decodedToken?.id || null);
@@ -110,12 +110,12 @@ useEffect(() => {
     question;
   const currentCode = !questionDetails.allStatus ? "" : pythonCode;
   return (
-    <SplitPane split="vertical">
-      <div className="ml-4 min-h-screen">
+    <SplitPane split="vertical" className="">
+      <div className="ml-4 text-lg overflow-scroll-y">
         {/* Buttons for tab navigation */}
-        <div className="text-xs ml-4 py-2 px-2">
+        <div className="text-sm ml-4 py-2 px-2">
           <button
-            className={`mr-4 py-2 px-4 rounded-lg transition-colors duration-150 ${
+            className={`mr-4 py-1 px-4 rounded-3xl transition-colors duration-150 ${
               activeTab === "questionSet"
                 ? "bg-primary bg-opacity-20 text-primary shadow-lg"
                 : "bg-gray-200 text-gray-800 hover:bg-opacity-20 hover:bg-primary"
@@ -125,7 +125,7 @@ useEffect(() => {
             Description
           </button>
           <button
-            className={`py-2 px-4 rounded-lg transition-colors duration-150 ${
+            className={`py-1 px-4 rounded-3xl transition-colors duration-150 ${
               activeTab === "submissions"
                 ? "bg-primary bg-opacity-20 text-primary shadow-lg"
                 : "bg-gray-200 text-gray-800 hover:bg-opacity-20 hover:bg-primary"

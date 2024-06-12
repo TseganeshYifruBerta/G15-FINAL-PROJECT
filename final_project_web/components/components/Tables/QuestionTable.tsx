@@ -10,6 +10,8 @@ import ExamList from "../Chat/ExamList";
 import UseExamsTable from "./UseExamsTable";
 import Loading from "@/components/common/Loading";
 import FetchError from "@/components/common/Error";
+import CardDataStats from "../CardDataStats";
+import { FiSearch } from "react-icons/fi";
 
 
 interface CreateQuestionButtonProps {
@@ -21,12 +23,14 @@ interface CreateExamButtonProps {
 
 const CreateExamButton: React.FC<CreateExamButtonProps> = ({ onClick }) => {
   return (
-    <button
-      onClick={onClick}
-      className="bg-primary hover:bg-primary-hover text-white font-medium py-2 px-4 rounded shadow focus:outline-none w-full"
-    >
-      + Exam Question
-    </button>
+    <div className="flex items-center space-x-2 w-full max-w-lg border-2  rounded-xl overflow-hidden">
+      <button
+        onClick={onClick}
+        className="bg-primary hover:bg-primary-hover hover:text-white font-medium py-2 px-4 rounded-lg bg-opacity-5 text-primary shadow focus:outline-none w-full"
+      >
+        + Exam Question
+      </button>
+    </div>
   );
 };
 const CreateQuestionButton: React.FC<CreateQuestionButtonProps> = ({
@@ -34,12 +38,14 @@ const CreateQuestionButton: React.FC<CreateQuestionButtonProps> = ({
 }) => {
 
   return (
-    <button
-      onClick={onClick}
-      className="bg-primary hover:bg-primary-hover text-white font-medium py-2 px-4 rounded shadow focus:outline-none w-full"
-    >
-      + Question
-    </button>
+    <div className="flex items-center space-x-2 w-full max-w-lg border-2  rounded-xl overflow-hidden">
+      <button
+        onClick={onClick}
+        className="bg-primary hover:bg-primary-hover hover:text-white font-medium py-2 px-4 rounded-lg bg-opacity-5 text-primary shadow focus:outline-none w-full"
+      >
+        + Question
+      </button>
+    </div>
   );
 };
 
@@ -65,7 +71,7 @@ const QuestionTable: React.FC = () => {
         const userId = decodedToken?.id || null;
         setCurrentTeacherId(userId);
       } else {
-        router.push("/login");
+        router.push("/");
       }
     }, []);
   const {
@@ -144,24 +150,67 @@ if (isErrorQuestion || isError) {
       }
     });
 
+      const handleButtonClick = () => {
+        setCreatedByMe(!createdByMe);
+      };
   return (
-    <div className="rounded-sm bg-white  dark:border-strokedark dark:bg-boxdark">
-      <div className="text-xs ml-4 py-2 px-2">
+    <div className="rounded-sm bg-white  dark:border-strokedark dark:bg-boxdark -mt-2 pb-2">
+      <div className="flex mt-10 justify-center">
+        <div className="w-1/3 px-2">
+          <CardDataStats
+            title="Easy"
+            total={3}
+            rate=""
+            icon="easy"
+            bg="bg-easy"
+            text=""
+          >
+            <div></div>
+          </CardDataStats>
+        </div>
+
+        <div className="w-1/3 px-2">
+          <CardDataStats
+            title="Medium"
+            total={1}
+            rate=""
+            icon="medium"
+            bg="s"
+            text=""
+          >
+            <div></div>
+          </CardDataStats>
+        </div>
+        <div className="w-1/3 px-2">
+          <CardDataStats
+            title="Hard"
+            total={2}
+            rate=""
+            icon="hardd"
+            bg="bg-mid"
+            text=""
+          >
+            <div></div>
+          </CardDataStats>
+        </div>
+      </div>
+
+      <div className="text-md ml-2">
         <button
-          className={`mr-4 py-2 px-4 rounded-lg transition-colors duration-150 ${
+          className={`mr-2 my-2 py-2 px-4 rounded-3xl transition-colors duration-150 ${
             activeTab === "Lab Questions"
-              ? "bg-primary bg-opacity-20 text-primary shadow-lg"
-              : "bg-gray-200 text-gray-800 hover:bg-opacity-20 hover:bg-primary"
+              ? " text-primary hover:bg-opacity-20 bg-primary bg-opacity-10"
+              : " text-gray-800 hover:bg-opacity-20 hover:bg-primary"
           }`}
           onClick={() => setActiveTab("Lab Questions")}
         >
           Lab Questions
         </button>
         <button
-          className={`py-2 px-4 rounded-lg transition-colors duration-150 ${
+          className={`mb-2 mt-4 py-2 px-4 transition-colors duration-150 rounded-3xl ${
             activeTab === "Exam Questions"
-              ? "bg-primary bg-opacity-20 text-primary shadow-lg"
-              : "bg-gray-200 text-gray-800 hover:bg-opacity-20 hover:bg-primary"
+              ? " text-primary hover:bg-opacity-20 bg-primary bg-opacity-10"
+              : " text-gray-800 hover:bg-opacity-20 hover:bg-primary"
           }`}
           onClick={() => setActiveTab("Exam Questions")}
         >
@@ -170,53 +219,63 @@ if (isErrorQuestion || isError) {
       </div>
 
       {activeTab === "Lab Questions" && (
-        <div className="rounded-sm bg-white  dark:border-strokedark dark:bg-boxdark">
-          <div className="flex justify-between items-center my-4 mx-2">
-            <div className="flex mr-4 w-2/5">
-              <input
-                type="text"
-                placeholder="Search by title..."
-                className="w-full select select-bordered select-primary max-w-xs mr-2 px-2 py-2 rounded-md bg-white  focus:outline-none shadow text-xs"
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            <div className="flex items-center w-4/5">
-              <button
-                onClick={handleSortOrderChange}
-                className="w-1/5 select select-bordered select-primary max-w-xs mr-2 px-2 py-2 rounded-md bg-white  focus:outline-none shadow text-xs"
-              >
-                Sort by Date {sortExamOrder === "asc" ? "↑" : "↓"}
-              </button>
-              <div className="w-1/5 select select-bordered select-primary max-w-xs mr-2 px-2 py-2 rounded-md bg-white  focus:outline-none shadow text-xs">
-                <label className="label cursor-pointer -pb-2">
-                  <span className="label-text mr-2 -mb-2">Created by Me</span>
-                </label>
+        <div className="rounded-sm bg-white  dark:border-strokedark dark:bg-boxdark ">
+          <div className="flex items-center  mx-2 justify-between w-2/3">
+            <div className="flex items-center justify-between mr-2 space-x-4 mb-10 w-2/6">
+              <div className="flex items-center space-x-2 w-full max-w-lg border-2 border-gray-200 bg-primary bg-opacity-5 rounded-xl overflow-hidden">
+                <FiSearch className="ml-4 text-[#7983FB]" />
                 <input
-                  type="checkbox"
-                  className="toggle toggle-primary text-primary"
-                  checked={createdByMe}
-                  onChange={(e) => setCreatedByMe(e.target.checked)}
+                  type="text"
+                  className="w-full p-2 outline-none"
+                  placeholder="Search ..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
             </div>
+            <div className="flex items-center justify-between space-x-4 mb-10 w-1/6 mr-2">
+              <div className="flex items-center space-x-2 w-full max-w-lg border-2  rounded-xl overflow-hidden">
+                <button
+                  onClick={handleSortOrderChange}
+                  className="w-full p-[10px] outline-none text-sm "
+                >
+                  Sort by Date {sortOrder === "asc" ? "↑" : "↓"}
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between space-x-4 mb-10 w-1/6">
+              <div className="flex items-center space-x-2 w-full max-w-lg border-2 rounded-xl overflow-hidden">
+                <button
+                  className={`w-full p-[10px] outline-none text-sm ${
+                    createdByMe ? "bg-primary bg-opacity-10 text-primary " : ""
+                  }`}
+                  onClick={handleButtonClick}
+                >
+                  {createdByMe ? "Created by Me" : "Created by Me"}
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between space-x-4 mb-10 w-2/6">
+              <Link
+                href={"/teacher/create_question"}
+                className="w-full p-2 outline-none"
+              >
+                <CreateQuestionButton onClick={() => {}} />
+              </Link>
+            </div>
           </div>
-          <div className="px-4 py-6 md:px-6 xl:px-7.5 flex">
-            <h4 className="w-4/5 text-xl font-semibold text-black dark:text-white">
-              Lab Questions
-            </h4>
-            <Link href={"/teacher/create_question"} className="w-1/5">
-              <CreateQuestionButton onClick={() => {}} />
-            </Link>
-          </div>
-          <div className="flex">
-            <div className="w-2/3">
+
+          <div className="w-full flex -mt-10">
+            <div className="w-4/6">
               <UseQuestionsTable
                 questions={filteredAndSortedQuestions}
                 teacherId={currentTeacherId}
                 deletequestion={refetch}
               />
             </div>
-            <div className="w-1/3">
+            <div className="w-2/6 ml-6 mr-4">
               <TopSovedQuestions />
             </div>
           </div>
@@ -224,54 +283,64 @@ if (isErrorQuestion || isError) {
       )}
 
       {activeTab === "Exam Questions" && (
-        <div className="rounded-sm bg-white  dark:border-strokedark dark:bg-boxdark">
-          <div className="flex justify-between items-center my-4 mx-2">
-            <div className="flex mr-4 w-2/5">
-              <input
-                type="text"
-                placeholder="Search by title..."
-                className="w-full select select-bordered select-primary max-w-xs mr-2 px-2 py-2 rounded-md bg-white  focus:outline-none shadow text-xs"
-                onChange={(e) => setExamSearchTerm(e.target.value)}
-              />
-            </div>
-            <div className="flex items-center w-4/5">
-              <button
-                onClick={handleExamSortOrderChange}
-                className="w-1/5 select select-bordered select-primary max-w-xs mr-2 px-2 py-2 rounded-md bg-white  focus:outline-none shadow text-xs"
-              >
-                Sort by Date {sortExamOrder === "asc" ? "↑" : "↓"}
-              </button>
-              <div className="w-1/5 select select-bordered select-primary max-w-xs mr-2 px-2 py-2 rounded-md bg-white  focus:outline-none shadow text-xs">
-                <label className="label cursor-pointer -pb-2">
-                  <span className="label-text mr-2 -mb-2">Created by Me</span>
-                </label>
+        <div className="rounded-sm bg-white  dark:border-strokedark dark:bg-boxdark ">
+          <div className="flex items-center  mx-2 justify-between w-2/3">
+            <div className="flex items-center justify-between mr-2 space-x-4 mb-10 w-2/6">
+              <div className="flex items-center space-x-2 w-full max-w-lg border-2 border-gray-200 bg-primary bg-opacity-5 rounded-xl overflow-hidden">
+                <FiSearch className="ml-4 text-[#7983FB]" />
                 <input
-                  type="checkbox"
-                  className="toggle toggle-primary text-primary"
-                  checked={createdExamByMe}
-                  onChange={(e) => setCreatedExamByMe(e.target.checked)}
+                  type="text"
+                  className="w-full p-2 outline-none"
+                  placeholder="Search ..."
+                  value={searchExamTerm}
+                  onChange={(e) => setExamSearchTerm(e.target.value)}
                 />
               </div>
             </div>
+            <div className="flex items-center justify-between space-x-4 mb-10 w-1/6 mr-2">
+              <div className="flex items-center space-x-2 w-full max-w-lg border-2  rounded-xl overflow-hidden">
+                <button
+                  onClick={handleExamSortOrderChange}
+                  className="w-full p-[10px] outline-none text-sm "
+                >
+                  Sort by Date {sortExamOrder === "asc" ? "↑" : "↓"}
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between space-x-4 mb-10 w-1/6">
+              <div className="flex items-center space-x-2 w-full max-w-lg border-2 rounded-xl overflow-hidden">
+                <button
+                  className={`w-full p-[10px] outline-none text-sm ${
+                    createdExamByMe ? "bg-primary bg-opacity-10 text-primary " : ""
+                  }`}
+                  onClick={(e: any) => setCreatedExamByMe(!createdExamByMe)}
+                >
+                  {createdByMe ? "Created by Me" : "Created by Me"}
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between space-x-4 mb-10 w-2/6">
+              <Link
+                href={"/teacher/create_exam_question"}
+                className="w-full p-2 outline-none"
+              >
+                <CreateExamButton onClick={() => {}} />
+              </Link>
+            </div>
           </div>
-          <div className="px-4 py-6 md:px-6 xl:px-7.5 flex">
-            <h4 className="w-4/5 text-xl font-semibold text-black dark:text-white">
-              Exam Questions
-            </h4>
-            <Link href={"/teacher/create_exam_question"} className="w-1/5">
-              <CreateExamButton onClick={() => {}} />
-            </Link>
-          </div>
-          <div className="flex">
-            <div className="w-2/3">
+
+          <div className="w-full flex -mt-10">
+            <div className="w-4/6">
               <UseExamsTable
                 exam={filteredAndSortedExamQuestions}
                 teacherId={currentTeacherId}
                 deleteexam={refetch}
               />
             </div>
-            <div className="w-1/3">
-              <ExamList />
+            <div className="w-2/6 ml-6 mr-4">
+              <TopSovedQuestions />
             </div>
           </div>
         </div>
