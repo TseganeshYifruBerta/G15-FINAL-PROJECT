@@ -14,6 +14,7 @@ const plagiarismRouter = require("./routes/plagiarism/plagiarismRoute.js");
 const ActivateRouter = require(
   "./routes/Activate/activateUserRoute.js"
 ) 
+const bodyParser = require('body-parser');
 
 const verifyJWT = require("./middleware/verifyJWT.js")
 const checkUserStatus = require("./middleware/userStatus.js")
@@ -30,6 +31,8 @@ app.use(
     extended: true,
   })
 );
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 async function initializeDatabase() {
   try {
