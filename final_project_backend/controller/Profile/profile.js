@@ -23,7 +23,7 @@ const getProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
     const { id } = req.params;
-    const { university, linkedin, github, phoneNumber, telegramUsername,gender,shortBio,department} = req.body; 
+    const { university, linkedin, github, phoneNumber,gender,shortBio,department} = req.body; 
     
     try {
         const user = await User.findOne({where: {id: id}});
@@ -61,7 +61,6 @@ const updateProfile = async (req, res) => {
             linkedin,
             github,
             phoneNumber,
-            telegramUsername,
             department,
             shortBio,
             gender
