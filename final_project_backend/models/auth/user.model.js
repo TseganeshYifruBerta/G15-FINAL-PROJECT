@@ -43,13 +43,8 @@ const User = sequelize.define("Userinformation", {
     type: DataTypes.STRING,
     defaultValue:""
   },
-  telegramUsername:{    
-    type: DataTypes.STRING,
-    defaultValue:""
-  },
   gender:{
-    type: DataTypes.STRING,
-    defaultValue:""
+    type: DataTypes.ENUM('female','male')
   },
   department:{
     type: DataTypes.STRING,
