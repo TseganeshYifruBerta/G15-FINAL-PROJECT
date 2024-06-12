@@ -53,7 +53,7 @@ return (
   
 }
 const CodeEditorBox: React.FC<editorProps> = ({userId, questionId}) => {
-  const MAX_HEIGHT = 500;
+  const MAX_HEIGHT = 800;
   const [submitStatus, setSubmitStatus] = useState("");
   const [currentCode, setCurrentCode] = useState("def grade_checker(score):\n");
   const [currentInput, setCurrentInput] = useState<string[]>([]);
@@ -62,7 +62,7 @@ const CodeEditorBox: React.FC<editorProps> = ({userId, questionId}) => {
   );
   const [currentActualOutput, setCurrentActualOutput] = useState<string[]>([]);
   const [currentPassedStatus, setCurrentPassesStatus] = useState<boolean[]>([]);
-  const [editorHeight, setEditorHeight] = useState("670px"); // Initial editor height
+  const [editorHeight, setEditorHeight] = useState("1000px"); // Initial editor height
   const editorContainerRef = useRef(null); // Ref for the editor's container div
   const submissionResultsRef = useRef(null); // Only if you need to track or manipulate this section
 
@@ -141,50 +141,39 @@ const CodeEditorBox: React.FC<editorProps> = ({userId, questionId}) => {
   console.log(questionId, "question ID");
   console.log(userId, "userr ID");
   return (
-    <SplitPane split="horizontal" className="min-h-screen">
-      <Pane initialSize="5%" minSize="5%" maxSize="5%" className="flex text-xs">
+    <SplitPane split="horizontal" className=" border-l-8 border-gray-500 ">
+      <Pane initialSize="5%" minSize="5%" maxSize="5%" className="flex text-sm">
         <select onChange={(e) => setLanguage(e.target.value)} value={language}>
           <option value="javascript">JavaScript</option>
           <option value="python">Python</option>
           <option value="java">Java</option>
         </select>
-          <select onChange={(e) => setTheme(e.target.value)} value={theme}>
-            <option value="vs-light">Light</option>
-            <option value="vs-dark">Dark</option>
-          </select>
-        
+        <select onChange={(e) => setTheme(e.target.value)} value={theme}>
+          <option value="vs-light">Light</option>
+          <option value="vs-dark">Dark</option>
+        </select>
       </Pane>
-      <Pane
+      <Pane className="overflow-hidden">
+        <Editor
+          height={editorHeight}
+          className=""
+          language={language}
+          theme={theme}
+          value={currentCode}
+          onChange={(newValue) => {
+            if (typeof newValue === "string") {
+              console.log(newValue);
 
-        className="overflow-hidden"
-      >
-    
-        
-            <Editor
-              height={editorHeight}
-              className=""
-              language={language}
-              theme={theme}
-              value={currentCode}
-              onChange={(newValue) => {
-                if (typeof newValue === "string") {
-                  console.log(newValue);
+              setCurrentCode(newValue);
 
-                  setCurrentCode(newValue);
-
-                  console.log("New value:", newValue);
-                  console.log("Currentcode", currentCode);
-                }
-              }}
-            />
-          
-      
+              console.log("New value:", newValue);
+              console.log("Currentcode", currentCode);
+            }
+          }}
+        />
       </Pane>
 
-      <Pane
-
-        className="overflow-hidden"
-      >
+      <Pane className="overflow-hidden">
         <div>
           <SubmitCodeDiv submitStatus={submitStatus} />
           <CodeSubmissionResluts
@@ -195,7 +184,7 @@ const CodeEditorBox: React.FC<editorProps> = ({userId, questionId}) => {
           />
         </div>
         <div className="w-full bg-white p-4 mb-4">
-          <div className="flex justify-end text-xs font-semibold">
+          <div className="flex justify-end text-sm font-semibold">
             <div className="mr-4">
               <button
                 className="bg-primary bg-opacity-20 hover:bg-opacity-30 text-primary py-2 px-4 rounded"

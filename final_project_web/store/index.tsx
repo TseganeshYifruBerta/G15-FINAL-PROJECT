@@ -11,6 +11,7 @@ import PlagiarismCheckSliceReducer from "./plagiarism/check-plagiarism-by-exam-i
 import examQuestionUploadReducer from './exam/upload-exam-question-slice'
 import addTestcaseReducer from './question-upload/add-testcase-slice'
 import addExamTestcaseReducer from './question-upload/add-exam-testcase-slice'
+import addExamSolutionReducer from './question-upload/add-solution-slice'
 import loginReducer from './login/login-slice'
 import examUploadReducer from './exam/upload-exam-slice'
 import examAnswerReducer from './exam/upload-exam-question-slice'
@@ -63,7 +64,7 @@ export const store = configureStore({
     examanswerupload:examAnswerReducer,
     login: loginReducer,
     addtestcase: addTestcaseReducer,
-
+addexamsolution: addExamSolutionReducer,
     addexamtestcase:addExamTestcaseReducer,
     checkPlagiarismByExamId: PlagiarismCheckSliceReducer,
     uploadexam: examUploadReducer,

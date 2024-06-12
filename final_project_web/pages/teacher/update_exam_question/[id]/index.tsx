@@ -1,3 +1,4 @@
+import Loading from '@/components/common/Loading';
 import ExamQuestionFormEdit from '@/components/questions/ExamQuestionFormEdit'
 import { useGetExamQuestionByIdQuery } from '@/store/exam/get-all-exam-by-id';
 import { useRouter } from 'next/router';
@@ -16,7 +17,9 @@ console.log(questionId, "questionId")
   });
 
   if(isLoading){
-    return <div>Loading...</div>
+    return <div>
+      <Loading></Loading>
+    </div>
   }
 
   console.log(examDetails, "examDetailsssssssssssssss")

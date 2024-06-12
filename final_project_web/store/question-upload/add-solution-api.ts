@@ -1,21 +1,15 @@
 import { testCaseProps } from "@/components/questions/QuestionUpload";
 import { URL } from "../host";
 
-export type QuestionUploadFormData = {
-  title: string;
-  difficulty: string;
-  description: string;
-  example: string;
-  testCases: testCaseProps[];
-  functionName : string;
+export type AddExamSolutionFormData = {
+  content: any[];
+  examQuestionId: string;
 };
 
-
-
-export const uploadquestion = async (formData: QuestionUploadFormData) => {
-   const token = localStorage.getItem("token");
+export const addexamsolution = async (formData: AddExamSolutionFormData) => {
+  const token = localStorage.getItem("token");
   try {
-    const response = await fetch(`${URL}/question/submitQuestion`, {
+    const response = await fetch(`${URL}/exam/addSolution`, {
       method: "POST",
       body: JSON.stringify(formData),
       headers: {

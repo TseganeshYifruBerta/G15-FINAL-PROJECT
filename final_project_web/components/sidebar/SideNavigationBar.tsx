@@ -131,7 +131,7 @@ function SideNavigationBar() {
       const userRole = decodedToken?.role || "teacher"; // Default to teacher if role is not decoded
       setRole(userRole);
     } else {
-      router.push("/login");
+      router.push("/");
     }
   }, []);
 

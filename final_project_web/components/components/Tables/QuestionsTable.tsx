@@ -158,7 +158,7 @@ const QuestionsTable: React.FC<UserTableProps> = ({
                   handleRowClick(user.id);
                 }}
               >
-                <div className="text-xs text-gray-700 font-light">
+                <div className="text-sm text-gray-700 font-light hover:text-primary">
                   {user && user.id} {".  "}
                   {user && user.title}
                 </div>
@@ -174,7 +174,7 @@ const QuestionsTable: React.FC<UserTableProps> = ({
         return (
           <>
             {isUser ? (
-              <div className="text-xs font-light text-gray-700">
+              <div className="text-sm font-light text-gray-700">
                 {user && user.id}
               </div>
             ) : (
@@ -189,8 +189,20 @@ const QuestionsTable: React.FC<UserTableProps> = ({
         return (
           <>
             {isUser ? (
-              <div className="text-xs text-gray-700 font-light">
-                {user && user.difficulty}
+              <div className="text-sm font-light">
+                <span
+                  className={
+                    user && user.difficulty === "hard"
+                      ? "text-red-500 bg-red-500 ml-2 bg-opacity-20 px-4 py-1 rounded-xl"
+                      : user && user.difficulty === "easy"
+                      ? "text-green-500 bg-green-500 bg-opacity-20 px-4 py-1 rounded-xl ml-2"
+                      : user && user.difficulty === "medium"
+                      ? "text-yellow-800 bg-opacity-20 px-4 py-1 rounded-xl bg-yellow-800"
+                      : ""
+                  }
+                >
+                  {user && user.difficulty}
+                </span>
               </div>
             ) : (
               <div className="mr-32 w-full">
@@ -206,8 +218,8 @@ const QuestionsTable: React.FC<UserTableProps> = ({
           <>
             {isUser ? (
               <>
-                <div className="text-xs mt-1">{formattedDate}</div>
-                <div className="text-xs mt-1">{formattedTime}</div>
+                <span className="text-sm mt-1">{formattedDate}</span>
+                <span className="text-sm mt-1">{formattedTime}</span>
               </>
             ) : (
               <div className="w-full mr-24">
@@ -228,11 +240,11 @@ const QuestionsTable: React.FC<UserTableProps> = ({
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
-                        color="#FF3B30"
+                        color="red"
                         viewBox="0 0 24 24"
                         strokeWidth="1.5"
                         stroke="currentColor"
-                        className="w-8 h-8 mx-2 rounded-full bg-[#FF3B30] bg-opacity-20 p-2"
+                        className="w-8 h-8 mx-2 rounded-full bg-red-100 bg-opacity-30 p-2"
                       >
                         <path
                           strokeLinecap="round"
@@ -248,11 +260,11 @@ const QuestionsTable: React.FC<UserTableProps> = ({
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
-                        color="#AE709F"
+                        color="#7983FB"
                         viewBox="0 0 24 24"
                         strokeWidth="1.5"
                         stroke="currentColor"
-                        className="w-8 h-8 mx-2 rounded-full bg-green-800 bg-opacity-30 pt-2 py-2"
+                        className="w-8 h-8 mx-2 rounded-full bg-[#7983FB] bg-opacity-30 pt-2 py-2"
                       >
                         <path
                           stroke="currentColor"
@@ -322,7 +334,7 @@ const QuestionsTable: React.FC<UserTableProps> = ({
 
   const bottomContent = useMemo(() => {
     return (
-      <div className="pt-30 bg-white rounded-2xl px-2 flex justify-between items-center text-primary text-xs">
+      <div className="pt-30 rounded-2xl px-2 flex justify-between items-center text-primary text-xs">
         <span className="w-[30%] px-2">
           {data?.data?.data?.length} questions in total
         </span>
@@ -367,8 +379,8 @@ const QuestionsTable: React.FC<UserTableProps> = ({
     router.push(`/question/${userId}`);
   };
   return (
-    <div>
-      <div className="p-6 bg-white rounded-md shadow-lg">
+    <div className="flex ">
+      <div className=" rounded-md shadow-lg flex w-full bg-primary bg-opacity-5">
         <Table
           aria-label="Example table with custom cells, pagination and sorting"
           isHeaderSticky
@@ -382,7 +394,7 @@ const QuestionsTable: React.FC<UserTableProps> = ({
           onSortChange={(e) => sortTable(e)}
           topContentPlacement="outside"
           removeWrapper={true}
-          className="text-secondary w-full h-full"
+          className="text-gray-700 text-opacity-80 w-full h-full "
         >
           <TableHeader columns={tableHeads}>
             {(column) => (
@@ -390,7 +402,7 @@ const QuestionsTable: React.FC<UserTableProps> = ({
                 key={column.uid}
                 align={column.uid === "actions" ? "center" : "start"}
                 allowsSorting={column.sortable}
-                className="text-xs font-bold text-gray-700 bg-white"
+                className="text-sm font-bold text-gray-700 bg-white"
               >
                 {column.name}
               </TableColumn>
@@ -399,7 +411,7 @@ const QuestionsTable: React.FC<UserTableProps> = ({
           {loading ? (
             <TableBody>
               {shimmers.map((user, i) => (
-                <TableRow key={i}>
+                <TableRow key={i} className={`m-10`}>
                   {(columnKey) => (
                     <TableCell>{renderCell(false, user, columnKey)}</TableCell>
                   )}
@@ -407,11 +419,17 @@ const QuestionsTable: React.FC<UserTableProps> = ({
               ))}
             </TableBody>
           ) : (
-            <TableBody>
-              {users?.map((item) => (
+            <TableBody className="">
+              {users?.map((item, index) => (
                 <TableRow
                   key={item.id}
-                  style={{ cursor: "pointer" }}>
+                  className={
+                    index % 2 === 0
+                      ? "bg-primary bg-opacity-5 rounded-xl "
+                      : "bg-white  rounded-xl"
+                  }
+                  style={{ cursor: "pointer" }}
+                >
                   {(columnKey) => (
                     <TableCell>{renderCell(true, item, columnKey)}</TableCell>
                   )}
