@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import TopSovedQuestions from "../Chat/TopSolvedCard";
 import { useGetAllQuestionsQuery } from "@/store/question/get-all-questions";
 import Loading from "@/components/common/Loading";
@@ -9,6 +9,7 @@ import StudentUseQuestionsTable from "./StudentUseQuestionsTable";
 import CardDataStats from "../CardDataStats";
 import Link from "next/link";
 import { FiSearch } from "react-icons/fi";
+import SelectDifficultyGroup from "../SelectGroup/SelectDifficultyGroup";
 
 interface CreateQuestionButtonProps {
   onClick: () => void;
@@ -45,9 +46,19 @@ const StudentQuestionTable: React.FC = () => {
   const [filter, setFilter] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortExamOrder, setExamSortOrder] = useState("asc");
   const router = useRouter();
   const [currentTeacherId, setCurrentTeacherId] = useState("");
+const [filterDifficulty, setFilterDifficulty] = useState("");
+   const [easy, setEasy] = useState(0);
+   const [medium, setMedium] = useState(0);
+   const [hard, setHard] = useState(0);
+  const [selectedOption, setSelecteddOption] = useState<string>("");
+
+   function countQuestionsByDifficulty(difficulty: any) {
+     return questions.questionWithTestcase.filter(
+       (question: any) => question.difficulty === difficulty
+     ).length;
+   }
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -55,7 +66,7 @@ const StudentQuestionTable: React.FC = () => {
       const userId = decodedToken?.id || null;
       setCurrentTeacherId(userId);
     } else {
-      router.push("/login");
+      router.push("/");
     }
   }, []);
 
@@ -65,6 +76,18 @@ const StudentQuestionTable: React.FC = () => {
     isError: isErrorQuestion,
   } = useGetAllQuestionsQuery("");
 
+
+   useEffect(() => {
+     if (questions && questions.questionWithTestcase) {
+       const easyCount = countQuestionsByDifficulty("easy");
+       const mediumCount = countQuestionsByDifficulty("medium");
+       const hardCount = countQuestionsByDifficulty("hard");
+
+       setEasy(easyCount);
+       setMedium(mediumCount);
+       setHard(hardCount);
+     }
+   }, [questions]);
   if (isLoadingQuestion) {
     return (
       <div>
@@ -84,6 +107,10 @@ const StudentQuestionTable: React.FC = () => {
   const handleSortOrderChange = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
+
+  const handleDifficultyChange = (value:any) => {
+    setFilterDifficulty(value);
+  }
   const filteredAndSortedQuestions = questions?.questionWithTestcase
     ?.filter(
       (question: any) =>
@@ -112,7 +139,7 @@ const StudentQuestionTable: React.FC = () => {
         <div className="w-1/3 px-2">
           <CardDataStats
             title="Easy"
-            total={3}
+            total={easy}
             rate=""
             icon="easy"
             bg="bg-easy"
@@ -125,7 +152,7 @@ const StudentQuestionTable: React.FC = () => {
         <div className="w-1/3 px-2">
           <CardDataStats
             title="Medium"
-            total={1}
+            total={medium}
             rate=""
             icon="medium"
             bg="s"
@@ -137,7 +164,7 @@ const StudentQuestionTable: React.FC = () => {
         <div className="w-1/3 px-2">
           <CardDataStats
             title="Hard"
-            total={2}
+            total={hard}
             rate=""
             icon="hardd"
             bg="bg-mid"
@@ -172,17 +199,47 @@ const StudentQuestionTable: React.FC = () => {
               </button>
             </div>
           </div>
-
-          
-
-        
+          <div className="flex items-center justify-between space-x-4 w-1/6 mr-2">
+            <div className="flex items-center space-x-2 w-full max-w-lg border-2  rounded-xl overflow-hidden">
+              <select
+                value={selectedOption}
+                onChange={(e) => {
+                  setFilterDifficulty(e.target.value);
+                }}
+                className="w-full p-[10px] outline-none text-sm "
+              >
+                <option value="" disabled>
+                  Difficulty
+                </option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+              <span className="absolute right-4 top-1/2 z-30 -ml-4 -translate-y-1/2">
+                <svg
+                  className="fill-current"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g opacity="0.8">
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
+                      fill=""
+                    ></path>
+                  </g>
+                </svg>
+              </span>
+            </div>
+          </div>
         </div>
-
-        
       </div>
       <div className="rounded-sm bg-white  dark:border-strokedark dark:bg-boxdark">
-        <div className="px-4 md:px-6 xl:px-7.5 flex">
-        </div>
+        <div className="px-4 md:px-6 xl:px-7.5 flex"></div>
         <div className="flex">
           <div className="w-2/3">
             <StudentUseQuestionsTable

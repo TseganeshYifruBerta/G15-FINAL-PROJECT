@@ -64,6 +64,18 @@ const QuestionTable: React.FC = () => {
   const router = useRouter();
   const [currentTeacherId, setCurrentTeacherId] = useState("");
   const [activeTab, setActiveTab] = useState("Lab Questions");
+ const [easy, setEasy] = useState(0);
+ const [medium, setMedium] = useState(0);
+ const [hard, setHard] = useState(0);
+
+ function countQuestionsByDifficulty(difficulty: any) {
+   return questions.questionWithTestcase.filter(
+     (question: any) => question.difficulty === difficulty
+   ).length;
+ }
+
+
+   
     useEffect(() => {
       const token = localStorage.getItem("token");
       if (token) {
@@ -87,6 +99,18 @@ const QuestionTable: React.FC = () => {
     isError: isErrorQuestion,
   } = useGetAllQuestionsQuery("");
 
+
+   useEffect(() => {
+     if (questions && questions.questionWithTestcase) {
+       const easyCount = countQuestionsByDifficulty("easy");
+       const mediumCount = countQuestionsByDifficulty("medium");
+       const hardCount = countQuestionsByDifficulty("hard");
+
+       setEasy(easyCount);
+       setMedium(mediumCount);
+       setHard(hardCount);
+     }
+   }, [questions]);
   if (isLoadingQuestion || isLoading) {
     return <div>
       <Loading />
@@ -159,7 +183,7 @@ if (isErrorQuestion || isError) {
         <div className="w-1/3 px-2">
           <CardDataStats
             title="Easy"
-            total={3}
+            total={easy}
             rate=""
             icon="easy"
             bg="bg-easy"
@@ -172,7 +196,7 @@ if (isErrorQuestion || isError) {
         <div className="w-1/3 px-2">
           <CardDataStats
             title="Medium"
-            total={1}
+            total={medium}
             rate=""
             icon="medium"
             bg="s"
@@ -184,7 +208,7 @@ if (isErrorQuestion || isError) {
         <div className="w-1/3 px-2">
           <CardDataStats
             title="Hard"
-            total={2}
+            total={hard}
             rate=""
             icon="hardd"
             bg="bg-mid"
