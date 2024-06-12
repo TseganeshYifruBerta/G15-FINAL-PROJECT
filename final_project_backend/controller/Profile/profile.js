@@ -81,6 +81,7 @@ const updateProfilePhoto = async (req, res) => {
     const { id } = req.params;
     const { photoUrl } = req.body;
     try {
+        console.log(".........................",photoUrl)
         const profile = await User.findOne({where: {id: id}});
         if(!profile){
             return res.status(404).json({message: "User not found"});
