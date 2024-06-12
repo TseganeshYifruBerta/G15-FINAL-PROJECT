@@ -4,8 +4,9 @@ import React, { useState } from "react";
 interface SelectDifficultyGroupProps {
   setSelectedOption: React.Dispatch<React.SetStateAction<string>>;
   value: string;
+  error: boolean;
 }
-const SelectDifficultyGroup: React.FC<SelectDifficultyGroupProps> = ({setSelectedOption, value}) => {
+const SelectDifficultyGroup: React.FC<SelectDifficultyGroupProps> = ({setSelectedOption, value, error}) => {
   const [selectedOption, setSelecteddOption] = useState<string>(value);
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
 
@@ -14,13 +15,12 @@ const SelectDifficultyGroup: React.FC<SelectDifficultyGroupProps> = ({setSelecte
   };
 
   return (
-    <div className="mb-4.5 text-xs w-2/5 mr-2">
-      <label className="mb-3 block font-medium text-black dark:text-white">
-        {" "}
-        Difficulty{" "}
+    <div className="mb-4.5 text-md w-2/5 mr-2">
+      <label className="block mb-2 font-medium">Difficulty</label>
+      <label className="block mb-2 text-sm text-gray-700">
+        Select the difficulty of the question
       </label>
-
-      <div className="relative z-20 bg-transparent dark:bg-form-input text-xs">
+      <div className="relative z-20 bg-transparent dark:bg-form-input text-sm">
         <select
           value={selectedOption}
           onChange={(e) => {
@@ -28,22 +28,16 @@ const SelectDifficultyGroup: React.FC<SelectDifficultyGroupProps> = ({setSelecte
             setSelecteddOption(e.target.value);
             changeTextColor();
           }}
-          className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary ${
-            isOptionSelected ? "text-black dark:text-white" : ""
-          }`}
+          className={`w-full rounded-lg border-2 focus:border px-4 py-2 focus:border-primary appearance-none ${
+            error ? "border-red-800" : "border-gray-300"
+          } focus:outline-none focus:ring-1 focus:ring-primary`}
         >
-          <option value="" disabled className="text-gray dark:text-bodydark">
+          <option value="" disabled>
             Select Difficulty
           </option>
-          <option value="easy" className="text-body dark:text-bodydark">
-            Easy
-          </option>
-          <option value="medium" className="text-body dark:text-bodydark">
-            Medium
-          </option>
-          <option value="hard" className="text-body dark:text-bodydark">
-            Hard
-          </option>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
         </select>
 
         <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">

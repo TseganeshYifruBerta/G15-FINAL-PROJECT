@@ -3,13 +3,13 @@ import { URL } from "../host";
 
 export type AddExamTestcaseFormData = {
   testCases: any[];
-  questionId: string;
+  examId: string;
 };
 
 export const addexamtestcase = async (formData: AddExamTestcaseFormData) => {
   const token = localStorage.getItem("token");
   try {
-    const response = await fetch(`${URL}/question/AddTestcases`, {
+    const response = await fetch(`${URL}/exam/AddTestcases`, {
       method: "POST",
       body: JSON.stringify(formData),
       headers: {

@@ -4,8 +4,8 @@ interface TopStudentsProps {
 }
 const TopStudents: React.FC<TopStudentsProps> = ({ topstudents }) => {
   return (
-    <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-      <h4 className="mb-6 text-md font-semibold text-black dark:text-white">
+    <div className="rounded-xl bg-primary bg-opacity-5 h-[450px] px-5 pb-2.5 pt-6 shadow-lg dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+      <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
         Top Students
       </h4>
       {topstudents.length == 0 ? (
