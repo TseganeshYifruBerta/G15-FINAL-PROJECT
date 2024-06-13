@@ -1,8 +1,5 @@
 import { useRouter } from "next/router";
 import React, { useMemo, useState } from "react";
-import StudentsTable from "./StudentsTable";
-import { useGetAllStudentsQuery } from "@/store/teacherprofile/get-all-students";
-import { useGetAllQuestionsQuery } from "@/store/question/get-all-questions";
 import QuestionsTable from "./QuestionsTable";
 
 interface QuestionsProps {
@@ -103,7 +100,7 @@ const UseQuestionsTable: React.FC<QuestionsProps> = ({questions, teacherId, dele
 
 
   return (
-    <div>
+    <div className="">
       <div className="my-1">
         <QuestionsTable
           data={{

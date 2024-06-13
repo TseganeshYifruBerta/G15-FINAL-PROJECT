@@ -144,7 +144,7 @@ const StudentQuestionsTable: React.FC<UserTableProps> = ({
                   handleRowClick(user.id);
                 }}
               >
-                <div className="text-xs text-gray-700 font-light">
+                <div className="text-sm text-gray-700 font-light hover:text-primary">
                   {user && user.id} {".  "}
                   {user && user.title}
                 </div>
@@ -175,8 +175,20 @@ const StudentQuestionsTable: React.FC<UserTableProps> = ({
         return (
           <>
             {isUser ? (
-              <div className="text-xs text-gray-700 font-light">
-                {user && user.difficulty}
+              <div className="text-sm font-light">
+                <span
+                  className={
+                    user && user.difficulty === "hard"
+                      ? "text-red-500 bg-red-500 ml-2 bg-opacity-20 px-4 py-1 rounded-xl"
+                      : user && user.difficulty === "easy"
+                      ? "text-green-500 bg-green-500 bg-opacity-20 px-4 py-1 rounded-xl ml-2"
+                      : user && user.difficulty === "medium"
+                      ? "text-yellow-800 bg-opacity-20 px-4 py-1 rounded-xl bg-yellow-800"
+                      : ""
+                  }
+                >
+                  {user && user.difficulty}
+                </span>
               </div>
             ) : (
               <div className="mr-32 w-full">
@@ -190,17 +202,8 @@ const StudentQuestionsTable: React.FC<UserTableProps> = ({
         const formattedTime = formatTime(user.updatedAt);
         return (
           <>
-            {isUser ? (
-              <>
-                <div className="text-xs mt-1">{formattedDate}</div>
-                <div className="text-xs mt-1">{formattedTime}</div>
-              </>
-            ) : (
-              <div className="w-full mr-24">
-                <Skeleton className="h-3 mb-2 w-3/5 rounded-full" />
-                <Skeleton className="h-3 my- w-2/5 rounded-full" />
-              </div>
-            )}
+            <span className="text-sm mt-1">{formattedDate}</span>
+            <span className="text-sm mt-1">{formattedTime}</span>
           </>
         );
 
@@ -257,7 +260,7 @@ const StudentQuestionsTable: React.FC<UserTableProps> = ({
   };
   return (
     <div>
-      <div className="p-6 bg-white rounded-md shadow-lg">
+      <div className=" rounded-md shadow-lg flex w-full bg-primary bg-opacity-5">
         <Table
           aria-label="Example table with custom cells, pagination and sorting"
           isHeaderSticky
@@ -271,7 +274,7 @@ const StudentQuestionsTable: React.FC<UserTableProps> = ({
           onSortChange={(e) => sortTable(e)}
           topContentPlacement="outside"
           removeWrapper={true}
-          className="text-secondary w-full h-full"
+          className="text-gray-700 text-opacity-80 w-full h-full "
         >
           <TableHeader columns={tableHeads}>
             {(column) => (
@@ -279,7 +282,7 @@ const StudentQuestionsTable: React.FC<UserTableProps> = ({
                 key={column.uid}
                 align={column.uid === "actions" ? "center" : "start"}
                 allowsSorting={column.sortable}
-                className="text-xs font-bold text-gray-700 bg-white"
+                className="text-sm font-bold text-gray-700 bg-white"
               >
                 {column.name}
               </TableColumn>
@@ -297,8 +300,16 @@ const StudentQuestionsTable: React.FC<UserTableProps> = ({
             </TableBody>
           ) : (
             <TableBody>
-              {users?.map((item) => (
-                <TableRow key={item.id} style={{ cursor: "pointer" }}>
+              {users?.map((item, index) => (
+                <TableRow
+                  key={item.id}
+                  className={
+                    index % 2 === 0
+                      ? "bg-primary bg-opacity-5 rounded-xl "
+                      : "bg-white  rounded-xl"
+                  }
+                  style={{ cursor: "pointer" }}
+                >
                   {(columnKey) => (
                     <TableCell>{renderCell(true, item, columnKey)}</TableCell>
                   )}

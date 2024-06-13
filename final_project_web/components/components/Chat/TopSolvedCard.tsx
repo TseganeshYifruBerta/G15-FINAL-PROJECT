@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useGetTopSolvedQuestionsQuery } from "@/store/question/get-top-solved-questions";
+import Loading from "@/components/common/Loading";
 
 const TopSovedQuestions: React.FC = () => {
   const {
@@ -10,11 +11,13 @@ const TopSovedQuestions: React.FC = () => {
   } = useGetTopSolvedQuestionsQuery("");
 
   if (isLoadingTop) {
-    return <div>Loading...</div>;
+    return <div>
+      <Loading></Loading>
+    </div>;
   }
   return (
-    <div className="col-span-12 rounded-sm  bg-white py-6 shadow-md dark:border-strokedark dark:bg-boxdark xl:col-span-4">
-      <h4 className="mb-6 px-7.5 text-md font-semibold text-black dark:text-white">
+    <div className="col-span-12 rounded-xl bg-primary bg-opacity-5 h-[450px] py-6 shadow-lg dark:border-strokedark dark:bg-boxdark xl:col-span-4">
+      <h4 className="mb-6 px-7.5 text-xl font-semibold text-black dark:text-white">
         Top Solved Questions
       </h4>
       {topsolved?.combinedResults.length == undefined ||

@@ -1,3 +1,4 @@
+import Loading from "@/components/common/Loading";
 import QuestionFormEdit from "@/components/questions/QuestionFormEdit";
 import {
   useGetQuestionDetailEditQuery,
@@ -19,7 +20,9 @@ function UpdateQuestion() {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>
+      <Loading></Loading>
+    </div>;
   }
   console.log(questiondetail, "questiondetail");
   return (

@@ -145,11 +145,11 @@ const WeeklyReportChart: React.FC<ReportsProps> = ({ reports }) => {
   handleReset;
   // console.log(options?.xaxis?.categories);
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
+    <div className="h-[420px] col-span-12 rounded-xl px-5 pb-5 pt-7.5 shadow-lg dark:border-strokedark bg-primary bg-opacity-5 sm:px-7.5 xl:col-span-8">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         {" "}
         <div>
-          <h5 className="text-md font-semibold text-black dark:text-white">
+          <h5 className="text-lg font-semibold text-black dark:text-white ">
             Weekly Report
           </h5>
         </div>
