@@ -16,14 +16,13 @@ export type Props = {
 const SolvedProblemsStats = forwardRef<HTMLDivElement, Props>(() => {
     const { data: difficultyData, isLoading: difficultyLoading, isError: difficultyError } = useGetAllDifficultyDataPerUserApiQuery("");
     const { data: acceptedSubmissionData, isLoading: submissionLoading, isError: submissionError } = useCountAcceptedSubmissionsperDifficultyApiQuery("");
-
     if (difficultyLoading || submissionLoading) return <Loading />;
     if (difficultyError || submissionError) return <div>Error loading data</div>;
     const transformedData: any = {
         allQuestionsCount :  [
-            { difficulty: "Easy", count: difficultyData?.difficultyDataPerUser[0]?.easyCount },
-            { difficulty: "Medium", count: difficultyData?.difficultyDataPerUser[0]?.mediumCount },
-            { difficulty: "Hard", count: difficultyData?.difficultyDataPerUser[0]?.hardCount }
+            { difficulty: "Easy", count: difficultyData?.easyQuestionCount },
+            { difficulty: "Medium", count: difficultyData?.mediumQuestionCount },
+            { difficulty: "Hard", count: difficultyData?.hardQuestionCount }
         ],
         acSubmissionNum: [
             { difficulty: "Easy", count: acceptedSubmissionData?.easyCount },
@@ -46,7 +45,7 @@ const SolvedProblemsStats = forwardRef<HTMLDivElement, Props>(() => {
         >
             <div id="solved_problems_stats_progress_deails" className="w-full flex justify-between items-center">
                 <OverallProgress
-                    totalQuestions={difficultyData?.difficultyDataPerUser[0]?.totalCount}
+                    totalQuestions={difficultyData?.easyQuestionCount + difficultyData?.mediumQuestionCount + difficultyData?.hardQuestionCount}
                     totalSolved={
                         (acceptedSubmissionData?.easyCount) +
                         (acceptedSubmissionData?.mediumCount) +
