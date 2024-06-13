@@ -26,12 +26,12 @@ export const countAcceptedSubmissionsperDifficultyApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    countAcceptedSubmissionsperDifficultyApi: builder.query<difficultyData[], void>({
+    countAcceptedSubmissionsperDifficultyApi: builder.query({
       query: () => {
         const token = localStorage.getItem("token");
         const decodedToken: { id: number } = jwt.decode(token) as { id: number };
         const userId = decodedToken.id;
-        let url = `${URL}/codeSubmission/countAcceptedSubmissionsPerUser`;
+        let url = `${URL}/codeSubmission/countAcceptedSubmissionperDifficulty`;
         return {
           url: `${url}/${userId}`,
           method: "GET",
