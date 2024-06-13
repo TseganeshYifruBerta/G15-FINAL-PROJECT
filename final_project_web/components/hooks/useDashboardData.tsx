@@ -5,17 +5,17 @@ import { useGetAllSubmissionsByIdQuery } from '@/store/submissions/get-all-submi
 import { useGetUpcomingExamsQuery } from '@/store/exam/upcoming-exam-api';
 
 const useDashboardData = () => {
-    const { data: consistencyChart, error: consistencyError, isLoading: consistencyLoading } = useGetCountCodeSubmissionsForLastMonthQuery();
+    // const { data: consistencyChart, error: consistencyError, isLoading: consistencyLoading } = useGetCountCodeSubmissionsForLastMonthQuery();
     const { data: difficultyData, error: difficultyError, isLoading: difficultyLoading } = useGetAllDifficultyDataPerUserApiQuery("");
     const { data: acceptedSubmissionData, error: submissionError, isLoading: submissionLoading } = useCountAcceptedSubmissionsperDifficultyApiQuery("");
     const { data: submissions, error: submissionsError, isLoading: submissionsLoading } = useGetAllSubmissionsByIdQuery();
     const { data: upcomingExams, error: upcomingExamsError, isLoading: upcomingExamsLoading } = useGetUpcomingExamsQuery();
 
-    const isLoading = consistencyLoading || difficultyLoading || submissionLoading || submissionsLoading || upcomingExamsLoading;
-    const error = consistencyError || difficultyError || submissionError || submissionsError || upcomingExamsError;
+    const isLoading =  difficultyLoading || submissionLoading || submissionsLoading || upcomingExamsLoading;
+    const error =  difficultyError || submissionError || submissionsError || upcomingExamsError;
 
     return {
-        consistencyChart,
+        // consistencyChart,
         difficultyData,
         acceptedSubmissionData,
         submissions,
