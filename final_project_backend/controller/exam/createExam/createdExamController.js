@@ -72,14 +72,7 @@ const createExam = async (req, res) => {
           return res.status(400).json({ message: errors.join(", ") });
         }
     
-      
-       else { 
-        
-        
-        (errors.length === 0)}
-
-        
-
+     
 
 
 
@@ -147,39 +140,6 @@ const createExam = async (req, res) => {
           // Check if there are enough questions available for each difficulty level
         
 
-   
-    
-
-
-
-
-
-
-
-
-
-
-
-
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     // Use the selectQuestions function to get a randomized selection of question IDs
@@ -246,6 +206,7 @@ const createExam = async (req, res) => {
       // selectedTag: questionsByDifficulty
     });
   } catch (error) {
+    await transaction.rollback();
     // If there was any failure, rollback the transaction
     // await transaction.rollback();
 

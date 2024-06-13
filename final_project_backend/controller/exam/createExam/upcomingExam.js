@@ -34,7 +34,7 @@ const getExamWithClosestDate = async (req, res) => {
 
         // Calculate the absolute difference in time between each exam's date_and_time and now
         exams.forEach(exam => {
-            const examDateTime = new Date(exam.date_and_time);
+            const examDateTime = new Date(exam.examTime);
             exam.timeDifference = Math.abs(examDateTime - now);
         });
 
