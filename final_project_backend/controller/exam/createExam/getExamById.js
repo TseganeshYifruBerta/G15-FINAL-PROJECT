@@ -2,7 +2,7 @@ const Exam = require("../../../models/exam/createExam");
 
 const ExamQuestionId = require("../../../models/exam/SelectedQuestionForExam");
 const ExamQuestion= require("../../../models/exam/uploadExamQuestion");
-const selectedSectionsForExam = require("../../../models/exam/SelectedSectionsForExam");
+const SelectedSectionsForExam = require("../../../models/exam/SelectedSectionsForExam");
 const { model } = require("../../../database/sequelize");
 const SelectedChapter = require("../../../models/exam/SelectedChapter");
 // Function to get an exam by ID along with associated questions
@@ -27,13 +27,16 @@ const getExamByIdWithQuestions = async (req, res) => {
           },
           
           {
-          model:selectedSectionsForExam,
+          model:SelectedSectionsForExam,
             as: "selectedSectionsForExam",
+
        
          },
          {
          model:SelectedChapter,
-            as:"selectedChapters",}
+            as:"selectedChapters",},
+        
+      
         
         ],
         }); // Or exam.questionIds.split(',') for a comma-separated string.
@@ -51,6 +54,7 @@ const getExamByIdWithQuestions = async (req, res) => {
             ...exam.toJSON(),
             chapters: ExamWithquestionIds[0].selectedChapters,
             questions: filteredQuestions,
+            sections: ExamWithquestionIds[0].selectedSectionsForExam,
            
         };
 
