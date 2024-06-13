@@ -7,7 +7,6 @@ import Loading from '@/components/common/Loading';
 const UpcomingExams = () => {
   const router = useRouter();
   const { data: upcomingExams, isLoading, error } = useGetUpcomingExamsQuery(); 
-  console.log("dfghiuytrfghj",{upcomingExams})
   const [timeLeft, setTimeLeft] = useState(0); 
   const [timerColor, setTimerColor] = useState(""); 
 
