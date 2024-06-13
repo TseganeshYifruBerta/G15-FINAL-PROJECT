@@ -6,14 +6,9 @@ const jwt = require("jsonwebtoken");
 const baseUrl = ""; 
 
 export interface difficultyDataPerUser{
-    id: number,
-    easyCount: number,
-    mediumCount: number,
-    hardCount: number,
-    totalCount: number,
-    userId: string,
-    createdAt: string,
-    updatedAt: string
+    easyQuestionCount: number,
+    mediumQuestionCount: number,
+    hardQuestionCount: number
 }
 
 
@@ -33,11 +28,9 @@ export const getAllDifficultyDataPerUserApi = createApi({
     getAllDifficultyDataPerUserApi: builder.query({
       query: () => {
         const token = localStorage.getItem("token");
-        const decodedToken: { id: number } = jwt.decode(token) as { id: number };
-        const userId = decodedToken.id;
-        let url = `${URL}/codeSubmission/getAllDifficultyDataPerUser`;
+        let url = `${URL}/question/getNumberOfQuestionByDifficulty`;
         return {
-          url: `${url}/${userId}`,
+          url: `${url}`,
           method: "GET",
         };
       },
