@@ -30,7 +30,7 @@ export const getAllDifficultyDataPerUserApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getAllDifficultyDataPerUserApi: builder.query<difficultyDataPerUser[], void>({
+    getAllDifficultyDataPerUserApi: builder.query({
       query: () => {
         const token = localStorage.getItem("token");
         const decodedToken: { id: number } = jwt.decode(token) as { id: number };
