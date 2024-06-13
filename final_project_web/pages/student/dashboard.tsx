@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from 'react';
+import useDashboardData from './../../components/hooks/useDashboardData';
 import MemoizedHeatMap from '../../components/Dashboard/student/HeatMap';
 import MemoizedSolvedProblemsStats from '@/components/Dashboard/student/SolvedQuestions';
 import SubmissionList from '../../components/Dashboard/student/SubmissionList';
 import UpcomingExams from '../../components/Dashboard/student/UpcomingExam'; 
 import Image from 'next/image';
+import Loading from '@/components/common/Loading';
 const jwt = require("jsonwebtoken");
 
 const Dashboard = () => {
   const [userData, setUserData] = useState({ fullname: '', role: '' });
+  const { consistencyChart, difficultyData, acceptedSubmissionData, submissions, upcomingExams, isLoading, error } = useDashboardData();
+
+    if (isLoading) {
+        return <Loading />;
+    }
+
+    if (error) {
+        return <div>Error loading data</div>;
+    }
 
 
   return (
-    <div className='flex flex-col mx-20 gap-6 pb-24 bg-primary bg-opacity-5 p-4 rounded-lg'>
+    <div className='flex flex-col mx-20 gap-6 pb-8 bg-primary bg-opacity-5 p-4 rounded-lg'>
       <div className='flex flex-col h-screen/3'>
       <div className='box-border h-[200px] w-full p-4 rounded-lg' style={{ backgroundImage: "url('/images/2.jpg')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
       </div>
