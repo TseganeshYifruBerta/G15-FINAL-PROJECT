@@ -1,16 +1,7 @@
 import React, { forwardRef, memo, useRef, useState, useEffect } from "react";
-import { useGetCountCodeSubmissionsForLastMonthQuery } from "./../../../store/submissions/get-all-last-month-submissions-by-id";
+import { useGetCountCodeSubmissionsForLastMonthQuery } from "@/store/submissions/get-all-last-month-submissions-by-id";
+import Loading from "@/components/common/Loading";
 
-export type Props = {
-    userName: string;
-    loadingComponent?: JSX.Element;
-    theme?: {
-        primaryColor?: string;
-        secondaryColor?: string;
-        bgColor?: string;
-    };
-    showUserName?: boolean;
-};
 
 const Block = ({
     count,
@@ -48,8 +39,8 @@ const Block = ({
                     }}
                 >
                     <div className="flex flex-row gap-2">
-                        <div>{count}</div>
-                        <div>submissions</div>
+                        <div className="text-xs text-gray-700">{count}</div>
+                        <div className="text-xs text-gray-700">submission</div>
                     </div>
                 </div>
             )}
@@ -57,25 +48,14 @@ const Block = ({
     );
 };
 
-const HeatMap = forwardRef<HTMLDivElement, Props>(
-    (
-        {
-            userName,
-            loadingComponent,
-            theme = {
-                primaryColor: "rgba(34,211,238,1)",
-                secondaryColor: "rgba(209,213,219,1)",
-                bgColor: "rgba(68,64,60,1)",
-            },
-            showUserName = false,
-        },
-        ref
-    ) => {
+const HeatMap = forwardRef<HTMLDivElement>(
+    () => {
         const [screenWidth, setScreenWidth] = useState(() => {
             return typeof window !== "undefined" ? window.innerWidth : 0;
         });
         const divRef = useRef<HTMLDivElement>(null);
-        const { data, error, isLoading } = useGetCountCodeSubmissionsForLastMonthQuery();
+        const { data:consistencyChart , error, isLoading } = useGetCountCodeSubmissionsForLastMonthQuery();
+        console.log(consistencyChart)
 
         useEffect(() => {
             const handleResize = () => {
@@ -93,28 +73,27 @@ const HeatMap = forwardRef<HTMLDivElement, Props>(
             };
         }, []);
 
-        if (isLoading) return <>{loadingComponent}</>;
+        if (isLoading) return <Loading />;
 
         if (error) return <>Error: Error</>;
 
-        const totalSubmissionCount = data ? data.reduce((total, { count }) => total + count, 0) : 0;
-        const blockWidth = screenWidth < 780 ? 20 : 50; // Adjusted block width
-        const totalColumns = Math.max(Math.ceil((data?.length || 0) / 5), 1);
-        const blockHeight = screenWidth < 780 ? (screenWidth - 60) / 30 : (screenWidth - 60) / 20; // Adjusted block height
+        const totalSubmissionCount = consistencyChart ? consistencyChart.reduce((total, { count }) => total + count, 0) : 0;
+        const blockWidth = screenWidth < 780 ? 20 : 50; 
+        const totalColumns = Math.max(Math.ceil((consistencyChart?.length || 0) / 5), 1);
+        const blockHeight = screenWidth < 780 ? (screenWidth - 60) / 30 : (screenWidth - 60) / 20; 
         const columns: Array<Array<{ count: number; date: string }>> = Array.from({ length: totalColumns }, (_, index) =>
-            data?.slice(index * 5, index * 5 + 5) || []
+        consistencyChart?.slice(index * 5, index * 5 + 5) || []
         );
 
         return (
             <div
                 ref={divRef}
-                className={`w-full bg-white shadow-md gap-1 rounded-lg p-4 flex flex-col items-center justify-center gap-4 ${
-                    !data || data.length === 0 ? "border-2 border-black" : ""
+                className={`w-full gap-1 rounded-lg p-4 flex flex-col items-center justify-center gap-4 bg-white ${
+                    !consistencyChart || consistencyChart.length === 0 ? "border-2 border-black" : ""
                 }`}
             >
-                <h2 id="heat_map_title" className="flex text-black justify-between font-medium w-full">
+                <h2 id="heat_map_title" className="flex text-black justify-between text-l font-semibold text-gray-800 w-full">
                     <span className="text-sm">{totalSubmissionCount} Submissions</span>
-                    {showUserName && <span>{userName}</span>}
                 </h2>
                 <div id="heat_map" className="w-full flex flex-row items-center justify-center">
                     {columns.map((column, columnIndex) => (
