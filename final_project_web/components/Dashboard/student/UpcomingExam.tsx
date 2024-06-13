@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useGetUpcomingExamsQuery } from "./../../../store/exam/upcoming-exam-api"; 
 import Image from "next/image";
 import { useRouter } from "next/router";
+import Loading from '@/components/common/Loading';
 
 const UpcomingExams = () => {
   const router = useRouter();
-  const { data: upcomingExams, isLoading } = useGetUpcomingExamsQuery(); 
+  const { data: upcomingExams, isLoading, error } = useGetUpcomingExamsQuery(); 
+  console.log("dfghiuytrfghj",{upcomingExams})
   const [timeLeft, setTimeLeft] = useState(0); 
   const [timerColor, setTimerColor] = useState(""); 
 
@@ -38,27 +40,33 @@ const UpcomingExams = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
+  }
+
+    if (error) {
+      return <div>Error:</div>;
   }
 
   return (
-    <div className="flex flex-col gap-4 items-center rounded-xl shadow-md p-4 md:w-3/4">
+    <div className="flex flex-col gap-4 items-center rounded-lg shadow-sm p-4 md:w-3/4 bg-white">
       {timeLeft === 0 ? (
-        <div className="flex flex-col justify-between h-full">
-          <div className='flex flex-col gap-4'>
-            <div className='flex flex-col items-center justify-center gap-4'>
-              <h3 className="mt-8 text-md font-semibold">No Upcoming Exams</h3>
-              <Image
-                width={64}
-                height={64}
-                src="/images/noExam.png"
-                alt=""
-                className="text-primary w-20 h-20"
-              />
-            </div>
-            <p className="text-sm">You have no upcoming exams scheduled.</p>
-          </div>
+        <div className="col-span-12 px-5 pb-5 pt-7.5 sm:px-7.5 xl:col-span-8">
+        <div className="flex flex-col items-center justify-center text-center">
+          <Image
+            src="/images/nodata.svg"
+            className="w-16 h-16 mb-4 text-gray-400 dark:text-gray-500"
+            alt={""}
+            width={12}
+            height={12}
+          ></Image>
+          <h3 className="mb-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
+            No Upcoming Exams
+          </h3>
+          <p className="text-xs text-gray-600 dark:text-gray-400">
+            It looks like there is no upcoming exam at the moment !
+          </p>
         </div>
+      </div>
       ) : (
         <div className="mb-8 p-4 rounded-lg text-black h-[130px] transition-shadow duration-300 ease-in-out cursor-pointer bg-slate-200">
           <div className="flex items-center space-x-4 h-full">
@@ -66,17 +74,16 @@ const UpcomingExams = () => {
               <Image
                 width={64}
                 height={64}
-                src="/images/noExam.png"
+                src="/images/exam.svg"
                 alt=""
                 className="text-primary w-20 h-20"
               />
             </div>
             <div className="flex flex-col justify-between h-full gap-4">
               <div className='flex flex-col gap-4'>
-                <h3 className="text-md font-semibold">
+                <h3 className="text-sm font-semibold">
                   Upcoming Exam: {upcomingExams?.title}
                 </h3>
-                {/* <p className="text-sm">Date: {upcomingExams?.date_and_time}</p> */}
                 <div className="flex items-center justify-center">
                 <div className={`text-sm border-2 border-primary p-2 m-2 rounded-md ${timerColor}`}>
                   Time Left: {formatTime(timeLeft)}
@@ -84,7 +91,7 @@ const UpcomingExams = () => {
                 </div>
               </div>
               <div>
-                <p className="text-sm">Get ready to showcase your skills!</p>
+                <p className="text-xs">Get ready to showcase your skills!</p>
               </div>
             </div>
           </div>
