@@ -55,7 +55,6 @@ const HeatMap = forwardRef<HTMLDivElement>(
         });
         const divRef = useRef<HTMLDivElement>(null);
         const { data:consistencyChart , error, isLoading } = useGetCountCodeSubmissionsForLastMonthQuery();
-        console.log(consistencyChart)
 
         useEffect(() => {
             const handleResize = () => {
