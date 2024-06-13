@@ -6,7 +6,6 @@ import Loading from './../../common/Loading';
 
 const SubmissionList: React.FC = () => {
     const { data: submissions, error, isLoading } = useGetAllSubmissionsByIdQuery();
-    console.log(submissions)
     if (isLoading) return <Loading />;
     if (error) return <div>Error:</div>;
 
@@ -47,29 +46,33 @@ const SubmissionList: React.FC = () => {
                                     </Link>
                                 </td>
                                 <td className="px-6 py-4 text-sm">
-                                <span
-                                    className={
-                                        submission.questionsForId.difficulty === 'Easy'
-                                            ? "text-green-500 bg-green-500 bg-opacity-20 px-4 py-1 rounded-xl ml-2"
-                                            : submission.questionsForId.difficulty === 'Medium'
-                                            ? "text-yellow-800 bg-yellow-800 bg-opacity-20 px-4 py-1 rounded-xl"
-                                            : submission.questionsForId.difficulty === 'Hard'
-                                            ? "text-red-500 bg-red-500 bg-opacity-20 px-4 py-1 rounded-xl ml-2"
-                                            : "text-yellow-800 bg-yellow-800 bg-opacity-20 px-4 py-1 rounded-xl"
-                                    }
-                                >
-                                        {submission.questionsForId.difficulty.charAt(0).toUpperCase() + submission.questionsForId.difficulty.slice(1)}
-                                    </span>
+                                {submission.questionsForId?.difficulty === 'easy' && (
+                                <span className="text-green-500 bg-green-500 bg-opacity-20 px-4 py-1 rounded-xl ml-2">
+                                    Easy
+                                </span>
+                                )}
+                                {submission.questionsForId?.difficulty === 'medium' && (
+                                <span className="text-yellow-800 bg-yellow-800 bg-opacity-20 px-4 py-1 rounded-xl">
+                                    Medium
+                                </span>
+                                )}
+                                {submission.questionsForId?.difficulty === 'hard' && (
+                                <span className="text-red-500 bg-red-500 bg-opacity-20 px-4 py-1 rounded-xl ml-2">
+                                    Hard
+                                </span>
+                                )}
                                 </td>
                                 <td className="px-6 py-4">
                                     {submission.questionStatus?.status !== null ? (
                                         <Link href={`/submissions/${submission.id}`}>
-                                            {submission.questionStatus?.status === 'Accepted' ? (
-                                                <span className="text-green-500 text-sm">Accepted</span>
-                                            ) : submission.questionStatus?.status === 'Wrong Answer' ? (
-                                                <span className="text-red-500 text-sm">Wrong Answer</span>
-                                            ) : (
-                                                <span className="text-red-500 text-sm">Error Occurred</span>
+                                            {submission.questionStatus?.status === 'Accepted' && (
+                                            <span style={{ color: 'green' }} className="text-sm">Accepted</span>
+                                            )}
+                                            {submission.questionStatus?.status === 'Wrong Answer' && (
+                                            <span style={{ color: 'red' }} className="text-sm">Wrong Answer</span>
+                                            )}
+                                            {submission.questionStatus?.status !== 'Accepted' && submission.questionStatus?.status !== 'Wrong Answer' && (
+                                            <span style={{ color: 'red' }} className="text-sm">{submission.questionStatus?.status}</span>
                                             )}
                                         </Link>
                                     ) : (
