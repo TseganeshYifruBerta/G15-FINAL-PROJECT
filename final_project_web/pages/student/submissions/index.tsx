@@ -66,11 +66,11 @@ const SubmissionsPage = () => {
                     <td className="px-6 py-4 text-sm">
                                 <span
                                     className={
-                                        submission.questionsForId.difficulty === 'Easy'
+                                        submission.questionsForId.difficulty === 'easy'
                                             ? "text-green-500 bg-green-500 bg-opacity-20 px-4 py-1 rounded-xl ml-2"
-                                            : submission.questionsForId.difficulty === 'Medium'
+                                            : submission.questionsForId.difficulty === 'medium'
                                             ? "text-yellow-800 bg-yellow-800 bg-opacity-20 px-4 py-1 rounded-xl"
-                                            : submission.questionsForId.difficulty === 'Hard'
+                                            : submission.questionsForId.difficulty === 'hard'
                                             ? "text-red-500 bg-red-500 bg-opacity-20 px-4 py-1 rounded-xl ml-2"
                                             : "text-yellow-800 bg-yellow-800 bg-opacity-20 px-4 py-1 rounded-xl"
                                     }
@@ -81,13 +81,15 @@ const SubmissionsPage = () => {
                     <td className="px-6 py-4">
                         {submission.questionStatus?.status !== null ? (
                             <Link href={`/submissions/${submission.id}`}>
-                                {submission.questionStatus?.status === 'Accepted' ? (
-                                    <span className="text-green-500 text-sm">Accepted</span>
-                                ) : submission.questionStatus?.status === 'Wrong Answer' ? (
-                                    <span className="text-red-500 text-sm">Wrong Answer</span>
-                                ) : (
-                                    <span className="text-red-500 text-sm">Error Occured</span>
-                                )}
+                              {submission.questionStatus?.status === 'Accepted' && (
+                              <span style={{ color: 'green' }} className="text-sm">Accepted</span>
+                              )}
+                              {submission.questionStatus?.status === 'Wrong Answer' && (
+                              <span style={{ color: 'red' }} className="text-sm">Wrong Answer</span>
+                              )}
+                              {submission.questionStatus?.status !== 'Accepted' && submission.questionStatus?.status !== 'Wrong Answer' && (
+                              <span style={{ color: 'red' }} className="text-sm">{submission.questionStatus?.status}</span>
+                              )}
                             </Link>
                         ) : (
                             <span className="text-yellow-500 text-sm">Error</span>
