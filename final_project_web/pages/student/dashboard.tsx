@@ -10,7 +10,7 @@ const jwt = require("jsonwebtoken");
 
 const Dashboard = () => {
   const [userData, setUserData] = useState({ fullname: '', role: '' });
-  const { consistencyChart, difficultyData, acceptedSubmissionData, submissions, upcomingExams, isLoading, error } = useDashboardData();
+  const { difficultyData, acceptedSubmissionData, submissions, upcomingExams, isLoading, error } = useDashboardData();
 
     if (isLoading) {
         return <Loading />;
