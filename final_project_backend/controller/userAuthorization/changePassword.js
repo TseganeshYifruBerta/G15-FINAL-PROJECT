@@ -6,7 +6,7 @@ const { Model } = require('sequelize');
 const changePassword = async (req, res) => {
   const { userId, newPassword , oldPassword } = req.body;
   const user = await User.findOne({ where: 
-    { userId } 
+    { id:userId } 
 
 
 
