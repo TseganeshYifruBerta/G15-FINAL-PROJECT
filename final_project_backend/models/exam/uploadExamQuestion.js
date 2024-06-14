@@ -5,7 +5,6 @@ const Solution = require("./solution");
 const examTestCase = require("./examTestcase");
 
 const studentsExamAnswer = require("./studentsExamAnswer");
-const SelectedChapter = require("./SelectedChapter");
 const ExamQuestion = sequelize.define("examQuestion", {
 
   title: {
@@ -29,7 +28,10 @@ const ExamQuestion = sequelize.define("examQuestion", {
     allowNull: false,
 
   },
-  
+  gradeValue:{
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   example: {
     type: DataTypes.STRING,
     allowNull: false,

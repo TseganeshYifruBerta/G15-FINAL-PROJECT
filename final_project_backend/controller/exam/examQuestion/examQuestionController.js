@@ -5,7 +5,7 @@ const sequelize = require("../../../database/sequelize");
 
 const User = require("../../../models/auth/user.model");
 const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
-  const { title, difficulty, description, example, testcases, solutions, teacherId ,tag ,chapter ,plagiarismRatio} = req.body;
+  const { title, difficulty, description, example, testcases, solutions, teacherId ,tag ,chapter ,plagiarismRatio,gradeValue} = req.body;
 
   try {
     const transaction = await sequelize.transaction(); 
@@ -14,6 +14,10 @@ const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
     if(!isTeacher) {
       return res.status(400).json({ message: "you are not a teacher"});
     }
+    if (!title || !difficulty || !description || !example || !testcases || !teacherId || !tag || !chapter || !plagiarismRatio || !gradeValue) {
+      return res.status(400).json({ message: "Please provide all required fields" });
+    }
+
     const newQuestion = await ExamQuestion.create({
       title,
       difficulty,
@@ -22,7 +26,8 @@ const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
       teacherId,
       tag,
       chapter,
-      plagiarismRatio
+      plagiarismRatio,
+      gradeValue
 
     }, { transaction });
 
