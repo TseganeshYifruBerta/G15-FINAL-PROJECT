@@ -11,8 +11,9 @@ const studentsExamAnswer = require("../../../models/exam/studentsExamAnswer");
 // Function to get an exam by ID along with associated questions
 const getExamByIdWithQuestions = async (req, res) => {
     try {
-        const { examId ,studentId } = req.params; // The exam's ID
+        const { examId , } = req.params; // The exam's ID
         const exam = await Exam.findByPk(examId);
+       
         
         if (!exam) {
             return res.status(404).json({ message: 'Exam not found.' });
@@ -116,7 +117,7 @@ const getExamDetailByIdStudentView = async (req, res) => {
                 UserinformationId: studentId
             }
         });
-        
+
 
 console.log(submissionCount,questionCount,"----------------------");
         if (submissionCount == questionCount) {
