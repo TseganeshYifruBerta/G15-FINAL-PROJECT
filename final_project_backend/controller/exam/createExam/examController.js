@@ -9,7 +9,7 @@ const User = require('../../../models/auth/user.model');
 const updateCreatedExam = async (req, res) => {
   try {
     const { teacherId, examId } = req.params;
-    const { title, date_and_time, instruction, duration, status, sections} = req.body;
+    const { title, passKey,examDate,examTime, instruction, duration, sections,} = req.body;
 
     const exam = await CreatExam.findOne({
       where: {
@@ -28,10 +28,11 @@ const updateCreatedExam = async (req, res) => {
     try {
 
       exam.title = title;
-      exam.date_and_time = date_and_time;
       exam.instruction = instruction;
       exam.duration = duration;
-      exam.status = status;
+      exam.passKey = passKey;
+      exam.examDate = examDate;
+      exam.examTime = examTime;
       await exam.save({ transaction });
 
       // update section
@@ -188,10 +189,11 @@ const startCreatedExam = async (req, res) => {
     const exam = await CreatExam.findByPk(id);
     if (!exam) {
       return res.status(404).json({ error: 'Exam not found' });
-    }
+    } 
+    start_time = new Date()
 
     // Update the exam status to "running"
-    await exam.update({ status: 'running' });
+    await exam.update({ status: 'running' , start_time: start_time});
 
     // Schedule to update the status to "ended" after the exam's duration
     const durationInMilliseconds = exam.duration * 60000; // Convert duration from minutes to milliseconds

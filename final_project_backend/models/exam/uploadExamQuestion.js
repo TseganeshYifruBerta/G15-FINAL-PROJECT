@@ -24,6 +24,11 @@ const ExamQuestion = sequelize.define("examQuestion", {
     type: DataTypes.ENUM("Lab", "Final"),
     allowNull: false,
   },
+  plagiarismRatio: {
+    type: DataTypes.STRING,
+    allowNull: false,
+
+  },
   
   example: {
     type: DataTypes.STRING,

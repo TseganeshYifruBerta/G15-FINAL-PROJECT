@@ -7,7 +7,7 @@ const { where } = require("sequelize");
 
 const editExamQuestion = async (req, res) => {
   try {
-    const { title, difficulty, description,  tag , chapter , example, testcases, solutions } = req.body;
+    const { title, difficulty, description,  tag , chapter , example, testcases, solutions ,plagiarismRatio} = req.body;
     const { teacherId, examQuestionId } = req.params;
 
     const examQuestion = await ExamQuestion.findOne({
@@ -41,6 +41,7 @@ const editExamQuestion = async (req, res) => {
       examQuestion.example = example;
       examQuestion.tag = tag;
       examQuestion.chapter = chapter;
+      examQuestion.plagiarismRatio = plagiarismRatio;
       await examQuestion.save({ transaction });
 
       // Update test cases
