@@ -107,8 +107,21 @@ const getExamDetailByIdStudentView = async (req, res) => {
                 }
             ]
         });
-
+        if (exam[0].status == "end") {
+            return res.status(401).json({ message: "Exam has ended" });
+        }
+        const submissionCount = await studentsExamAnswer.count({
+            where: {
+                examId: examId,
+                UserinformationId: studentId
+            }
+        });
         
+
+console.log(submissionCount,questionCount,"----------------------");
+        if (submissionCount == questionCount) {
+            return res.status(401).json({ message: "You have already submitted the exam" });
+        }
         
         if (!exam || !student) {
             return res.status(404).json({ message: 'Exam not found or Student not found' });
