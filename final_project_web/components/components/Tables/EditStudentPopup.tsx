@@ -117,7 +117,7 @@ export const EditStudentPopup: React.FC<FormProps> = (props) => {
       const response = await fetchAllStudents(token);
       if (response.user) {
         console.log(response.user); // After fetchAllStudents call
-        
+
        setStudents(response.user);
 console.log(students); // This might not log updated state immediately due to setState being asynchronous
 
@@ -136,7 +136,7 @@ console.log(students); // This might not log updated state immediately due to se
     dispatch(reset("editStudent")); // Dispatch the reset action with your form name
     onClose(); // Then call the onClose prop to close the popup
   };
-  
+
   useEffect(() => {
     initialize({ ...student, SectionsOfUser: student.SectionsOfUser ?? [],NewSections: []  });
   }, [student, initialize]);
@@ -160,7 +160,7 @@ console.log(students); // This might not log updated state immediately due to se
       console.error("Error deleting section:", error);
     }
   };
-  
+
 
   const handleAddSection = async (sectionInput: { section: string }) => {
     const section = sectionInput.section;
@@ -177,14 +177,14 @@ console.log(students); // This might not log updated state immediately due to se
         // Check if 'sections' is present and has at least one item
         if (response && response.sections && response.sections.length > 0) {
           console.log("Response section:", response.sections);  // Debug: Log the response section
-    
+
           const newSections = [...sections, ...response.sections];
           setSections(newSections);  // Update the state to reflect the newly added sections
           console.log('Updated sections:', newSections);  // Debug: Log the new sections array
-    
+
           initialize({ ...student, SectionsOfUser: newSections });
           onSave(response);  // Update the local state to reflect the changes
-          
+
         } else {
           console.error("No sections in response or empty sections array:", response);  // Error handling: Log if no sections
         }
@@ -194,12 +194,12 @@ console.log(students); // This might not log updated state immediately due to se
       console.error("Error adding section:", error);
     }
   };
-  
-  
+
+
   useEffect(() => {
     getStudents();
   }, [sections]);
-  
+
 interface RenderSectionsProps {
   fields: any;  // Depending on your setup, you might want to define a more specific type
   meta: {
@@ -222,14 +222,14 @@ interface RenderSectionsProps {
     <TiTick />
 </button>
 
-          
+
         </div>
       ))}
     </>
   );
   const RenderSections2: React.FC<any> = ({ fields, meta: { error, submitFailed } }) => (
     <>
-     
+
       {fields.map((section:string, index:number) => (
         <div key={index} className="flex items-center space-x-2">
            <Field name={`${section}.section`} type="number" component="input" placeholder="Section" className="p-2 border rounded" readOnly />
@@ -242,11 +242,11 @@ interface RenderSectionsProps {
   );
   const RenderSections3: React.FC<any> = ({ fields, meta: { error, submitFailed } }) => (
     <>
-     
+
       {fields.map((section:string, index:number) => (
         <div key={index} className="flex items-center space-x-2">
            <Field name={`${section}.section`} type="number" component="input" placeholder="Section" className="p-2 border rounded" />
-          
+
         </div>
       ))}
     </>
@@ -268,7 +268,7 @@ interface RenderSectionsProps {
     }));
 
     const finalPayload = {
-        
+
         fullName: studentData.fullName,
         email: studentData.email,
         userId: studentData.userId,
@@ -292,7 +292,7 @@ interface RenderSectionsProps {
 };
 
 
-  
+
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-md flex justify-center items-center"
@@ -310,9 +310,10 @@ interface RenderSectionsProps {
                   <AiOutlineClose size={24} />
             </button>
         <div className="flex flex-row gap-10">
-          
-        <form onSubmit={handleSubmit(onSubmit)} className="w-1/2">
-          <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">
+
+        <form onSubmit={handleSubmit(onSubmit)} className="w-1/2 h-[600px] overflow-y-auto scrollbar-hide">
+          <div className="flex-col">
+          <h2 className="text-2xl font-bold text-gray-800 mb-8">
             Edit User
           </h2>
           <div className="grid grid-cols-1 gap-6">
@@ -337,7 +338,7 @@ interface RenderSectionsProps {
               placeholder={student.email || "User ID"}
               iconName={FaEnvelope}
             />
-            <p className="flex items-center"><FaUsers className="text-xl text-gray-700 mr-2"/>Section</p>
+            <p className="flex items-center"><FaUsers className="text-xl text-gray-700 mr-2 ml-2"/>Section</p>
             <FieldArray name="SectionsOfUser" component={RenderSections3}  />
             <Field
               name="role"
@@ -352,35 +353,36 @@ interface RenderSectionsProps {
               <option value="teacher">Teacher</option>
               <option value="student">Student</option>
             </Field>
-            
+
+          </div>
           </div>
           <div className="flex justify-end space-x-4">
-           
+
             <button
               type="submit"
-              className="btn bg-[#7983FB] border-2 hover:bg-[#919AF3] text-white py-2 px-4 rounded-xl font-bold"
+              className="btn bg-[#7983FB] hover:bg-[#919AF3] text-white py-2 px-4 rounded-xl font-bold"
             >
               Submit
             </button>
           </div>
         </form>
-        <div className="w-1/2  ">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6 mt-2">
+        <div className="w-1/2 h-[600px] overflow-y-auto scrollbar-hide ">
+        <h2 className="text-2xl font-bold  text-gray-800 mb-6  ">
            Add Section
           </h2>
         <FieldArray name="NewSections" component={RenderSections} props={{ sections, setSections }} />
-        
-        
-        <div className="mb-4">
 
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6 mt-2">
+
+        <div className="mb-4 h-[600px] overflow-y-auto scrollbar-hide">
+
+        <h2 className="text-2xl font-bold  text-gray-800 mb-6 mt-2">
             Delete Section
           </h2>
         <FieldArray name="SectionsOfUser" component={RenderSections2} props={{ sectionsToDelete, setSectionsToDelete }} />
         </div>
         </div>
         </div>
-        
+
       </div>
     </div>
   );
@@ -389,5 +391,5 @@ interface RenderSectionsProps {
 export default reduxForm<FormStudent, OwnProps>({
   form: "editStudent",
   validate,
-  
+
 })(EditStudentPopup);

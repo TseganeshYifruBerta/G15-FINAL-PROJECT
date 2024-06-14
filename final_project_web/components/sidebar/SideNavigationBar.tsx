@@ -1,3 +1,4 @@
+import { fetchUserProfile, UserProfile2, updateUserProfilePhoto  } from '@/store/account/api_caller';
 const jwt = require("jsonwebtoken");
 import React, { useEffect, useState } from "react";
 import {
@@ -96,22 +97,52 @@ type RoleKey = keyof typeof roleDisplayName;
 
 function SideNavigationBar() {
   const router = useRouter();
+  const [userProfile, setUserProfile] = useState<UserProfile2 | null>(null);
   const [fullName, setFullName] = useState('');
   const [role, setRole] = useState<RoleKey>("teacher"); // Default role if none is provided
   const [navigation, setNavigation] = useState(navigations.teacher); // Default navigation
   const [activeTab, setActiveTab] = useState("/teacher/dashboard");
   const [isNavOpen, setIsNavOpen] = useState(true);
 
+  const [token, setToken] = useState<string | null>(null);
+  const [userId, setUserId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+        setToken(storedToken);
+        const decodedToken = jwt.decode(storedToken);
+        if (decodedToken && typeof decodedToken === 'object') {
+            setUserId(decodedToken.id); 
+        }
+    }
+}, []);
+
+useEffect(() => {
+    const fetchData = async (token: string, userId: number) => {
+        try {
+            const data = await fetchUserProfile(token, userId);
+            setUserProfile(data);
+        } catch (error) {
+            console.error('Error fetching user profile:', error);
+        }
+    };
+
+    if (token && userId !== null) {
+        fetchData(token, userId);
+    }
+}, [token, userId]); 
+
   const SetActiveMenuTab = (tab: number, link: string) => {
     router.push(link);
   };
 
-  useEffect(() => {
-    const storedFullName = localStorage.getItem('fullName');
-    if (storedFullName) {
-      setFullName(storedFullName);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedFullName = localStorage.getItem('fullName');
+  //   if (storedFullName) {
+  //     setFullName(storedFullName);
+  //   }
+  // }, []);
 
   useEffect(() => {
     // Adjust navigation bar visibility based on window size
@@ -128,7 +159,7 @@ function SideNavigationBar() {
     const token = localStorage.getItem("token");
     if (token) {
       const decodedToken = jwt.decode(token);
-      const userRole = decodedToken?.role || "teacher"; // Default to teacher if role is not decoded
+      const userRole = decodedToken?.role || "teacher"; 
       setRole(userRole);
     } else {
       router.push("/");
@@ -170,33 +201,31 @@ function SideNavigationBar() {
             </div>
           </div>
           <div className="flex flex-row gap-4 h-18 min-h-24 bg-gray-500 bg-opacity-20 items-center m-4 rounded-xl justify-start">
-            <div className="h-12 w-12 ml-2 rounded-full">
+              <span className="h-12 w-12 ml-2">
               <Image
+              className="w-12 h-12 rounded-full drop-shadow-md"
                 width={112}
                 height={112}
-                src={"/assets/people-1.png"}
+                src={userProfile?.photoUrl || "/assets/pro2.png"}
+
                 alt="User"
-                style={{
-                  width: "auto",
-                  height: "auto",
-                }}
               />
-            </div>
+            </span>
             <div className="hidden lg:flex justify-center items-center">
               <div className="text-center">
                 <span className="block text-sm font-medium text-gray-800 dark:text-gray-200">
-                  {fullName && (
+
                     <span>
-                      <strong>{fullName}</strong>
+                      <strong className='drop-shadow-md'>{userProfile?.fullName}</strong>
                     </span>
-                  )}
+
                 </span>
                 <span className="block text-xs text-gray-500 dark:text-gray-400">
-                  {role && (
-                    <strong className="text-gray-600 dark:text-gray-300">
-                      {role}
+
+                    <strong className="text-gray-600 drop-shadow-md dark:text-gray-300">
+                    {userProfile?.role }
                     </strong>
-                  )}
+
                 </span>
               </div>
             </div>
@@ -216,7 +245,7 @@ function SideNavigationBar() {
                         className={classNames(
                           activeTab == item.name
                             ? "bg-primary text-primary bg-opacity-30"
-                            : "text-gray-600 hover:text-primary hover:bg-primary hover:bg-opacity-30",
+                            : "text-gray-700 hover:text-primary hover:bg-gray-100 transition-transform duration-200 ease-in-out transform hover:scale-105",
                           "group flex gap-x-3 rounded-xl text-sm leading-6 font-medium h-full w-full pt-2 px-2"
                         )}
                       >
@@ -240,7 +269,7 @@ function SideNavigationBar() {
               </li>
               <li className="w-full flex flex-col items-center justify-center mb-5 mt-auto">
                 <Image
-                  className="relative mb-4"
+                  className="relative mb-4 "
                   src={"/assets/image5.png"}
                   alt="Logo"
                   width={155}
@@ -248,21 +277,21 @@ function SideNavigationBar() {
                   priority
                 />
                 <span className="block drop-shadow-md text-sm font-medium text-gray-800 dark:text-gray-200">
-                  {fullName && (
-                    <span>
-                      Hi, <strong>{fullName}</strong>
+
+                    <span className='drop-shadow-md'>
+                      Hi, <strong>{userProfile?.fullName}</strong>
                     </span>
-                  )}
+
                 </span>
               </li>
               <li className="w-full mb-4">
                 <button
                   onClick={handleLogout}
-                  className="group flex text-gray-600 hover:text-primary gap-x-3 rounded-xl p-2 py-3 text-2sm leading-6 font-medium h-full w-full"
+                  className="group flex text-gray-600 hover:text-primary hover:font-bold gap-x-3 rounded-xl transition-transform duration-200 ease-in-out transform hover:scale-105 p-2 py-3 text-2sm leading-6 font-medium h-full w-full"
                 >
                   <BiLogOut className="h-4 w-4 hover:text-primary text-sm mt-1 ml-0.5" />
                   <span
-                    className="mx-3 hover:text-primary font-medium"
+                    className="mx-3 drop-shadow-md hover:text-primary font-medium"
                     aria-hidden="true"
                   >
                     Logout

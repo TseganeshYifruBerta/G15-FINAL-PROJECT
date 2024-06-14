@@ -18,13 +18,13 @@ interface FormValues {
     fullName?: string;
     userId?: string;
     email?: string;
- 
+
     role?: string;
     status?: string;
   }
   const validate = (values: FormValues): FormValidationErrors => {
     const errors: FormValidationErrors = {};
-  
+
     if (!values.fullName) {
       errors.fullName = 'Please enter a username.';
     }
@@ -36,18 +36,18 @@ interface FormValues {
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
       errors.email = 'Please enter a valid email address.';
     }
-   
+
     if (!values.role) {
       errors.role = 'Please select a role.';
     }
     if (!values.status) {
       errors.status = 'Please select a status.';
     }
-   
-  
+
+
     return errors;
   };
-  
+
   const renderField = ({ input, type, placeholder, meta: { touched, error }, iconName }: any) => (
     <div className="flex flex-col mb-4">
       <div className="flex align-center border-b-2 border-gray-300 focus-within:border-blue-500">
@@ -70,7 +70,7 @@ interface FormValues {
             </>
           )}
         </select>
- 
+
 ) : (
   <input {...input} type={type} className="flex-1 p-2 outline-none" placeholder={placeholder} />
 )}
@@ -82,7 +82,7 @@ interface FormValues {
   interface ExtraProps {
     onUploadSuccess: () => void;
   }
-  
+
   const UploadPopup: React.FC<InjectedFormProps<FormValues, ExtraProps> & ExtraProps> = ({ handleSubmit, onUploadSuccess }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [sections, setSections] = React.useState(['']); 
@@ -92,7 +92,7 @@ interface FormValues {
     updatedSections[index] = value;
     setSections(updatedSections);
   };
-  
+
   const onSubmit = async (values: FormValues, dispatch: Function, props: any) => {
     const formData = {
       ...values,
@@ -109,7 +109,7 @@ interface FormValues {
     }
   };
 
-    
+
 
 
   return (
@@ -117,7 +117,7 @@ interface FormValues {
        <div className="w-full "> 
        <div className='flex justify-end items-center'>
   <button
-    className="text-white bg-gradient-to-r from-[rgb(145,154,243)] to-[#7983FB] hover:bg-gradient-to-br font-bold py-2 md:py-2 px-4 md:px-3 rounded-xl flex items-center shadow-xl transition-transform duration-200 ease-in-out transform hover:scale-105 mr-3 text-xs sm:text-sm md:text-base"
+    className="text-white bg-gradient-to-r from-[rgb(145,154,243)] to-[#7983FB] hover:bg-gradient-to-br font-bold py-2 md:py-2 px-4 md:px-3 rounded-xl flex items-center shadow-lg transition-transform duration-200 ease-in-out transform hover:scale-105 mr-3 text-xs sm:text-sm md:text-base"
     onClick={() => setIsOpen(true)}
     aria-label="Add" // Accessible label for the button
   >
@@ -136,23 +136,23 @@ interface FormValues {
         <div
           className="relative w-full max-w-2xl mx-auto bg-white rounded-xl shadow-2xl p-6 md:p-8 lg:p-12 transform transition-all"
           onClick={(e) => e.stopPropagation()}
-         
+
         >
            <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="absolute right-3 text-gray-500 hover:text-gray-800"
+                className="absolute right-8 top-4 text-gray-500 hover:text-gray-800"
                 aria-label="Close"
               >
                 <AiOutlineClose size={24} />
           </button>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 ">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 pace-y-4 h-[600px] overflow-y-auto scrollbar-hide">
             <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">Add New User</h2>
             <div className="grid grid-cols-1 gap-2">
               <Field name="fullName" type="text" component={renderField} placeholder="Full Name" iconName={FaUser} />
             <Field name="userId" type="text" component={renderField} placeholder="User ID" iconName={FaIdBadge} />
             <Field name="email" type="email" component={renderField} placeholder="Email" iconName={FaEnvelope} />
-            <p className="flex items-center"><FaUsers className="text-xl text-gray-700 mr-2"/>Section</p>
+            <p className="flex items-center"><FaUsers className="text-xl text-gray-700 mr-2 ml-2"/>Section</p>
             {
               sections.map((section, index) => (
                 <input
@@ -167,7 +167,7 @@ interface FormValues {
               ))
             }
 
-            
+
             <button className="flex w-35 items-center bg-[#7983FB] bg-opacity-30 text-[#7983FB] hover:bg-[#7983FB] hover:bg-opacity-60 font-bold py-2 px-2 rounded-xl   mb-4" onClick={() => setSections([...sections, ''])}><FaPlus className="mr-2" />  Add Section</button>
             <Field
               name="role"
@@ -189,11 +189,11 @@ interface FormValues {
             >
               <option value="" disabled>Select a status...</option>
               <option value="active">Active</option>
-             
+
             </Field>
           </div>
             <div className="flex justify-end space-x-4">
-            
+
               <button
                 type="submit"
                 className="btn bg-[#7983FB] border-2 hover:bg-[#919AF3] text-white py-2 px-4 rounded-xl font-bold"
@@ -205,18 +205,15 @@ interface FormValues {
 
         </div>
       </div>
-      
+
       )}
     </div>
   );
 };
-  
+
 const ConnectedUploadPopup = reduxForm<FormValues, ExtraProps>({
   form: 'uploadpop',
   validate,
 })(UploadPopup);
 
 export default ConnectedUploadPopup;
-
-
-
