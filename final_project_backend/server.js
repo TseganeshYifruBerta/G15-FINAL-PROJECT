@@ -8,6 +8,7 @@ const executionRouter = require("./routes/code/code.js");
 const examRouters =require("./routes/exam/examRoute")
 const dataUploadRouters = require("./routes/userDataUploader/userData");
 const sequelize = require("./database/sequelize.js");
+const gradingRouter = require("./routes/grading/gradingRoute.js");
 const questionRouters = require("./routes/questionRoute/questionRoute.js");
 const codeSubmissionRouter = require("./routes/codeSubmission/codeSubmissionRoute.js");
 const plagiarismRouter = require("./routes/plagiarism/plagiarismRoute.js");
@@ -77,6 +78,9 @@ app.use("/exam", examRouters);
 
   // Routes related to Plagiarism
 app.use("/plagiarism", plagiarismRouter); 
+
+  // Routes related to Grading
+app.use("/grading", gradingRouter);
 
 
 const port = process.env.PORT || 4000;
