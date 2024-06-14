@@ -42,7 +42,7 @@ examRouters.put("/updateExam/:teacherId/:examId", updateCreatedExam);
 examRouters.delete("/deleteExam/:teacherId/:examId",isTeacher,deleteCreatedExam);
 examRouters.put("/startExam/:id",startCreatedExam);
 examRouters.get("/getExamByIdWithQuestions/:examId", getExamByIdWithQuestions);
-examRouters.get("/getExamDetailByIdStudentView", getExamDetailByIdStudentView);
+examRouters.get("/getExamDetailByIdStudentView/:examId/:studentId/:passKey", getExamDetailByIdStudentView);
 examRouters.get("/upcomingExam/:userId", upcomingExam);
 examRouters.get("/createdExamDetailWithSolution/:examId", createdExamDetailWithSolution);
 
