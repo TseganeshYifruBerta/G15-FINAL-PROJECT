@@ -9,7 +9,7 @@ const upcomingExam = require("../../controller/exam/createExam/upcomingExam")
 const deleteExamQuestion = require("../../controller/exam/examQuestion/manageExamQuestion/deleteExamQuestion")
 const {editExamQuestion , addSolution , deleteSolution , AddTestcases,DeleteTestcases} = require("../../controller/exam/examQuestion/manageExamQuestion/updateExamQuestion")
 const {getAllCreatedExams , getAllCreatedExamByTeacherId} = require("../../controller/exam/createExam/getExam")
-const getExamByIdWithQuestions = require("../../controller/exam/createExam/getExamById")
+const {getExamByIdWithQuestions , getExamDetailByIdStudentView} = require("../../controller/exam/createExam/getExamById")
 const examQuestionDetailById = require("../../controller/exam/examQuestion/examQuestionDetailById")
 const submitExamAnswerByStudent = require("../../controller/exam/submittedExamAnswer/submittedStudentsExamAnswer")
 const fetchAllSubmittedStudentExamAnswerBySection = require("../../controller/exam/submittedExamAnswer/fetchSubmittedStudentExamAnswer")
@@ -42,8 +42,10 @@ examRouters.put("/updateExam/:teacherId/:examId", updateCreatedExam);
 examRouters.delete("/deleteExam/:teacherId/:examId",isTeacher,deleteCreatedExam);
 examRouters.put("/startExam/:id",startCreatedExam);
 examRouters.get("/getExamByIdWithQuestions/:examId", getExamByIdWithQuestions);
+examRouters.get("/getExamDetailByIdStudentView", getExamDetailByIdStudentView);
 examRouters.get("/upcomingExam/:userId", upcomingExam);
 examRouters.get("/createdExamDetailWithSolution/:examId", createdExamDetailWithSolution);
+
 
 examRouters.put("/endExam/:id", endStartedExam);
 

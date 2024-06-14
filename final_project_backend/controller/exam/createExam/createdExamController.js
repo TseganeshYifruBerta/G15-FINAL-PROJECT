@@ -157,7 +157,7 @@ const createExam = async (req, res) => {
       examDate,
       examTime,
       passKey,
-      start_time,
+      
       instruction,
       duration,
       teacherId,
