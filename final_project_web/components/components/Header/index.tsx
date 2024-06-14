@@ -16,7 +16,7 @@ const Header = (props: {
     return <div></div>;
   }
   return (
-   
+
     <header className="sticky top-0 z-50 flex w-full bg-transparent  shadow-gray-50 shadow-xs">
     <div className="flex flex-grow items-center bg-transparent justify-between px-4 py-1 shadow-md md:px-6 rounded-l-sm 2xl:px-11">
         <div className="hidden sm:block"></div>
