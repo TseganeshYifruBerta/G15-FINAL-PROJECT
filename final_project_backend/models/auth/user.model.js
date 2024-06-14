@@ -27,6 +27,37 @@ const User = sequelize.define("Userinformation", {
   role: {
     type: DataTypes.ENUM('admin','student', 'teacher'),
   },
+  university:{
+    type: DataTypes.STRING,
+    defaultValue:""
+  },
+  linkedin:{
+    type: DataTypes.STRING,
+    defaultValue:""
+  },
+  github:{
+    type: DataTypes.STRING,
+    defaultValue:""
+  },
+  phoneNumber:{
+    type: DataTypes.STRING,
+    defaultValue:""
+  },
+  gender:{
+    type: DataTypes.ENUM('female','male')
+  },
+  department:{
+    type: DataTypes.STRING,
+    defaultValue:""
+  },
+  shortBio:{
+    type: DataTypes.TEXT,
+    defaultValue:""
+  },
+  photoUrl:{
+    type: DataTypes.TEXT,
+    defaultValue:""
+  },
 
 });
 

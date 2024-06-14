@@ -8,6 +8,9 @@ const userUpload = multer({ dest: "uploads/user" });
 const { isAdmin, isTeacher } = require("../../middleware/roleMiddleWare");
 const { fetchAllStudentBasedOnSection, updateUser,deleteUser ,fetchAllTeachers, fetchAllStudents, DeleteSections, AddSections } = require("../../controller/userDataUploadController/userUploadManagment");
 const fetchAllSections = require("../../controller/userDataUploadController/fetchAllSection");
+const {getProfile ,updateProfile,updateProfilePhoto} = require("../../controller/Profile/profile");
+
+
 //  upload user data
 dataUploadRouters.post("/userDataUploader", userUpload.single("usersExcelFile"), verifyRoles("admin"), isAdmin, uploadUsersFile);
 
@@ -37,6 +40,15 @@ dataUploadRouters.get("/fetchAllTeachers", verifyRoles("admin"), fetchAllTeacher
 dataUploadRouters.post("/AddSections", AddSections)
 dataUploadRouters.delete("/DeleteSections/:sectionId", DeleteSections)
 dataUploadRouters.get("/fetchAllSections", fetchAllSections);
+
+
+//manage profile
+dataUploadRouters.get("/getUserProfile/:id", getProfile);
+dataUploadRouters.put("/updateUserProfile/:id", updateProfile);
+dataUploadRouters.put("/updateUserProfilePhoto/:id", updateProfilePhoto);
+
+
+
 
 module.exports = dataUploadRouters;
 
