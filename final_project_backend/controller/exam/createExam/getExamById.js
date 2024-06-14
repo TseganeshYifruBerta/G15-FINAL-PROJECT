@@ -6,6 +6,8 @@ const SelectedSectionsForExam = require("../../../models/exam/SelectedSectionsFo
 const { model } = require("../../../database/sequelize");
 const SelectedChapter = require("../../../models/exam/SelectedChapter");
 const User = require("../../../models/auth/user.model");
+const submitExamAnswerByStudent = require("../submittedExamAnswer/submittedStudentsExamAnswer");
+const studentsExamAnswer = require("../../../models/exam/studentsExamAnswer");
 // Function to get an exam by ID along with associated questions
 const getExamByIdWithQuestions = async (req, res) => {
     try {
@@ -77,6 +79,13 @@ const getExamDetailByIdStudentView = async (req, res) => {
             examId,
             studentId
         } = req.params;
+
+     const   questionCount = await ExamQuestionId.count({
+            where: {
+                examId: examId
+            }
+        });
+      
         // The exam's ID
         const exam = await Exam.findAll({
             where: {
@@ -90,8 +99,15 @@ const getExamDetailByIdStudentView = async (req, res) => {
         const student = await User.findAll({
             where: {
                 id: studentId
-            }
+            },
+            include:[
+                {
+                    model:studentsExamAnswer,
+                    as:"studentsExamAnswer",
+                }
+            ]
         });
+
         
         
         if (!exam || !student) {
@@ -144,7 +160,7 @@ const getExamDetailByIdStudentView = async (req, res) => {
             sections: ExamWithquestionIds[0].selectedSectionsForExam,
            
         };
-        return res.status(200).json({response});
+        return res.status(200).json({response , message:"successfully get exam detail"});
 
     }
         catch (error) {
