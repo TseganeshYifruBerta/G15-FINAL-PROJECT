@@ -9,7 +9,7 @@ const User = require('../../../models/auth/user.model');
 const updateCreatedExam = async (req, res) => {
   try {
     const { teacherId, examId } = req.params;
-    const { title, passKey,examDate,examTime, instruction, duration, status, sections,} = req.body;
+    const { title, passKey,examDate,examTime, instruction, duration, sections,} = req.body;
 
     const exam = await CreatExam.findOne({
       where: {
@@ -30,7 +30,6 @@ const updateCreatedExam = async (req, res) => {
       exam.title = title;
       exam.instruction = instruction;
       exam.duration = duration;
-      exam.status = status;
       exam.passKey = passKey;
       exam.examDate = examDate;
       exam.examTime = examTime;
