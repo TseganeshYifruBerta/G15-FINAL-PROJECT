@@ -1,119 +1,100 @@
 const express = require('express');
-const criteria = require('../../models/grading/criteria');
-const { Model, where } = require('sequelize');
+const { Model, where ,Sequelize} = require('sequelize');
 const grading = require('../../models/grading/grading');
 const studentsExamAnswer = require('../../models/exam/studentsExamAnswer');
-const studentsExamDetail = require('../../models/exam/submittedExamDetail');
-const getCriteriaById = require('./getStudentExamAnswer');
-const getStudentExamAnswerById = require('./getStudentExamAnswer');
-const getrefrenceExamAnswerById = require('./getStudentExamAnswer');
-const getExamTestcaseById = require('./getStudentExamAnswer');
-const { default: axios } = require('axios');
+
+const {getCriteriaById,getStudentExamAnswerById,getRefrenceExamAnswerById,getExamTestcaseById} = require('./fetchGradingComponent')
+// const { default: axios } = require('axios');
+const sequelize = require('../../database/sequelize')
+
 const axios = require('axios');
-
-const addCriteria  = async (req, res) =>  {
-    
-
-    const { 
-            examId,
-            examQuestionId,
-            timeComplexity,
-            codeQuality,
-            codeComment,
-            codeCorrectness,
-            teacherId
-        } = req.body;
-   
-    try {
-    await criteria.create({
-        examId,
-        examQuestionId,
-        timeComplexity,
-        codeQuality,
-        codeComment,
-        codeCorrectness,
-        teacherId
-    });
-    return res.status(201).json({message: 'Criteria created successfully'});
-
-    }
-    catch (error) {
-        console.error(error);
-        return res.status(500).json({error: 'Failed to create criteria'});
-    }
-}
-// transaction
-
-
-
-
-
 
 
 const gradeResult  = async (req, res) =>  {
-    const {examId} = req.params;
-    const {teacherId} = req.body;
+  
+    const {examId,teacherId} = req.body;
+    const transaction = await sequelize.transaction();
+
     try{
+        if(!examId || !teacherId){
+            return res.status(400).json({message: 'Invalid data received'});
+        }
+        console.log("................",examId)
+        console.log("...ooooooooooooo......",teacherId)
+        const exam = await grading.findOne({
+            where:{
+                examId:examId
+            }
+        },{transaction})
+        if(exam){
+            await transaction.rollback();
+            return res.status(400).json({message: 'Grading already done for this exam'});
+        }
+        
 
         const findAllUser = await studentsExamAnswer.findAll({
             where:{
                 examId:examId
-            }
-        })
-    const allUser = findAllUser.map((userIds) => userIds.userinformationId)
-    combinedResult = []
-    for (usersId of allUser){
-        const studentAnswer = await studentsExamAnswer.findAll(
-            {
-                where:{
-                    examId:examId,
-                    userinformationId:usersId
+            },
+            attributes:[
+                [Sequelize.fn('DISTINCT', Sequelize.col('UserinformationId')), 'UserinformationId']
+            ]
+        },{transaction})
 
-                },
-                include:[
-                    {
-                        model: studentsExamDetail,
-                        as: "studentsExamDetails"
-                    }
-                ]
-            }
-        )
-        const examQuestionIds = studentAnswer[0].studentsExamDetails.map(detail => detail.examQuestionId);
-        for (questionId of examQuestionIds){
+    const allUser = findAllUser.map((userIds) => userIds.UserinformationId)
+    let allQuestions = []
+    for (const id of allUser){
+        console.log("///////////",id)
+        
+        const studentAnswer = await studentsExamAnswer.findAll({
+            where: {
+                examId: examId,
+                UserinformationId: id
+            },transaction
 
-            var student_code = await getStudentExamAnswerById(usersId, questionId);
-            var reference_code = await getrefrenceExamAnswerById(questionId);
-            var criteria = await getCriteriaById(questionId);
+        });
+        allQuestions = (studentAnswer.map((answer) => answer.examQuestionId))
+        
+        for (const questionId of allQuestions){
+            console.log("**********",questionId)
+
+            var student_code = await getStudentExamAnswerById(id, questionId,examId);
+            var reference_code = await getRefrenceExamAnswerById(questionId);
+            var criteria = await getCriteriaById(questionId,examId);
             var testcases = await getExamTestcaseById(questionId);
             
-            if (!student_code || !reference_code) {
-                return res.status(400).json({ message: "Invalid data received" });
-            }
+            // if (!student_code || !reference_code) {
+            //     return res.status(400).json({ message: "Invalid data received" });
+            // }
+            
 
-            const response = await axios.post('http://localhost:4000/grade', {
+            const response = await axios.post('http://localhost:5060/grade', {
                 student_code,
                 reference_code,
                 criteria: {
                     timeComplexity: criteria.timeComplexity,
                     codeQuality: criteria.codeQuality,
-                    correctness: criteria.correctness,
-                    comment: criteria.comment
+                    codeCorrectness: criteria.codeCorrectness,
+                    codeComment: criteria.codeComment
                 },
                 testcases
             });
-            const gradingData = {
-                examId,
-                examQuestionId: questionId,
-                timeComplexity: response.data.timeComplexity,
-                codeQuality: response.data.codeQuality,
-                codeComment: response.data.codeComment,
-                codeCorrectness: response.data.codeCorrectness,
-                finalGrade: response.data.finalGrade,
-                studentId: usersId,
-                teacherId: teacherId
-            }
 
-            await grading.create(gradingData);
+            console.log("*****rrrrrrrrrrrrrrrrrr****",response.data)
+            // const gradingData = {
+            //     examId,
+            //     examQuestionId: questionId,
+            //     timeComplexity: response.data.timeComplexity,
+            //     codeQuality: response.data.codeQuality,
+            //     codeComment: response.data.codeComment,
+            //     codeCorrectness: response.data.codeCorrectness,
+            //     finalGrade: response.data.finalGrade,
+            //     studentId: id,
+            //     teacherId: teacherId
+            // }
+
+            // await grading.create(response.data,{transaction});
+            return res.status(201).json(response.data);
 
     }
     }
@@ -127,4 +108,4 @@ const gradeResult  = async (req, res) =>  {
 }
 
         
-module.exports = {addCriteria, gradeResult};
+module.exports = gradeResult;

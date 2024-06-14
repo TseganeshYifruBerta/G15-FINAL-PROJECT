@@ -15,22 +15,39 @@ const gradeResult = sequelize.define("gradeResult", {
     allowNull: false,
   },
   
-  timeComplexity: {
+  timeComplexityValue: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  codeQuality: {
+  timeComplexityDescription: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  codeQualityValue: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  codeComment: {
+  codeQualityDescription: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  codeCommentValue: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  codeCorrectness: {
+  codeCommentDescription: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  codeCorrectnessValue: {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  codeCorrectnessDescription: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+
   finalGrade:{
     type: DataTypes.STRING,
     allowNull: false,
