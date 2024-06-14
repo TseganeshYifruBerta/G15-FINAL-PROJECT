@@ -1,30 +1,60 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { RiLockPasswordLine } from "react-icons/ri";
+import PasswordChangeComponent from "@/components/changepassword/changepasswordpopup";
+import router from "next/router";
+import { fetchUserProfile, UserProfile2, updateUserProfilePhoto  } from '@/store/account/api_caller';
+const jwt = require("jsonwebtoken");
 
 const DropdownUser = () => {
-  // const fullName = localStorage.getItem("fullName");
- 
-  const [role, setRole] = useState('');
+  const [userProfile, setUserProfile] = useState<UserProfile2 | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [fullName, setFullName] = useState('');
+  const [showForm, setShowForm] = useState(false);
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [userId, setUserId] = useState<number | null>(null);
 
   useEffect(() => {
-    const storedFullName = localStorage.getItem('fullName');
-    if (storedFullName) {
-      setFullName(storedFullName);
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+        setToken(storedToken);
+        const decodedToken = jwt.decode(storedToken);
+        if (decodedToken && typeof decodedToken === 'object') {
+            setUserId(decodedToken.id); 
+        }
     }
-  }, []);
-  useEffect(() => {
-    const storedRole = localStorage.getItem("role");
-    if (storedRole) {
-      setFullName(storedRole);
-    }
-  }, []);
+}, []);
 
-  // close on click outside
+useEffect(() => {
+    const fetchData = async (token: string, userId: number) => {
+        try {
+            const data = await fetchUserProfile(token, userId);
+            setUserProfile(data);
+        } catch (error) {
+            console.error('Error fetching user profile:', error);
+        }
+    };
+
+    if (token && userId !== null) {
+        fetchData(token, userId);
+    }
+}, [token, userId]);
+
+  // useEffect(() => {
+  //   const storedFullName = localStorage.getItem('fullName');
+  //   if (storedFullName) {
+  //     setFullName(storedFullName);
+  //   }
+  // }, []);
+  // useEffect(() => {
+  //   const storedRole = localStorage.getItem("role");
+  //   if (storedRole) {
+  //     setRole(storedRole);
+  //   }
+  // }, []);
+
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
       if (!dropdown.current) return;
@@ -40,7 +70,6 @@ const DropdownUser = () => {
     return () => document.removeEventListener("click", clickHandler);
   });
 
-  // close if the esc key is pressed
   useEffect(() => {
     const keyHandler = ({ keyCode }: KeyboardEvent) => {
       if (!dropdownOpen || keyCode !== 27) return;
@@ -49,6 +78,13 @@ const DropdownUser = () => {
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
   });
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("fullName");
+    localStorage.removeItem("role");
+    router.push("/");
+  };
 
   return (
     <div className="relative">
@@ -60,32 +96,30 @@ const DropdownUser = () => {
       >
         <div className="hidden lg:flex justify-center items-center">
           <div className="text-center">
-            <span className="block text-sm font-medium text-gray-800 dark:text-gray-200">
-              {fullName && (
+            <span className="block text-sm font-medium drop-shadow-md text-gray-800 dark:text-gray-200">
+              
                 <span>
-                  Welcome, <strong>{fullName}</strong>
+                  Welcome, <strong className='drop-shadow-md'>{userProfile?.fullName}</strong>
                 </span>
-              )}
+          
             </span>
             <span className="block text-xs text-gray-500 dark:text-gray-400">
-              {role && (
-                <strong className="text-gray-600 dark:text-gray-300">
-                  {role}
+              
+                <strong className="drop-shadow-md text-gray-600 dark:text-gray-300">
+                  {userProfile?.role }
                 </strong>
-              )}
+         
             </span>
           </div>
         </div>
 
-        <span className="h-12 w-12 rounded-full">
+        <span className="h-12 w-12 ">
           <Image
+           className="w-12 h-12 rounded-full drop-shadow-md"
             width={112}
             height={112}
-            src={"/assets/people-1.png"}
-            style={{
-              width: "auto",
-              height: "auto",
-            }}
+            src={userProfile?.photoUrl || "/assets/pro2.png"}
+            
             alt="User"
           />
         </span>
@@ -107,20 +141,19 @@ const DropdownUser = () => {
         </svg>
       </Link>
 
-      {/* <!-- Dropdown Start --> */}
       <div
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
-        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border bg-white border-stroke  shadow-default dark:border-strokedark dark:bg-boxdark ${
-          dropdownOpen === true ? "block" : "hidden"
+        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border bg-white border-stroke shadow-default dark:border-strokedark dark:bg-boxdark ${
+          dropdownOpen ? "block" : "hidden"
         }`}
       >
         <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
           <li>
             <Link
               href="/account"
-              className="flex  items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+              className="flex items-center transition-transform duration-200 ease-in-out transform hover:scale-105 gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
             >
               <svg
                 className="fill-current"
@@ -142,9 +175,20 @@ const DropdownUser = () => {
               My Profile
             </Link>
           </li>
-         
+          <li>
+            <button
+              className="flex items-center gap-3.5 transition-transform duration-200 ease-in-out transform hover:scale-105 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+              onClick={() => setShowForm(true)}
+            >
+              <RiLockPasswordLine className="text-primary text-xl" />
+              Change Password
+            </button>
+          </li>
         </ul>
-        <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-3.5 px-6 transition-transform duration-200 ease-in-out transform hover:scale-105 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+        >
           <svg
             className="fill-current"
             width="22"
@@ -165,7 +209,9 @@ const DropdownUser = () => {
           Log Out
         </button>
       </div>
-      {/* <!-- Dropdown End --> */}
+      {showForm && (
+        <PasswordChangeComponent showForm={showForm} setShowForm={setShowForm} />
+      )}
     </div>
   );
 };

@@ -9,6 +9,7 @@ import { Student,activateUser,fetchAllStudents,updateStudent } from '@/store/adm
 import { AcademicCapIcon, UserGroupIcon } from '@heroicons/react/24/solid';
 import { showToast } from '@/components/popup';
 import { AiOutlineClose } from 'react-icons/ai';
+import Loading from '@/components/common/Loading';
 
 const AllTeacher: React.FC = () => {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
@@ -167,21 +168,21 @@ const PasswordModal = ({ isOpen, newPassword, onClose }:any) => {
 };
 
 
-  if (isLoading) return <div>Loading...</div>;
+if (isLoading) return <div><Loading/></div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="overflow-x-auto overflow-y-auto">
      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
-      <div className="bg-gray-50 rounded-xl shadow-lg p-4 flex items-center justify-between">
+      <div className="bg-primary bg-opacity-5 rounded-xl shadow-lg p-4 flex items-center justify-between">
           <div>
             <h4 className="text-xl font-semibold text-[#7983FB]">Teachers</h4>
             <p className="text-2xl font-bold text-[#7983FB]">{teachers.length}</p>
           </div>
           <AcademicCapIcon className="h-12 w-12 text-[#7983FB]" />
           </div>
-          <div className="bg-gray-50 rounded-xl shadow-lg p-4 flex items-center justify-between">
+          <div className="bg-primary bg-opacity-5 rounded-xl shadow-lg p-4 flex items-center justify-between">
           <div>
             <h4 className="text-xl font-semibold text-[#7983FB]">Students</h4>
           <p className="text-2xl font-bold text-[#7983FB]">{students.length}</p>
@@ -191,13 +192,13 @@ const PasswordModal = ({ isOpen, newPassword, onClose }:any) => {
       </div>
 
       {/* Search and Upload Popup */}
-      <div className="flex items-center justify-between space-x-4 mb-4">
-      <div className="flex items-center space-x-2 w-full max-w-lg border-2 border-gray-200 bg-gray-100 rounded-xl shadow-lg overflow-hidden">
-  <FiSearch className="ml-4 text-gray-400" />
+      <div className="flex items-center justify-between space-x-4 mb-10">
+      <div className="flex items-center space-x-2 w-full max-w-lg border-2 border-gray-200 bg-primary bg-opacity-5 rounded-xl  overflow-hidden">
+  <FiSearch className="ml-4 text-[#7983FB]" />
   <input
     type="text"
     className="w-full p-2 outline-none"
-    placeholder="Search by name, email, or section..."
+    placeholder="Search ..."
     value={searchQuery}
     onChange={(e) => setSearchQuery(e.target.value)}
   />
@@ -221,31 +222,31 @@ const PasswordModal = ({ isOpen, newPassword, onClose }:any) => {
         </thead>
         <tbody>
         {filteredTeachers.map((teacher) => (
-            <tr key={teacher.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <td className="py-4 px-4">{teacher.fullName}</td>
-              <td className="py-4 px-4">{teacher.userId}</td>
-              <td className="py-4 px-4">{teacher.email}</td>
-              <td className="py-4 px-4">
+            <tr key={teacher.id} className="bg-white odd:bg-primary odd:bg-opacity-5">
+              <td className="py-2 px-4">{teacher.fullName}</td>
+              <td className="py-2 px-4">{teacher.userId}</td>
+              <td className="py-2 px-4">{teacher.email}</td>
+              <td className="py-2 px-4">
                 {teacher.SectionsOfUser?.map((sec, index) => (
                   <span key={index}>{sec.section}{index < (teacher.SectionsOfUser?.length ?? 0) - 1 ? ', ' : ''}</span>
                 ))}
               </td>
-              <td className="py-4 px-4">{teacher.role}</td>
-              <td className="py-4 px-4">
+              <td className="py-2 px-4">{teacher.role}</td>
+              <td className="py-2 px-4">
       {teacher.status === 'active' ? (
-        <button className="bg-green-200 text-green-800 px-4 py-2 rounded shadow disabled:opacity-50" disabled>
+        <button className="bg-green-300 text-green-500 px-2 py-1 rounded shadow disabled:bg-opacity-50" disabled>
           Active
         </button>
       ) : (
         <button
-          className="bg-[#7983FB] bg-opacity-30 text-[#7983FB] hover:bg-[#7983FB] hover:bg-opacity-60 px-2 py-2 rounded shadow "
+          className="bg-[#7983FB] bg-opacity-30 text-[#7983FB] hover:bg-[#7983FB] hover:bg-opacity-60 px-2 py-1 rounded shadow "
           onClick={() => handleActivateUser(token, teacher.id)}
         >
           Activate
         </button>
       )}
 </td>
-              <td className="py-4 px-4 flex items-center gap-4">
+              <td className="py-2 px-4 flex items-center gap-4">
                 <button className="text-blue-500 hover:text-blue-700"
                  onClick={() => handleEditClick(teacher)}>
                   <svg

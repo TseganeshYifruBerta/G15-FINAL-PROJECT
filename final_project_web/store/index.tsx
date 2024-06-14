@@ -47,9 +47,11 @@ import { upcomingExamsApi } from "./exam/upcoming-exam-api";
 import { countAcceptedSubmissionsperDifficultyApi } from "./submissions/count-Accepted-submissions-per-Difficulty";
 import  userProfileReducer   from '@/store/account/slice_reducer';
 
+
 export const store = configureStore({
   reducer: {
     form: formReducer,
+   
     userProfile: userProfileReducer, 
     register: signupTeacherReducer,
     signupStudentReducer,
