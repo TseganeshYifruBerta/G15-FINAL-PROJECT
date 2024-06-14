@@ -76,7 +76,7 @@ const getExamDetailByIdStudentView = async (req, res) => {
             passKey,
             examId,
             studentId
-        } = req.body;
+        } = req.params;
         // The exam's ID
         const exam = await Exam.findAll({
             where: {
