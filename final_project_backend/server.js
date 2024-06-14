@@ -79,5 +79,5 @@ app.use("/exam", examRouters);
 app.use("/plagiarism", plagiarismRouter); 
 
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`BACK_END_SERVICE_PORT: ${port}`));
