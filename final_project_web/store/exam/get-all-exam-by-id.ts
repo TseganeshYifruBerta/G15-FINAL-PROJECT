@@ -23,7 +23,7 @@ export const getExamQuestionByIdApi = createApi({
       query: (params) => {
         const { questionId } = params;
         let url =
-          "https://g15-final-project-backend.onrender.com/exam/examQuestionDetailById";
+          `${URL}/exam/examQuestionDetailById`;
         const queryParams = [];
         queryParams.push(`${questionId}`);
         return {

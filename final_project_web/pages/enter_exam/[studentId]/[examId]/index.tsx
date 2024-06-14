@@ -22,10 +22,10 @@ interface Question {
 const ExamDetail: React.FC<ExamDetailProps> = () => {
   const [timeLeft, setTimeLeft] = useState({
     hours: 0,
-    minutes: 0,
+    minutes: 5,
     seconds: 0,
   });
-  const [examDuration, setExamDuration] = useState(0);
+  const [examDuration, setExamDuration] = useState(10);
 
   const router = useRouter();
   const [studentId, setStudentId] = useState<string>("");

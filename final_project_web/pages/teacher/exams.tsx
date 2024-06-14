@@ -1,10 +1,15 @@
 import Loading from '@/components/common/Loading';
 import ExamTable from '@/components/components/Tables/ExamTable';
-import { useGetAllExamsQuery } from '@/store/exam/get-all-exam-api';
+import { useGetAllExamListQuery } from '@/store/exam/get-all-exam-api';
 import React from 'react'
 
 function Exams() {
-    const { data: allexams, isLoading, isError, refetch } = useGetAllExamsQuery("");
+    const {
+      data: allexams,
+      isLoading,
+      isError,
+      refetch,
+    } = useGetAllExamListQuery("");
 if (isLoading) {
     return <div>
       <Loading />
@@ -16,7 +21,7 @@ if (isLoading) {
       <div className="flex flex-col gap-10">
         <div className="flex justify-between w-full">
           <div className="w-full">
-            <ExamTable exams={allexams.combinedResult} deleteexam={refetch} />
+            <ExamTable exams={allexams.exams} deleteexam={refetch} />
           </div>
         </div>
       </div>

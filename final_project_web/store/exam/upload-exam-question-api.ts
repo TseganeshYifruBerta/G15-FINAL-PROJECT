@@ -8,8 +8,9 @@ export type ExamQuestionUploadFormData = {
   example: string;
   testcases: testCaseProps[];
   solutions: any[];
-  tag:string;
-  chapter:string;
+  tag: string;
+  chapter: string;
+  plagiarismRatio: string;
 };
 
 export const uploadexamquestion = async (formData: ExamQuestionUploadFormData) => {

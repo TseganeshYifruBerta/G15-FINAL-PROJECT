@@ -5,7 +5,9 @@ export type ExamUploadFormData = {
     
     teacherId:string,
     title:string,
-    date_and_time:string,
+    examDate:string,
+    examTime:string,
+    passKey:string,
     instruction:string,
     duration:string,
     sections:any[],

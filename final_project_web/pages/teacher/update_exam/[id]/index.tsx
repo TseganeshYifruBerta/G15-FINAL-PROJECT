@@ -23,9 +23,12 @@ console.log("exam detail", examDetails?.response)
       <ExamFormEdit
         title={examDetails?.response.title}
         duration={examDetails?.response.duration}
-        date_and_time={examDetails?.response.date_and_time}
+        examDate={examDetails?.response.examDate}
+        examTime={examDetails?.response.examTime}
         instruction={examDetails?.response.instruction}
         examId={examDetails?.response.id}
+        passKey={examDetails?.response.passKey}
+        sections={examDetails?.response.sections}
       />
     </div>
   );

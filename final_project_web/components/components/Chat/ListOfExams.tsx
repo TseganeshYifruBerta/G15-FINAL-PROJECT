@@ -1,15 +1,23 @@
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 import Link from "next/link";
 import Image from "next/image";
-import { useDeleteExamMutation, useGetAllExamListQuery, useUpdateExamMutation } from "@/store/exam/get-all-exam-api";
+import {
+  useDeleteExamMutation,
+  useGetAllExamListQuery,
+  useUpdateExamMutation,
+} from "@/store/exam/get-all-exam-api";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Loading from "@/components/common/Loading";
 
-const ListOfExam: React.FC = () => {
-const router = useRouter()
-const [teacherId, setTeacherId] = useState("")
-    
+interface ExamsProps {
+  allexamlist: any;
+}
+const ListOfExam: React.FC<ExamsProps> = ({ allexamlist }) => {
+  const router = useRouter();
+  const [teacherId, setTeacherId] = useState("");
+  const [chapterStrings, setChapterStrings] = useState("");
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -17,41 +25,52 @@ const [teacherId, setTeacherId] = useState("")
       const id = decodedToken?.id || null;
       setTeacherId(id);
     } else {
-      router.push("/login");
+      router.push("/");
     }
   }, []);
-  const {
-    data: allexamlist,
-    isLoading: isLoadingTop,
-    isError: isErrorTop,refetch
-  } = useGetAllExamListQuery("");
 
-    const [updateExam, { isLoading: isUpdating }] =
-      useUpdateExamMutation();
+  // Mutation hook for deleting a question
+  const [deleteExam, { isLoading: isDeleting }] = useDeleteExamMutation();
+  const handleDeleteExam = async (questionId: any, event: any) => {
+    event.preventDefault();
+    try {
+      await deleteExam(questionId);
+      // refetch();
+      // refetch();
+    } catch (error) {
+      // Handle error
+      console.log("error deleting");
+    }
+  };
 
-    // Mutation hook for deleting a question
-    const [deleteExam, { isLoading: isDeleting }] =
-      useDeleteExamMutation();
-    const handleDeleteExam = async (questionId: any, event: any) => {
-      event.preventDefault();
-      try {
-        await deleteExam(questionId);
-        refetch();
-        // refetch();
-      } catch (error) {
-        // Handle error
-        console.log("error deleting");
+  console.log(allexamlist, "allexamlist");
+  const chapterString = () => {
+    let chapterString = "";
+    console.log(allexamlist[0].selectedChapters, "hel");
+    allexamlist[0].selectedSectionsForExam.map(
+      (chapter: any, key: any) => {
+        chapterString += chapter.sections;
+        if (key != allexamlist[0].selectedSectionsForExam.length - 1) {
+          chapterString += ", ";
+        }
       }
-    };
-  if (isLoadingTop) {
-    return <div>
-      <Loading />
-    </div>;
-  }
+    );
+    return chapterString;
+  };
+
+  const sectionString = () => {
+    let sectionString = "";
+    allexamlist[0].selectedChapters.map((chapter: any, key: any) => {
+      sectionString += chapter.chapter;
+      if (key != allexamlist[0].selectedChapters.length - 1) {
+        sectionString += ", ";
+      }
+    });
+    return sectionString;
+  };
   return (
-    <div className="col-span-12 rounded-sm  bg-white py-6 shadow-md dark:border-strokedark dark:bg-boxdark xl:col-span-4">
-      {allexamlist?.exams.length == undefined ||
-      allexamlist?.exams.length == 0 ? (
+    <div className="col-span-12 rounded-sm  bg-primary bg-opacity-5 shadow-md xl:col-span-4 ">
+      {allexamlist?.length == undefined || allexamlist?.length == 0 ? (
         <div className="flex flex-col items-center justify-center p-10 text-center">
           <Image
             src="/images/nodata.svg"
@@ -70,41 +89,52 @@ const [teacherId, setTeacherId] = useState("")
         </div>
       ) : (
         <div className="w-full">
-          <div className="border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
+          <div className="border-t  px-4 py-2 dark:border-strokedark sm:grid-cols-8">
             <div className="flex items-center">
-              <div className="w-full gap-4 flex sm:items-center">
-                <div className="w-1/2">
-                  <p className="text-sm text-black dark:text-white">Title</p>
+              <div className="w-full gap-4 flex sm:items-center font-bold text-gray-700">
+                <div className="w-4/5">
+                  <p className="text-sm dark:text-white">Title</p>
                 </div>
                 <div className="w-1/2">
-                  <p className="text-sm text-black dark:text-white">
-                    Date and Time
-                  </p>
+                  <p className="text-sm dark:text-white">Date</p>
                 </div>
                 <div className="w-1/2">
-                  <p className="text-sm text-black dark:text-white">
-                    Questions
-                  </p>
+                  <p className="text-sm dark:text-white">Time</p>
                 </div>
                 <div className="w-1/2">
-                  <p className="text-sm text-black dark:text-white">Tag</p>
+                  <p className="text-sm  dark:text-white">Questions</p>
                 </div>
                 <div className="w-1/2">
-                  <p className="text-sm text-black dark:text-white">Actions</p>
+                  <p className="text-sm  dark:text-white">Chapters</p>
+                </div>
+                <div className="w-1/2">
+                  <p className="text-sm  dark:text-white">Tag</p>
+                </div>
+                <div className="w-1/2">
+                  <p className="text-sm  dark:text-white">Sections</p>
+                </div>
+                <div className="w-1/2">
+                  <p className="text-sm  dark:text-white">Duration</p>
+                </div>
+                <div className="w-1/2">
+                  <p className="text-sm  dark:text-white">Actions</p>
                 </div>
               </div>
             </div>
           </div>
-          {allexamlist?.exams.map((exam: any, key: any) => (
+          {allexamlist?.map((exam: any, key: any) => (
             <div
-              className="border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 text-xs"
+              className={` ${
+                key % 2 === 0 ? "bg-primary bg-opacity-5" : "bg-white"
+              }
+                       pl-4 pr-2 py-1 text-sm`}
               key={key}
             >
               <div className="flex items-center">
                 <div className="w-full gap-4 flex sm:items-center">
                   <Link
                     href={`/exams/${exam.id}`}
-                    className="w-1/2 justify-center "
+                    className="w-4/5 justify-center"
                   >
                     <div>
                       <p className=" text-black dark:text-white">
@@ -114,7 +144,12 @@ const [teacherId, setTeacherId] = useState("")
                   </Link>
                   <div className="w-1/2">
                     <p className=" text-gray-500 dark:text-white">
-                      {exam.date_and_time}
+                      {exam.examDate}
+                    </p>
+                  </div>
+                  <div className="w-1/2">
+                    <p className=" text-gray-500 dark:text-white">
+                      {exam.examTime}
                     </p>
                   </div>
                   <div className="w-1/2">
@@ -123,10 +158,25 @@ const [teacherId, setTeacherId] = useState("")
                     </p>
                   </div>
                   <div className="w-1/2">
+                    <p className=" text-gray-500 dark:text-white">
+                      {chapterString()}
+                    </p>
+                  </div>
+                  <div className="w-1/2">
                     <p className=" text-gray-500 dark:text-white">{exam.tag}</p>
                   </div>
+                  <div className="w-1/2">
+                    <p className=" text-gray-500 dark:text-white">
+                      {sectionString()}
+                    </p>
+                  </div>
+                  <div className="w-1/2">
+                    <p className=" text-gray-500 dark:text-white">
+                      {exam.duration}
+                    </p>
+                  </div>
                   {exam.teacherId == teacherId ? (
-                    <div className="w-1/2">
+                    <div className="w-1/2 ">
                       <button onClick={(e) => handleDeleteExam(exam.id, e)}>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -135,7 +185,7 @@ const [teacherId, setTeacherId] = useState("")
                           viewBox="0 0 24 24"
                           strokeWidth="1.5"
                           stroke="currentColor"
-                          className="w-8 h-8  rounded-full bg-[#FF3B30] bg-opacity-20 p-2"
+                          className="w-8 h-8  rounded-full bg-[#FF3B30] bg-opacity-20 p-2 -ml-[22px]"
                         >
                           <path
                             strokeLinecap="round"
@@ -155,7 +205,7 @@ const [teacherId, setTeacherId] = useState("")
                           viewBox="0 0 24 24"
                           strokeWidth="1.5"
                           stroke="currentColor"
-                          className="w-8 h-8 mx-2 rounded-full bg-green-800 bg-opacity-30 pt-2 py-2"
+                          className="w-8 h-8 ml-2 rounded-full bg-green-800 bg-opacity-30 pt-2 py-2"
                         >
                           <path
                             stroke="currentColor"
