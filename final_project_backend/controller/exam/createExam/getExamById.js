@@ -83,7 +83,7 @@ const getExamDetailByIdStudentView = async (req, res) => {
                 id: examId
             }
         });
-        // console.log(",,,,,,,,,,,,,,,,,",exam[0].passKey);
+       
 
         
 
@@ -100,7 +100,7 @@ const getExamDetailByIdStudentView = async (req, res) => {
         // const pk = await exam.passKey;
         // console.log(pk,"-------------------------------------");
         if  (exam[0].passKey != passKey){
-            return res.status(401).json({ exam});
+            return res.status(401).json({ message: "Invalid passkey" });
         }
         // Assuming exam.questionIds is an array of question IDs. If it's a string, you'll need to split it.
         const ExamWithquestionIds = await Exam.findAll({
