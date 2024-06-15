@@ -59,7 +59,6 @@ const ProfileCard: React.FC = () => {
         width: 144,
         height: 144,
         src: publicId
-        
       });
 
       console.log('Image updated successfully', imageUrl); // Debug log
