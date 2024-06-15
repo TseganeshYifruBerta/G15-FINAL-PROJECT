@@ -120,6 +120,7 @@ const PlagiarismCheck: React.FC = () => {
         </div>
       </div>
 
+
       <h4 className="text-xl font-semibold text-black mb-6 dark:text-white">
         Plagiarism Checked Exams
       </h4>
@@ -138,6 +139,7 @@ const PlagiarismCheck: React.FC = () => {
               </tr>
             </thead>
           </table>
+
         </div>
       )}
 
@@ -146,7 +148,7 @@ const PlagiarismCheck: React.FC = () => {
           examId={exam.examData.id}
           title={exam.examData.title}
           instruction={exam.examData.instruction}
-          date_and_time={exam.examData.date_and_time}
+          date_and_time={exam.examData.examDate}
           status={exam.examData.status}
           tag={exam.examData.tag}
           duration={exam.examData.duration}

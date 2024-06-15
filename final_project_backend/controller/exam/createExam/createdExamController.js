@@ -13,7 +13,8 @@ const SelectedChapter = require("../../../models/exam/SelectedChapter");
 const createExam = async (req, res) => {
   const {
     title,
-    date_and_time,
+    examDate,
+    examTime,
     instruction,
     sections,
     duration,
@@ -22,7 +23,9 @@ const createExam = async (req, res) => {
     easy_questions,
     medium_questions,
     hard_questions,
-    teacherId
+    teacherId,
+    passKey,
+
 
     
   } 
@@ -31,6 +34,9 @@ const createExam = async (req, res) => {
   // Start a transaction
   const transaction = await sequelize.transaction();
   try {
+    if (!title || !examDate || !examTime || !instruction || !duration || !tag || !chapter || !easy_questions || !medium_questions || !hard_questions || !teacherId || !passKey || !sections) {
+      return res.status(400).json({ message: "Please provide title, examDate, examTime, instruction, duration, tag, chapter, easy_questions, medium_questions, hard_questions, passKey and sections" });
+    }
         const foundUser = await User.findOne({
           where: {
             id: teacherId
@@ -69,14 +75,7 @@ const createExam = async (req, res) => {
           return res.status(400).json({ message: errors.join(", ") });
         }
     
-      
-       else { 
-        
-        
-        (errors.length === 0)}
-
-        
-
+     
 
 
 
@@ -144,39 +143,6 @@ const createExam = async (req, res) => {
           // Check if there are enough questions available for each difficulty level
         
 
-   
-    
-
-
-
-
-
-
-
-
-
-
-
-
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     // Use the selectQuestions function to get a randomized selection of question IDs
@@ -191,14 +157,18 @@ const createExam = async (req, res) => {
     // Create exam within the transaction
     const exam = await Exam.create({
       title,
-      date_and_time,
+      examDate,
+      examTime,
+      passKey,
+      
       instruction,
       duration,
       teacherId,
       tag,
       easy_questions,
       medium_questions,
-      hard_questions
+      hard_questions,
+
 
     }, { transaction }); // Pass transaction to the create method
 
@@ -239,6 +209,7 @@ const createExam = async (req, res) => {
       // selectedTag: questionsByDifficulty
     });
   } catch (error) {
+    await transaction.rollback();
     // If there was any failure, rollback the transaction
     // await transaction.rollback();
 

@@ -10,19 +10,34 @@ const creatExam = sequelize.define("exam", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  date_and_time: {
+  examDate: {
     type: DataTypes.STRING, // Consider using DataTypes.DATE for actual date comparison
     allowNull: false,
+  },
+
+  examTime :{
+    type: DataTypes.STRING,
+    allowNull: false,
+
+  },
+  start_time: {
+    type: DataTypes.STRING,
+    defaultValue: "00:00",
+
   },
   instruction: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-
+  
   status: {
     type: DataTypes.ENUM('upcoming', 'running', 'end'),
     allowNull: false,
     defaultValue: 'upcoming', // Default status is 'upcoming'
+  },
+  passKey:{
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   duration: {
     type: DataTypes.INTEGER,

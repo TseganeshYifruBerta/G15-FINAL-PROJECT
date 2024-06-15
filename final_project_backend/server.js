@@ -8,13 +8,15 @@ const executionRouter = require("./routes/code/code.js");
 const examRouters =require("./routes/exam/examRoute")
 const dataUploadRouters = require("./routes/userDataUploader/userData");
 const sequelize = require("./database/sequelize.js");
+const gradingRouter = require("./routes/grading/gradingRoute.js");
 const questionRouters = require("./routes/questionRoute/questionRoute.js");
 const codeSubmissionRouter = require("./routes/codeSubmission/codeSubmissionRoute.js");
 const plagiarismRouter = require("./routes/plagiarism/plagiarismRoute.js");
 const ActivateRouter = require(
   "./routes/Activate/activateUserRoute.js"
 ) 
-const userProfile = require("./routes/profile/profile.route.js")
+const bodyParser = require('body-parser');
+
 const verifyJWT = require("./middleware/verifyJWT.js")
 const checkUserStatus = require("./middleware/userStatus.js")
 const seedAdminData = require("./models/auth/seed.js");
@@ -30,6 +32,8 @@ app.use(
     extended: true,
   })
 );
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 async function initializeDatabase() {
   try {
@@ -56,8 +60,7 @@ app.use(checkUserStatus)
 // Routes for ActivateUser
 app.use("/activateUser",ActivateRouter);
 
-// Routes for userProfile
-app.use("/userProfile",userProfile);
+
 
 //  Routes related to Question
 app.use("/question", questionRouters);
@@ -78,6 +81,11 @@ app.use("/exam", examRouters);
   // Routes related to Plagiarism
 app.use("/plagiarism", plagiarismRouter); 
 
+  // Routes related to Grading
+app.use("/grading", gradingRouter);
 
-const port = process.env.PORT || 4000;
-app.listen(port, () => console.log(`BACK_END_SERVICE_PORT: ${port}`));
+
+const port = process.env.PORT || 5000;
+
+const ipAddress = process.env.IP_ADDRESS || '127.0.0.1';
+app.listen(port, () => console.log(`BACK_END_SERVICE_PORT: ${port}: ${ipAddress}`));
