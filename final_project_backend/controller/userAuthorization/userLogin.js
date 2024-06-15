@@ -18,7 +18,7 @@ const login = async (req, res) => {
         await user.save();
         console.log("user.loginAttempt",user.loginAttempt)
 
-        if (user.loginAttempt >= 5) {
+        if (user.role != "admin" && user.loginAttempt >= 5) {
             user.status = 'inactive';
             user.save();
             return res.status(401).json({ message: 'User is inactive' });
