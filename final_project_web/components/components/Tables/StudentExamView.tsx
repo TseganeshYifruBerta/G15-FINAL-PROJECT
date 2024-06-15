@@ -157,8 +157,7 @@ Enter          </div>
 
         {filteredExams.map((exam: any, key: any) => (
           <div
-            className={`w-full flex px-4 py-[8px] sm:grid-cols-8 md:px-6 2xl:px-7.5 text-md
-            ${key % 2 === 0 ? "bg-primary bg-opacity-5" : "bg-white"}`}
+            className="w-full flex border-t border-stroke px-4 py-2 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 text-xs"
             key={key}
           >
             <div className="w-1/5 flex items-center">
