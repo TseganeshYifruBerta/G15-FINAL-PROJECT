@@ -45,6 +45,11 @@ const navigations: any = {
       name: "Exams",
       icon: IoFolderOpenOutline,
     },
+    {
+      href: "/plagiarism/plagiarism",
+      name: "Plagiarism",
+      icon: MdOutlineTopic,
+    },
   ],
   student: [
     {
@@ -246,7 +251,7 @@ useEffect(() => {
                           activeTab == item.name
                             ? "bg-primary text-primary bg-opacity-30"
                             : "text-gray-700 hover:text-primary hover:bg-gray-100 transition-transform duration-200 ease-in-out transform hover:scale-105",
-                          "group flex gap-x-3 rounded-xl text-sm leading-6 font-medium h-full w-full pt-2 px-2"
+                          "group flex gap-x-3 items-center rounded-xl text-sm leading-6 font-medium h-full w-full pt-2 px-2"
                         )}
                       >
                         <item.icon
