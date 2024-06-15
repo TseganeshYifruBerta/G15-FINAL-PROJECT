@@ -108,10 +108,10 @@ setIsLoading(true);
   return (
     <div className="relative">
       <button
-        className="border rounded-full text-white bg-primary p-2 px-6 transition duration-300 mr-10"
+        className="py-3 lg:py-4 px-12 lg:px-16 text-white font-semibold rounded-lg bg-[#7983FB] hover:shadow-orange-md transition-all outline-none"
         onClick={() => setShowModal(true)}
       >
-        Login
+        Get Started
       </button>
       {/* Modal */}
       {showModal && (

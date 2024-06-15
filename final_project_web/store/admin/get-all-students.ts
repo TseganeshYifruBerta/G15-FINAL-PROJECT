@@ -22,13 +22,13 @@ export type Section = {
       id: number;
       updateData: Partial<Student>;
     }
-    
+
     interface AddSectionsParams{
       userId?: string;
       sections: string;
     }
-    
-     
+
+
     export const fetchAllStudents = async (token: string | null): Promise<StudentApiResponse> => {
       try {
         const response = await fetch(
@@ -64,11 +64,11 @@ export type Section = {
           },
           body: JSON.stringify(updateData),
         });
-    
+
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-    
+
         const data = await response.json();
         return data;
       } catch (error) {
@@ -76,14 +76,14 @@ export type Section = {
         throw error;
       }
     };
-    
-   
-    
+
+
+
     export const addSections = async (token: string | null,{ userId, sections }: { userId: string, sections: string }): Promise<any> => {
       try {
         console.log("Sending payload to server:", JSON.stringify({ userId, sections }));
 
-    
+
         const response = await fetch(`${URL}/upload/AddSections`, {
           method: "POST",
           headers: {
@@ -102,7 +102,7 @@ export type Section = {
         throw error;
       }
     };
-    
+
     export const deleteSection = async (token: string | null, sectionId: number): Promise<any> => {
       try {
         const response = await fetch(
@@ -124,10 +124,10 @@ export type Section = {
         throw error;
       }
     };
-    
+
     export const deleteUser = async ( token: string | null, id: number): Promise<any> => {
       try {
-        
+
         const response = await fetch(`${URL}/upload/deleteUser/${id}`, {
           method: "DELETE",
           headers: {
@@ -148,7 +148,7 @@ export type Section = {
       if (!token) {
           throw new Error("Authentication token not found");
       }
-  
+
       try {
           const response = await fetch(
             `${URL}/activateUser/activateUser`,
@@ -161,17 +161,16 @@ export type Section = {
               body: JSON.stringify({ userId }),
             }
           );
-  
+
           const data = await response.json();
-  
+
           if (!response.ok) {
               throw new Error(data.message || 'Failed to activate user');
           }
-  
+
           return data; // This might include some user details and new password
       } catch (error) {
           console.error('Error activating user:', error);
           throw error; // Rethrow the error to be handled by the caller
       }
   };
-  

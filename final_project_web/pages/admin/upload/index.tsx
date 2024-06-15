@@ -15,8 +15,8 @@ interface FileForm {
 
 const Upload: React.FC<InjectedFormProps<FileForm>> = ({ handleSubmit }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  
-  
+
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0];
@@ -43,17 +43,17 @@ const Upload: React.FC<InjectedFormProps<FileForm>> = ({ handleSubmit }) => {
         console.error("File upload failed:", error);
         showToast('File upload failed: ' + (error as Error).message, 'error');
       }
-      
+
     }
   };
 
   return (
     <>
-   
+
     <form onSubmit={handleSubmit(onSubmit)}>
-       
+
         <main className="px-4 text-center flex flex-col gap-2">
-       
+
         <div className="flex flex-col items-center justify-center h-screen">
         <div className="mt-2 w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 mx-auto h-screen"> 
          <div className="mt-8 mx-auto p-6 max-w-md bg-[#7983FB] bg-opacity-10 rounded-xl shadow-xl mb-20">
@@ -84,9 +84,9 @@ const Upload: React.FC<InjectedFormProps<FileForm>> = ({ handleSubmit }) => {
                         <span className="font-medium text-gray-900">
                           -------------OR-------------
                         </span>{" "}
-                        
+
                       </p>
-                      
+
                 <label
                   htmlFor="file-input"
                   className="bg-[#7983FB] hover:bg-[rgb(145,154,243)] text-white py-2 mt-8 px-4 rounded-2xl cursor-pointer"
@@ -97,7 +97,7 @@ const Upload: React.FC<InjectedFormProps<FileForm>> = ({ handleSubmit }) => {
 
                   </div>
                 </div>
-               
+
               </div>
               <p className="mt-2 text-center text-gray-600">
         {selectedFile && <span className="font-medium text-gray-600">{selectedFile.name}</span>}
@@ -109,23 +109,23 @@ const Upload: React.FC<InjectedFormProps<FileForm>> = ({ handleSubmit }) => {
               >
                 Upload
               </button>
-              <Link href='/upload'>
+
                 <button className="ml-4 bg-[#7983FB] bg-opacity-30 rounded-xl hover:bg-[#919AF3] text-black py-2 px-4 shadow-xl">
                   Cancel
                 </button>
-              </Link>
-            </div>
-                
-    
-           </div>
-           
 
-               
+            </div>
+
+
+           </div>
+
+
+
           </div> 
-      
+
       </main>
     </form>
-    
+
     </>
   );
 };
