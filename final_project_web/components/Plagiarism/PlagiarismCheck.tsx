@@ -144,7 +144,7 @@ useEffect(() => {
             <p>Instruction</p>
           </div>
           <div className="col-span-1 flex items-center">
-            <p>Date and Time</p>
+            <p>Date</p>
           </div>
           <div className="col-span-1 flex items-center">
             <p>Status</p>
@@ -163,7 +163,7 @@ useEffect(() => {
           examId={exam.examData.id}
           title={exam.examData.title}
           instruction={exam.examData.instruction}
-          date_and_time={exam.examData.date_and_time}
+          date_and_time={exam.examData.examDate}
           status={exam.examData.status}
           tag={exam.examData.tag}
           duration={exam.examData.duration}

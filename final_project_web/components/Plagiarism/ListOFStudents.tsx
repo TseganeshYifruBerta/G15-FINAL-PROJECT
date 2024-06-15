@@ -33,7 +33,7 @@ const AllStudentsInPLagiarism: React.FC<AllStudentsProps> = ({
  
 
   const modifiedData = Students?.map((student: any) => {
-    const date = new Date(student.createdAt);
+    const date = new Date(student.newUser.createdAt);
     const dayOfWeek = days[date.getDay()];
     const time = date.toLocaleTimeString();
     const dateFormat = `${dayOfWeek}, ${time}, ${date.getDate()}/${
@@ -47,7 +47,7 @@ const AllStudentsInPLagiarism: React.FC<AllStudentsProps> = ({
     };
   });
   const filteredStudents = modifiedData?.filter((student: any) =>
-    student.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+    student.newUser.fullName.toLowerCase().includes(searchTerm.toLowerCase())
   );
  
 
@@ -90,28 +90,28 @@ const AllStudentsInPLagiarism: React.FC<AllStudentsProps> = ({
       )}
 
       {filteredStudents.map((student: any, key: any) => (
-        <Link href={`/plagiarism/question/${student.id}/${examId}`} key={student.id}>
+        <Link href={`/plagiarism/question/${student.newUser.id}/${examId}`} key={student.newUser.id}>
         <div
           className="grid grid-cols-6  px-4 py-2 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 text-xs"
           key={key}
         >
           <div className="col-span-2 flex items-center">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-              <p className=" text-black dark:text-white">{student.fullName}</p>
+              <p className=" text-black dark:text-white">{student.newUser.fullName}</p>
             </div>
           </div>
           <div className="col-span-2 hidden items-center sm:flex">
-            <p className=" text-black dark:text-white">{student.email}</p>
+            <p className=" text-black dark:text-white">{student.newUser.email}</p>
           </div>
           <div className="col-span-1 flex items-center">
-            <p className=" text-black dark:text-white">{student.userId}</p>
+            <p className=" text-black dark:text-white">{student.newUser.userId}</p>
           </div>
           <div className="col-span-1 flex items-center">
-            <p className="text-sm text-meta-3">{student.status}</p>
+            <p className="text-sm text-meta-3">{student.newUser.status}</p>
           </div>
          
           <div className="col-span-1 flex items-center">
-            <p className=" text-black dark:text-white">{student.createdAt}</p>
+            <p className=" text-black dark:text-white">{student.newUser.createdAt}</p>
           </div>
         </div>
         </Link>

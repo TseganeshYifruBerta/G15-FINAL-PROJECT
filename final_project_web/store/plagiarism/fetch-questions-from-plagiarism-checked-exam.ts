@@ -20,11 +20,13 @@ export const fetchQuestionsFromPlagiarismCheckedExamApi = createApi({
   endpoints: (builder) => ({
     fetchQuestionsFromPlagiarismCheckedExam: builder.query({
       query: (params) => {
-        const {  examId } = params;
+        const {  examId, studentId} = params;
+
         let url = `${URL}/plagiarism/fetchListOfQuestionsByExamId`;
         const queryParams = [];
 
         queryParams.push(`${examId}`);
+        queryParams.push(`${studentId}`);
 
         return {
           url: queryParams.length > 0 ? `${url}/${queryParams.join("/")}` : url,

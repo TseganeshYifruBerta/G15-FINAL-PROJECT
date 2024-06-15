@@ -57,6 +57,7 @@ function AllPlagiarizedSection() {
                 studentAnswer = {examQuestionsAnswer.response}
                 questionTitle =  {examQuestionsAnswer.questionDetail.title}
                 submittedDate = {examQuestionsAnswer.submittedDate}
+                fullName = {examQuestionsAnswer.name}
                 
             />
                       

@@ -6,7 +6,8 @@ interface AllTaggedCodesAndStudent {
     StudentsAndTaggedCode: any,
     studentAnswer: string,
     questionTitle: string,
-    submittedDate: string
+    submittedDate: string,
+    fullName: string
 
 
 }
@@ -16,13 +17,16 @@ const AllStudentsAndTaggedCodeInPLagiarism: React.FC<AllTaggedCodesAndStudent> =
     StudentsAndTaggedCode,
     studentAnswer,
     questionTitle,
-    submittedDate
+    submittedDate,
+    fullName
 }) => {
     const answerLines = studentAnswer.split("\n");
     return (
         <div className="dark:bg-boxdark min-h-screen p-6">
             <h4 className="text-xl font-semibold mb-4">{questionTitle}</h4>
             <p className="text-gray-500 mb-6">Submitted on: {submittedDate}</p>
+            <p className="text-gray-500 mb-6">Submitted by: <b>{fullName}</b></p>
+
             <div className="flex gap-6">
                 {/* Left Side */}
                 <div className="flex-grow bg-white p-6 shadow-md rounded overflow-hidden">
@@ -44,7 +48,7 @@ const AllStudentsAndTaggedCodeInPLagiarism: React.FC<AllTaggedCodesAndStudent> =
                                 key={index}
                                 fullName={student.newUser.fullName}
                                 section={student.newUser.SectionsOfUser[0]?.section}
-                                taggedCode={student.plagiarismSectionId[0]?.taggedcode}
+                                taggedCode={student.plagiarismSectionId}
                                 percentage={student.percentage}
                             />
                         ))}
