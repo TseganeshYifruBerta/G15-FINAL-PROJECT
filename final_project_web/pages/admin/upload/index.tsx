@@ -109,11 +109,11 @@ const Upload: React.FC<InjectedFormProps<FileForm>> = ({ handleSubmit }) => {
               >
                 Upload
               </button>
-              <Link href='/upload'>
+             
                 <button className="ml-4 bg-[#7983FB] bg-opacity-30 rounded-xl hover:bg-[#919AF3] text-black py-2 px-4 shadow-xl">
                   Cancel
                 </button>
-              </Link>
+              
             </div>
                 
     

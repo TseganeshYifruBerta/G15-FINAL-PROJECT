@@ -311,8 +311,9 @@ interface RenderSectionsProps {
             </button>
         <div className="flex flex-row gap-10">
           
-        <form onSubmit={handleSubmit(onSubmit)} className="w-1/2">
-          <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-1/2 h-[600px] overflow-y-auto scrollbar-hide">
+          <div className="flex-col">
+          <h2 className="text-2xl font-bold text-gray-800 mb-8">
             Edit User
           </h2>
           <div className="grid grid-cols-1 gap-6">
@@ -337,7 +338,7 @@ interface RenderSectionsProps {
               placeholder={student.email || "User ID"}
               iconName={FaEnvelope}
             />
-            <p className="flex items-center"><FaUsers className="text-xl text-gray-700 mr-2"/>Section</p>
+            <p className="flex items-center"><FaUsers className="text-xl text-gray-700 mr-2 ml-2"/>Section</p>
             <FieldArray name="SectionsOfUser" component={RenderSections3}  />
             <Field
               name="role"
@@ -354,26 +355,27 @@ interface RenderSectionsProps {
             </Field>
             
           </div>
+          </div>
           <div className="flex justify-end space-x-4">
            
             <button
               type="submit"
-              className="btn bg-[#7983FB] border-2 hover:bg-[#919AF3] text-white py-2 px-4 rounded-xl font-bold"
+              className="btn bg-[#7983FB] hover:bg-[#919AF3] text-white py-2 px-4 rounded-xl font-bold"
             >
               Submit
             </button>
           </div>
         </form>
-        <div className="w-1/2  ">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6 mt-2">
+        <div className="w-1/2 h-[600px] overflow-y-auto scrollbar-hide ">
+        <h2 className="text-2xl font-bold  text-gray-800 mb-6  ">
            Add Section
           </h2>
         <FieldArray name="NewSections" component={RenderSections} props={{ sections, setSections }} />
         
         
-        <div className="mb-4">
+        <div className="mb-4 h-[600px] overflow-y-auto scrollbar-hide">
 
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6 mt-2">
+        <h2 className="text-2xl font-bold  text-gray-800 mb-6 mt-2">
             Delete Section
           </h2>
         <FieldArray name="SectionsOfUser" component={RenderSections2} props={{ sectionsToDelete, setSectionsToDelete }} />

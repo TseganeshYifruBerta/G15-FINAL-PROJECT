@@ -4,6 +4,7 @@ import ButtonPrimary from "@/components/misc/ButtonPrimary";
 import { motion } from "framer-motion";
 import getScrollAnimation from "@/utils/getScrollAnimation";
 import ScrollAnimationWrapper from "@/components/layout/ScrollAnimationWrapper";
+import SignInSide from "@/pages/signin/indexx";
 
 interface ListUser {
   name: string;
@@ -52,7 +53,7 @@ const Hero: React.FC<HeroProps> = ({
             <p className="text-black-500 mt-4 mb-6">
             Empower Collaboration and Efficiency: Experience Seamless Educational Endeavors with the  ሁሉ <span className="text-[#7983FB]">Code</span>, Your Centralized Solution for Streamlining Organization, Collaboration, and Knowledge Sharing.
             </p>
-            <ButtonPrimary addClass="text-white">Get Started</ButtonPrimary>
+            <SignInSide/>
           </div>
           <div className="flex w-full">
             <motion.div className="h-full w-full" variants={scrollAnimation}>

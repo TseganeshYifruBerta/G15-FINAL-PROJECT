@@ -12,7 +12,7 @@ interface UserProfile {
   gender: string;
   department: string;
   shortBio: string;
-  photoUrl: string;
+
 }
 
 // Define a type for the slice state

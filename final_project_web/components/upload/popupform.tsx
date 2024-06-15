@@ -117,7 +117,7 @@ interface FormValues {
        <div className="w-full "> 
        <div className='flex justify-end items-center'>
   <button
-    className="text-white bg-gradient-to-r from-[rgb(145,154,243)] to-[#7983FB] hover:bg-gradient-to-br font-bold py-2 md:py-2 px-4 md:px-3 rounded-xl flex items-center shadow-xl transition-transform duration-200 ease-in-out transform hover:scale-105 mr-3 text-xs sm:text-sm md:text-base"
+    className="text-white bg-gradient-to-r from-[rgb(145,154,243)] to-[#7983FB] hover:bg-gradient-to-br font-bold py-2 md:py-2 px-4 md:px-3 rounded-xl flex items-center shadow-lg transition-transform duration-200 ease-in-out transform hover:scale-105 mr-3 text-xs sm:text-sm md:text-base"
     onClick={() => setIsOpen(true)}
     aria-label="Add" // Accessible label for the button
   >
@@ -141,18 +141,18 @@ interface FormValues {
            <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="absolute right-3 text-gray-500 hover:text-gray-800"
+                className="absolute right-8 top-4 text-gray-500 hover:text-gray-800"
                 aria-label="Close"
               >
                 <AiOutlineClose size={24} />
           </button>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 ">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 pace-y-4 h-[600px] overflow-y-auto scrollbar-hide">
             <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">Add New User</h2>
             <div className="grid grid-cols-1 gap-2">
               <Field name="fullName" type="text" component={renderField} placeholder="Full Name" iconName={FaUser} />
             <Field name="userId" type="text" component={renderField} placeholder="User ID" iconName={FaIdBadge} />
             <Field name="email" type="email" component={renderField} placeholder="Email" iconName={FaEnvelope} />
-            <p className="flex items-center"><FaUsers className="text-xl text-gray-700 mr-2"/>Section</p>
+            <p className="flex items-center"><FaUsers className="text-xl text-gray-700 mr-2 ml-2"/>Section</p>
             {
               sections.map((section, index) => (
                 <input

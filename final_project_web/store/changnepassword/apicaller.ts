@@ -1,8 +1,14 @@
 // store/apicaller.ts
- const token = localStorage.getItem("token");
+ 
  import { URL } from "../host";
 
-async function changePassword(data: { userId: string, newPassword: string, oldPassword: string }) {
+ export interface ChangePasswordData {
+  userId: number;
+  newPassword: string;
+  oldPassword: string;
+}
+async function changePassword(data: ChangePasswordData) {
+  const token = localStorage.getItem("token");
     try {
         const response = await fetch(`${URL}/changePassword`, {
           method: "POST",
