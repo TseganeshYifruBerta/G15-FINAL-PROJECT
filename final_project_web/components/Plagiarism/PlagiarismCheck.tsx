@@ -8,6 +8,7 @@ import router from "next/router";
 import Image from "next/image";
 import { FiSearch } from "react-icons/fi";
 import Link from "next/link";
+import { AiOutlineClose } from "react-icons/ai";
 
 const PlagiarismCheck: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState("");
@@ -179,8 +180,15 @@ const PlagiarismCheck: React.FC = () => {
             ref={modalRef}
             className="relative top-1/4 mx-auto p-5 h-[250px] w-[250px] md:w-[550px] shadow-lg rounded-md bg-white"
           >
+             <button
+              type="button"
+              onClick={() => setShowModal(false)}
+              className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
+              >
+                  <AiOutlineClose size={24} />
+            </button>
             <div className="mt-3 text-center">
-              <div className="text-2xl font-bold text-gray-600 mb-6">
+              <div className="text-xl font-bold text-gray-600 mb-6">
                 Add Exam To Check Plagiarism
               </div>
               <select
