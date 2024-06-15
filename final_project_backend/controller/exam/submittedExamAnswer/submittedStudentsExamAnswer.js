@@ -14,6 +14,16 @@ const submitExamAnswerByStudent = async (req, res) => {
 
     const examFound = await Exam.findOne({ where: { id: examId } }, { transaction: t });
     const userFound = await User.findOne({ where: { id: userId } }, { transaction: t });
+    formerSubmmision = await studentsExamAnswer.findOne(
+      {where: 
+        {  examId: examId,
+           UserinformationId: userId
+          , examQuestionId: questionId},
+           transaction: t});
+    if(formerSubmmision){
+      await t.rollback();
+      return res.status(400).json({ message: "You have already submitted an answer for this question"});
+    }
     if (!examFound || !userFound) {
       await t.rollback(); 
       return res.status(404).json({ message: "Exam or user not found" });
