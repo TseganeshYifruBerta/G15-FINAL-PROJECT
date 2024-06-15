@@ -7,10 +7,39 @@ import UpcomingExams from '../../components/Dashboard/student/UpcomingExam';
 import Image from 'next/image';
 import Loading from '@/components/common/Loading';
 const jwt = require("jsonwebtoken");
+import { fetchUserProfile, UserProfile2, updateUserProfilePhoto  } from '@/store/account/api_caller';
 
 const Dashboard = () => {
   const [userData, setUserData] = useState({ fullname: '', role: '' });
   const { difficultyData, acceptedSubmissionData, submissions, upcomingExams, isLoading, error } = useDashboardData();
+  const [token, setToken] = useState<string | null>(null);
+  const [userId, setUserId] = useState<number | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile2 | null>(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+        setToken(storedToken);
+        const decodedToken = jwt.decode(storedToken);
+        if (decodedToken && typeof decodedToken === 'object') {
+            setUserId(decodedToken.id); 
+        }
+    }
+}, []);
+useEffect(() => {
+  const fetchData = async (token: string, userId: number) => {
+      try {
+          const data = await fetchUserProfile(token, userId);
+          setUserProfile(data);
+      } catch (error) {
+          console.error('Error fetching user profile:', error);
+      }
+  };
+
+  if (token && userId !== null) {
+      fetchData(token, userId);
+  }
+}, [token, userId]); 
 
     if (isLoading) {
         return <Loading />;
@@ -31,13 +60,13 @@ const Dashboard = () => {
         <Image
                 width={64}
                 height={64}
-                src="/images/pro2.png"
+                src={userProfile?.photoUrl || "/assets/pro2.png"}
                 alt=""
                 className="inline-block bg-white border-white border-4 ml-[36px] mt-[-78px] h-36 w-36 p-[-4px] rounded-full ring-2 ring-white text-primary w-20 h-20"
               />
           <div className='flex flex-col'>
-          <h2 className='text-lg text-white mt-[-54px]'>{userData.fullname}</h2>
-          <p className='text-sm  text-white'>{userData.role}</p>
+          <h2 className='text-lg text-white mt-[-54px]'>{userProfile?.fullName || "Name"}</h2>
+          <p className='text-sm  text-white'>{userProfile?.role || "Role"}</p>
         </div>
           
         </div>
