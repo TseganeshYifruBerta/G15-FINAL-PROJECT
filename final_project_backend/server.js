@@ -85,7 +85,7 @@ app.use("/plagiarism", plagiarismRouter);
 app.use("/grading", gradingRouter);
 
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 5000;
 
 const ipAddress = process.env.IP_ADDRESS || '127.0.0.1';
 app.listen(port, () => console.log(`BACK_END_SERVICE_PORT: ${port}: ${ipAddress}`));

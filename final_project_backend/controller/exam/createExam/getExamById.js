@@ -11,7 +11,7 @@ const studentsExamAnswer = require("../../../models/exam/studentsExamAnswer");
 // Function to get an exam by ID along with associated questions
 const getExamByIdWithQuestions = async (req, res) => {
     try {
-        const { examId , } = req.params; // The exam's ID
+        const { examId } = req.params; // The exam's ID
         const exam = await Exam.findByPk(examId);
        
         
