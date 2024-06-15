@@ -49,6 +49,7 @@
     "mdi-material-ui": "^7.8.0",
     "next": "14.0.3",
     "next-auth": "^4.24.5",
+    "next-cloudinary": "^6.6.2",
     "react": "^18.2.0",
     "react-apexcharts": "1.4.1",
     "react-dom": "^18.2.0",
