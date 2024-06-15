@@ -18,7 +18,7 @@ const verifyRoles = require("../../middleware/verifyRoles");
 const {getAllExamtakeStudent,getSubmissionOfstudentByQuestionId} = require("../../controller/exam/submittedExamAnswer/getAllExamtakeStudent");
 const e = require("express");
 const createdExamDetailWithSolution = require("../../controller/exam/createExam/createdExamDetailWithSolution");
-const getAllEndedExamsByStudentId = require("../../controller/exam/createExam/getAllEndedExamByStudentId");
+const getAllExamsByStudentId = require("../../controller/exam/createExam/getAllEndedExamByStudentId");
 
 examRouters.post("/AddTestcases", AddTestcases);
 examRouters.delete("/DeleteTestcases/:testCasesId",DeleteTestcases);
@@ -53,7 +53,7 @@ examRouters.put("/endExam/:id", endStartedExam);
 
 examRouters.get("/getAllCreatedExams", getAllCreatedExams);
 examRouters.get("/getAllCreatedExamByTeacherId/:teacherId", getAllCreatedExamByTeacherId);
-examRouters.get("/getAllEndedExamsByStudentId/:studentId",getAllEndedExamsByStudentId)
+examRouters.get("/getAllExamsByStudentId/:studentId",getAllExamsByStudentId)
 
 // detail of created exam and exam question
 examRouters.get("/examQuestionDetailById/:examQuestionId", examQuestionDetailById);
