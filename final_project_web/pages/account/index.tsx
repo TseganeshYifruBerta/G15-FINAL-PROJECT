@@ -11,6 +11,8 @@ import { fetchUserProfile, UserProfile2, updateUserProfilePhoto } from '@/store/
 import { showToast } from '@/components/popup';
 import { CldUploadWidget, getCldImageUrl } from 'next-cloudinary';
 const jwt = require("jsonwebtoken");
+const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+
 
 config.autoAddCss = false;
 
