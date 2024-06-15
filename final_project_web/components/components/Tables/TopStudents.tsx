@@ -3,6 +3,7 @@ interface TopStudentsProps {
   topstudents: any;
 }
 const TopStudents: React.FC<TopStudentsProps> = ({ topstudents }) => {
+  console.log(topstudents, "topstudents")
   return (
     <div className="rounded-xl bg-primary bg-opacity-5 h-[450px] px-5 pb-2.5 pt-6 shadow-lg dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
@@ -53,16 +54,16 @@ const TopStudents: React.FC<TopStudentsProps> = ({ topstudents }) => {
             >
               <div className="flex items-center gap-3 p-2.5 xl:p-5">
                 <p className="hidden text-black dark:text-white sm:block">
-                  {student.fullName}
+                  Fenet
                 </p>
               </div>
 
               <div className="flex items-center justify-center p-2.5 xl:p-5">
-                <p className="text-black dark:text-white">{student.userId}</p>
+                <p className="text-black dark:text-white">UGR/1111/11</p>
               </div>
 
               <div className="flex items-center justify-center p-2.5 xl:p-5">
-                <p className="text-meta-3">10</p>
+                <p className="text-meta-3">{student.acceptedCount}</p>
               </div>
 
               <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">

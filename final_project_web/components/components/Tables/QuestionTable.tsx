@@ -6,7 +6,6 @@ import UseQuestionsTable from "./UseQuestionsTable";
 import TopSovedQuestions from "../Chat/TopSolvedCard";
 import { useGetAllExamsQuery } from "@/store/exam/get-all-exam-api";
 import { useGetAllQuestionsQuery } from "@/store/question/get-all-questions";
-import ExamList from "../Chat/ExamList";
 import UseExamsTable from "./UseExamsTable";
 import Loading from "@/components/common/Loading";
 import FetchError from "@/components/common/Error";

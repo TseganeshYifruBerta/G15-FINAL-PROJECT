@@ -17,6 +17,7 @@ import examUploadReducer from './exam/upload-exam-slice'
 import examAnswerReducer from './exam/upload-exam-question-slice'
 import { questionApi } from "./question/get-all-questions";
 import { getSubmissionDetailByIdApi } from "./submissions/get-submission-detail-by-id-api";
+import { getPassKeyApi } from "./exam/pass-key-api";
 import { getQuestionDetalApi } from "./question/get-questionById-api";
 import { getAllSubmissionsByIdApi } from "./submissions/get-all-submissions-by-id";
 import { getAcceptedQuestionByIdApi } from "./profile/get-accepted-wrong-question-by-student-id";
@@ -64,11 +65,11 @@ export const store = configureStore({
     examanswerupload:examAnswerReducer,
     login: loginReducer,
     addtestcase: addTestcaseReducer,
-addexamsolution: addExamSolutionReducer,
+    addexamsolution: addExamSolutionReducer,
     addexamtestcase:addExamTestcaseReducer,
     checkPlagiarismByExamId: PlagiarismCheckSliceReducer,
     uploadexam: examUploadReducer,
-
+[getPassKeyApi.reducerPath]: getPassKeyApi.reducer,
     [getQuestionDetalApi.reducerPath]: getQuestionDetalApi.reducer,
     [questionApi.reducerPath]: questionApi.reducer,
     [getSubmissionDetailByIdApi.reducerPath]:
@@ -130,6 +131,7 @@ addexamsolution: addExamSolutionReducer,
       .concat(getCountCodeSubmissionsForLastMonthApi.middleware)
       .concat(upcomingExamsApi.middleware)
       .concat(countAcceptedSubmissionsperDifficultyApi.middleware)
+      .concat(getPassKeyApi.middleware),
      
 });
 

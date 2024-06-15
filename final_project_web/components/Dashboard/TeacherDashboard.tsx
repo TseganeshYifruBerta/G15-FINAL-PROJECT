@@ -65,7 +65,7 @@ const TeacherDashboard: React.FC = () => {
 //         }
 //     ]
 // }
-
+console.log(topStudents, "topstudentsssssssssssssssssss");
 
   return (
     <div className="w-full min-h-screen justify-center">

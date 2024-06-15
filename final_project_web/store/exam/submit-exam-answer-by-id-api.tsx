@@ -1,4 +1,6 @@
+const jwt = require("jsonwebtoken");
 import { testCaseProps } from "@/components/questions/QuestionUpload";
+
 import { URL } from "../host";
 
 export type ExamAnswerUploadFormData = {
@@ -10,6 +12,10 @@ export type ExamAnswerUploadFormData = {
 
 export const uploadexamanswer = async (formData: ExamAnswerUploadFormData) => {
   const token = localStorage.getItem("token");
+const decoded = jwt.decode(token);
+const userId = decoded ? (decoded as any).id : "";
+formData.userId = userId;
+console.log(formData, "form data");
 
   try {
     const response = await fetch(`${URL}/exam/submitExamAnswerByStudent`, {
@@ -21,7 +27,6 @@ export const uploadexamanswer = async (formData: ExamAnswerUploadFormData) => {
       },
       body: JSON.stringify(formData),
     });
-
     const data = await response.json();
     console.log("Success:", data);
     return data;
