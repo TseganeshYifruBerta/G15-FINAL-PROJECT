@@ -28,10 +28,6 @@ const ExamQuestion = sequelize.define("examQuestion", {
     allowNull: false,
 
   },
-  gradeValue:{
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   example: {
     type: DataTypes.STRING,
     allowNull: false,

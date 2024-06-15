@@ -36,6 +36,10 @@ const criteria = sequelize.define("criteriaExamQuestion", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  gradeValue: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
  
 
 });

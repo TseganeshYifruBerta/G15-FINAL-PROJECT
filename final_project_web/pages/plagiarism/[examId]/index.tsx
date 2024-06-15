@@ -27,7 +27,7 @@ function AllStudentsFromPlagiarismCheckedExam() {
         <div>
             
             <AllStudentsInPLagiarism
-                Students = {allStudentData.allStudentData}
+                Students = {allStudentData.AllPlagiarizedStudents}
                 examId = {examId}
                 
             />
