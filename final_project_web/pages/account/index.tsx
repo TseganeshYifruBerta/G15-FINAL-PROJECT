@@ -13,6 +13,7 @@ import { CldUploadWidget, getCldImageUrl } from 'next-cloudinary';
 const jwt = require("jsonwebtoken");
 const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 
+console.log('Cloudinary Cloud Name:', process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME);
 
 config.autoAddCss = false;
 
