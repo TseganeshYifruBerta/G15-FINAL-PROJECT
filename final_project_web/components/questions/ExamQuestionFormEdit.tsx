@@ -10,8 +10,14 @@ import {
 } from "@/store/exam/upload-exam-question-api";
 import { testCaseProps } from "./QuestionUpload";
 import { useUpdateExamQuestionMutation } from "@/store/exam/get-all-exam-api";
-import { AddExamTestcaseFormData, addexamtestcase } from "@/store/question-upload/add-exam-testcase-api";
-import { AddExamSolutionFormData, addexamsolution } from "@/store/question-upload/add-solution-api";
+import {
+  AddExamTestcaseFormData,
+  addexamtestcase,
+} from "@/store/question-upload/add-exam-testcase-api";
+import {
+  AddExamSolutionFormData,
+  addexamsolution,
+} from "@/store/question-upload/add-solution-api";
 
 export const metadata: Metadata = {
   title: "Next.js Form Layout | TailAdmin - Next.js Dashboard Template",
@@ -28,6 +34,7 @@ export type ExamQuestionFormEditProps = {
   EditedTag: string;
   EditedChapter: string;
   questionId: string;
+  plagiarismRatio: string;
 };
 const ExamQuestionFormEdit: React.FC<ExamQuestionFormEditProps> = ({
   EditedTitle,
@@ -39,6 +46,7 @@ const ExamQuestionFormEdit: React.FC<ExamQuestionFormEditProps> = ({
   EditedTag,
   EditedTestcases,
   questionId,
+  plagiarismRatio,
 }) => {
   const router = useRouter();
   const [questionTitle, setQuestionTitle] = useState(EditedTitle);
@@ -55,6 +63,7 @@ const ExamQuestionFormEdit: React.FC<ExamQuestionFormEditProps> = ({
   const [addedTestCases, setAddedTestCases] = useState<
     Array<{ input: string; output: string }>
   >([]);
+  const [plagiarismRatioo, setPlagiarismRatio] = useState(plagiarismRatio);
 
   const [addedSolution, setAddedSolution] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -68,9 +77,9 @@ const ExamQuestionFormEdit: React.FC<ExamQuestionFormEditProps> = ({
     setIsOptionSelected(true);
   };
 
-   const handleAddSolution = () => {
-     setAddedSolution([...addedSolution, ""]);
-   };
+  const handleAddSolution = () => {
+    setAddedSolution([...addedSolution, ""]);
+  };
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -92,6 +101,7 @@ const ExamQuestionFormEdit: React.FC<ExamQuestionFormEditProps> = ({
     chapter: chapter,
     tag: selectedTag,
     questionId: questionId,
+    plagiarismRatio: plagiarismRatioo,
   };
   const [updateExamQuestion, { isLoading: isUpdating }] =
     useUpdateExamQuestionMutation();
@@ -124,6 +134,7 @@ const ExamQuestionFormEdit: React.FC<ExamQuestionFormEditProps> = ({
       if (!questionDifficulty) newErrors.questionDifficulty = true;
       if (!chapter) newErrors.chapter = true;
       if (!selectedTag) newErrors.selectedTag = true;
+      if (!plagiarismRatio) newErrors.plagiarism = true;
     } else if (currentStep === 2) {
       if (!questionDescription) newErrors.questionDescription = true;
       if (!examples) newErrors.examples = true;
@@ -152,46 +163,48 @@ const ExamQuestionFormEdit: React.FC<ExamQuestionFormEditProps> = ({
     setCurrentStep((prevStep) => prevStep - 1);
   };
 
-
   const newtestcases = {
     testCases: addedTestCases,
     examId: questionId,
   };
-const handleTestcaseAdd = async (event: any) => {
-  console.log(newtestcases, "newtestcases");
-  event.preventDefault();
-  try {
-    const data = await addexamtestcase(newtestcases as AddExamTestcaseFormData);
-    console.log(data, "testcases added successful");
-    showToast("testcases added successful", "success");
-  } catch (error) {
-    console.error("Login error:", error);
-    console.log(values);
+  const handleTestcaseAdd = async (event: any) => {
+    console.log(newtestcases, "newtestcases");
+    event.preventDefault();
+    try {
+      const data = await addexamtestcase(
+        newtestcases as AddExamTestcaseFormData
+      );
+      console.log(data, "testcases added successful");
+      showToast("testcases added successful", "success");
+    } catch (error) {
+      console.error("Login error:", error);
+      console.log(values);
 
-    showToast("Login error: " + (error as Error).message, "error");
-  }
-};
-const newsolution = {
+      showToast("Login error: " + (error as Error).message, "error");
+    }
+  };
+  const newsolution = {
     content: addedSolution,
     examQuestionId: questionId,
-  }
+  };
 
-const handleSolutionAdd = async (event: any) => {
-  console.log(newsolution, "newsolution");
-  event.preventDefault();
-  try {
-    const data = await addexamsolution(newsolution as AddExamSolutionFormData);
-    console.log(data, "solution added successful");
-    showToast("solution added successful", "success");
-  } catch (error) {
-    console.error("Login error:", error);
-    console.log(values);
+  const handleSolutionAdd = async (event: any) => {
+    console.log(newsolution, "newsolution");
+    event.preventDefault();
+    try {
+      const data = await addexamsolution(
+        newsolution as AddExamSolutionFormData
+      );
+      console.log(data, "solution added successful");
+      showToast("solution added successful", "success");
+    } catch (error) {
+      console.error("Login error:", error);
+      console.log(values);
 
-    showToast("Login error: " + (error as Error).message, "error");
-  }
-};
+      showToast("Login error: " + (error as Error).message, "error");
+    }
+  };
 
-  
   return (
     <div className="">
       <div>
@@ -276,6 +289,29 @@ const handleSolutionAdd = async (event: any) => {
                   </select>
                   {errors.selectedTag && (
                     <span className="text-red-500">Tag is required</span>
+                  )}
+                </div>
+
+                <div className="w-2/5 mr-2 mb-4">
+                  <label className="block mb-2 font-medium">
+                    Plagiarism Ratio
+                  </label>
+                  <label className="block mb-2 text-sm text-gray-700">
+                    Enter the plagiarism ratio for the question
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="Plagiarism Ratio"
+                    required
+                    min="1"
+                    value={plagiarismRatioo}
+                    onChange={(e) => setPlagiarismRatio(e.target.value)}
+                    className={`w-full rounded-lg border-2 focus:border px-4 py-2 focus:border-primary ${
+                      errors.plagiarism ? "border-red-800" : "border-gray-300"
+                    } focus:outline-none focus:ring-1 focus:ring-primary`}
+                  />
+                  {errors.chapter && (
+                    <span className="text-red-500">Chapter is required</span>
                   )}
                 </div>
                 <div className="mb-4">
@@ -610,6 +646,12 @@ const handleSolutionAdd = async (event: any) => {
                 <div className="mb-4">
                   <h4 className="font-medium text-gray-700">Tag</h4>
                   <p>{selectedTag}</p>
+                </div>
+                <div className="mb-4">
+                  <h4 className="font-medium text-gray-700">
+                    Plagiarism Ratio
+                  </h4>
+                  <p>{plagiarismRatioo}</p>
                 </div>
                 <div className="mb-4">
                   <h4 className="font-medium text-gray-700">Description</h4>

@@ -2,10 +2,16 @@ interface QuestionSetProps {
   questionTitle: string;
   questionDescription: string;
   questionExample: string;
-  difficulty:string
+  difficulty: string;
   questionId: string;
 }
-const QuestionSet: React.FC<QuestionSetProps> = ({questionId, questionTitle, questionDescription, questionExample, difficulty}) => {
+const QuestionSet: React.FC<QuestionSetProps> = ({
+  questionId,
+  questionTitle,
+  questionDescription,
+  questionExample,
+  difficulty,
+}) => {
   return (
     <div className="col-span-12 rounded-md bg-white px-5 pb-5 pt-7.5 shadow-lg dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8  h-[550px]">
       <div className=" border-primary mb-6">
@@ -30,12 +36,18 @@ const QuestionSet: React.FC<QuestionSetProps> = ({questionId, questionTitle, que
       </div>
 
       <div className="pb-16 rounded-lg shadow-1 px-2 pt-2 ">
-        <div className="text-lg text-gray-700 text-opacity-80  font-semibold py-2">Description :</div>
+        <div className="text-lg text-gray-700 text-opacity-80  font-semibold py-2">
+          Description :
+        </div>
         <div>
           <p className="pb-2 text-sm">{questionDescription}</p>
         </div>
       </div>
       <div className="mt-2 text-sm bg-primary bg-opacity-20 pb-10 pt-2 px-2 rounded-lg">
+        <div className="text-sm text-gray-700 text-opacity-80  font-semibold py-2">
+          Example :
+        </div>
+
         <p>{questionExample}</p>
       </div>
     </div>
