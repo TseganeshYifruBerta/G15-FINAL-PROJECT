@@ -195,13 +195,17 @@ const startCreatedExam = async (req, res) => {
     if (!exam) {
       return res.status(404).json({ error: 'Exam not found' });
     }
-   
-    // Update the exam status to "running"
+   if (exam.status == "running" || exam.status == "end"){
+    return res.status(400).json({message:"restrict for ended and running exam"})
+   }
 
+
+    // Update the exam status to "running"
+    
       const now = new Date()
       const start_time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
       await exam.update({ status: 'running' , start_time: start_time});
-  
+      
     // Schedule to update the status to "ended" after the exam's duration
     const durationInMilliseconds = exam.duration * 60000; // Convert duration from minutes to milliseconds
     setTimeout(async () => {
