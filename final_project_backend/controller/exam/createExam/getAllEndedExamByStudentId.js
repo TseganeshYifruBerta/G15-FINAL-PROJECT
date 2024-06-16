@@ -31,7 +31,7 @@ const getAllExamsByStudentId = async (req, res) => {
           as: 'selectedSectionsForExam',
           where: { sections: userWithSection.SectionsOfUser[0].section }
       }],
-      raw: true,
+      // raw: true,
   });
 
 
