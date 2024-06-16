@@ -9,6 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Loading from "@/components/common/Loading";
+import { useStartExamByIdQuery } from "@/store/exam/get-all-exam-by-id";
 
 interface ExamsProps {
   allexamlist: any;
@@ -17,7 +18,14 @@ const ListOfExam: React.FC<ExamsProps> = ({ allexamlist }) => {
   const router = useRouter();
   const [teacherId, setTeacherId] = useState("");
   const [chapterStrings, setChapterStrings] = useState("");
+  const [Loading, setIsLoading] = useState(false);
+ const [submitParams, setSubmitParams] = useState<{
+   examId: string;
+ } | null>(null);
 
+const { data, error, isFetching } = useStartExamByIdQuery(submitParams, {
+  skip: !submitParams, // Skip the query if submitParams is null
+});
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -44,27 +52,54 @@ const ListOfExam: React.FC<ExamsProps> = ({ allexamlist }) => {
   };
 
   console.log(allexamlist, "allexamlist");
-  const chapterString = () => {
+  const chapterString = (value:any) => {
     let chapterString = "";
-    console.log(allexamlist[0].selectedChapters, "hel");
-    allexamlist[0].selectedSectionsForExam.map((chapter: any, key: any) => {
-      chapterString += chapter.sections;
-      if (key != allexamlist[0].selectedSectionsForExam.length - 1) {
+    allexamlist[value].selectedChapters.map((chapter: any, key: any) => {
+      chapterString += chapter.chapter;
+      if (key != allexamlist[value].selectedChapters.length - 1) {
         chapterString += ", ";
       }
     });
+    if (!chapterString) {
+      return "-"
+    }
     return chapterString;
   };
+//  const onStart = async (event: any) => {
+//    event.preventDefault();
+//    setLoading(true); // Set loading to true when the form is submitted
 
-  const sectionString = () => {
+//    try {
+//      const data = await useStartExamByIdQuery(
+//        values as ExamQuestionUploadFormData
+//      );
+//      showToast("Upload successful", "success");
+//      router.push("/teacher/questions");
+//    } catch (error) {
+//      console.error("Upload error:", error);
+//      showToast("Upload error: " + (error as Error).message, "error");
+//    }
+//  };
+  const sectionString = (value:any) => {
     let sectionString = "";
-    allexamlist[0].selectedChapters.map((chapter: any, key: any) => {
-      sectionString += chapter.chapter;
-      if (key != allexamlist[0].selectedChapters.length - 1) {
+    allexamlist[value].selectedSectionsForExam.map((section: any, key: any) => {
+      sectionString += section.sections;
+      if (key != allexamlist[value].selectedSectionsForExam.length - 1) {
         sectionString += ", ";
       }
     });
+    if(!sectionString){
+      return "-"
+    }
     return sectionString;
+  };
+
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>, examId:string) => {
+    event.preventDefault();
+   
+    setIsLoading(true); // Replace with actual exam ID
+    setSubmitParams({ examId });
   };
   return (
     <div className="col-span-12 rounded-sm  bg-primary bg-opacity-5 shadow-md xl:col-span-4 ">
@@ -117,6 +152,9 @@ const ListOfExam: React.FC<ExamsProps> = ({ allexamlist }) => {
                 <div className="w-1/2">
                   <p className="text-sm  dark:text-white">Actions</p>
                 </div>
+                <div className="w-1/2">
+                  <p className="text-sm  dark:text-white">Start Exam</p>
+                </div>
               </div>
             </div>
           </div>
@@ -157,7 +195,7 @@ const ListOfExam: React.FC<ExamsProps> = ({ allexamlist }) => {
                   </div>
                   <div className="w-1/2">
                     <p className=" text-gray-500 dark:text-white">
-                      {chapterString()}
+                      {chapterString(key)}
                     </p>
                   </div>
                   <div className="w-1/2">
@@ -165,7 +203,7 @@ const ListOfExam: React.FC<ExamsProps> = ({ allexamlist }) => {
                   </div>
                   <div className="w-1/2">
                     <p className=" text-gray-500 dark:text-white">
-                      {sectionString()}
+                      {sectionString(key)}
                     </p>
                   </div>
                   <div className="w-1/2">
@@ -257,7 +295,16 @@ const ListOfExam: React.FC<ExamsProps> = ({ allexamlist }) => {
                       </button>
                     </div>
                   )}
+                  <div className="w-1/2">
+                    <button
+                      onClick={(e:any) => handleSubmit(e, exam.id)}
+                      className="rounded-lg bg-primary px-2 py-2 text-white"
+                    >
+                      Start
+                    </button>
+                  </div>
                 </div>
+
                 {/* <div className="flex flex-col gap-4 sm:flex-row sm:items-center"></div> */}
               </div>
             </div>

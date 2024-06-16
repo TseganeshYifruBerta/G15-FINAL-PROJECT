@@ -9,11 +9,16 @@ import { useGetTopStudentsQuery } from "@/store/teacherprofile/get-top-students"
 import SolvedQuestionPerSectionChart from "../components/Charts/SolvedQuestionPerSectionChart";
 import { useGetAllQuestionsQuery } from "@/store/question/get-all-questions";
 import Loading from "../common/Loading";
+import { useGetAcceptedQuery } from "@/store/teacherprofile/get-accepted-submission-section-api";
 
 const TeacherDashboard: React.FC = () => {
   const [easy, setEasy] = React.useState(0);
   const [medium, setMedium] = React.useState(0);
   const [hard, setHard] = React.useState(0);
+  const [sections, setSections] = React.useState([]);
+  const [countSubmitted, setCountSubmitted] = React.useState([]);
+
+  
 
   function countQuestionsByDifficulty(difficulty: any) {
     return questions.questionWithTestcase.filter(
@@ -26,6 +31,13 @@ const TeacherDashboard: React.FC = () => {
     isLoading,
     isError,
   } = useGetNumberOfAllQuestionQuery("");
+
+
+  const {
+    data: persection,
+    isLoading: persectionLoading,
+    isError: persectionError,
+  } = useGetAcceptedQuery("");
   const { data: weeklyReport, isLoading: weeklyLoading } =
     useGetWeeklyReportQuery("");
   const { data: topStudents, isLoading: topSolvedLoading } =
@@ -45,13 +57,29 @@ const TeacherDashboard: React.FC = () => {
       setHard(hardCount);
     }
   }, [questions]);
-  if (weeklyLoading || isLoading || topSolvedLoading || questionsLoading) {
+
+
+    useEffect(() => {
+      if (persection && persection.countSubmitted) {
+        const sections = persection.countSubmitted.map((section: any) => {
+          return section.section;
+        })
+
+        const countSubmitted = persection.countSubmitted.map((section: any) => {
+          return section.acceptedCount;
+          
+      })
+              setSections(sections);
+              setCountSubmitted(countSubmitted);
+      }
+    }, [persection]);
+  if (weeklyLoading || isLoading || topSolvedLoading || questionsLoading || persectionLoading) {
     return;
     <div>
       <Loading />
     </div>;
   }
-
+console.log(sections, "hello");
   //   {
   //     "countSubmitted": [
   //         {
@@ -124,7 +152,7 @@ const TeacherDashboard: React.FC = () => {
           <WeeklyReportChart reports={weeklyReport} />
         </div>
         <div className="w-1/3">
-          <SolvedQuestionPerSectionChart />
+          <SolvedQuestionPerSectionChart sections={sections} countSubmitted={countSubmitted} />
         </div>
       </div>
       <div className="mt-4 flex md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5 p-2">
