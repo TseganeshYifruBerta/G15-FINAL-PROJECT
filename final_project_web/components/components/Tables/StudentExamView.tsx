@@ -9,13 +9,7 @@ import PassKeyPopup from "@/components/exam/ExamPopUp";
 const StudentExamView = () => {
   const [searchTerm, setSearchTerm] = useState("");
     const [showModal, setShowModal] = useState(false);
-const [valid, setValid] = useState(true);
-useEffect(() => {
-  const enter = localStorage.getItem("enter");
-  if (enter) {
-    setValid(false);
-  }
-}, []);
+
   const {
     data: exams,
     isLoading,
@@ -64,9 +58,7 @@ useEffect(() => {
      let totalResult = 0;
 
      return (
-       valid ? (
-        <div className="p-4 bg-white rounded-md shadow-sm w-full">
-
+       <div className="p-4 bg-white rounded-md shadow-sm w-full">
          <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
            <div className="font-semibold">Exam Question</div>
            <div className="font-semibold">Result</div>
@@ -80,7 +72,9 @@ useEffect(() => {
              );
            })}
          </div>
-         <div className="font-semibold text-sm">Overall Result: {totalResult}</div>
+         <div className="font-semibold text-sm">
+           Overall Result: {totalResult}
+         </div>
          <button
            className="mt-4 text-sm text-white bg-primary py-2 px-4 rounded-md hover:bg-primary-hover"
            onClick={handleCloseModal}
@@ -88,9 +82,6 @@ useEffect(() => {
            Close
          </button>
        </div>
-       ) : (
-        <div></div>
-       )
      );
    };
   const filteredExams = exams?.exams.filter((exam: any) =>
