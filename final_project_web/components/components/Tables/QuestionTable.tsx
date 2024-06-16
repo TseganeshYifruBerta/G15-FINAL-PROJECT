@@ -13,7 +13,6 @@ import FetchError from "@/components/common/Error";
 import CardDataStats from "../CardDataStats";
 import { FiSearch } from "react-icons/fi";
 
-
 interface CreateQuestionButtonProps {
   onClick: () => void;
 }
@@ -36,7 +35,6 @@ const CreateExamButton: React.FC<CreateExamButtonProps> = ({ onClick }) => {
 const CreateQuestionButton: React.FC<CreateQuestionButtonProps> = ({
   onClick,
 }) => {
-
   return (
     <div className="flex items-center space-x-2 w-full max-w-lg border-2  rounded-xl overflow-hidden">
       <button
@@ -64,28 +62,26 @@ const QuestionTable: React.FC = () => {
   const router = useRouter();
   const [currentTeacherId, setCurrentTeacherId] = useState("");
   const [activeTab, setActiveTab] = useState("Lab Questions");
- const [easy, setEasy] = useState(0);
- const [medium, setMedium] = useState(0);
- const [hard, setHard] = useState(0);
+  const [easy, setEasy] = useState(0);
+  const [medium, setMedium] = useState(0);
+  const [hard, setHard] = useState(0);
 
- function countQuestionsByDifficulty(difficulty: any) {
-   return questions.questionWithTestcase.filter(
-     (question: any) => question.difficulty === difficulty
-   ).length;
- }
+  function countQuestionsByDifficulty(difficulty: any) {
+    return questions.questionWithTestcase.filter(
+      (question: any) => question.difficulty === difficulty
+    ).length;
+  }
 
-
-   
-    useEffect(() => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        const decodedToken = jwt.decode(token);
-        const userId = decodedToken?.id || null;
-        setCurrentTeacherId(userId);
-      } else {
-        router.push("/");
-      }
-    }, []);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = jwt.decode(token);
+      const userId = decodedToken?.id || null;
+      setCurrentTeacherId(userId);
+    } else {
+      router.push("/");
+    }
+  }, []);
   const {
     data: allexams,
     isLoading,
@@ -99,30 +95,32 @@ const QuestionTable: React.FC = () => {
     isError: isErrorQuestion,
   } = useGetAllQuestionsQuery("");
 
+  useEffect(() => {
+    if (questions && questions.questionWithTestcase) {
+      const easyCount = countQuestionsByDifficulty("easy");
+      const mediumCount = countQuestionsByDifficulty("medium");
+      const hardCount = countQuestionsByDifficulty("hard");
 
-   useEffect(() => {
-     if (questions && questions.questionWithTestcase) {
-       const easyCount = countQuestionsByDifficulty("easy");
-       const mediumCount = countQuestionsByDifficulty("medium");
-       const hardCount = countQuestionsByDifficulty("hard");
-
-       setEasy(easyCount);
-       setMedium(mediumCount);
-       setHard(hardCount);
-     }
-   }, [questions]);
+      setEasy(easyCount);
+      setMedium(mediumCount);
+      setHard(hardCount);
+    }
+  }, [questions]);
   if (isLoadingQuestion || isLoading) {
-    return <div>
-      <Loading />
-    </div>;
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
   }
   // Function to handle kebab icon click and toggle selected question ID
-if (isErrorQuestion || isError) {
-    return <div>
-      <FetchError />
-    </div>;
+  if (isErrorQuestion || isError) {
+    return (
+      <div>
+        <FetchError />
+      </div>
+    );
   }
-  
 
   const handleKebabClick = (questionId: any) => {
     setSelectedQuestionId(
@@ -156,7 +154,8 @@ if (isErrorQuestion || isError) {
     setExamSortOrder(sortExamOrder === "asc" ? "desc" : "asc");
   };
 
-  const filteredAndSortedExamQuestions = allexams?.allQuestions?.filter(
+  const filteredAndSortedExamQuestions = allexams?.allQuestions
+    ?.filter(
       (question: any) =>
         question.title.toLowerCase().includes(searchExamTerm.toLowerCase()) &&
         (examfilter ? question.difficulty === examfilter : true) &&
@@ -174,9 +173,9 @@ if (isErrorQuestion || isError) {
       }
     });
 
-      const handleButtonClick = () => {
-        setCreatedByMe(!createdByMe);
-      };
+  const handleButtonClick = () => {
+    setCreatedByMe(!createdByMe);
+  };
   return (
     <div className="rounded-sm bg-white  dark:border-strokedark dark:bg-boxdark -mt-2 pb-2">
       <div className="flex mt-10 justify-center">
@@ -336,7 +335,9 @@ if (isErrorQuestion || isError) {
               <div className="flex items-center space-x-2 w-full max-w-lg border-2 rounded-xl overflow-hidden">
                 <button
                   className={`w-full p-[10px] outline-none text-sm ${
-                    createdExamByMe ? "bg-primary bg-opacity-10 text-primary " : ""
+                    createdExamByMe
+                      ? "bg-primary bg-opacity-10 text-primary "
+                      : ""
                   }`}
                   onClick={(e: any) => setCreatedExamByMe(!createdExamByMe)}
                 >

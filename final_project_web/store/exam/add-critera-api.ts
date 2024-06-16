@@ -1,29 +1,26 @@
 const jwt = require("jsonwebtoken");
 import { URL } from "../host";
 
-export type ExamUploadFormData = {
+export type CriteriaUploadState = {
+  examId: string;
+  examQuestionId: string;
+  timeComplexity: number;
+  codeQuality: number;
+  codeComment: number;
+  codeCorrectness: number;
   teacherId: string;
-  title: string;
-  examDate: string;
-  examTime: string;
-  passKey: string;
-  instruction: string;
-  duration: string;
-  sections: any[];
-  tag: string;
-  chapter: any[];
-  easy_questions: string;
-  medium_questions: string;
-  hard_questions: string;
+  gradeValue: number;
 };
 
-export const uploadexam = async (formData: ExamUploadFormData) => {
+export const uploadcriteria = async (formData: CriteriaUploadState) => {
+    console.log(formData, "formDataaaaaaaaaaaaa")
   const token = localStorage.getItem("token");
   const decodedToken = jwt.decode(token);
   const userId = decodedToken?.id || null;
   formData.teacherId = userId;
+
   try {
-    const response = await fetch(`${URL}/exam/createExam`, {
+    const response = await fetch(`${URL}/grading/addCriteria`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

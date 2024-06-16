@@ -1,17 +1,8 @@
 const jwt = require("jsonwebtoken");
 import { Metadata } from "next";
 import { useEffect, useState } from "react";
-import SelectDifficultyGroup from "../components/SelectGroup/SelectDifficultyGroup";
 import { showToast } from "../popup";
-import {
-  QuestionUploadFormData,
-  uploadquestion,
-} from "@/store/question-upload/question-upload-api";
 import { useRouter } from "next/router";
-import {
-  ExamQuestionUploadFormData,
-  uploadexamquestion,
-} from "@/store/exam/upload-exam-question-api";
 import { useUpdateExamMutation } from "@/store/exam/get-all-exam-api";
 
 export const metadata: Metadata = {
@@ -19,33 +10,43 @@ export const metadata: Metadata = {
   description:
     "This is Next.js Form Layout page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
 };
+
 interface ExamFormEditProps {
-    title:string,
-    duration:string,
-    date_and_time:string
-    instruction:string
-    examId:string
+  title: string;
+  duration: string;
+  instruction: string;
+  examId: string;
+  examTime: string;
+  examDate: string;
+  passKey: string;
+  sections: any[];
 }
+
 const ExamFormEdit: React.FC<ExamFormEditProps> = ({
   title,
   duration,
-  date_and_time,
+  examTime,
+  examDate,
   instruction,
   examId,
+  passKey,
+  sections,
 }) => {
   const router = useRouter();
   const [editedTitle, setEditedTitle] = useState(title);
-  const [teacherId, setTeacherId] = useState();
+  const [teacherId, setTeacherId] = useState<string | null>(null);
   const [editedDuration, setEditedDuration] = useState(duration);
   const [editedInstruction, setEditedInstruction] = useState(instruction);
+  const [editedDate, setEditedDate] = useState(examDate);
+  const [editedTime, setEditedTime] = useState(examTime);
+  const [editedPassKey, setEditedPassKey] = useState(passKey);
+  const [editedSections, setEditedSections] = useState(sections);
+  const [newSections, setNewSections] = useState<any[]>([]);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<any>({});
 
-  const [editedDate, setEditedDate] = useState(date_and_time);
-  const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
-  const changeTextColor = () => {
-    setIsOptionSelected(true);
-  };
-
-  console.log(editedDate, "editedDate");
+  const [updateExam, { isLoading: isUpdating }] = useUpdateExamMutation();
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -53,137 +54,374 @@ const ExamFormEdit: React.FC<ExamFormEditProps> = ({
       const userId = decodedToken?.id || null;
       setTeacherId(userId);
     } else {
-      router.push("/login");
+      router.push("/");
     }
   }, []);
-  const values = {
-    title: editedTitle,
 
+  const values = {
+    examId,
+    title: editedTitle,
+    examDate: editedDate,
+    examTime: editedTime,
     instruction: editedInstruction,
     duration: editedDuration,
-    date_and_time: editedDate,
-    examId: examId,
-    sections: [
-      { id: 1, sections: "4" },
-      { id: 2, sections: "3" },
-    ],
-    status: "upcoming",
+    passKey: editedPassKey,
+    sections: editedSections,
   };
 
-  const [updateExam, { isLoading: isUpdating }] = useUpdateExamMutation();
-  if (isUpdating) {
-    return <div>Loading...</div>;
-  }
-  const handleUpdateExam = async (updatedData: any, event: any) => {
+  const validateCurrentStep = () => {
+    const newErrors: any = {};
+    if (currentStep === 1) {
+      if (!editedTitle) newErrors.examTitle = true;
+      if (!editedInstruction) newErrors.instruction = true;
+      if (!editedDate) newErrors.examDate = true;
+      if (!editedTime) newErrors.examTime = true;
+      if (!editedDuration) newErrors.duration = true;
+    } else if (currentStep === 2) {
+      if (!editedPassKey) newErrors.passKey = true;
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNextStep = () => {
+    if (validateCurrentStep()) {
+      setCurrentStep((prevStep) => prevStep + 1);
+    } else {
+      showToast("Please fill out all required fields", "error");
+    }
+  };
+
+  const handlePreviousStep = () => setCurrentStep((prevStep) => prevStep - 1);
+
+  const handleAddSection = () => {
+    setNewSections([...newSections, { id: "", section: "" }]);
+  };
+
+  const handleRemoveSection = (index: number) => {
+    setNewSections(newSections.filter((_, i) => i !== index));
+  };
+
+  const onSubmit = async (event: any) => {
     event.preventDefault();
-
+    setLoading(true);
     try {
-      console.log(updatedData, "updatedData");
-      const data = await updateExam({ ...updatedData }); // Assuming 'updatedData' is an object containing the updated fields
-      console.log(data, "data");
-      // Optionally, you can trigger a refetch of all questions after updating
-      //   refetch();
-      showToast("Exam Updated successfully", "success");
-
+      await updateExam(values);
+      showToast("Update successful", "success");
       router.push("/teacher/exams");
     } catch (error) {
-      // Handle error
+      console.error("Update error:", error);
+      showToast("Update error: " + (error as Error).message, "error");
+    } finally {
+      setLoading(false);
     }
   };
   return (
-    <form onSubmit={(e: any) => handleUpdateExam(values, e)}>
-      <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
-        <div className="flex flex-col gap-9">
-          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
-              <h3 className="font-semibold text-black dark:text-white">
-                Update Exam
-              </h3>
+    <form onSubmit={onSubmit}>
+      <div className="container w-5/6 pt-10 px-2 mx-auto font-bold text-2xl text-primary pl-4">
+        <div>Update Exam</div>
+      </div>
+      <div className="container w-5/6 pb-4 pt-4 px-2 mx-auto">
+        {currentStep === 1 && (
+          <div className="step bg-primary bg-opacity-5 px-6 pt-4 rounded-lg pb-10">
+            <h3 className="text-xl font-semibold mb-4">
+              Step 1: Basic Information
+            </h3>
+            <div className="mb-4 w-2/3">
+              <label className="block mb-2 font-medium">Exam Title</label>
+              <label className="block mb-2 text-xs text-gray-700">
+                Provide a concise and descriptive title for the exam.
+              </label>
+              <input
+                type="text"
+                placeholder="Enter exam title"
+                className={`w-full rounded-lg border-2 focus:border px-4 py-2 focus:border-primary ${
+                  errors.examTitle ? "border-red-800" : "border-gray-300"
+                } focus:outline-none focus:ring-1 focus:ring-primary`}
+                value={editedTitle}
+                required
+                onChange={(e) => setEditedTitle(e.target.value)}
+              />
+              {errors.examTitle && (
+                <span className="text-red-500">Exam title is required</span>
+              )}
             </div>
-            <>
-              <div className="p-6.5 text-xs">
-                <div className="w-full mr-6">
-                  <div className="w-full py-2">
-                    <label className="mb-2 block font-medium text-black dark:text-white">
-                      Exam Title
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter Exam title"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                      value={editedTitle}
-                      required
-                      onChange={(e) => {
-                        setEditedTitle(e.target.value);
-                      }}
-                    />
-                  </div>
-                  <div className="w-full py-2">
-                    <label className="mb-2 block font-medium text-black dark:text-white">
-                      Instruction
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter question title"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                      value={editedInstruction}
-                      required
-                      onChange={(e) => {
-                        setEditedInstruction(e.target.value);
-                      }}
-                    />
-                  </div>
-                  <div className="w-full py-2">
-                    <label className="mb-2 block font-medium text-black dark:text-white">
-                      Date and Time
-                    </label>
-                    <input
-                      type="date"
-                      name="date_and_time"
-                      id="date_and_time"
-                      required
-                      value={editedDate}
-                      onChange={(e) => setEditedDate(e.target.value)}
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                      // className="mt-1 flex-1 rounded-lg bg-gray-100 px-3 py-2 shadow focus:outline-none focus:shadow-outline"
-                      style={{
-                        transition:
-                          "box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out",
-                      }}
-                    />
-                  </div>
-                  <div className="w-full py-2">
-                    <label className="mb-2 block font-medium text-black dark:text-white">
-                      Duration
-                    </label>
-                    <input
-                      type="number"
-                      name="date_and_time"
-                      id="date_and_time"
-                      required
-                      value={editedDuration}
-                      onChange={(e) => setEditedDuration(e.target.value)}
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                      placeholder="Enter duration in minutes"
-                      style={{
-                        transition:
-                          "box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out",
-                      }}
-                    />
-                  </div>
-                  <div className="justify-end flex">
-                    <button
-                      className="flex w-1/3 justify-center rounded bg-primary text-white p-3 font-medium text-gray hover:bg-opacity-90"
-                      type="submit"
-                    >
-                      Update Exam
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </>
+            <div className="mb-4 w-2/3">
+              <label className="block mb-2 font-medium">Instruction</label>
+              <label className="block mb-2 text-xs text-gray-700">
+                Provide instructions for the exam.
+              </label>
+              <input
+                type="text"
+                placeholder="Enter instruction"
+                className={`w-full rounded-lg border-2 focus:border px-4 py-2 focus:border-primary ${
+                  errors.instruction ? "border-red-800" : "border-gray-300"
+                } focus:outline-none focus:ring-1 focus:ring-primary`}
+                value={editedInstruction}
+                required
+                onChange={(e) => setEditedInstruction(e.target.value)}
+              />
+              {errors.instruction && (
+                <span className="text-red-500">Instruction is required</span>
+              )}
+            </div>
+            <div className="mb-4 w-2/3">
+              <label className="block mb-2 font-medium">Exam Date</label>
+              <input
+                type="date"
+                required
+                value={editedDate}
+                onChange={(e) => setEditedDate(e.target.value)}
+                className={`w-full rounded-lg border-2 focus:border px-4 py-2 focus:border-primary ${
+                  errors.examDate ? "border-red-800" : "border-gray-300"
+                } focus:outline-none focus:ring-1 focus:ring-primary`}
+              />
+              {errors.examDate && (
+                <span className="text-red-500">Exam date is required</span>
+              )}
+            </div>
+            <div className="mb-4 w-2/3">
+              <label className="block mb-2 font-medium">Exam Time</label>
+              <input
+                type="time"
+                required
+                value={editedTime}
+                onChange={(e) => setEditedTime(e.target.value)}
+                className={`w-full rounded-lg border-2 focus:border px-4 py-2 focus:border-primary ${
+                  errors.examTime ? "border-red-800" : "border-gray-300"
+                } focus:outline-none focus:ring-1 focus:ring-primary`}
+              />
+              {errors.examTime && (
+                <span className="text-red-500">Exam time is required</span>
+              )}
+            </div>
+            <div className="mb-4 w-2/3">
+              <label className="block mb-2 font-medium">Duration</label>
+              <input
+                type="number"
+                placeholder="Enter duration in minutes"
+                required
+                value={editedDuration}
+                onChange={(e) => setEditedDuration(e.target.value)}
+                className={`w-full rounded-lg border-2 focus:border px-4 py-2 focus:border-primary ${
+                  errors.duration ? "border-red-800" : "border-gray-300"
+                } focus:outline-none focus:ring-1 focus:ring-primary`}
+              />
+              {errors.duration && (
+                <span className="text-red-500">Duration is required</span>
+              )}
+            </div>
+            <div className="flex justify-between mt-4">
+              <button
+                type="button"
+                className="bg-primary text-white px-4 py-2 rounded"
+                onClick={handleNextStep}
+              >
+                Next
+              </button>
+            </div>
           </div>
-        </div>
+        )}
+
+        {currentStep === 2 && (
+          <div className="step bg-primary bg-opacity-10 px-6 pt-4 rounded-lg pb-10">
+            <h3 className="text-xl font-semibold mb-4">
+              Step 2: Additional Information
+            </h3>
+            <div className="mb-4 w-2/3">
+              <label className="block mb-2 font-medium">Pass Key</label>
+              <input
+                type="text"
+                placeholder="Enter pass key"
+                required
+                value={editedPassKey}
+                onChange={(e) => setEditedPassKey(e.target.value)}
+                className={`w-full rounded-lg border-2 focus:border px-4 py-2 focus:border-primary ${
+                  errors.passKey ? "border-red-800" : "border-gray-300"
+                } focus:outline-none focus:ring-1 focus:ring-primary`}
+              />
+              {errors.passKey && (
+                <span className="text-red-500">Pass key is required</span>
+              )}
+            </div>
+            <div className="mb-4 w-2/3">
+              <label className="block mb-2 font-medium">Sections</label>
+              {editedSections?.map((section, index) => (
+                <div key={index} className="mb-2 flex items-center">
+                  <input
+                    type="text"
+                    placeholder={`Section ID ${index + 1}`}
+                    className={`w-full rounded-lg border-2 focus:border px-4 py-2 focus:border-primary ${
+                      errors[`section${index}`]
+                        ? "border-red-800"
+                        : "border-gray-300"
+                    } focus:outline-none focus:ring-1 focus:ring-primary`}
+                    value={section.sections}
+                    onChange={(e) => {
+                      const newSections = sections.map(
+                        (sec: any, secIndex: any) => {
+                          if (index === secIndex) {
+                            return {
+                              ...sec,
+                              sections: e.target.value,
+                            };
+                          }
+                          return sec;
+                        }
+                      );
+                      setEditedSections(newSections);
+                    }}
+                  />
+                  <button
+                    type="button"
+                    className="ml-2 bg-red-500 text-white px-3 py-1 rounded"
+                    onClick={() => handleRemoveSection(index)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+              {newSections.map((section, index) => (
+                <div key={index} className="mb-2 flex items-center">
+                  <input
+                    type="text"
+                    placeholder={`New Section name ${index + 1}`}
+                    className={`w-full rounded-lg border-2 focus:border px-4 py-2 focus:border-primary ${
+                      errors[`section${index}`]
+                        ? "border-red-800"
+                        : "border-gray-300"
+                    } focus:outline-none focus:ring-1 focus:ring-primary`}
+                    value={section.section}
+                    onChange={(e) => {
+                      const newSectionsOutput = [...newSections];
+                      newSectionsOutput[index].section = e.target.value;
+                      setNewSections(newSectionsOutput);
+                    }}
+                  />
+                  <button
+                    type="button"
+                    className="ml-2 bg-red-500 text-white px-3 py-1 rounded"
+                    onClick={() => handleRemoveSection(index)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={handleAddSection}
+                className="rounded-lg mr-2 border-primary bg-white font-semibold text-primary border px-2 py-2 mt-2"
+              >
+                + Add Section
+              </button>
+              <button
+                type="button"
+                onClick={() => {}}
+                className="rounded-lg bg-primary font-semibold text-white border px-2 py-2 mt-2"
+              >
+                Confirm
+              </button>
+            </div>
+            <div className="flex justify-between mt-4">
+              <button
+                type="button"
+                className="bg-gray-500 text-white px-4 py-2 rounded"
+                onClick={handlePreviousStep}
+              >
+                Previous
+              </button>
+              <button
+                type="button"
+                className="bg-primary text-white px-4 py-2 rounded"
+                onClick={handleNextStep}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+
+        {currentStep === 3 && (
+          <div className="step bg-primary bg-opacity-10 px-6 pt-4 rounded-lg pb-10">
+            <h3 className="text-xl font-semibold mb-4">Review and Submit</h3>
+            <div className="mb-4">
+              <h4 className="font-medium text-gray-700">Exam Title</h4>
+              <p>{editedTitle}</p>
+            </div>
+            <div className="mb-4">
+              <h4 className="font-medium text-gray-700">Instruction</h4>
+              <p>{editedInstruction}</p>
+            </div>
+            <div className="mb-4">
+              <h4 className="font-medium text-gray-700">Exam Date</h4>
+              <p>{editedDate}</p>
+            </div>
+            <div className="mb-4">
+              <h4 className="font-medium text-gray-700">Exam Time</h4>
+              <p>{editedTime}</p>
+            </div>
+            <div className="mb-4">
+              <h4 className="font-medium text-gray-700">Duration</h4>
+              <p>{editedDuration}</p>
+            </div>
+            <div className="mb-4">
+              <h4 className="font-medium text-gray-700">Pass Key</h4>
+              <p>{editedPassKey}</p>
+            </div>
+            <div className="mb-4">
+              <h4 className="font-medium text-gray-700">Sections</h4>
+              {editedSections.map((section, index) => (
+                <p key={index}>
+                  {section.id}: {section.sections}
+                </p>
+              ))}
+              {newSections.map((section, index) => (
+                <p key={index}>
+                  {section.id}: {section.sections}
+                </p>
+              ))}
+            </div>
+            <div className="flex justify-between mt-4">
+              <button
+                type="button"
+                className="bg-gray-500 text-white px-4 py-2 rounded"
+                onClick={handlePreviousStep}
+              >
+                Previous
+              </button>
+              <button
+                type="submit"
+                className="bg-green-500 text-white px-4 py-2 rounded"
+                disabled={loading}
+              >
+                {loading ? (
+                  <svg
+                    className="animate-spin h-5 w-20 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                ) : (
+                  "Update Exam"
+                )}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </form>
   );

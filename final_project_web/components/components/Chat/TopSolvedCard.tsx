@@ -11,9 +11,11 @@ const TopSovedQuestions: React.FC = () => {
   } = useGetTopSolvedQuestionsQuery("");
 
   if (isLoadingTop) {
-    return <div>
-      <Loading></Loading>
-    </div>;
+    return (
+      <div>
+        <Loading></Loading>
+      </div>
+    );
   }
   return (
     <div className="col-span-12 rounded-xl bg-primary bg-opacity-5 h-[450px] py-6 shadow-lg dark:border-strokedark dark:bg-boxdark xl:col-span-4">
@@ -49,10 +51,10 @@ const TopSovedQuestions: React.FC = () => {
                 <div className="flex items-center">
                   <div className="w-full gap-4 flex sm:items-center">
                     <p className="text-sm text-black dark:text-white">
-                      {question.questionDetail.title}
+                      {question?.questionDetail?.title}
                     </p>
                     <p className="w-1/2 text-sm text-gray-500 dark:text-white">
-                      {question.userCount} solved
+                      {question?.userCount} solved
                     </p>
                   </div>
                   {/* <div className="flex flex-col gap-4 sm:flex-row sm:items-center"></div> */}

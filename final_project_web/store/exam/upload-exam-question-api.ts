@@ -8,13 +8,17 @@ export type ExamQuestionUploadFormData = {
   example: string;
   testcases: testCaseProps[];
   solutions: any[];
-  tag:string;
-  chapter:string;
+  tag: string;
+  chapter: string;
+  plagiarismRatio: string;
+  gradeValue: string;
 };
 
-export const uploadexamquestion = async (formData: ExamQuestionUploadFormData) => {
-     const token = localStorage.getItem("token");
-
+export const uploadexamquestion = async (
+  formData: ExamQuestionUploadFormData
+) => {
+  const token = localStorage.getItem("token");
+  console.log(formData, "formDataaaaaaaaaaaaa");
   try {
     const response = await fetch(`${URL}/exam/uploadExamQuestion`, {
       method: "POST",
