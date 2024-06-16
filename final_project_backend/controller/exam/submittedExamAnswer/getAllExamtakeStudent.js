@@ -112,8 +112,9 @@ const getSubmissionOfstudentByQuestionId = async (req, res) => {
             
         });
         const response = submission[0].submittedAnswer
+        const name = foundUser.fullName
         const submittedDate = submission[0].createdAt
-        return res.status(200).json({response,questionDetail,submittedDate})
+        return res.status(200).json({response,questionDetail,submittedDate,name})
     } catch (error) {
         console.error('Failed to fetch exams:', error);
         res.status(500).json({ message: 'Internal server error' });

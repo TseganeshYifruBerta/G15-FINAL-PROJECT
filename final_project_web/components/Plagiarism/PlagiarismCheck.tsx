@@ -120,24 +120,40 @@ const PlagiarismCheck: React.FC = () => {
         </div>
       </div>
 
-      <h4 className="text-xl font-semibold text-black mb-6 dark:text-white">
-        Plagiarism Checked Exams
-      </h4>
-      {filteredAndSortedQuestions.length !== 0 && (
-        <div className="bg-gray-100 rounded-xl drop-shadow-sm">
-          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-              <tr>
-                <th scope="col" className="py-3 px-4">Title</th>
-                <th scope="col" className="py-3 px-4">Instruction</th>
-                <th scope="col" className="py-3 px-4">Date and Time</th>
-                <th scope="col" className="py-3 px-4">Status</th>
-                <th scope="col" className="py-3 px-4">Tag</th>
-                <th scope="col" className="py-3 px-4">Duration</th>
-                <th scope="col" className="py-3 px-3">Actions</th>
-              </tr>
-            </thead>
-          </table>
+      <div className="px-4 mt-[50px] py-6 md:px-6 xl:px-7.5 flex">
+        <h4 className="w-4/5 text-xl font-semibold text-black dark:text-white">
+          Plagiarism Checked Exams
+        </h4>
+        <div className="w-1/5">
+          <button
+            className="bg-primary hover:bg-primary-hover text-white font-medium py-2 px-4 rounded shadow focus:outline-none w-full"
+            onClick={() => setShowModal(true)}
+          >
+            Check Plagiarism
+          </button>
+        </div>
+      </div>
+
+      {filteredAndSortedQuestions.length != 0 && (
+        <div className="grid grid-cols-6 px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 font-bold text-xs">
+          <div className="col-span-1 flex items-center">
+            <p>Title</p>
+          </div>
+          <div className="col-span-1 flex items-center">
+            <p>Instruction</p>
+          </div>
+          <div className="col-span-1 flex items-center">
+            <p>Date</p>
+          </div>
+          <div className="col-span-1 flex items-center">
+            <p>Status</p>
+          </div>
+          <div className="col-span-1 flex items-center">
+            <p>Tag</p>
+          </div>
+          <div className="col-span-1 flex items-center">
+            <p>Duration</p>
+          </div>
         </div>
       )}
 
@@ -146,7 +162,7 @@ const PlagiarismCheck: React.FC = () => {
           examId={exam.examData.id}
           title={exam.examData.title}
           instruction={exam.examData.instruction}
-          date_and_time={exam.examData.date_and_time}
+          date_and_time={exam.examData.examDate}
           status={exam.examData.status}
           tag={exam.examData.tag}
           duration={exam.examData.duration}

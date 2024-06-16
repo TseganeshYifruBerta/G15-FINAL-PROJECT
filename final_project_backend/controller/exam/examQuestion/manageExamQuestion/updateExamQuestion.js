@@ -7,9 +7,9 @@ const { where } = require("sequelize");
 
 const editExamQuestion = async (req, res) => {
   try {
-    const { title, difficulty, description,  tag , chapter , example, testcases, solutions ,plagiarismRatio,gradeValue} = req.body;
+    const { title, difficulty, description,  tag , chapter , example, testcases, solutions ,plagiarismRatio} = req.body;
     const { teacherId, examQuestionId } = req.params;
-    if(!title || !difficulty || !description || !example || !tag || !chapter || !plagiarismRatio || !gradeValue) {
+    if(!title || !difficulty || !description || !example || !tag || !chapter || !plagiarismRatio ) {
       return res.status(400).json({ message: 'Please provide all required fields' });
     }
 
@@ -45,7 +45,6 @@ const editExamQuestion = async (req, res) => {
       examQuestion.tag = tag;
       examQuestion.chapter = chapter;
       examQuestion.plagiarismRatio = plagiarismRatio;
-      examQuestion.gradeValue = gradeValue;
       await examQuestion.save({ transaction });
 
       // Update test cases

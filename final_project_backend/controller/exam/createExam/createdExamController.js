@@ -34,6 +34,9 @@ const createExam = async (req, res) => {
   // Start a transaction
   const transaction = await sequelize.transaction();
   try {
+    if (!title || !examDate || !examTime || !instruction || !duration || !tag || !chapter || !easy_questions || !medium_questions || !hard_questions || !teacherId || !passKey || !sections) {
+      return res.status(400).json({ message: "Please provide title, examDate, examTime, instruction, duration, tag, chapter, easy_questions, medium_questions, hard_questions, passKey and sections" });
+    }
         const foundUser = await User.findOne({
           where: {
             id: teacherId

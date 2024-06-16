@@ -12,7 +12,8 @@ const addCriteria = async (req, res) => {
         codeQuality,
         codeComment,
         codeCorrectness,
-        teacherId
+        teacherId,
+        gradeValue
     } = req.body;
 
     const transaction = await sequelize.transaction();
@@ -51,8 +52,8 @@ const addCriteria = async (req, res) => {
         if (!examId || !examQuestionId || !teacherId) {
             return res.status(400).json({ message: 'Invalid data received' });
         }
-        if (!timeComplexity || !codeQuality || !codeComment || !codeCorrectness) {
-            return res.status(400).json({ message: 'timeComplexity , codeQuality , codeComment and codeCorrectness should not be null' });
+        if (!timeComplexity || !codeQuality || !codeComment || !codeCorrectness || !gradeValue) {
+            return res.status(400).json({ message: 'timeComplexity , codeQuality , gradeValue,codeComment and codeCorrectness should not be null' });
         }
         if (timeComplexity < 0 || timeComplexity > 1 || codeQuality < 0 || codeQuality > 1 || codeComment < 0 || codeComment > 1 || codeCorrectness < 0 || codeCorrectness > 1) {
             return res.status(400).json({ message: 'timeComplexity , codeQuality , codeComment and codeCorrectness should be between 0 and 1' });
@@ -74,7 +75,8 @@ const addCriteria = async (req, res) => {
             codeQuality,
             codeComment,
             codeCorrectness,
-            teacherId
+            teacherId,
+            gradeValue
         }, { transaction });
 
         await transaction.commit();
@@ -93,7 +95,8 @@ const updateCriteria = async (req, res) => {
         timeComplexity,
         codeQuality,
         codeComment,
-        codeCorrectness
+        codeCorrectness,
+        gradeValue
     } = req.body;
 
     const transaction = await sequelize.transaction();
@@ -110,8 +113,8 @@ const updateCriteria = async (req, res) => {
         }
 
        
-        if (!timeComplexity || !codeQuality || !codeComment || !codeCorrectness) {
-            return res.status(400).json({ message: 'timeComplexity , codeQuality , codeComment and codeCorrectness should not be null' });
+        if (!timeComplexity || !codeQuality || !codeComment || !codeCorrectness || !gradeValue) {
+            return res.status(400).json({ message: 'timeComplexity , codeQuality , gradeValue,codeComment and codeCorrectness should not be null' });
         }
         if (timeComplexity < 0 || timeComplexity > 1 || codeQuality < 0 || codeQuality > 1 || codeComment < 0 || codeComment > 1 || codeCorrectness < 0 || codeCorrectness > 1) {
             return res.status(400).json({ message: 'timeComplexity , codeQuality , codeComment and codeCorrectness should be between 0 and 1' });
@@ -126,6 +129,7 @@ const updateCriteria = async (req, res) => {
         updatedCriteria.codeComment = codeComment
         updatedCriteria.codeCorrectness = codeCorrectness
         updatedCriteria.codeQuality = codeQuality
+        updatedCriteria.gradeValue = gradeValue
         await updatedCriteria.save({ transaction });
 
         // const updatedCriteria = await criteria.update({

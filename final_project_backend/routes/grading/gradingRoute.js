@@ -5,7 +5,8 @@ const gradingRouter = express.Router();
 
 const {addCriteria,updateCriteria,deleteCriteria,getCriteriaDetailById} = require('../../controller/grading/manageCriteria');
 const {getStudentExamAnswerById,getRefrenceExamAnswerById,getCriteriaById,getExamTestcaseById } = require('../../controller/grading/fetchGradingComponent')
-const gradeResult = require('../../controller/grading/gradingController')
+const gradeResults = require('../../controller/grading/gradingController')
+const fetchAllGradedExams = require('../../controller/grading/fetchAllGradedExams')
 
 
 
@@ -25,6 +26,7 @@ gradingRouter.get('/getExamTestcaseById/:questionId', getExamTestcaseById);
 
 
               // check plagiarism
-gradingRouter.post('/gradeResult', gradeResult);
+gradingRouter.post('/gradeResult', gradeResults);
+gradingRouter.get('/fetchAllGradedExams', fetchAllGradedExams);
 
 module.exports = gradingRouter;
