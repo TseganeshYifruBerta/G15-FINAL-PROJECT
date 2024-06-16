@@ -1,6 +1,6 @@
 const express = require('express');
 const { Model, where ,Sequelize} = require('sequelize');
-const grading = require('../../models/grading/grading');
+const gradeResult = require('../../models/grading/grading');
 const studentsExamAnswer = require('../../models/exam/studentsExamAnswer');
 
 const {getCriteriaById,getStudentExamAnswerById,getRefrenceExamAnswerById,getExamTestcaseById} = require('./fetchGradingComponent')
@@ -10,10 +10,12 @@ const sequelize = require('../../database/sequelize')
 const axios = require('axios');
 
 
-const gradeResult  = async (req, res) =>  {
+const gradeResults  = async (req, res) =>  {
   
     const {examId,teacherId} = req.body;
     const transaction = await sequelize.transaction();
+    let combinedResults = []; // Declare combinedResults with let at the top of the function
+
 
     try{
         if(!examId || !teacherId){
@@ -21,7 +23,7 @@ const gradeResult  = async (req, res) =>  {
         }
         console.log("................",examId)
         console.log("...ooooooooooooo......",teacherId)
-        const exam = await grading.findOne({
+        const exam = await gradeResult.findOne({
             where:{
                 examId:examId
             }
@@ -92,13 +94,50 @@ const gradeResult  = async (req, res) =>  {
             //     studentId: id,
             //     teacherId: teacherId
             // }
+            const data = await gradeResult.create({
+                examId,
+                examQuestionId: questionId,
+                timeComplexityValue: response.data.timeComplexity.score,
+                timeComplexityDescription: response.data.timeComplexity.description,
+                codeQualityValue: response.data.codeQuality.score,
+                codeQualityDescription: response.data.codeQuality.description,
+                codeCommentValue: response.data.documentation.score,
+                codeCommentDescription: response.data.documentation.description,
+                codeCorrectnessValue: response.data.correctness.score,
+                codeCorrectnessDescription: response.data.correctness.description,
+                finalGrade: response.data.finalGrade.score,
+                studentId: id,
+                teacherId: teacherId
+              }, { transaction });
 
-            // await grading.create(response.data,{transaction});
-            return res.status(201).json(response.data);
+            combinedResults.push({
+                examId,
+                examQuestionId: questionId,
+                timeComplexityValue: response.data.timeComplexity.score,
+                timeComplexityDescription: response.data.timeComplexity.description,
+                codeQualityValue: response.data.codeQuality.score,
+                codeQualityDescription: response.data.codeQuality.description,
+                codeCommentValue: response.data.documentation.score,
+                codeCommentDescription: response.data.documentation.description,
+                codeCorrectnessValue: response.data.correctness.score,
+                codeCorrectnessDescription: response.data.correctness.description,
+                finalGrade: response.data.finalGrade.score,
+                studentId: id,
+                teacherId: teacherId
+              });
+      
+              
+
+
+
+            // await gradeResult.create(response.data,{transaction});
+            // return res.status(201).json(data);
+
 
     }
     }
-    return res.status(201).json({message: 'Grading completed successfully'});
+    await transaction.commit();
+    return res.status(201).json({message: 'Grading completed successfully', combinedResults});
 
 } catch (error) {
     console.error(error);
@@ -108,4 +147,4 @@ const gradeResult  = async (req, res) =>  {
 }
 
         
-module.exports = gradeResult;
+module.exports = gradeResults;
