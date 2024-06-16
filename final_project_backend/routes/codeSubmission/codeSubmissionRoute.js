@@ -5,7 +5,7 @@ const getAllAcceptedSubmissionsByUserId = require("../../controller/codeSubmissi
 const {submitCode} = require("../../controller/codeSubmission/codeSubmission")
 const verifyRoles = require("../../middleware/verifyRoles");
 const {isStudent, isTeacher} = require("../../middleware/roleMiddleWare");
-const {countCodeSubmissionsForLastWeek , countCodeSubmissionsForLastMonth} = require("../../controller/codeSubmission/countCodeSubmissionPerWeek") 
+const {countCodeSubmissionsForLastWeek , countCodeSubmissionsFor5LastMonth} = require("../../controller/codeSubmission/countCodeSubmissionPerWeek") 
 const {
     countAcceptedSubmissionperDifficulty,
     countAcceptedSubmissionsPerUser,
@@ -22,7 +22,7 @@ const CountingAllAcceptedSubmittedQuestionsPerSection = require('../../controlle
 codeSubmissionRouter.get("/getAllAcceptedSubmissions/:userId", getAllAcceptedSubmissionsByUserId);
 codeSubmissionRouter.post("/submitCode", verifyRoles("student"),isStudent,submitCode);
 codeSubmissionRouter.get("/countCodeSubmissionsForLastWeek/:initialDateString/:userId",verifyRoles("teacher"),isTeacher, countCodeSubmissionsForLastWeek);
-codeSubmissionRouter.get("/countCodeSubmissionsForLastMonth/:initialDateString/:userId",verifyRoles("teacher"),isTeacher, countCodeSubmissionsForLastMonth);
+codeSubmissionRouter.get("/countCodeSubmissionsFor5LastMonth/:initialDateString/:userId",verifyRoles("teacher"),isTeacher, countCodeSubmissionsFor5LastMonth);
 codeSubmissionRouter.get("/countAcceptedSubmissionsOfUserBySection/:section", verifyRoles("teacher"),isTeacher,countAcceptedSubmissionsOfUserBySection);
 codeSubmissionRouter.get("/countAcceptedSubmissionsPerUser/:userId",countAcceptedSubmissionsPerUser)
 codeSubmissionRouter.get("/countAcceptedSubmissionperDifficulty/:userId",countAcceptedSubmissionperDifficulty)
