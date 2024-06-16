@@ -1,54 +1,45 @@
+import AddCriteriaPopUp from "@/components/exam/AddCriteriaPopUp";
 import { useGetExamByIdQuery } from "@/store/exam/get-all-exam-by-id";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import SplitPane, { Pane } from "react-split-pane-next";
-
 
 // TypeScript interface for props if you need to pass data to the component
 interface ExamDetailProps {
   // Add props here if needed, e.g., exam title, date, etc.
 }
 
-
 interface Question {
   title: string;
   description: string;
-  chapter:string
-  example:string
-  tag:string
-  difficulty:string
-solution: string[]
-
+  chapter: string;
+  example: string;
+  tag: string;
+  difficulty: string;
+  solution: string[];
 }
 const ExamDetail: React.FC<ExamDetailProps> = () => {
-    const router = useRouter();
+  const router = useRouter();
 
-  const examId = router.query.id as string
+  const examId = router.query.id as string;
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
     null
   );
 
-   const handleViewQuestion = (question: Question) => {
-     setSelectedQuestion(question);
-   };
+  const handleViewQuestion = (question: Question) => {
+    setSelectedQuestion(question);
+  };
 
+  const { data, isLoading, isError } = useGetExamByIdQuery({ examId: examId });
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-   const {
-     data,
-     isLoading,
-     isError,
-   } = useGetExamByIdQuery({ examId: examId });
-   if (isLoading){
-    return <div>
-      Loading...
-    </div>
-   }
-
-   if (isError){
-    return <div>Errore...</div>
-   }
-const examdetail = data.response
-console.log(examdetail)
+  if (isError) {
+    return <div>Errore...</div>;
+  }
+  const examdetail = data.response;
+  console.log(data.response);
   return (
     <SplitPane
       className=" rounded-md bg-white px-5 pb-5 shadow-lg dark:border-strokedark dark:bg-boxdark w-full "
@@ -57,8 +48,12 @@ console.log(examdetail)
       <Pane className="border-r-4 text-sm bg-white shadow-md rounded-lg p-4">
         <div className="text-2xl font-bold mb-6">{examdetail.title}</div>
         <div className="mb-4">
-          Date and Time:{" "}
-          <span className="font-semibold">{examdetail.date_and_time}</span>
+          Exam Date:{" "}
+          <span className="font-semibold">{examdetail.examDate}</span>
+        </div>
+        <div className="mb-4">
+          Exam Time:{" "}
+          <span className="font-semibold">{examdetail.examTime}</span>
         </div>
         <div className="mb-4">
           Duration:{" "}
@@ -82,6 +77,7 @@ console.log(examdetail)
                 <th className="border border-gray-300 p-3">Questions</th>
                 <th className="border border-gray-300 p-3">Difficulty</th>
                 <th className="border border-gray-300 p-3">Action</th>
+                <th className="border border-gray-300 p-3">Criteria</th>
               </tr>
             </thead>
             <tbody>
@@ -100,6 +96,18 @@ console.log(examdetail)
                     >
                       View
                     </button>
+                  </td>
+                  <td className="border border-gray-300 p-2">
+                    <AddCriteriaPopUp
+                      examId={data.response.id}
+                      examQuestionId={question.id}
+                    />
+                    {/* <button
+                      className="bg-primary hover:bg-primary-hover text-white font-bold py-1 px-2 rounded"
+                      onClick={() => {}}
+                    >
+                      Add Criteria
+                    </button> */}
                   </td>
                 </tr>
               ))}
@@ -145,8 +153,18 @@ console.log(examdetail)
             </span>
           </div>
         </div>
-        <div className="mb-4">
-          Selected Sections: <span className="font-medium">1, 2</span>
+        <div className="mb-4 flex">
+          <div className="py-2 m-1">Selected Sections: </div>
+          <div className="flex flex-wrap p-2 rounded">
+            {examdetail.sections.map((section: any) => (
+              <span
+                key={section.id}
+                className="bg-gray-200 text-blue-800 m-1 px-2 rounded"
+              >
+                {section.sections}
+              </span>
+            ))}
+          </div>
         </div>
       </Pane>
 

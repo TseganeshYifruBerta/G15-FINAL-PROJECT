@@ -1,32 +1,43 @@
-import ExamQuestionSet from '@/components/questions/ExamQuestionSet';
-import { useGetExamQuestionByIdQuery } from '@/store/exam/get-all-exam-by-id';
-import { useRouter } from 'next/router';
-import React from 'react'
+import ExamQuestionSet from "@/components/questions/ExamQuestionSet";
+import { useGetExamQuestionByIdQuery } from "@/store/exam/get-all-exam-by-id";
+import { useRouter } from "next/router";
+import React from "react";
 
 function ExamById() {
-      const router = useRouter();
+  const router = useRouter();
   const questionId = router.query.id as string;
- const {
-   data: examDetails,
-   isLoading,
-   isError,
- } = useGetExamQuestionByIdQuery({
-   questionId: questionId,
- });
+  const {
+    data: examDetails,
+    isLoading,
+    isError,
+  } = useGetExamQuestionByIdQuery({
+    questionId: questionId,
+  });
 
-   if (isLoading) {
-     return <div>loading</div>;
-   }
-   if (isError) {
-     return <div>Errroe</div>;
-   }
+  if (isLoading) {
+    return <div>loading</div>;
+  }
+  if (isError) {
+    return <div>Errroe</div>;
+  }
 
-   console.log("examDetails", examDetails)
+  console.log("examDetails", examDetails);
   const question = examDetails.examQuestionDetail;
-  const testcases = examDetails.examQuestionDetail.examTestCase
-  const { createdAt, description, difficulty, example, id, title, updatedAt, tag, solutions , chapter} =question
+  const testcases = examDetails.examQuestionDetail.examTestCase;
+  const {
+    createdAt,
+    description,
+    difficulty,
+    example,
+    id,
+    title,
+    updatedAt,
+    tag,
+    solutions,
+    chapter,
+  } = question;
 
-console.log("examDetails", examDetails)
+  console.log("examDetails", examDetails);
 
   return (
     <ExamQuestionSet

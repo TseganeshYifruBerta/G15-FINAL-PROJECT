@@ -46,26 +46,24 @@ const TeacherDashboard: React.FC = () => {
     }
   }, [questions]);
   if (weeklyLoading || isLoading || topSolvedLoading || questionsLoading) {
-    return 
-      <div>
-        <Loading />
-      </div>;
+    return;
+    <div>
+      <Loading />
+    </div>;
   }
 
-
-//   {
-//     "countSubmitted": [
-//         {
-//             "section": "2",
-//             "acceptedCount": 3
-//         },
-//         {
-//             "section": "1",
-//             "acceptedCount": 1
-//         }
-//     ]
-// }
-
+  //   {
+  //     "countSubmitted": [
+  //         {
+  //             "section": "2",
+  //             "acceptedCount": 3
+  //         },
+  //         {
+  //             "section": "1",
+  //             "acceptedCount": 1
+  //         }
+  //     ]
+  // }
 
   return (
     <div className="w-full min-h-screen justify-center">
