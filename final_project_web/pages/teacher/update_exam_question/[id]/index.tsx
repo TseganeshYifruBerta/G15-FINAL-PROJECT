@@ -35,6 +35,7 @@ console.log(questionId, "questionId")
         EditedTag={examDetails.examQuestionDetail.tag}
         EditedChapter={examDetails.examQuestionDetail.chapter}
         questionId={examDetails.examQuestionDetail.id}
+        plagiarismRatio={examDetails.examQuestionDetail.plagiarismRatio}
       />
     </div>
   );

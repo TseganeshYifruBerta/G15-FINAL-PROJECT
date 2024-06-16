@@ -134,6 +134,8 @@ const AddCriteriaPopUp: React.FC<AddCriteriaPopUpProps> = ({
                         Time Complexity (0 - 1)
                       </label>
                       <Input
+                        name="timeComplexity"
+                        crossOrigin={true}
                         type="number"
                         id="timeComplexity"
                         placeholder="Enter Time Complexity"
@@ -142,6 +144,8 @@ const AddCriteriaPopUp: React.FC<AddCriteriaPopUpProps> = ({
                           setTimeComplexity(parseFloat(e.target.value))
                         }
                         required
+                        onPointerEnterCapture={() => {}}
+                        onPointerLeaveCapture={() => {}}
                       />
                     </div>
                     <div className="mb-4">
@@ -154,12 +158,16 @@ const AddCriteriaPopUp: React.FC<AddCriteriaPopUpProps> = ({
                       <Input
                         type="number"
                         id="codeQuality"
+                        name="codeQuality"
                         placeholder="Enter Code Quality"
                         value={codeQuality}
                         onChange={(e) =>
                           setCodeQuality(parseFloat(e.target.value))
                         }
                         required
+                        onPointerEnterCapture={() => {}}
+                        onPointerLeaveCapture={() => {}}
+                        crossOrigin={true}
                       />
                     </div>
                     <div className="mb-4">
@@ -172,12 +180,16 @@ const AddCriteriaPopUp: React.FC<AddCriteriaPopUpProps> = ({
                       <Input
                         type="number"
                         id="codeComment"
+                        name="codeComment"
                         placeholder="Enter Code Comment"
                         value={codeComment}
                         onChange={(e) =>
                           setCodeComment(parseFloat(e.target.value))
                         }
                         required
+                        onPointerEnterCapture={() => {}}
+                        onPointerLeaveCapture={() => {}}
+                        crossOrigin={true}
                       />
                     </div>
                     <div className="mb-4">
@@ -196,6 +208,10 @@ const AddCriteriaPopUp: React.FC<AddCriteriaPopUpProps> = ({
                           setCodeCorrectness(parseFloat(e.target.value))
                         }
                         required
+                        name="codeCorrectness"
+                        onPointerEnterCapture={() => {}}
+                        onPointerLeaveCapture={() => {}}
+                        crossOrigin={true}
                       />
                     </div>
                     <div className="mb-4">
@@ -214,6 +230,10 @@ const AddCriteriaPopUp: React.FC<AddCriteriaPopUpProps> = ({
                           setGradeValue(parseFloat(e.target.value))
                         }
                         required
+                        name="gradeValue"
+                        onPointerEnterCapture={() => {}}
+                        onPointerLeaveCapture={() => {}}
+                        crossOrigin={true}
                       />
                     </div>
                     {criteriaError && (

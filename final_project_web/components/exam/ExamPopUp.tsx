@@ -97,13 +97,15 @@ const PassKeyPopup: React.FC<PassKeyPopupProps> = ({ examId }) => {
                       id="passkey"
                       name="passkey"
                       label="Passkey"
-                      crossOrigin={true}
                       value={passKey}
                       color={passKeyError ? "red" : "black"}
                       onChange={(e: ChangeEvent<HTMLInputElement>) => {
                         setPassKey(e.target.value);
                       }}
                       type="text"
+                      onPointerEnterCapture={() => {}}
+                      onPointerLeaveCapture={() => {}}
+                      crossOrigin={true}
                     />
                     {passKeyError && (
                       <p className="text-red-500 text-xs italic">
