@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useGetAllEndedExamsQuery } from "@/store/plagiarism/get-all-ended-exams";
-import { checkPlagiarismByExamId, PlagiarismExamId } from "@/store/plagiarism/check-plagiarism-by-exam-id";
+import { checkPlagiarismByExamId } from "@/store/plagiarism/check-plagiarism-by-exam-id";
 import { showToast } from "../popup";
 import { useGetAllPlagiarismCheckedExamsQuery } from "@/store/plagiarism/get-all-plagiarism-checked-exams";
 import PlagiarismCheckedExamsTable from "@/components/components/Tables/PlagiarismCheckedExamsTable";
-import router from "next/router";
 import Image from "next/image";
 import { FiSearch } from "react-icons/fi";
-import Link from "next/link";
 import { AiOutlineClose } from "react-icons/ai";
 import Loading from "../common/Loading";
 
@@ -19,7 +17,7 @@ const PlagiarismCheck: React.FC = () => {
   const [sortOrder, setSortOrder] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoadingg, setIsLoadingg] = useState(false);
-  const { data: allEndedExams, isLoading, isError, refetch: examReftch } = useGetAllEndedExamsQuery("");
+  const { data: allEndedExams, isLoading, isError } = useGetAllEndedExamsQuery("");
   const { data: allcheckedxams, isLoading: isCheckedLoading, isError: isCheckedError, refetch } = useGetAllPlagiarismCheckedExamsQuery("");
 
   const closeModal = () => {
@@ -31,11 +29,11 @@ const PlagiarismCheck: React.FC = () => {
       showToast("Please select an exam.", "error");
       return;
     }
-    
+
     try {
       const formData = { examId: selectedOption };
       const data = await checkPlagiarismByExamId(formData);
-      showToast("plagiarism Checked successfully", "success");
+      showToast("Plagiarism checked successfully", "success");
       refetch();
       setShowModal(false);
       setIsLoadingg(true);
@@ -82,18 +80,36 @@ const PlagiarismCheck: React.FC = () => {
   }, []);
 
   if (isLoading) {
-    return <div><Loading/></div>;
+    return <Loading />;
   }
 
   if (isError) {
-    return <div>Error fetching exams.</div>;
+    return (
+      <div className="flex items-center justify-center mt-6">
+        <div className="flex flex-col items-center justify-center p-30 text-center">
+          <Image
+            src="/images/nodata.svg"
+            className="w-42 h-42 mb-4 text-gray-400 dark:text-gray-500"
+            alt=""
+            width={100}
+            height={100}
+          />
+          <h3 className="mb-2 text-base font-semibold text-gray-800 dark:text-gray-200">
+            No Exam Has Been Checked For Plagiarism
+          </h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            It looks like there are no exams to display at the moment. Check back later!
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div>
       <div className="rounded-sm mt-10 bg-white dark:border-stroke dark:bg-box dark">
         <div className="flex items-center mb-10 space-x-2">
-          <div className="flex items-center space-x-2 w-1/4 max-w-lg border-2 border-gray-200 bg-primary bg-opacity-5 rounded-xl overflow-hidden">
+          <div className="flex items-center space-x-2 w-1/2 max-w-lg border-2 border-gray-200 bg-primary bg-opacity-5 rounded-xl overflow-hidden">
             <FiSearch className="ml-4 text-[#7983FB]" />
             <input
               type="text"
@@ -103,31 +119,31 @@ const PlagiarismCheck: React.FC = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <div className="flex flex-col items-center w-1/2 justify-between">
-            <div className="flex items-center border-2 rounded-lg overflow-hidden bg-primary bg-opacity-5 rounded-xl">
+          <div className="flex items-center">
+            <div className="flex items-center border-2 rounded-lg overflow-hidden bg-primary bg-opacity-5 w-full">
               <button
                 onClick={handleSortOrderChange}
-                className="w-full py-2 px-4 outline-none"
+                className="w-40 py-2 px-4 outline-none"
               >
                 Sort by Date {sortOrder === "asc" ? "↑" : "↓"}
-              </button>
-            </div>
-            <div className="flex items-center">
-              <button
-                className="bg-primary shadow-lg rounded-lg hover:bg-primary-hover text-white font-medium py-2 px-4 rounded shadow focus:outline-none transition-transform duration-200 ease-in-out transform hover:scale-105"
-                onClick={() => setShowModal(true)}
-              >
-                Check Plagiarism
               </button>
             </div>
           </div>
         </div>
       </div>
 
+      <div className="flex items-center justify-between mb-6 p-4">
+        <h4 className="text-xl font-semibold text-black dark:text-white">
+          Plagiarism Checked Exams
+        </h4>
+        <button
+          className="bg-primary shadow-lg rounded-lg hover:bg-primary-hover text-white font-medium py-2 px-4 rounded shadow focus:outline-none transition-transform duration-200 ease-in-out transform hover:scale-105"
+          onClick={() => setShowModal(true)}
+        >
+          Check Plagiarism
+        </button>
+      </div>
 
-      <h4 className="text-xl font-semibold text-black mb-6 dark:text-white">
-        Plagiarism Checked Exams
-      </h4>
       {filteredAndSortedQuestions.length !== 0 && (
         <div className="bg-gray-100 rounded-xl drop-shadow-sm">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -143,7 +159,6 @@ const PlagiarismCheck: React.FC = () => {
               </tr>
             </thead>
           </table>
-
         </div>
       )}
 
@@ -186,12 +201,12 @@ const PlagiarismCheck: React.FC = () => {
             ref={modalRef}
             className="relative top-1/4 mx-auto p-5 h-[250px] w-[250px] md:w-[550px] shadow-lg rounded-md bg-white"
           >
-             <button
+            <button
               type="button"
               onClick={() => setShowModal(false)}
               className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
-              >
-                  <AiOutlineClose size={24} />
+            >
+              <AiOutlineClose size={24} />
             </button>
             <div className="mt-3 text-center">
               <div className="text-xl font-bold text-gray-600 mb-6">
@@ -211,39 +226,34 @@ const PlagiarismCheck: React.FC = () => {
                   </option>
                 ))}
               </select>
-
-
-
               <button
                 className="bg-primary text-white p-2 px-6 rounded-lg shadow-lg  transition-transform duration-200 ease-in-out transform hover:scale-105  mt-[67px]"
                 onClick={onSubmit}
               >
                 {isLoadingg ? (
-                    <svg
-                      className="animate-spin h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                  ) : (
-                    "Check Plagiarism"
-                  )}
-                
-                
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                ) : (
+                  "Check Plagiarism"
+                )}
               </button>
             </div>
           </div>
