@@ -22,7 +22,7 @@ const CountingAllAcceptedSubmittedQuestionsPerSection = require('../../controlle
 codeSubmissionRouter.get("/getAllAcceptedSubmissions/:userId", getAllAcceptedSubmissionsByUserId);
 codeSubmissionRouter.post("/submitCode", verifyRoles("student"),isStudent,submitCode);
 codeSubmissionRouter.get("/countCodeSubmissionsForLastWeek/:initialDateString/:userId",verifyRoles("teacher"),isTeacher, countCodeSubmissionsForLastWeek);
-codeSubmissionRouter.get("/countCodeSubmissionsFor5LastMonth/:initialDateString/:userId",verifyRoles("teacher"),isTeacher, countCodeSubmissionsFor5LastMonth);
+codeSubmissionRouter.get("/countCodeSubmissionsFor5LastMonth/:initialDateString/:userId",verifyRoles("student"),isStudent, countCodeSubmissionsFor5LastMonth);
 codeSubmissionRouter.get("/countAcceptedSubmissionsOfUserBySection/:section", verifyRoles("teacher"),isTeacher,countAcceptedSubmissionsOfUserBySection);
 codeSubmissionRouter.get("/countAcceptedSubmissionsPerUser/:userId",countAcceptedSubmissionsPerUser)
 codeSubmissionRouter.get("/countAcceptedSubmissionperDifficulty/:userId",countAcceptedSubmissionperDifficulty)

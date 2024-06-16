@@ -52,9 +52,10 @@ const addCriteria = async (req, res) => {
         if (!examId || !examQuestionId || !teacherId) {
             return res.status(400).json({ message: 'Invalid data received' });
         }
-        if (!timeComplexity || !codeQuality || !codeComment || !codeCorrectness || !gradeValue) {
-            return res.status(400).json({ message: 'timeComplexity , codeQuality , gradeValue,codeComment and codeCorrectness should not be null' });
+        if (timeComplexity == null || codeQuality == null || codeComment == null || codeCorrectness == null || gradeValue == null) {
+            return res.status(400).json({ message: 'timeComplexity, codeQuality, gradeValue, codeComment and codeCorrectness should not be null' });
         }
+        
         if (timeComplexity < 0 || timeComplexity > 1 || codeQuality < 0 || codeQuality > 1 || codeComment < 0 || codeComment > 1 || codeCorrectness < 0 || codeCorrectness > 1) {
             return res.status(400).json({ message: 'timeComplexity , codeQuality , codeComment and codeCorrectness should be between 0 and 1' });
         }
@@ -113,8 +114,8 @@ const updateCriteria = async (req, res) => {
         }
 
        
-        if (!timeComplexity || !codeQuality || !codeComment || !codeCorrectness || !gradeValue) {
-            return res.status(400).json({ message: 'timeComplexity , codeQuality , gradeValue,codeComment and codeCorrectness should not be null' });
+        if (timeComplexity == null || codeQuality == null || codeComment == null || codeCorrectness == null || gradeValue == null) {
+            return res.status(400).json({ message: 'timeComplexity, codeQuality, gradeValue, codeComment and codeCorrectness should not be null' });
         }
         if (timeComplexity < 0 || timeComplexity > 1 || codeQuality < 0 || codeQuality > 1 || codeComment < 0 || codeComment > 1 || codeCorrectness < 0 || codeCorrectness > 1) {
             return res.status(400).json({ message: 'timeComplexity , codeQuality , codeComment and codeCorrectness should be between 0 and 1' });
