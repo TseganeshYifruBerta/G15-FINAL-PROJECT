@@ -7,8 +7,10 @@ const {addCriteria,updateCriteria,deleteCriteria,getCriteriaDetailById} = requir
 const {getStudentExamAnswerById,getRefrenceExamAnswerById,getCriteriaById,getExamTestcaseById } = require('../../controller/grading/fetchGradingComponent')
 const gradeResults = require('../../controller/grading/gradingController')
 const fetchAllGradedExams = require('../../controller/grading/fetchAllGradedExams')
-
-
+const getAllEndedExams = require('../../controller/grading/fetchAllEndedExams')
+const fetchAllGradedStudents = require('../../controller/grading/fetchAllGradedStudents')
+const fetchListOfGradedQuestionsByExamId = require('../../controller/grading/fetchListOfGradedQuestionsByExamId')
+const fetchGradedResult = require('../../controller/grading/fetchGradeResult')
 
             // managing criteria
 gradingRouter.post('/addCriteria', addCriteria);
@@ -25,8 +27,13 @@ gradingRouter.get('/getCriteriaById/:questionId/:examId', getCriteriaById);
 gradingRouter.get('/getExamTestcaseById/:questionId', getExamTestcaseById);
 
 
+
               // check plagiarism
 gradingRouter.post('/gradeResult', gradeResults);
 gradingRouter.get('/fetchAllGradedExams', fetchAllGradedExams);
+gradingRouter.get('/getAllEndedExams/:teacherId', getAllEndedExams);
+gradingRouter.get('/fetchAllGradedStudents/:examId', fetchAllGradedStudents);
+gradingRouter.get('/fetchListOfGradedQuestionsByExamId/:examId/:studentId', fetchListOfGradedQuestionsByExamId);
+gradingRouter.get('/fetchGradedResult/:examId/:studentId/:questionId', fetchGradedResult);
 
 module.exports = gradingRouter;
