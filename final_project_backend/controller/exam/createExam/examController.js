@@ -2,7 +2,8 @@ const CreatExam = require('../../../models/exam/createExam'); // Adjust the path
 const sequelize = require('../../../database/sequelize'); // Adjust the path as necessary
 const SelectedQuestionForExam = require('../../../models/exam/SelectedQuestionForExam'); // Adjust the path as necessary
 const SelectedSectionsForExam = require('../../../models/exam/SelectedSectionsForExam'); // Adjust the path as necessary
-const User = require('../../../models/auth/user.model');
+
+
 
 
 
@@ -17,6 +18,8 @@ const updateCreatedExam = async (req, res) => {
         teacherId: teacherId
       }
     });
+
+  
 
     if (!exam) {
       return res.status(404).json({ message: 'Exam not found' });
@@ -183,29 +186,53 @@ const DeleteSectionToExam = async (req, res) => {
 
 // Function to start an exam
 const startCreatedExam = async (req, res) => {
-  const { id } = req.params; // Get exam ID from the request parameters
+  const { id } = req.params; 
+  
+  // Get exam ID from the request parameters
 
   try {
     const exam = await CreatExam.findByPk(id);
     if (!exam) {
       return res.status(404).json({ error: 'Exam not found' });
-    } 
-    start_time = new Date()
-
+    }
+   
     // Update the exam status to "running"
-    await exam.update({ status: 'running' , start_time: start_time});
 
+      const now = new Date()
+      const start_time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      await exam.update({ status: 'running' , start_time: start_time});
+  
     // Schedule to update the status to "ended" after the exam's duration
     const durationInMilliseconds = exam.duration * 60000; // Convert duration from minutes to milliseconds
     setTimeout(async () => {
       await exam.update({ status: 'end' });
-    }, durationInMilliseconds);
+    }, durationInMilliseconds );
 
     return res.status(200).json({ message: 'Exam started successfully' });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
+
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const endStartedExam = async (req, res) => {
   const { id } = req.params; // Get exam ID from the request parameters
@@ -215,7 +242,6 @@ const endStartedExam = async (req, res) => {
     if (!exam) {
       return res.status(404).json({ error: 'Exam not found' });
     }
-
     await exam.update({ status: 'end' });
 
     return res.status(200).json({ message: 'Exam ended successfully' });
@@ -233,10 +259,8 @@ module.exports = {
   deleteCreatedExam,
   updateCreatedExam,
   startCreatedExam,
-
   AddSectionToExam,
   DeleteSectionToExam,
-
   endStartedExam
 
 }
