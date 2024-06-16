@@ -15,7 +15,10 @@ const plagiarismRouter = require("./routes/plagiarism/plagiarismRoute.js");
 const ActivateRouter = require(
   "./routes/Activate/activateUserRoute.js"
 ) 
+<<<<<<< HEAD
 const bodyParser = require('body-parser');
+=======
+>>>>>>> d2d4b4f (profile , adding id to detail of lab question)
 
 const verifyJWT = require("./middleware/verifyJWT.js")
 const checkUserStatus = require("./middleware/userStatus.js")
