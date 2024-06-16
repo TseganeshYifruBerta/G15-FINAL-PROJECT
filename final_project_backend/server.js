@@ -85,5 +85,5 @@ app.use("/plagiarism", plagiarismRouter);
 app.use("/grading", gradingRouter);
 
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`BACK_END_SERVICE_PORT: ${port}`));
