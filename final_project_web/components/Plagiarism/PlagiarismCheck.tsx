@@ -9,6 +9,7 @@ import Image from "next/image";
 import { FiSearch } from "react-icons/fi";
 import Link from "next/link";
 import { AiOutlineClose } from "react-icons/ai";
+import Loading from "../common/Loading";
 
 const PlagiarismCheck: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState("");
@@ -17,6 +18,7 @@ const PlagiarismCheck: React.FC = () => {
   const [filter, setFilter] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoadingg, setIsLoadingg] = useState(false);
   const { data: allEndedExams, isLoading, isError, refetch: examReftch } = useGetAllEndedExamsQuery("");
   const { data: allcheckedxams, isLoading: isCheckedLoading, isError: isCheckedError, refetch } = useGetAllPlagiarismCheckedExamsQuery("");
 
@@ -36,9 +38,11 @@ const PlagiarismCheck: React.FC = () => {
       showToast("plagiarism Checked successfully", "success");
       refetch();
       setShowModal(false);
+      setIsLoadingg(true);
     } catch (error) {
       console.error("Error checking plagiarism:", error);
       showToast("Error checking plagiarism: " + (error as Error).message, "error");
+      setIsLoadingg(false);
     }
   };
 
@@ -78,7 +82,7 @@ const PlagiarismCheck: React.FC = () => {
   }, []);
 
   if (isLoading) {
-    return <div>Loading exams...</div>;
+    return <div><Loading/></div>;
   }
 
   if (isError) {
@@ -99,7 +103,7 @@ const PlagiarismCheck: React.FC = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <div className="flex items-center w-1/2 justify-between">
+          <div className="flex flex-col items-center w-1/2 justify-between">
             <div className="flex items-center border-2 rounded-lg overflow-hidden bg-primary bg-opacity-5 rounded-xl">
               <button
                 onClick={handleSortOrderChange}
@@ -214,7 +218,32 @@ const PlagiarismCheck: React.FC = () => {
                 className="bg-primary text-white p-2 px-6 rounded-lg shadow-lg  transition-transform duration-200 ease-in-out transform hover:scale-105  mt-[67px]"
                 onClick={onSubmit}
               >
-                Check Plagiarism
+                {isLoadingg ? (
+                    <svg
+                      className="animate-spin h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                  ) : (
+                    "Check Plagiarism"
+                  )}
+                
+                
               </button>
             </div>
           </div>
