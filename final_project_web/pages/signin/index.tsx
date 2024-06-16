@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState, ChangeEvent } from "react";
 import { Input } from "@material-tailwind/react";
 import { login } from "@/store/login/login-api";
 import { useRouter } from "next/router";
+import { showToast } from "@/components/popup";
 
 function Copyright() {
   return (
@@ -98,7 +99,7 @@ setIsLoading(true);
       }
     } catch (error) {
       console.error("Error during login:", error);
-      // Handle error, maybe set an error state to display in the UI.
+      showToast('Login Error: ' + (error as Error).message, 'error');
     } finally {
       setIsLoading(false);
     }
