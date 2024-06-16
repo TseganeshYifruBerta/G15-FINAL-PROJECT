@@ -76,7 +76,7 @@ const PassKeyPopup: React.FC<PassKeyPopupProps> = ({examId}) => {
     <div>
       <div>
         <button
-          className="text-sm text-white bg-primary py-2 px-4 rounded-md hover:bg-primary-hover"
+          className="text-sm text-white bg-primary py-[8px] px-4 rounded-md hover:bg-primary-hover"
           onClick={() => setShowModal(true)}
         >
           Enter Exam

@@ -93,7 +93,7 @@ useEffect(() => {
        )
      );
    };
-  const filteredExams = exams?.filter((exam: any) =>
+  const filteredExams = exams?.exams.filter((exam: any) =>
     exam.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
   console.log(exams, "exams");
@@ -157,7 +157,7 @@ Enter          </div>
 
         {filteredExams.map((exam: any, key: any) => (
           <div
-            className={`w-full flex px-4 py-4.5 sm:grid-cols-8 md:px-6 2xl:px-7.5 text-md
+            className={`w-full flex px-4 py-[8px] sm:grid-cols-8 md:px-6 2xl:px-7.5 text-md
             ${key % 2 === 0 ? "bg-primary bg-opacity-5" : "bg-white"}`}
             key={key}
           >
@@ -176,7 +176,7 @@ Enter          </div>
             </div>
             <div className="w-1/5 flex items-center">
               <button
-                className="text-sm text-white bg-primary py-2 px-4 rounded-md hover:bg-primary-hover"
+                className="text-sm text-white bg-primary py-[8px] px-4 rounded-md hover:bg-primary-hover"
                 onClick={() => handleViewClick()}
               >
                 View

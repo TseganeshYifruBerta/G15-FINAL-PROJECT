@@ -46,7 +46,7 @@ export const getAllExamsApi = createApi({
       query: (params) => {
              const token = localStorage.getItem("token");
              const userId = jwt.decode(token).id;
-        let url = `${URL}/exam/getAllEndedExamsByStudentId/${userId}`;
+        let url = `${URL}/exam/getAllExamsByStudentId/${userId}`;
 
         return {
           url: url,

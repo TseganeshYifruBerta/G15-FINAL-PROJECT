@@ -15,14 +15,22 @@ const creatExam = sequelize.define("exam", {
     allowNull: false,
   },
 
+<<<<<<< HEAD
   examTime :{
+=======
+  eXamTime :{
+>>>>>>> afcd2cb (update)
     type: DataTypes.STRING,
     allowNull: false,
 
   },
   start_time: {
     type: DataTypes.STRING,
+<<<<<<< HEAD
     defaultValue: "00:00",
+=======
+    allowNull: "00:00",
+>>>>>>> afcd2cb (update)
 
   },
   instruction: {

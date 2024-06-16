@@ -53,6 +53,7 @@ const ExamForm = () => {
     chapter: chapter,
     tag: selectedTag,
     plagiarismRatio: plagiarismRatio,
+    gradeValue: "0"
   };
 
   const handleAddTestCase = () => {
@@ -101,6 +102,7 @@ const ExamForm = () => {
   const onSubmit = async (event: any) => {
     event.preventDefault();
     setLoading(true); // Set loading to true when the form is submitted
+      console.log("Upload successful", values);
 
     try {
       const data = await uploadexamquestion(
