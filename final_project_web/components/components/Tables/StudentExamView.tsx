@@ -19,18 +19,20 @@ const [isLoading, setIsLoading] = useState(false)
     isError:examError,
   } = useGetAllExamListStudentQuery("");
  
-// const { data:result, isLoading:resultLoading, isError:resultError } = useGetExamResultByStudentIdQuery("");
-// submitParams,
-//   {
-//     skip: !submitParams, // Skip the query if submitParams is null
-//   };
- if (examLoading ) {
+const { data:result, isLoading:resultLoading, isError:resultError } = useGetExamResultByStudentIdQuery(submitParams,
+  {
+    skip: !submitParams, // Skip the query if submitParams is null
+  });
+
+ if (examLoading || resultLoading) {
    return <div>Loading...</div>;
  }
 
- if (examError ){
+ if (examError || resultError){
   return <div>Error...</div>
  }
+
+ console.log(result)
   // Days of the week
   const days = [
     "Sunday",

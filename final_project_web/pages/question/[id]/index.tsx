@@ -9,6 +9,7 @@ import SplitPane from "react-split-pane-next";
 import CodeEditorBox from "@/components/codeeditor/CodeEditorBox";
 import Loading from "@/components/common/Loading";
 import { IoChevronBack } from "react-icons/io5";
+import { useGetSpecificQuestionSubmissionDetailQuery } from "@/store/question/get-top-solved-questions";
 
 interface QuestionSubmissionProps {
   submissions: any;
@@ -57,6 +58,20 @@ const QuestionSetTab: React.FC<QuestionSetProps> = ({
   questionExample,
   difficulty,
 }) => {
+
+  const { data, isLoading, isError } =
+    useGetSpecificQuestionSubmissionDetailQuery({questionId:questionId})
+
+    if(isLoading){
+      return <div>
+        <Loading />
+      </div>
+    }
+    if (isError){
+      return <div>Error...</div>
+    }
+
+    console.log(data, "data")
   return (
     <div className="ml-4">
       <QuestionSet
