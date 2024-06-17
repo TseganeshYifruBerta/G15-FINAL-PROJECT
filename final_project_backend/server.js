@@ -14,7 +14,12 @@ const codeSubmissionRouter = require("./routes/codeSubmission/codeSubmissionRout
 const plagiarismRouter = require("./routes/plagiarism/plagiarismRoute.js");
 const ActivateRouter = require(
   "./routes/Activate/activateUserRoute.js"
-) 
+
+)
+const InfoRouter = require("./routes/info/information.js")
+
+
+
 const bodyParser = require('body-parser');
 
 const verifyJWT = require("./middleware/verifyJWT.js")
@@ -50,6 +55,10 @@ initializeDatabase();
 
 app.use(cors());
 app.use(cookieParser());
+
+
+app.use("/information",InfoRouter);
+
 
 // Routes related to Authentication
 app.use("/", routes);
