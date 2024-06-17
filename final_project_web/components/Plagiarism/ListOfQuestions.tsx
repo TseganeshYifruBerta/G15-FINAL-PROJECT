@@ -59,7 +59,7 @@ const AllQuestionsInPLagiarism: React.FC<AllQuestionsProps> = ({
         <div className="flex gap-5">
           <Link href={`/plagiarism/${examId}`}><IoChevronBack className="text-3xl text-primary"/></Link>
           <h4 className="text-xl font-semibold text-gray-700 dark:text-white ">
-            All Exam questions
+            All Plagiarized Exam questions
           </h4>
         </div>
         <div className="flex items-center mb-8 space-x-2 w-1/3 max-w-lg border-2 border-gray-200 bg-primary bg-opacity-5 rounded-xl overflow-hidden">

@@ -50,6 +50,11 @@ const navigations: any = {
       name: "Plagiarism",
       icon: MdOutlineTopic,
     },
+    {
+      href: "/grading/grading",
+      name: "Grading",
+      icon: MdOutlineTopic,
+    },
   ],
   student: [
     {
