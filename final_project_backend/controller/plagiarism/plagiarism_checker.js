@@ -28,6 +28,10 @@ const checkPlagiarism = async (req, res) => {
         ],
 
       },{transaction});
+      if (!findAllUser) {
+        return res.status(400).json({ message: 'No students submitted Answer found for this exam' });
+      } 
+
       const allUser = findAllUser.map((userIds) => userIds.UserinformationId);
       let allQuestions = []
     
