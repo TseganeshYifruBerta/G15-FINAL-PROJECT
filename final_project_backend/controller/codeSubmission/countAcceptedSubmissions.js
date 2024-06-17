@@ -207,39 +207,36 @@ const countAcceptedSubmissionperDifficulty = async (req, res) => {
       ],
     });
 
+    uniqueQuestionIds = new Set(acceptedSubmissions.map(submission => submission.questionId));
+
 
     let easyCount = 0;
     let mediumCount = 0;
     let hardCount = 0;
-    const  countedQuestionId = new Set();
-    for (const submission of acceptedSubmissions) {
-      const question = await Question.findOne({
-        where: {
-          id: submission.questionId,
-        },
-      });
-      if (!countedQuestionId.has(question.id)) {
-        countedQuestionId.add(submission.questionId);
-
-
-      
-      if (question.difficulty === 'easy') {
-        easyCount++;
-      }
-      if (question.difficulty === 'medium') {
-        mediumCount++;
-      }
-      if (question.difficulty === 'hard') {
-        hardCount++;
-      }
-    }
-    return res.status(200).json({ easyCount, mediumCount, hardCount });
-  }}
-    catch (error) {
-      console.log(error);
-      return res.status(500).json({ error: "Internal Server Error" });
-    }
+    const questions = await Question.findAll({  
+      where: {
+           id: Array.from(uniqueQuestionIds),
+          },
+  });
+  // Count the questions based on their difficulty
+  for (const question of questions) {  
+        if (question.difficulty === 'easy') {
+      easyCount++;      } 
+      else if (question.difficulty === 'medium')
+       {
+      mediumCount++;      } 
+      else if (question.difficulty === 'hard')
+       {
+      hardCount++;      }
   }
+    return res.status(200).json({ easyCount, mediumCount, hardCount });
+  }
+  catch (error) {
+    
+    console.log(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }}
+  
   const submissionPerStudentOnSpecificQuestion = async (req, res) => {
     const { questionId ,studentId} = req.params;
     try {
@@ -248,6 +245,13 @@ const countAcceptedSubmissionperDifficulty = async (req, res) => {
           questionId: questionId,
           userId: studentId
         },
+        include: [
+          {
+            model: Status,
+            as: "Status",
+            
+          }
+        ]
       });
       return res.status(200).json(submission);
     } catch (error) {
