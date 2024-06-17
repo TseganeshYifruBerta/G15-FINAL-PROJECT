@@ -171,21 +171,28 @@ const PlagiarismCheck: React.FC = () => {
       </div>
 
       {filteredAndSortedQuestions.length !== 0 && (
-        <div className="bg-gray-100 rounded-xl drop-shadow-sm">
-          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-              <tr>
-                <th scope="col" className="py-3 px-4">Title</th>
-                <th scope="col" className="py-3 px-4">Instruction</th>
-                <th scope="col" className="py-3 px-4">Date and Time</th>
-                <th scope="col" className="py-3 px-4">Status</th>
-                <th scope="col" className="py-3 px-4">Tag</th>
-                <th scope="col" className="py-3 px-4">Duration</th>
-                
-              </tr>
-            </thead>
-          </table>
-        </div>
+         <div className="grid grid-cols-6 px-4 py-3 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 font-bold text-sm bg-gray-100  text-gray-700  rounded-lg">
+         <div className="col-span-2 flex items-center">
+           <p className="ml-2">Title</p>
+         </div>
+         <div className="col-span-2 hidden items-center sm:flex">
+           <p className="ml-2">Instruction</p>
+         </div>
+         <div className="col-span-1 flex items-center">
+           <p className="ml-2">Date and Time</p>
+         </div>
+         <div className="col-span-1 flex items-center">
+           <p className="ml-2">Status</p>
+         </div>
+         
+         <div className="col-span-1 flex items-center">
+           <p className="ml-2">Tag</p>
+         </div>
+         <div className="col-span-1 flex items-center">
+           <p className="ml-2">Duration</p>
+         </div>
+       </div>
+       
       )}
 
       {filteredAndSortedQuestions.map((exam: any) => (

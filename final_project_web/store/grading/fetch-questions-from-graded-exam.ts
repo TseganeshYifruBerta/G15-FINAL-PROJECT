@@ -22,7 +22,7 @@ export const fetchQuestionsFromGradedExamApi = createApi({
       query: (params) => {
         const {  examId, studentId} = params;
 
-        let url = `${URL}/plagiarism/fetchListOfQuestionsByExamId`;
+        let url = `${URL}/grading/fetchListOfGradedQuestionsByExamId`;
         const queryParams = [];
 
         queryParams.push(`${examId}`);
