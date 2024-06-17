@@ -88,7 +88,7 @@ const AllStudents = () => {
         </div>
 
         {filteredStudents.map((student: any, key: any) => (
-          <Link href={`/student/${student.id}`}>
+          <Link href={`/student/${student.id}`} key={key}>
             <div
               className={` ${
                 key % 2 === 0 ? "bg-primary bg-opacity-5" : "bg-white"

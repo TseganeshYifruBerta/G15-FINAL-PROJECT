@@ -47,8 +47,7 @@ const QuestionById: React.FC = () => {
         <CodeEditorBox
           currentCode={currentCode}
           userId={"1"}
-          questionId={questionId}
-        />
+          questionId={questionId} functionName={""}        />
         {/* <CodeSubmission /> */}
       </div>
     </div>
