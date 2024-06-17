@@ -3,6 +3,7 @@ interface TopStudentsProps {
   topstudents: any;
 }
 const TopStudents: React.FC<TopStudentsProps> = ({ topstudents }) => {
+  console.log(topstudents, "topstudents")
   return (
     <div className="rounded-xl bg-primary bg-opacity-5 h-[450px] px-5 pb-2.5 pt-6 shadow-lg dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
@@ -26,25 +27,25 @@ const TopStudents: React.FC<TopStudentsProps> = ({ topstudents }) => {
           </p>
         </div>
       ) : (
-        <div className="flex flex-col text-xs font-bold">
+        <div className="flex flex-col text-sm font-bold ">
           <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-4">
             <div className="p-2.5 xl:p-5">
-              <h5 className="font-medium">Full Name</h5>
+              <h5 className="">Full Name</h5>
             </div>
             <div className="p-2.5 text-center xl:p-5">
-              <h5 className="font-medium">User ID</h5>
+              <h5 className="">User ID</h5>
             </div>
             <div className="p-2.5 text-center xl:p-5">
-              <h5 className="font-medium">Total Solved</h5>
+              <h5 className="">Total Solved</h5>
             </div>
             <div className="hidden p-2.5 text-center sm:block xl:p-5">
-              <h5 className="font-medium">Section</h5>
+              <h5 className="">Section</h5>
             </div>
           </div>
 
           {topstudents.map((student: any, key: any) => (
             <div
-              className={`grid grid-cols-3 sm:grid-cols-4 ${
+              className={`text-gray-700 grid grid-cols-3 sm:grid-cols-4 font-medium ${
                 key === topstudents.length - 1
                   ? ""
                   : "border-b border-stroke dark:border-strokedark"
@@ -52,17 +53,17 @@ const TopStudents: React.FC<TopStudentsProps> = ({ topstudents }) => {
               key={key}
             >
               <div className="flex items-center gap-3 p-2.5 xl:p-5">
-                <p className="hidden text-black dark:text-white sm:block">
-                  {student.fullName}
+                <p className="hidden sm:block">
+                  {student.Userinformation.fullName}
                 </p>
               </div>
 
               <div className="flex items-center justify-center p-2.5 xl:p-5">
-                <p className="text-black dark:text-white">{student.userId}</p>
+                <p className="">{student.Userinformation.userId}</p>
               </div>
 
               <div className="flex items-center justify-center p-2.5 xl:p-5">
-                <p className="text-meta-3">10</p>
+                <p className="text-meta-3">{student.acceptedCount}</p>
               </div>
 
               <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">

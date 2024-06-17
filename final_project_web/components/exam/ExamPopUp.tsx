@@ -5,8 +5,10 @@ import { useGetPassKeyQuery } from "@/store/exam/pass-key-api";
 import ExamDetail from "./ExamDetail";
 interface PassKeyPopupProps {
   examId: string;
+  disable: boolean;
+  color: string;
 }
-const PassKeyPopup: React.FC<PassKeyPopupProps> = ({ examId }) => {
+const PassKeyPopup: React.FC<PassKeyPopupProps> = ({ examId, disable, color }) => {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [passKey, setPassKey] = useState("");
@@ -22,11 +24,10 @@ const PassKeyPopup: React.FC<PassKeyPopupProps> = ({ examId }) => {
   const { data, error, isFetching } = useGetPassKeyQuery(submitParams, {
     skip: !submitParams, // Skip the query if submitParams is null
   });
-
   useEffect(() => {
     if (!isFetching) {
       if (error) {
-        setPassKeyError("Invalid passkey");
+        setPassKeyError("exam already submitted or invalid passkey");
       } else if (data) {
         closeModal();
         console.log(data, "data exam detail");
@@ -76,8 +77,13 @@ const PassKeyPopup: React.FC<PassKeyPopupProps> = ({ examId }) => {
     <div>
       <div>
         <button
-          className="text-sm text-white bg-primary py-[8px] px-4 rounded-md hover:bg-primary-hover"
-          onClick={() => setShowModal(true)}
+          className={`text-sm text-white ${color} py-[8px] px-4 rounded-md hover:${color}`}
+          onClick={() => {
+            if (!disable) {
+              setShowModal(true);
+            }
+          }}
+          
         >
           Enter Exam
         </button>

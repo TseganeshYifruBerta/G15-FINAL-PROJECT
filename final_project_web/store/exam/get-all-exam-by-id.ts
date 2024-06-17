@@ -43,8 +43,20 @@ export const getExamQuestionByIdApi = createApi({
         };
       },
     }),
+    startExamById: builder.query({
+      query: (params) => {
+        const { examId } = params;
+        let url = `${URL}/exam/startExam`;
+        const queryParams = [];
+        queryParams.push(`${examId}`);
+        return {
+          url: queryParams.length > 0 ? `${url}/${queryParams.join("/")}` : url,
+          method: "PUT",
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetExamQuestionByIdQuery, useGetExamByIdQuery } =
+export const { useGetExamQuestionByIdQuery, useGetExamByIdQuery, useStartExamByIdQuery } =
   getExamQuestionByIdApi;

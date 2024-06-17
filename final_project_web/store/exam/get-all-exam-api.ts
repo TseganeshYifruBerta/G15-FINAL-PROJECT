@@ -45,7 +45,21 @@ export const getAllExamsApi = createApi({
       query: (params) => {
         const token = localStorage.getItem("token");
         const userId = jwt.decode(token).id;
+        console.log(userId, "userId")
         let url = `${URL}/exam/getAllExamsByStudentId/${userId}`;
+
+        return {
+          url: url,
+          method: "GET",
+        };
+      },
+    }),
+    getExamResultByStudentId: builder.query({
+      query: (params) => {
+        const examId = params.examId
+        const token = localStorage.getItem("token");
+        const userId = jwt.decode(token).id;
+        let url = `${URL}/grading/fetchGradeResultByStudentId/${examId}/${userId}`;
 
         return {
           url: url,
@@ -111,4 +125,5 @@ export const {
   useDeleteExamMutation,
   useUpdateExamMutation,
   useGetAllExamListStudentQuery,
+  useGetExamResultByStudentIdQuery
 } = getAllExamsApi;

@@ -95,10 +95,10 @@ const newtestcases = {
       console.log(data, "testcases added successful");
       showToast("testcases added successful", "success");
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("Add Error:", error);
       console.log(values);
 
-      showToast("Login error: " + (error as Error).message, "error");
+      showToast("Add Error: " + (error as Error).message, "error");
     }
   };
 
@@ -147,7 +147,7 @@ console.log(testCases, "testCases");
       console.log(data, "updated successfully");
       showToast("Updated successfully", "success");
 
-      // router.push("/teacher/questions");
+      router.push("/teacher/questions");
     } catch (error) {
       // Handle error
     }

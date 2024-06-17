@@ -9,14 +9,41 @@ import {
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Loading from "@/components/common/Loading";
+import { useStartExamByIdQuery } from "@/store/exam/get-all-exam-by-id";
+import { showToast } from "@/components/popup";
 
 interface ExamsProps {
   allexamlist: any;
+  refetchexam: any;
 }
-const ListOfExam: React.FC<ExamsProps> = ({ allexamlist }) => {
+
+const ListOfExam: React.FC<ExamsProps> = ({ allexamlist, refetchexam }) => {
   const router = useRouter();
   const [teacherId, setTeacherId] = useState("");
   const [chapterStrings, setChapterStrings] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Renamed to avoid conflict with Loading component
+  const [submitParams, setSubmitParams] = useState<{
+    examId: string;
+  } | null>(null);
+
+  const { data, error, refetch } = useStartExamByIdQuery(submitParams, {
+    skip: !submitParams, // Skip the query if submitParams is null
+  });
+
+  useEffect(() => {
+    if (data?.message) {
+      if (data.message == "Exam started successfully") {
+        showToast(data.message, "success");
+      } else if (data?.message == "Restrict for ended and running exam") {
+        showToast(data.message, "success");
+      }
+      setIsLoading(false);
+    }
+    if (error) {
+      showToast("error while starting exam", "error");
+      setIsLoading(false);
+    }
+  }, [data, error]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -27,48 +54,60 @@ const ListOfExam: React.FC<ExamsProps> = ({ allexamlist }) => {
     } else {
       router.push("/");
     }
-  }, []);
+  }, [router]);
 
-  // Mutation hook for deleting a question
   const [deleteExam, { isLoading: isDeleting }] = useDeleteExamMutation();
   const handleDeleteExam = async (questionId: any, event: any) => {
     event.preventDefault();
     try {
       await deleteExam(questionId);
-      // refetch();
-      // refetch();
+      showToast("Exam deleted successfully", "success");
+      refetchexam();
     } catch (error) {
-      // Handle error
-      console.log("error deleting");
+      showToast("Error deleting exam", "error");
     }
   };
 
-  console.log(allexamlist, "allexamlist");
-  const chapterString = () => {
+  const chapterString = (value: any) => {
     let chapterString = "";
-    console.log(allexamlist[0].selectedChapters, "hel");
-    allexamlist[0].selectedSectionsForExam.map((chapter: any, key: any) => {
-      chapterString += chapter.sections;
-      if (key != allexamlist[0].selectedSectionsForExam.length - 1) {
+    allexamlist[value].selectedChapters.map((chapter: any, key: any) => {
+      chapterString += chapter.chapter;
+      if (key != allexamlist[value].selectedChapters.length - 1) {
         chapterString += ", ";
       }
     });
+    if (!chapterString) {
+      return "-";
+    }
     return chapterString;
   };
 
-  const sectionString = () => {
+  const sectionString = (value: any) => {
     let sectionString = "";
-    allexamlist[0].selectedChapters.map((chapter: any, key: any) => {
-      sectionString += chapter.chapter;
-      if (key != allexamlist[0].selectedChapters.length - 1) {
+    allexamlist[value].selectedSectionsForExam.map((section: any, key: any) => {
+      sectionString += section.sections;
+      if (key != allexamlist[value].selectedSectionsForExam.length - 1) {
         sectionString += ", ";
       }
     });
+    if (!sectionString) {
+      return "-";
+    }
     return sectionString;
   };
+
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>,
+    examId: string
+  ) => {
+    event.preventDefault();
+    setIsLoading(true);
+    setSubmitParams({ examId });
+  };
+
   return (
-    <div className="col-span-12 rounded-sm  bg-primary bg-opacity-5 shadow-md xl:col-span-4 ">
-      {allexamlist?.length == undefined || allexamlist?.length == 0 ? (
+    <div className="col-span-12 rounded-sm bg-primary bg-opacity-5 shadow-md xl:col-span-4 ">
+      {allexamlist?.length === undefined || allexamlist?.length === 0 ? (
         <div className="flex flex-col items-center justify-center p-10 text-center">
           <Image
             src="/images/nodata.svg"
@@ -87,7 +126,7 @@ const ListOfExam: React.FC<ExamsProps> = ({ allexamlist }) => {
         </div>
       ) : (
         <div className="w-full">
-          <div className="border-t  px-4 py-2 dark:border-strokedark sm:grid-cols-8">
+          <div className="border-t px-4 py-2 dark:border-strokedark sm:grid-cols-8">
             <div className="flex items-center">
               <div className="w-full gap-4 flex sm:items-center font-bold text-gray-700">
                 <div className="w-4/5">
@@ -100,22 +139,28 @@ const ListOfExam: React.FC<ExamsProps> = ({ allexamlist }) => {
                   <p className="text-sm dark:text-white">Time</p>
                 </div>
                 <div className="w-1/2">
-                  <p className="text-sm  dark:text-white">Questions</p>
+                  <p className="text-sm dark:text-white">Questions</p>
                 </div>
                 <div className="w-1/2">
-                  <p className="text-sm  dark:text-white">Chapters</p>
+                  <p className="text-sm dark:text-white">Chapters</p>
                 </div>
                 <div className="w-1/2">
-                  <p className="text-sm  dark:text-white">Tag</p>
+                  <p className="text-sm dark:text-white">Tag</p>
                 </div>
                 <div className="w-1/2">
-                  <p className="text-sm  dark:text-white">Sections</p>
+                  <p className="text-sm dark:text-white">Sections</p>
                 </div>
                 <div className="w-1/2">
-                  <p className="text-sm  dark:text-white">Duration</p>
+                  <p className="text-sm dark:text-white">Duration</p>
                 </div>
                 <div className="w-1/2">
-                  <p className="text-sm  dark:text-white">Actions</p>
+                  <p className="text-sm dark:text-white">Actions</p>
+                </div>
+                <div className="w-1/2">
+                  <p className="text-sm dark:text-white">Status</p>
+                </div>
+                <div className="w-1/2">
+                  <p className="text-sm dark:text-white">Start Exam</p>
                 </div>
               </div>
             </div>
@@ -124,8 +169,7 @@ const ListOfExam: React.FC<ExamsProps> = ({ allexamlist }) => {
             <div
               className={` ${
                 key % 2 === 0 ? "bg-primary bg-opacity-5" : "bg-white"
-              }
-                       pl-4 pr-2 py-1 text-sm`}
+              } pl-4 pr-2 py-1 text-sm`}
               key={key}
             >
               <div className="flex items-center">
@@ -135,41 +179,41 @@ const ListOfExam: React.FC<ExamsProps> = ({ allexamlist }) => {
                     className="w-4/5 justify-center"
                   >
                     <div>
-                      <p className=" text-black dark:text-white">
+                      <p className="text-black dark:text-white">
                         {exam.id} . {exam.title}
                       </p>
                     </div>
                   </Link>
                   <div className="w-1/2">
-                    <p className=" text-gray-500 dark:text-white">
+                    <p className="text-gray-500 dark:text-white">
                       {exam.examDate}
                     </p>
                   </div>
                   <div className="w-1/2">
-                    <p className=" text-gray-500 dark:text-white">
+                    <p className="text-gray-500 dark:text-white">
                       {exam.examTime}
                     </p>
                   </div>
                   <div className="w-1/2">
-                    <p className=" text-gray-500 dark:text-white">
+                    <p className="text-gray-500 dark:text-white">
                       {exam.selectedQuestionsForExam.length}
                     </p>
                   </div>
                   <div className="w-1/2">
-                    <p className=" text-gray-500 dark:text-white">
-                      {chapterString()}
+                    <p className="text-gray-500 dark:text-white">
+                      {chapterString(key)}
                     </p>
                   </div>
                   <div className="w-1/2">
-                    <p className=" text-gray-500 dark:text-white">{exam.tag}</p>
+                    <p className="text-gray-500 dark:text-white">{exam.tag}</p>
                   </div>
                   <div className="w-1/2">
-                    <p className=" text-gray-500 dark:text-white">
-                      {sectionString()}
+                    <p className="text-gray-500 dark:text-white">
+                      {sectionString(key)}
                     </p>
                   </div>
                   <div className="w-1/2">
-                    <p className=" text-gray-500 dark:text-white">
+                    <p className="text-gray-500 dark:text-white">
                       {exam.duration}
                     </p>
                   </div>
@@ -183,7 +227,7 @@ const ListOfExam: React.FC<ExamsProps> = ({ allexamlist }) => {
                           viewBox="0 0 24 24"
                           strokeWidth="1.5"
                           stroke="currentColor"
-                          className="w-8 h-8  rounded-full bg-[#FF3B30] bg-opacity-20 p-2 -ml-[22px]"
+                          className="w-8 h-8 rounded-full bg-[#FF3B30] bg-opacity-20 p-2 -ml-[22px]"
                         >
                           <path
                             strokeLinecap="round"
@@ -210,8 +254,7 @@ const ListOfExam: React.FC<ExamsProps> = ({ allexamlist }) => {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth="1.5"
-                            d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z
-"
+                            d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
                           />
                         </svg>
                       </button>
@@ -249,16 +292,38 @@ const ListOfExam: React.FC<ExamsProps> = ({ allexamlist }) => {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth="1.5"
-                            // d="m1 14 3-3m-3 3 3 3m-3-3h16v-3m2-7-3 3m3-3-3-3m3 3H3v3"\
-                            d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z
-"
+                            d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
                           />
                         </svg>
                       </button>
                     </div>
                   )}
+                  <div className="w-1/2">
+                    <p
+                      className={`${
+                        exam.status == "running" ? "text-green-500" : ""
+                      } ${exam.status == "ended" ? "text-red-500" : ""} ${
+                        exam.status == "upcomming" ? "text-yellow-700" : ""
+                      } text-gray-500 dark:text-white`}
+                    >
+                      {exam.status}
+                    </p>
+                  </div>
+                  <div className="w-1/2">
+                    <button
+                      onClick={(e: any) => {
+                        if (exam.status == "upcoming") {
+                          handleSubmit(e, exam.id);
+                        }
+                      }}
+                      className={`rounded-lg w-[80px] px-2 py-1 text-white ${exam.status == "running" ? "bg-green-500":""} ${exam.status == "upcoming" ? "bg-yellow-600":""} ${exam.status == "end" ? "bg-red-500":""}`}
+                    >
+                      {exam.status == "running" ? "Started" : ""}
+                      {exam.status == "upcoming" ? "Start" : ""}
+                      {exam.status == "end" ? "Ended" : ""}
+                    </button>
+                  </div>
                 </div>
-                {/* <div className="flex flex-col gap-4 sm:flex-row sm:items-center"></div> */}
               </div>
             </div>
           ))}

@@ -46,7 +46,7 @@ const QuestionForms = () => {
     difficulty: questionDifficulty,
     description: questionDescription,
     example: examples,
-    functionName: "functionName",
+    functionName: functionName,
     teacherId: teacherId,
   };
 

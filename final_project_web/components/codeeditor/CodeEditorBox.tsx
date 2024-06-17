@@ -17,10 +17,11 @@ interface FormValuesSubmit {
   pythonCode: string;
   id: string
 }
-interface editorProps{
-  currentCode : string,
-  userId:string,
-  questionId:string
+interface editorProps {
+  currentCode: string;
+  userId: string;
+  questionId: string;
+  functionName:string
 }
 interface SubmitCodeStatusProps{
   submitStatus: string
@@ -52,10 +53,10 @@ return (
   }
   
 }
-const CodeEditorBox: React.FC<editorProps> = ({userId, questionId}) => {
+const CodeEditorBox: React.FC<editorProps> = ({userId, questionId, functionName}) => {
   const MAX_HEIGHT = 800;
   const [submitStatus, setSubmitStatus] = useState("");
-  const [currentCode, setCurrentCode] = useState("def grade_checker(score):\n");
+  const [currentCode, setCurrentCode] = useState(functionName);
   const [currentInput, setCurrentInput] = useState<string[]>([]);
   const [currentExpectedOutput, setCurrentExpectedOutput] = useState<string[]>(
     []

@@ -53,6 +53,7 @@ import { getAllDifficultyDataPerUserApi } from "./submissions/get-all-difficulty
 import { getCountCodeSubmissionsForLastMonthApi } from "./submissions/get-all-last-month-submissions-by-id";
 import { upcomingExamsApi } from "./exam/upcoming-exam-api";
 import { countAcceptedSubmissionsperDifficultyApi } from "./submissions/count-Accepted-submissions-per-Difficulty";
+import {acceptedApi} from "./teacherprofile/get-accepted-submission-section-api";
 import userProfileReducer from "@/store/account/slice_reducer";
 
 export const store = configureStore({
@@ -121,6 +122,7 @@ export const store = configureStore({
     [getCountCodeSubmissionsForLastMonthApi.reducerPath]:
       getCountCodeSubmissionsForLastMonthApi.reducer,
     [upcomingExamsApi.reducerPath]: upcomingExamsApi.reducer,
+    [acceptedApi.reducerPath]: acceptedApi.reducer,
     [countAcceptedSubmissionsperDifficultyApi.reducerPath]:
       countAcceptedSubmissionsperDifficultyApi.reducer,
   },
@@ -159,7 +161,8 @@ export const store = configureStore({
       .concat(getCountCodeSubmissionsForLastMonthApi.middleware)
       .concat(upcomingExamsApi.middleware)
       .concat(countAcceptedSubmissionsperDifficultyApi.middleware)
-      .concat(getPassKeyApi.middleware),
+      .concat(getPassKeyApi.middleware)
+      .concat(acceptedApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
