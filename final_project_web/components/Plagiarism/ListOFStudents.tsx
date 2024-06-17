@@ -2,7 +2,29 @@ import { on } from "events";
 import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
+import { FiSearch } from "react-icons/fi";
+import { IoChevronBack } from "react-icons/io5";
 
+const formatDate = (dateString: string) => {
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
+  };
+  return new Date(dateString).toLocaleString(undefined, options);
+};
+interface Student {
+  newUser: {
+    id: string;
+    fullName: string;
+    email: string;
+    userId: string;
+    status: string;
+    createdAt: string;
+  };
+}
 
 // import Plagiarism from './plagiarism';
 // import { useCheckPlagiarismByExamIdQuery } from "@/store/plagiarism/check-plagiarism-by-exam-id";
@@ -50,71 +72,73 @@ const AllStudentsInPLagiarism: React.FC<AllStudentsProps> = ({
     student.newUser.fullName.toLowerCase().includes(searchTerm.toLowerCase())
   );
  
-
-
+  
   
   return (
-    <div className="rounded-sm  bg-white shadow-default  dark:border-strokedark dark:bg-boxdark">
-      <div className="px-4 py-6 md:px-6 xl:px-7.5 flex ">
-        <h4 className="text-xl font-semibold text-black dark:text-white w-4/5">
-          All Students
+    <div className="rounded-sm  bg-white scrollbar-hide shadow-default  dark:border-strokedark dark:bg-boxdark">
+      <div className="px-4 py-6  flex justify-between mr-6">
+        <div className="flex gap-5">
+      <Link href={"/plagiarism/plagiarism"}><IoChevronBack className="text-3xl text-primary"/></Link>
+      <h4 className="text-xl font-semibold text-gray-700 dark:text-white ">
+          All Plagiarized Students 
         </h4>
-        <div className="flex mr-4 w-2/5">
-          <input
-            type="text"
-            placeholder="Search by name..."
-            className="w-full select select-bordered select-primary max-w-xs mr-2 px-2 py-2 rounded-md bg-white  focus:outline-none shadow text-xs"
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
         </div>
+        <div className="flex items-center mb-8 space-x-2 w-1/3 max-w-lg border-2 border-gray-200 bg-primary bg-opacity-5 rounded-xl overflow-hidden">
+            <FiSearch className="ml-4 text-[#7983FB]" />
+            <input
+              type="text"
+              className="w-full p-2 outline-none"
+              placeholder="Search ..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
       </div>
       {!(filteredStudents.length === 0 )&& (
-      <div className="grid grid-cols-6  px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 font-bold text-xs">
-        <div className="col-span-2 flex items-center">
-          <p className="">Full Name</p>
-        </div>
-        <div className="col-span-2 hidden items-center sm:flex">
-          <p className="">Email</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="">User ID</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="">Status</p>
-        </div>
-        
-        <div className="col-span-1 flex items-center">
-          <p className="">Joined At</p>
-        </div>
-      </div>
+       <div className="grid grid-cols-6 px-4 py-3 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 font-bold text-sm bg-gray-100  text-gray-700  rounded-lg">
+       <div className="col-span-2 flex items-center">
+         <p className="ml-2">Full Name</p>
+       </div>
+       <div className="col-span-2 hidden items-center sm:flex">
+         <p className="ml-2">Email</p>
+       </div>
+       <div className="col-span-1 flex items-center">
+         <p className="ml-2">User ID</p>
+       </div>
+       <div className="col-span-1 flex items-center">
+         <p className="ml-2">Status</p>
+       </div>
+       <div className="col-span-1 flex items-center">
+         <p className="ml-2">Joined At</p>
+       </div>
+     </div>
+    
       )}
 
       {filteredStudents.map((student: any, key: any) => (
-        <Link href={`/plagiarism/question/${student.newUser.id}/${examId}`} key={student.newUser.id}>
-        <div
-          className="grid grid-cols-6  px-4 py-2 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 text-xs"
-          key={key}
-        >
-          <div className="col-span-2 flex items-center">
+       <Link href={`/plagiarism/question/${student.newUser.id}/${examId}`} key={student.newUser.id}>
+      <div className="grid grid-cols-6 px-4 py-3 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 text-sm dark:bg-gray-800 transition-transform duration-200 ease-in-out transform hover:scale-105 text-gray-500 odd:bg-primary odd:bg-opacity-5  rounded-lg mb-2"   key={key}>
+          <div className="col-span-2 flex  items-center">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-              <p className=" text-black dark:text-white">{student.newUser.fullName}</p>
+              <p className=" text-gray-600 dark:text-white">{student.newUser.fullName}</p>
             </div>
           </div>
           <div className="col-span-2 hidden items-center sm:flex">
-            <p className=" text-black dark:text-white">{student.newUser.email}</p>
+            <p className=" text-gray-600 dark:text-white">{student.newUser.email}</p>
           </div>
           <div className="col-span-1 flex items-center">
-            <p className=" text-black dark:text-white">{student.newUser.userId}</p>
+            <p className=" text-gray-600 dark:text-white">{student.newUser.userId}</p>
           </div>
           <div className="col-span-1 flex items-center">
             <p className="text-sm text-meta-3">{student.newUser.status}</p>
           </div>
          
           <div className="col-span-1 flex items-center">
-            <p className=" text-black dark:text-white">{student.newUser.createdAt}</p>
+            <p className=" text-gray-600 dark:text-white">{formatDate(student.newUser.createdAt)}</p>
           </div>
         </div>
-        </Link>
+     </Link>
+     
       ))}
         {filteredStudents.length === 0 && (
             <div className="flex flex-col items-center justify-center p-10 text-center">
