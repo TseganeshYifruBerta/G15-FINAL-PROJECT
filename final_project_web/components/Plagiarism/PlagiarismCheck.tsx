@@ -157,7 +157,7 @@ const PlagiarismCheck: React.FC = () => {
                 <th scope="col" className="py-3 px-4">Status</th>
                 <th scope="col" className="py-3 px-4">Tag</th>
                 <th scope="col" className="py-3 px-4">Duration</th>
-                <th scope="col" className="py-3 px-3">Actions</th>
+                
               </tr>
             </thead>
           </table>
@@ -179,7 +179,7 @@ const PlagiarismCheck: React.FC = () => {
 
       {filteredAndSortedQuestions.length === 0 && (
         <div className="flex items-center justify-center mt-6">
-          <div className="flex flex-col items-center justify-center p-30 text-center">
+          <div className="flex flex-col items-center justify-center p-10 text-center">
             <Image
               src="/images/nodata.svg"
               className="w-42 h-42 mb-4 text-gray-400 dark:text-gray-500"

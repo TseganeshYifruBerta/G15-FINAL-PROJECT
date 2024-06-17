@@ -1,10 +1,11 @@
-import React, { useMemo } from "react";
 import Image from "next/image";
 import ButtonPrimary from "@/components/misc/ButtonPrimary";
 import { motion } from "framer-motion";
 import getScrollAnimation from "@/utils/getScrollAnimation";
 import ScrollAnimationWrapper from "@/components/layout/ScrollAnimationWrapper";
 import SignInSide from "@/pages/signin/indexx";
+import { fetchInfoQuestion } from "@/store/info/info_Api";
+import React, { useMemo,useEffect, useState } from 'react';
 
 
 interface ListUser {
@@ -18,6 +19,19 @@ interface HeroProps {
 }
 
 const Hero: React.FC<HeroProps> = ({
+
+  useEffect(() => {
+
+  const fetchData = async (token: string, userId: number) => {
+    try {
+      const data = await  fetchInfoQuestion();
+    
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    }
+  };
+}
+  
   listUser = [
     {
       name: "Users",
