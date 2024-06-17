@@ -79,6 +79,7 @@ const TeacherDashboard: React.FC = () => {
       <Loading />
     </div>;
   }
+  
 console.log(sections, "hello");
   //   {
   //     "countSubmitted": [
@@ -92,7 +93,6 @@ console.log(sections, "hello");
   //         }
   //     ]
   // }
-
   return (
     <div className="w-full min-h-screen justify-center">
       <div className="flex mt-10 justify-center">
