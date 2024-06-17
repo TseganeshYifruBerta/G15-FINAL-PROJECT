@@ -240,8 +240,24 @@ const countAcceptedSubmissionperDifficulty = async (req, res) => {
       return res.status(500).json({ error: "Internal Server Error" });
     }
   }
-
+  const submissionPerStudentOnSpecificQuestion = async (req, res) => {
+    const { questionId ,studentId} = req.params;
+    try {
+      const submission = await codeSubmision.findAll({
+        where: {
+          questionId: questionId,
+          userId: studentId
+        },
+      });
+      return res.status(200).json(submission);
+    } catch (error) {
+      console.log(error);
+      throw new Error("Failed to count submissions for date");
+    }
+  }
     
+
+
 
 
 
@@ -251,6 +267,8 @@ module.exports = {
   fetchingDetailForAcceptedSubmittedQuestion,
   countAcceptedSubmissionsPerUser,
   countAcceptedSubmissionsOfUserBySection,
-  fetchStatusForSpecificQuestion
+  fetchStatusForSpecificQuestion,
+  submissionPerStudentOnSpecificQuestion
+
 };
 
