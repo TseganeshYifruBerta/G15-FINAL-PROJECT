@@ -6,7 +6,7 @@ interface GradingState {
 }
 
 const gradingExamSlice = createSlice({
-  name: "questionupload",
+  name: "grading",
   initialState: {
     examId: "",
     

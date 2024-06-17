@@ -8,6 +8,7 @@ import UploadManually from "./upload/uploadmanuallyslicereducer";
 import signinStudentReducer from "./signin/student-signin-slice";
 import questionUploadReducer from "./question-upload/question-upload-slice";
 import PlagiarismCheckSliceReducer from "./plagiarism/check-plagiarism-by-exam-id-slice";
+import gradingExamSliceReducer from "./grading/grade-exam-by-exam-Id-slice";
 import examQuestionUploadReducer from "./exam/upload-exam-question-slice";
 import addTestcaseReducer from "./question-upload/add-testcase-slice";
 import addExamTestcaseReducer from "./question-upload/add-exam-testcase-slice";
@@ -42,6 +43,11 @@ import { getAllQuestionsByStudentIdApi } from "./exam/examAnswer/get-all-questio
 import { getAllPlagiarismCheckedExamsApi } from "./plagiarism/get-all-plagiarism-checked-exams";
 import { getAllEndedExamsApi } from "./plagiarism/get-all-ended-exams";
 import { fetchQuestionsFromPlagiarismCheckedExamApi } from "./plagiarism/fetch-questions-from-plagiarism-checked-exam";
+import {getAllGradedExamsApi} from "./grading/get-all-graded-exams"
+import {getAllEndedExamsForGradingApi} from "./grading/get-all-ended-exams-for-grading"
+import {fetchStudentsFromGradedExamApi} from "./grading/fetch-students-from-graded-exam"
+import {fetchQuestionsFromGradedExamApi} from "./grading/fetch-questions-from-graded-exam"
+import {fetchGradedResultApi} from "./grading/fetch-grade-result"
 import { fetchAllPlagiarizedSectionApi } from "./plagiarism/get-all-plagiarized-section";
 import { getAllDifficultyDataPerUserApi } from "./submissions/get-all-difficulty-data-per-user";
 import { getCountCodeSubmissionsForLastMonthApi } from "./submissions/get-all-last-month-submissions-by-id";
@@ -69,6 +75,7 @@ export const store = configureStore({
     addexamsolution: addExamSolutionReducer,
     addexamtestcase: addExamTestcaseReducer,
     checkPlagiarismByExamId: PlagiarismCheckSliceReducer,
+    gradingExams: gradingExamSliceReducer,
     uploadexam: examUploadReducer,
     uploadcriteria: criteriaUploadReducer,
     [getPassKeyApi.reducerPath]: getPassKeyApi.reducer,
@@ -100,7 +107,13 @@ export const store = configureStore({
     [fetchStudentsFromPlagiarismCheckedExamApi.reducerPath]:
       fetchStudentsFromPlagiarismCheckedExamApi.reducer,
     [fetchQuestionsFromPlagiarismCheckedExamApi.reducerPath]:
+    
       fetchQuestionsFromPlagiarismCheckedExamApi.reducer,
+    [getAllGradedExamsApi.reducerPath]:getAllGradedExamsApi.reducer,
+    [getAllEndedExamsForGradingApi.reducerPath]:getAllEndedExamsForGradingApi.reducer,
+    [fetchStudentsFromGradedExamApi.reducerPath]:fetchStudentsFromGradedExamApi.reducer,
+    [fetchQuestionsFromGradedExamApi.reducerPath]:fetchQuestionsFromGradedExamApi.reducer,
+      [fetchGradedResultApi.reducerPath]:fetchGradedResultApi.reducer,
     [fetchAllPlagiarizedSectionApi.reducerPath]:
       fetchAllPlagiarizedSectionApi.reducer,
     [getAllDifficultyDataPerUserApi.reducerPath]:
@@ -136,6 +149,11 @@ export const store = configureStore({
       .concat(getAllPlagiarismCheckedExamsApi.middleware)
       .concat(fetchStudentsFromPlagiarismCheckedExamApi.middleware)
       .concat(fetchQuestionsFromPlagiarismCheckedExamApi.middleware)
+      .concat(getAllGradedExamsApi.middleware)
+      .concat(getAllEndedExamsForGradingApi.middleware)
+      .concat(fetchStudentsFromGradedExamApi.middleware)
+      .concat(fetchQuestionsFromGradedExamApi.middleware)
+      .concat(fetchGradedResultApi.middleware)
       .concat(fetchAllPlagiarizedSectionApi.middleware)
       .concat(getAllDifficultyDataPerUserApi.middleware)
       .concat(getCountCodeSubmissionsForLastMonthApi.middleware)
