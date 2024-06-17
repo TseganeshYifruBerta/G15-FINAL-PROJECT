@@ -22,6 +22,8 @@ const InfoRouter = require("./routes/info/information.js")
 
 const bodyParser = require('body-parser');
 
+const InfoRouter = require("./routes/info/information.js")
+
 const verifyJWT = require("./middleware/verifyJWT.js")
 const checkUserStatus = require("./middleware/userStatus.js")
 const seedAdminData = require("./models/auth/seed.js");
