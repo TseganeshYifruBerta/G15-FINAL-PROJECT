@@ -1,15 +1,15 @@
 const jwt = require("jsonwebtoken");
 import Submissions from "@/components/codeeditor/Submissions";
 import QuestionSet from "@/components/questions/QuestionSet";
-import {
-  useGetQuestionDetailEditQuery,
-} from "@/store/question/get-questionById-api";
+import { useGetQuestionDetailEditQuery } from "@/store/question/get-questionById-api";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import SplitPane from "react-split-pane-next";
 import CodeEditorBox from "@/components/codeeditor/CodeEditorBox";
 import Loading from "@/components/common/Loading";
+import { IoChevronBack } from "react-icons/io5";
+
 interface QuestionSubmissionProps {
   submissions: any;
 }
@@ -55,7 +55,7 @@ const QuestionSetTab: React.FC<QuestionSetProps> = ({
   questionId,
   questionDescription,
   questionExample,
-  difficulty
+  difficulty,
 }) => {
   return (
     <div className="ml-4">
@@ -69,6 +69,7 @@ const QuestionSetTab: React.FC<QuestionSetProps> = ({
     </div>
   );
 };
+
 const QuestionById: React.FC = () => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("questionSet");
@@ -77,18 +78,20 @@ const QuestionById: React.FC = () => {
   const questionId = router.query.id as string;
   const pythonCode =
     "def grade_checker(score):\n    if score >= 70:\n        return 'A'\n    elif score >= 80:\n        return 'B'\n    elif score >= 70:\n        return 'C'\n    elif score >= 60:\n        return 'D'\n    else:\n        return 'F'";
-useEffect(() => {
-  if (typeof window !== "undefined") {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/");
-    } else {
-      const decodedToken = jwt.decode(token);
-      setUserId(decodedToken?.id || null);
-      console.log(decodedToken);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        router.push("/");
+      } else {
+        const decodedToken = jwt.decode(token);
+        setUserId(decodedToken?.id || null);
+        console.log(decodedToken);
+      }
     }
-  }
-}, [router]);
+  }, [router]);
+
   const {
     data: questionDetails,
     isLoading,
@@ -96,68 +99,88 @@ useEffect(() => {
   } = useGetQuestionDetailEditQuery({
     questionId: questionId,
   });
+
   if (isLoading) {
-    return <div>
-      <Loading />
-    </div>;
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
   }
+
   if (isError) {
-    return <div>Errroe</div>;
+    return <div>Error</div>;
   }
+
   const question = questionDetails.questionDetail;
   const allstatus = questionDetails.allStatus;
   const { createdAt, description, difficulty, example, id, title, updatedAt } =
     question;
   const currentCode = !questionDetails.allStatus ? "" : pythonCode;
+
+  console.log(
+    "questionDetails///////////////",
+    questionDetails.questionDetail.functionName
+  );
+
   return (
-    <SplitPane split="vertical" className="">
-      <div className="ml-4 text-lg overflow-scroll-y">
-        {/* Buttons for tab navigation */}
-        <div className="text-sm ml-4 py-2 px-2">
-          <button
-            className={`mr-4 py-1 px-4 rounded-3xl transition-colors duration-150 ${
-              activeTab === "questionSet"
-                ? "bg-primary bg-opacity-20 text-primary shadow-lg"
-                : "bg-gray-200 text-gray-800 hover:bg-opacity-20 hover:bg-primary"
-            }`}
-            onClick={() => setActiveTab("questionSet")}
-          >
-            Description
-          </button>
-          <button
-            className={`py-1 px-4 rounded-3xl transition-colors duration-150 ${
-              activeTab === "submissions"
-                ? "bg-primary bg-opacity-20 text-primary shadow-lg"
-                : "bg-gray-200 text-gray-800 hover:bg-opacity-20 hover:bg-primary"
-            }`}
-            onClick={() => setActiveTab("submissions")}
-          >
-            Submissions
-          </button>
+    <div className="relative">
+      <button
+        onClick={() => router.back()}
+        className="absolute top-2 left-2 px-2 py-1 rounded-lg"
+      >
+        <IoChevronBack className="text-3xl text-primary" />
+      </button>
+      <SplitPane split="vertical" className="pt-12">
+        <div className="ml-4 text-lg overflow-scroll-y">
+          {/* Buttons for tab navigation */}
+          <div className="text-sm ml-4 py-2 px-2">
+            <button
+              className={`mr-4 py-1 px-4 rounded-3xl transition-colors duration-150 ${
+                activeTab === "questionSet"
+                  ? "bg-primary bg-opacity-20 text-primary shadow-lg"
+                  : "bg-gray-200 text-gray-800 hover:bg-opacity-20 hover:bg-primary"
+              }`}
+              onClick={() => setActiveTab("questionSet")}
+            >
+              Description
+            </button>
+            <button
+              className={`py-1 px-4 rounded-3xl transition-colors duration-150 ${
+                activeTab === "submissions"
+                  ? "bg-primary bg-opacity-20 text-primary shadow-lg"
+                  : "bg-gray-200 text-gray-800 hover:bg-opacity-20 hover:bg-primary"
+              }`}
+              onClick={() => setActiveTab("submissions")}
+            >
+              Submissions
+            </button>
+          </div>
+
+          {/* Conditional rendering based on activeTab */}
+          {activeTab === "questionSet" && (
+            <QuestionSetTab
+              questionTitle={title}
+              questionDescription={description}
+              questionExample={example}
+              difficulty={difficulty}
+              questionId={questionId}
+            />
+          )}
+
+          {activeTab === "submissions" && (
+            <QuestionSubmissionTab submissions={questionDetails.allStatus} />
+          )}
         </div>
-
-        {/* Conditional rendering based on activeTab */}
-        {activeTab === "questionSet" && (
-          <QuestionSetTab
-            questionTitle={title}
-            questionDescription={description}
-            questionExample={example}
-            difficulty={difficulty}
-            questionId={questionId}
-          />
-        )}
-
-        {activeTab === "submissions" && (
-          <QuestionSubmissionTab submissions={questionDetails.allStatus} />
-        )}
-      </div>
 
         <CodeEditorBox
           currentCode={currentCode}
           userId={userId}
           questionId={questionId}
+          functionName={questionDetails.questionDetail.functionName}
         />
-    </SplitPane>
+      </SplitPane>
+    </div>
   );
 };
 

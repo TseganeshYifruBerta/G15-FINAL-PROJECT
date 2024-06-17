@@ -24,11 +24,10 @@ const PassKeyPopup: React.FC<PassKeyPopupProps> = ({ examId, disable, color }) =
   const { data, error, isFetching } = useGetPassKeyQuery(submitParams, {
     skip: !submitParams, // Skip the query if submitParams is null
   });
-
   useEffect(() => {
     if (!isFetching) {
       if (error) {
-        setPassKeyError("Invalid passkey");
+        setPassKeyError(error?.data?.message);
       } else if (data) {
         closeModal();
         console.log(data, "data exam detail");

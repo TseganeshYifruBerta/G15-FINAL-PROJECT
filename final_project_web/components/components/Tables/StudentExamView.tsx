@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import React from "react";
-import { useGetAllExamListStudentQuery } from "@/store/exam/get-all-exam-api";
+import { useGetAllExamListStudentQuery, useGetExamResultByStudentIdQuery } from "@/store/exam/get-all-exam-api";
 import { FiSearch } from "react-icons/fi";
 import UpcomingExams from "@/components/Dashboard/student/UpcomingExam";
 import PassKeyPopup from "@/components/exam/ExamPopUp";
@@ -9,12 +9,28 @@ import PassKeyPopup from "@/components/exam/ExamPopUp";
 const StudentExamView = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
+ const [submitParams, setSubmitParams] = useState<{
+   examId: string;
+ } | null>(null);
+const [isLoading, setIsLoading] = useState(false)
+  const {
+    data: exams,
+    isLoading:examLoading,
+    isError:examError,
+  } = useGetAllExamListStudentQuery("");
+ 
+// const { data:result, isLoading:resultLoading, isError:resultError } = useGetExamResultByStudentIdQuery("");
+// submitParams,
+//   {
+//     skip: !submitParams, // Skip the query if submitParams is null
+//   };
+ if (examLoading ) {
+   return <div>Loading...</div>;
+ }
 
-  const { data: exams, isLoading, isError } = useGetAllExamListStudentQuery("");
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
+ if (examError ){
+  return <div>Error...</div>
+ }
   // Days of the week
   const days = [
     "Sunday",
@@ -42,7 +58,7 @@ const StudentExamView = () => {
   //   };
   // });
   const handleViewClick = () => {
-    setShowModal(true);
+    
   };
 
   const handleCloseModal = () => {
@@ -52,7 +68,6 @@ const StudentExamView = () => {
   const renderExamResults = () => {
     const exams: any[] = []; // Assuming exams is an array of exam results
     let totalResult = 0;
-
     return (
       <div className="p-4 bg-white rounded-md shadow-sm w-full">
         <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
@@ -84,6 +99,13 @@ const StudentExamView = () => {
     exam.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
   console.log(exams, "exams");
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>, examId:any) => {
+      event.preventDefault();
+      setShowModal(true);
+      
+      setIsLoading(true); // Replace with actual exam ID
+      setSubmitParams({ examId });
+    };
   return (
     <div className="rounded-sm shadow-default text-sm min-h-screen">
       <div className="w-1/3 mt-2 mb-6 flex justify-center rounded-lg shadow-lg">
@@ -138,7 +160,7 @@ const StudentExamView = () => {
           <div>Enter </div>
         </div>
 
-        {filteredExams.map((exam: any, key: any) => (
+        {filteredExams?.map((exam: any, key: any) => (
           <div
             className="w-full flex border-t border-stroke px-4 py-2 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 text-xs"
             key={key}
@@ -150,27 +172,43 @@ const StudentExamView = () => {
             </div>
             <div className="w-1/5 hidden items-center sm:flex">
               {/* <p className=" text-black dark:text-white">{exam.examDate}</p> */}
-              <p className=" text-black dark:text-white">exam.examDate</p>
+              <p className=" text-black dark:text-white">{exam.examDate}</p>
             </div>
 
             <div className="w-1/5 flex items-center">
-              <p className={`${exam.status == "end" ? "text-red-500":""} ${exam.status == "running" ? "text-green-500":""} ${exam.status == "upcoming" ? "text-yellow-700":""} text-sm`}>{exam.status}</p>
+              <p
+                className={`${exam.status == "end" ? "text-red-500" : ""} ${
+                  exam.status == "running" ? "text-green-500" : ""
+                } ${
+                  exam.status == "upcoming" ? "text-yellow-700" : ""
+                } text-sm`}
+              >
+                {exam.status}
+              </p>
             </div>
             <div className="w-1/5 flex items-center">
               <button
                 className="text-sm text-white bg-primary py-[8px] px-4 rounded-md hover:bg-primary-hover"
-                onClick={() => handleViewClick()}
+                onClick={(e:any) => handleSubmit(e, exam.id)}
               >
                 View
               </button>{" "}
             </div>
             {exam.status === "running" ? (
               <div>
-                <PassKeyPopup examId={exam.id} disable={false} color="bg-primary"/>
+                <PassKeyPopup
+                  examId={exam.id}
+                  disable={false}
+                  color="bg-primary"
+                />
               </div>
             ) : (
               <div>
-                <PassKeyPopup examId={exam.id} disable={true} color="bg-gray-500"/>
+                <PassKeyPopup
+                  examId={exam.id}
+                  disable={true}
+                  color="bg-gray-500"
+                />
               </div>
             )}
           </div>
