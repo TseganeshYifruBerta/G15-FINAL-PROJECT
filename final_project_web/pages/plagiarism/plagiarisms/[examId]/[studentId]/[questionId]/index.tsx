@@ -3,12 +3,14 @@ import { useGetExamQuestionAnswerQuery } from '@/store/exam/examAnswer/get-exam-
 import { useFetchAllPlagiarizedSectionQuery } from '@/store/plagiarism/get-all-plagiarized-section';
 import { useRouter } from 'next/router';
 import React from 'react';
+import AllQuestionsInPLagiarism from '@/components/Plagiarism/ListOfQuestions';
+import { useFetchQuestionsFromPlagiarismCheckedExamQuery } from '@/store/plagiarism/fetch-questions-from-plagiarism-checked-exam';
 
 function AllPlagiarizedSection() {
     const router = useRouter();
     const examId = router.query.examId as string
-    const studentId = router.query.studentId as string
     const questionId = router.query.questionId as string
+    const studentId = router.query.studentId as any
 
     console.log("examId", examId)
     console.log("examId", studentId)
@@ -25,7 +27,12 @@ function AllPlagiarizedSection() {
     });
     
    
-
+    const {
+        data: allQuestionData,
+    } = useFetchQuestionsFromPlagiarismCheckedExamQuery({
+        examId: examId,
+        studentId: studentId
+    });
 
     const {
         data: AllStudentsAndTaggedCode,
@@ -52,13 +59,15 @@ function AllPlagiarizedSection() {
         <div>
             
             <AllStudentsAndTaggedCodeInPLagiarism
-                StudentsAndTaggedCode = {AllStudentsAndTaggedCode.AllStudentsAndTaggedCode}
-                
-                studentAnswer = {examQuestionsAnswer.response}
-                questionTitle =  {examQuestionsAnswer.questionDetail.title}
-                submittedDate = {examQuestionsAnswer.submittedDate}
-                fullName = {examQuestionsAnswer.name}
-                
+                StudentsAndTaggedCode={AllStudentsAndTaggedCode.AllStudentsAndTaggedCode}
+
+                studentAnswer={examQuestionsAnswer.response}
+                questionTitle={examQuestionsAnswer.questionDetail.title}
+                submittedDate={examQuestionsAnswer.submittedDate}
+                fullName={examQuestionsAnswer.name}
+                examId={examId} 
+                Questions = {allQuestionData.plagiarizedQuestions}
+                studentId= {studentId}               
             />
                       
                
