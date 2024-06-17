@@ -207,15 +207,22 @@ const countAcceptedSubmissionperDifficulty = async (req, res) => {
       ],
     });
 
+
     let easyCount = 0;
     let mediumCount = 0;
     let hardCount = 0;
+    const  countedQuestionId = new Set();
     for (const submission of acceptedSubmissions) {
       const question = await Question.findOne({
         where: {
           id: submission.questionId,
         },
       });
+      if (!countedQuestionId.has(question.id)) {
+        countedQuestionId.add(submission.question.id);
+
+
+      
       if (question.difficulty === 'easy') {
         easyCount++;
       }
@@ -227,7 +234,7 @@ const countAcceptedSubmissionperDifficulty = async (req, res) => {
       }
     }
     return res.status(200).json({ easyCount, mediumCount, hardCount });
-  }
+  }}
     catch (error) {
       console.log(error);
       return res.status(500).json({ error: "Internal Server Error" });
