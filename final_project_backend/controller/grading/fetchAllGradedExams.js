@@ -6,10 +6,11 @@ const sequelize = require('../../database/sequelize')
 const fetchAllGradedExams = async (req, res) => {
     try {
 
-        const checkedExams = await sequelize.query("SELECT DISTINCT `examId` FROM `graderesults`", {
+        const checkedExams = await sequelize.query("SELECT DISTINCT `examId` FROM `gradeResults`", {
             model: gradeResult,
             mapToModel: true 
         });
+        console.log("checkedExams",checkedExams)    
 
         let exams = [];
         // let examData 
