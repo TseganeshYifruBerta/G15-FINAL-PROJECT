@@ -219,7 +219,7 @@ const countAcceptedSubmissionperDifficulty = async (req, res) => {
         },
       });
       if (!countedQuestionId.has(question.id)) {
-        countedQuestionId.add(submission.question.id);
+        countedQuestionId.add(submission.questionId);
 
 
       
