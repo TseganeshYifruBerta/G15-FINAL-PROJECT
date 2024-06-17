@@ -9,6 +9,7 @@ const getTopStudents = async (req, res) => {
         const topStudents = await Status.findAll({
             attributes: [
                 'UserinformationId',
+                'section',
                 [sequelize.fn('COUNT', sequelize.col('questionId')), 'acceptedCount']
             ],
             where: {

@@ -75,6 +75,7 @@ const checkPlagiarism = async (req, res) => {
               const response = await axios.post('https://g15-final-project.onrender.com/check_plagiarism', formData, {
                 headers: { ...formData.getHeaders() },
               });
+              console.log("////////////////",response.data)
               const plagiarismResult = response.data;
             
               const tagged_code = plagiarismResult.tagged_code;
@@ -119,6 +120,21 @@ const checkPlagiarism = async (req, res) => {
                 questionId: questionId
               });
 
+            }else{
+              const plagiarismResults = await Allplagiarism.create({
+                userId: Id,
+                otherUserId: answer.UserinformationId,
+                percentage: plagiarismResult.ratio,
+                question: questionId,
+                examId: examId
+            }   , { transaction });
+              combinedResults.push({
+                UserID: Id,
+                questionTitle: `plagiarism checking for question ${questionId}`,
+                plagiarismDetails: plagiarismResult,
+                plagiarizedSections: plagiarizedSections,
+                questionId: questionId
+              });
             }
               
             }
