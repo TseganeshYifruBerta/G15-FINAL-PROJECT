@@ -30,17 +30,19 @@ const PlagiarismCheck: React.FC = () => {
       return;
     }
 
+    setIsLoadingg(true);  // Set loading state to true when button is clicked
+
     try {
       const formData = { examId: selectedOption };
       const data = await checkPlagiarismByExamId(formData);
       showToast("Plagiarism checked successfully", "success");
       refetch();
       setShowModal(false);
-      setIsLoadingg(true);
     } catch (error) {
       console.error("Error checking plagiarism:", error);
       showToast("Error checking plagiarism: " + (error as Error).message, "error");
-      setIsLoadingg(false);
+    } finally {
+      setIsLoadingg(false);  // Set loading state to false when operation is done
     }
   };
 
@@ -132,7 +134,7 @@ const PlagiarismCheck: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex items-center justify-between mb-6 p-4">
+      <div className="flex items-center justify-between mb-6 p-10">
         <h4 className="text-xl font-semibold text-black dark:text-white">
           Plagiarism Checked Exams
         </h4>

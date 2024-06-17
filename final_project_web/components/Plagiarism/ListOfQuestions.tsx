@@ -1,16 +1,29 @@
+import React, { useState } from "react";
 import Link from "next/link";
-import { useState } from "react";
+import { FiSearch } from "react-icons/fi";
+import { IoChevronBack } from "react-icons/io5";
+
 interface AllQuestionsProps {
   Questions: any[],
   studentId: string,
   examId: string
-
 }
+
+const formatDate = (dateString: string) => {
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
+  };
+  return new Date(dateString).toLocaleString(undefined, options);
+};
+
 const AllQuestionsInPLagiarism: React.FC<AllQuestionsProps> = ({
   Questions,
   studentId,
   examId
-
 }) => {
   const days = [
     "Sunday",
@@ -30,85 +43,80 @@ const AllQuestionsInPLagiarism: React.FC<AllQuestionsProps> = ({
     const dateFormat = `${dayOfWeek}, ${time}, ${date.getDate()}/${date.getMonth() + 1
       }/${date.getFullYear()}`;
 
-    // Return a new object with the createdAt property modified
     return {
       ...question,
       createdAt: dateFormat,
     };
   });
+
   const filteredQuestions = modifiedData?.filter((question: any) =>
     question.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-
   return (
-    <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-      <div className="px-4 py-6 md:px-6 xl:px-7.5 flex ">
-        <h4 className="text-xl font-semibold text-black dark:text-white w-4/5">
-          All Exam questions
-        </h4>
-        <div className="flex mr-4 w-2/5">
+    <div className="rounded-sm  bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <div className="px-4 py-6 flex justify-between mr-6 ">
+        <div className="flex gap-5">
+          <Link href={`/plagiarism/${examId}`}><IoChevronBack className="text-3xl text-primary"/></Link>
+          <h4 className="text-xl font-semibold text-gray-700 dark:text-white ">
+            All Exam questions
+          </h4>
+        </div>
+        <div className="flex items-center mb-8 space-x-2 w-1/3 max-w-lg border-2 border-gray-200 bg-primary bg-opacity-5 rounded-xl overflow-hidden">
+          <FiSearch className="ml-4 text-[#7983FB]" />
           <input
             type="text"
-            placeholder="Search by name..."
-            className="w-full select select-bordered select-primary max-w-xs mr-2 px-2 py-2 rounded-md bg-white  focus:outline-none shadow text-xs"
+            className="w-full p-2 outline-none"
+            placeholder="Search ..."
+            value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
       </div>
 
-      <div className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 font-bold text-xs">
-        <div className="col-span-2 flex items-center">
-          <p className="">Title</p>
-        </div>
-        <div className="col-span-2 hidden items-center sm:flex">
-          <p className="">Difficulty</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="">Tag</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="">Chapter</p>
-        </div>
-
-        <div className="col-span-1 flex items-center">
-          <p className="">Joined At</p>
-        </div>
+      <div className="bg-gray-100 rounded-xl drop-shadow-sm">
+        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+              <th scope="col" className="py-3 px-4">Title</th>
+              <th scope="col" className="py-3 px-4">Difficulty</th>
+              <th scope="col" className="py-3 px-4">Tag</th>
+              <th scope="col" className="py-3 px-4">Chapter</th>
+              <th scope="col" className="py-3 px-4">Joined At</th>
+            </tr>
+          </thead>
+        </table>
       </div>
 
       {filteredQuestions.map((question: any, key: any) => (
-     
-      <Link href={`/plagiarism/plagiarisms/${examId}/${studentId}/${question.id}`} key={question.id}>
-        <div
-          className="grid grid-cols-6 border-t border-stroke px-4 py-2 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 text-xs"
-          key={key}
-        >
-  
-            <div className="col-span-2 flex items-center">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-                <p className=" text-black dark:text-white">{question.title}</p>
-              </div>
-            </div>
-
-            <div className="col-span-2 hidden items-center sm:flex">
-              <p className=" text-black dark:text-white">{question.difficulty}</p>
-            </div>
-            <div className="col-span-1 flex items-center">
-              <p className=" text-black dark:text-white">{question.tag}</p>
-            </div>
-            <div className="col-span-1 flex items-center">
-              <p className="text-sm text-meta-3">{question.chapter}</p>
-            </div>
-            <div className="col-span-1 flex items-center">
-              <p className=" text-black dark:text-white">{question.createdAt}</p>
-            </div>
-          
-        </div>
-      </Link>
+        <Link href={`/plagiarism/plagiarisms/${examId}/${studentId}/${question.id}`} key={question.id}>
+          <div className="bg-gray-100 scrollbar-hide rounded-xl text-gray-500 drop-shadow-sm">
+            <table className="w-full scrollbar-hide text-sm text-left text-gray-500 dark:text-gray-400">
+              <tbody>
+                <tr key={question.id} className="bg-white scrollbar-hide text-left transition-transform duration-200 ease-in-out transform hover:scale-105 text-gray-500 odd:bg-primary odd:bg-opacity-5">
+                  <td className="py-3 pr-1 col-span-2">
+                    <p className="dark:text-white">{question.title}</p>
+                  </td>
+                  <td className="py-3 pr-16 hidden sm:table-cell col-span-2">
+                    <p className="dark:text-white">{question.difficulty}</p>
+                  </td>
+                  <td className="py-3 pr-9 pl-5 col-span-1">
+                    <p className="dark:text-white">{question.tag}</p>
+                  </td>
+                  <td className="py-3 pr-16 pl-10 col-span-1">
+                    <p className="text-sm text-meta-3">{question.chapter}</p>
+                  </td>
+                  <td className="py-3 pr-8 pl-3 col-span-1">
+                    <p className="dark:text-white">{formatDate(question.createdAt)}</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </Link>
       ))}
     </div>
   );
 };
 
 export default AllQuestionsInPLagiarism;
-
