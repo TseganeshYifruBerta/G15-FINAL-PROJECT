@@ -95,47 +95,48 @@ const AllStudentsInPLagiarism: React.FC<AllStudentsProps> = ({
           </div>
       </div>
       {!(filteredStudents.length === 0 )&& (
-      <div className="bg-gray-100 rounded-xl scrollbar-hide drop-shadow-sm">
-      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-          <tr>
-            <th scope="col" className="py-3 px-4">Full Name</th>
-            <th scope="col" className="py-3 px-4">Email</th>
-            <th scope="col" className="py-3 px-4">User ID</th>
-            <th scope="col" className="py-3 px-4">Status</th>
-            <th scope="col" className="py-3 px-4">Joined At</th>
-          </tr>
-        </thead>
-      </table>
-    </div>
+       <div className="grid grid-cols-6 px-4 py-3 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 font-bold text-sm bg-gray-100  text-gray-700  rounded-lg">
+       <div className="col-span-2 flex items-center">
+         <p className="ml-2">Full Name</p>
+       </div>
+       <div className="col-span-2 hidden items-center sm:flex">
+         <p className="ml-2">Email</p>
+       </div>
+       <div className="col-span-1 flex items-center">
+         <p className="ml-2">User ID</p>
+       </div>
+       <div className="col-span-1 flex items-center">
+         <p className="ml-2">Status</p>
+       </div>
+       <div className="col-span-1 flex items-center">
+         <p className="ml-2">Joined At</p>
+       </div>
+     </div>
     
       )}
 
       {filteredStudents.map((student: any, key: any) => (
        <Link href={`/plagiarism/question/${student.newUser.id}/${examId}`} key={student.newUser.id}>
-       <div className="bg-gray-100 rounded-xl scrollbar-hide text-gray-500 drop-shadow-sm">
-         <table className="w-full text-sm text-left scrollbar-hide text-gray-500 dark:text-gray-400">
-           <tbody>
-             <tr key={student.newUser.id} className="bg-white scrollbar-hide text-left transition-transform duration-200 ease-in-out transform hover:scale-105 text-gray-500 odd:bg-primary odd:bg-opacity-5">
-               <td className="py-3 pl-8  pr-17 col-span-2 ">
-                 <p className="dark:text-white">{student.newUser.fullName}</p>
-               </td>
-               <td className="py-3 pl-4   hidden sm:table-cell col-span-2">
-                 <p className="dark:text-white">{student.newUser.email}</p>
-               </td>
-               <td className="py-3  pr-18  col-span-1">
-                 <p className="dark:text-white">{student.newUser.userId}</p>
-               </td>
-               <td className="py-3 pr-16 col-span-1">
-                 <p className="text-sm text-meta-3">{student.newUser.status}</p>
-               </td>
-               <td className="py-3  pr-7   col-span-1">
-                 <p className="dark:text-white">{formatDate(student.newUser.createdAt)}</p>
-               </td>
-             </tr>
-           </tbody>
-         </table>
-       </div>
+      <div className="grid grid-cols-6 px-4 py-3 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 text-sm dark:bg-gray-800 transition-transform duration-200 ease-in-out transform hover:scale-105 text-gray-500 odd:bg-primary odd:bg-opacity-5  rounded-lg mb-2"   key={key}>
+          <div className="col-span-2 flex  items-center">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+              <p className=" text-gray-600 dark:text-white">{student.newUser.fullName}</p>
+            </div>
+          </div>
+          <div className="col-span-2 hidden items-center sm:flex">
+            <p className=" text-gray-600 dark:text-white">{student.newUser.email}</p>
+          </div>
+          <div className="col-span-1 flex items-center">
+            <p className=" text-gray-600 dark:text-white">{student.newUser.userId}</p>
+          </div>
+          <div className="col-span-1 flex items-center">
+            <p className="text-sm text-meta-3">{student.newUser.status}</p>
+          </div>
+         
+          <div className="col-span-1 flex items-center">
+            <p className=" text-gray-600 dark:text-white">{formatDate(student.newUser.createdAt)}</p>
+          </div>
+        </div>
      </Link>
      
       ))}

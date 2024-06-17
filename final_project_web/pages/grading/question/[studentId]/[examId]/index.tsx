@@ -17,7 +17,7 @@ function AllQuestionsFromGradedExam() {
         examId: examId,
         studentId: studentId
     });
-
+   console.log("Gggggggggggggggggg", allQuestionData)
     if (isLoading) {
         return <div>Loading...</div>;
     }
@@ -29,7 +29,7 @@ function AllQuestionsFromGradedExam() {
         <div>
             
             <AllQuestionsInGrading
-                Questions = {allQuestionData.plagiarizedQuestions}
+                Questions = {allQuestionData.allQuestionData}
                 examId = {examId}
                 studentId= {studentId}
                 
