@@ -19,7 +19,7 @@ const QuestionSubmissionTab: React.FC<QuestionSubmissionProps> = ({
 }) => {
   return (
     <div className="ml-4 mt-4">
-      {submissions ? (
+      {submissions.length ? (
         <Submissions submissions={submissions} />
       ) : (
         <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
@@ -59,19 +59,7 @@ const QuestionSetTab: React.FC<QuestionSetProps> = ({
   difficulty,
 }) => {
 
-  const { data, isLoading, isError } =
-    useGetSpecificQuestionSubmissionDetailQuery({questionId:questionId})
-
-    if(isLoading){
-      return <div>
-        <Loading />
-      </div>
-    }
-    if (isError){
-      return <div>Error...</div>
-    }
-
-    console.log(data, "data")
+  
   return (
     <div className="ml-4">
       <QuestionSet
@@ -115,17 +103,22 @@ const QuestionById: React.FC = () => {
     questionId: questionId,
   });
 
-  if (isLoading) {
+
+  const { data:sub, isLoading:submissionLoading, isError:subError } =
+    useGetSpecificQuestionSubmissionDetailQuery({ questionId: questionId });
+
+  if (isLoading || submissionLoading) {
     return (
       <div>
         <Loading />
       </div>
     );
   }
-
-  if (isError) {
-    return <div>Error</div>;
+  if (isError || subError) {
+    return <div>Error...</div>;
   }
+  
+
 
   const question = questionDetails.questionDetail;
   const allstatus = questionDetails.allStatus;
@@ -137,7 +130,7 @@ const QuestionById: React.FC = () => {
     "questionDetails///////////////",
     questionDetails.questionDetail.functionName
   );
-
+console.log(sub, "ehllo")
   return (
     <div className="relative">
       <button
@@ -184,7 +177,7 @@ const QuestionById: React.FC = () => {
           )}
 
           {activeTab === "submissions" && (
-            <QuestionSubmissionTab submissions={questionDetails.allStatus} />
+            <QuestionSubmissionTab submissions={sub} />
           )}
         </div>
 
