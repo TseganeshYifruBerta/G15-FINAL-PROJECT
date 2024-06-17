@@ -245,6 +245,13 @@ const countAcceptedSubmissionperDifficulty = async (req, res) => {
           questionId: questionId,
           userId: studentId
         },
+        include: [
+          {
+            model: Status,
+            as: "Status",
+            
+          }
+        ]
       });
       return res.status(200).json(submission);
     } catch (error) {
