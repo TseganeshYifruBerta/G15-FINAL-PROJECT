@@ -37,7 +37,7 @@ export const getCountCodeSubmissionsForLastMonthApi = createApi({
         const decodedToken: { id: number } = jwt.decode(token) as { id: number };
         const userId = decodedToken.id;
         const currentDate = getCurrentDate();
-        let url = `${URL}/codeSubmission/countCodeSubmissionsForLastMonth`;
+        let url = `${URL}/codeSubmission/countCodeSubmissionsFor5LastMonth`;
         return {
           url: `${url}/${currentDate}/${userId}`,
           method: "GET",
