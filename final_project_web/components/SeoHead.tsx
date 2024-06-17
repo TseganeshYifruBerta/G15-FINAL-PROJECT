@@ -18,14 +18,14 @@ interface SeoMeta {
 
 // Default value for some meta data
 const defaultMeta: SeoMeta = {
-  title: 'LaslesVPN',
-  siteName: 'LaslesVPN',
-  description: 'Landing page VPN LaslesVPN Best VPN For Privacy, Country and Cheapest',
-  url: 'https://next-landing-vpn.vercel.app',
+  title: 'Hulu Code',
+  siteName: 'Hulu Code',
+  description: 'Hulu code: Empower Collaboration and Efficiency',
+  url: 'https://hulucode-nine.vercel.app/',
   type: 'website',
   robots: 'follow, index',
   image: 'https://next-landing-vpn.vercel.app/assets/card-image.png',
-  author: 'Lorem Ipsum',
+  author: 'Fish Udu',
 };
 
 /**
