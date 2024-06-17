@@ -1,5 +1,5 @@
 const express = require('express');
-const { Model, where ,Sequelize} = require('sequelize');
+const { Model, where ,Sequelize, FLOAT} = require('sequelize');
 const gradeResult = require('../../models/grading/grading');
 const studentsExamAnswer = require('../../models/exam/studentsExamAnswer');
 
@@ -42,6 +42,9 @@ const gradeResults  = async (req, res) =>  {
                 [Sequelize.fn('DISTINCT', Sequelize.col('UserinformationId')), 'UserinformationId']
             ]
         },{transaction})
+        if(!findAllUser){
+            return res.status(400).json({message: 'No students submitted Answer found for this exam'});
+        }
 
     const allUser = findAllUser.map((userIds) => userIds.UserinformationId)
     let allQuestions = []
@@ -94,6 +97,9 @@ const gradeResults  = async (req, res) =>  {
             //     studentId: id,
             //     teacherId: teacherId
             // }
+            const finalGradedData = FLOAT(response.data.finalGrade.score) * (criteria.gradevalue / 10)
+    
+            
             const data = await gradeResult.create({
                 examId,
                 examQuestionId: questionId,
@@ -105,7 +111,7 @@ const gradeResults  = async (req, res) =>  {
                 codeCommentDescription: response.data.documentation.description,
                 codeCorrectnessValue: response.data.correctness.score,
                 codeCorrectnessDescription: response.data.correctness.description,
-                finalGrade: response.data.finalGrade.score,
+                finalGrade: String(finalGradedData),
                 studentId: id,
                 teacherId: teacherId
               }, { transaction });
