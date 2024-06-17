@@ -53,7 +53,7 @@ useEffect(() => {
   return (
     <div className='flex flex-col mx-10  gap-6 px-8 bg-primary bg-opacity-5 p-4 rounded-3xl'>
       <div className='flex flex-col h-screen/3'>
-      <div className='box-border h-[200px] w-full  rounded-xl ' style={{ backgroundImage: "url('/images/bg-mid.jpg')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <div className='box-border h-[200px] w-full  rounded-xl '  style={{ backgroundImage: "url('/images/bg.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
       </div>
 
         <div className='flex flex-row gap-8'>

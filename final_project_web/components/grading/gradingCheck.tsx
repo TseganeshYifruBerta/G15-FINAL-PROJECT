@@ -8,6 +8,7 @@ import Image from "next/image";
 import { gradingExams } from "@/store/grading/grade-exam-by-exam-id";
 import { FiSearch } from "react-icons/fi";
 import { AiOutlineClose } from "react-icons/ai";
+import Loading from "../common/Loading";
 const jwt = require("jsonwebtoken");
 
 interface GradingCheckProps {
@@ -101,7 +102,7 @@ useEffect(() => {
   }, []);
 
   if (isLoading) {
-    return <div>Loading exams...</div>;
+    return <div><Loading/></div>;
   }
 
   if (isError) {
@@ -123,6 +124,30 @@ useEffect(() => {
       </p>
     </div>
   </div>);
+  }
+  if (isCheckedLoading) {
+    return <div><Loading/></div>;
+  }
+  if (isCheckedError) {
+    return (
+      <div className="flex items-center justify-center mt-6">
+      <div className="flex flex-col items-center justify-center p-30 text-center">
+        <Image
+          src="/images/nodata.svg"
+          className="w-42 h-42 mb-4 text-gray-400 dark:text-gray-500"
+          alt=""
+          width={100}
+          height={100}
+        />
+        <h3 className="mb-2 text-base font-semibold text-gray-800 dark:text-gray-200">
+        No Exam Has Been Graded
+        </h3>
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+        It looks like there are no exams to display at the moment. Check back later!
+        </p>
+      </div>
+    </div>);
+
   }
   
 
@@ -183,7 +208,7 @@ useEffect(() => {
       </div>
       )}
 
-      {filteredAndSortedQuestions.map((exam: any) => (
+      {filteredAndSortedQuestions?.map((exam: any) => (
         <GradedExamTable
           examId={exam.examData.id}
           title={exam.examData.title}
