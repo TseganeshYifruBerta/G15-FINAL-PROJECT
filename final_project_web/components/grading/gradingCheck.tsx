@@ -6,6 +6,8 @@ import GradedExamTable from "@/components/components/Tables/GradedExamTable"
 import router from "next/router";
 import Image from "next/image";
 import { gradingExams } from "@/store/grading/grade-exam-by-exam-id";
+import { FiSearch } from "react-icons/fi";
+import { AiOutlineClose } from "react-icons/ai";
 const jwt = require("jsonwebtoken");
 
 interface GradingCheckProps {
@@ -17,7 +19,7 @@ const GradingCheck: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const [filter, setFilter] = useState("");
-  const [isLooading, setIsLooading] = useState(false);
+  const [isLoadingg, setIsLoadingg] = useState(false);
   const [sortOrder, setSortOrder] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
   const { data: allEndedExams, isLoading, isError,refetch:examReftch } = useGetAllEndedExamsForGradingQuery("");
@@ -34,7 +36,7 @@ const GradingCheck: React.FC = () => {
       return;
     }
 
-    setIsLooading(true);
+    setIsLoadingg(true);
     try {
       const tokens = localStorage.getItem("token");
       const decodedToken = jwt.decode(tokens);
@@ -50,7 +52,7 @@ const GradingCheck: React.FC = () => {
       console.error("Error grading an exam:", error);
       showToast("Error grading an exam: " + (error as Error).message, "error");
     } finally {
-      setIsLooading(false);
+      setIsLoadingg(false);
     }
   };
   
@@ -103,68 +105,82 @@ useEffect(() => {
   }
 
   if (isError) {
-    return <div>Error fetching exams.</div>;
+    return (
+    <div className="flex items-center justify-center mt-6">
+    <div className="flex flex-col items-center justify-center p-30 text-center">
+      <Image
+        src="/images/nodata.svg"
+        className="w-42 h-42 mb-4 text-gray-400 dark:text-gray-500"
+        alt=""
+        width={100}
+        height={100}
+      />
+      <h3 className="mb-2 text-base font-semibold text-gray-800 dark:text-gray-200">
+      No Exam Has Been Graded
+      </h3>
+      <p className="text-sm text-gray-600 dark:text-gray-400">
+      It looks like there are no exams to display at the moment. Check back later!
+      </p>
+    </div>
+  </div>);
   }
   
 
   return (
     <div>
-      <div className="rounded-sm bg-white  dark:border-strokedark dark:bg-boxdark">
-        <div className="flex justify-between items-center my-4 mx-2">
-          <div className="flex mr-4 w-2/5">
+      <div className="rounded-sm mt-10 bg-white dark:border-stroke dark:bg-box dark">
+        <div className="flex items-center mb-10 space-x-2">
+          <div className="flex items-center space-x-2 w-1/2 max-w-lg border-2 border-gray-200 bg-primary bg-opacity-5 rounded-xl overflow-hidden">
+            <FiSearch className="ml-4 text-[#7983FB]" />
             <input
               type="text"
-              placeholder="Search by title..."
-              className="w-full select select-bordered select-primary max-w-xs mr-2 px-2 py-2 rounded-md bg-white  focus:outline-none shadow text-xs"
+              className="w-full p-2 outline-none"
+              placeholder="Search ..."
+              value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <div className="flex items-center w-4/5">
-            <button
-              onClick={handleSortOrderChange}
-              className="w-1/5 select select-bordered select-primary max-w-xs mr-2 px-2 py-2 rounded-md bg-white  focus:outline-none shadow text-xs"
-            >
-              Sort by Date {sortOrder === "asc" ? "↑" : "↓"}
-            </button>
+          <div className="flex items-center">
+            <div className="flex items-center border-2 rounded-lg overflow-hidden bg-primary bg-opacity-5 w-full">
+              <button
+                onClick={handleSortOrderChange}
+                className="w-40 py-2 px-4 outline-none"
+              >
+                Sort by Date {sortOrder === "asc" ? "↑" : "↓"}
+              </button>
+            </div>
           </div>
         </div>
       </div>
-
-      <div className="px-4 mt-[50px] py-6 md:px-6 xl:px-7.5 flex">
-        <h4 className="w-4/5 text-xl font-semibold text-black dark:text-white">
-          Graded Exams
+          <div className="flex items-center justify-between mb-6 p-10">
+        <h4 className="text-xl font-semibold text-black dark:text-white">
+        Graded Exams
         </h4>
-        <div className="w-1/5">
-          <button
-            className="bg-primary hover:bg-primary-hover text-white font-medium py-2 px-4 rounded shadow focus:outline-none w-full"
-            onClick={() => setShowModal(true)}
-          >
-            Check Grading
-          </button>
+        <button
+          className="bg-primary shadow-lg rounded-lg hover:bg-primary-hover text-white font-medium py-2 px-4 rounded shadow focus:outline-none transition-transform duration-200 ease-in-out transform hover:scale-105"
+          onClick={() => setShowModal(true)}
+        >
+          Check Grading
+        </button>
         </div>
-      </div>
-
+      
       {filteredAndSortedQuestions.length != 0 && (
-        <div className="grid grid-cols-6 px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5 font-bold text-xs">
-          <div className="col-span-1 flex items-center">
-            <p>Title</p>
-          </div>
-          <div className="col-span-1 flex items-center">
-            <p>Instruction</p>
-          </div>
-          <div className="col-span-1 flex items-center">
-            <p>Date and Time</p>
-          </div>
-          <div className="col-span-1 flex items-center">
-            <p>Status</p>
-          </div>
-          <div className="col-span-1 flex items-center">
-            <p>Tag</p>
-          </div>
-          <div className="col-span-1 flex items-center">
-            <p>Duration</p>
-          </div>
-        </div>
+      
+        <div className="bg-gray-100 rounded-xl drop-shadow-sm">
+        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+              <th scope="col" className="py-3 px-4">Title</th>
+              <th scope="col" className="py-3 px-4">Instruction</th>
+              <th scope="col" className="py-3 px-4">Date and Time</th>
+              <th scope="col" className="py-3 px-4">Status</th>
+              <th scope="col" className="py-3 px-4">Tag</th>
+              <th scope="col" className="py-3 px-4">Duration</th>
+              
+            </tr>
+          </thead>
+        </table>
+      </div>
       )}
 
       {filteredAndSortedQuestions.map((exam: any) => (
@@ -181,13 +197,14 @@ useEffect(() => {
       ))}
 
       {filteredAndSortedQuestions.length === 0 && (
-        <div className="flex flex-col items-center justify-center p-10 text-center">
+        <div className="flex items-center justify-center mt-6">
+        <div className="flex flex-col items-center justify-center p-30 text-center">
           <Image
             src="/images/nodata.svg"
-            className="w-16 h-16 mb-4 text-gray-400 dark:text-gray-500"
+            className="w-42 h-42 mb-4 text-gray-400 dark:text-gray-500"
             alt=""
-            width={64}
-            height={64}
+            width={100}
+            height={100}
           />
           <h3 className="mb-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
             No Exam Has Been Graded
@@ -197,6 +214,7 @@ useEffect(() => {
             back later!
           </p>
         </div>
+        </div>
       )}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full">
@@ -204,13 +222,19 @@ useEffect(() => {
             ref={modalRef}
             className="relative top-1/4 mx-auto p-5 h-[250px] w-[250px] md:w-[550px] shadow-lg rounded-md bg-white"
           >
-            <div className="mt-3 text-center">
-              <div className="font-semi-bold text-lg">
+            <button
+              type="button"
+              onClick={() => setShowModal(false)}
+              className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
+            >
+              <AiOutlineClose size={24} />
+            </button>
+             <div className="mt-3 text-center">
+             <div className="text-xl font-bold text-gray-600 mb-6">
                 Add Exam To Be Graded
               </div>
               <select
-                className="block w-full mt-3 p-2 border-gray-500 rounded border border-stroke focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                // className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary `}
+                className="block w-full mt-3 p-2 border-gray-400 drop-shadow-md rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:ring-primary"
                 value={selectedOption}
                 onChange={handleDropdownChange}
               >
@@ -225,10 +249,33 @@ useEffect(() => {
               </select>
 
               <button
-                className="bg-primary text-white p-2 px-6 rounded-full mt-[67px]"
+                className="bg-primary text-white p-2 px-6 rounded-lg shadow-lg  transition-transform duration-200 ease-in-out transform hover:scale-105  mt-[67px]"
                 onClick={onSubmit}
               >
-                Check Grading
+                {isLoadingg ? (
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                ) : (
+                "Check Grading"
+              )}
               </button>
             </div>
           </div>
