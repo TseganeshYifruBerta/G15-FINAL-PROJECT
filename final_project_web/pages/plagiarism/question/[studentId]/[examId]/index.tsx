@@ -15,6 +15,7 @@ function AllQuestionsFromPlagiarismCheckedExam() {
         isError,
     } = useFetchQuestionsFromPlagiarismCheckedExamQuery({
         examId: examId,
+        studentId: studentId
     });
 
     if (isLoading) {
@@ -28,7 +29,7 @@ function AllQuestionsFromPlagiarismCheckedExam() {
         <div>
             
             <AllQuestionsInPLagiarism
-                Questions = {allQuestionData.allQuestionData}
+                Questions = {allQuestionData.plagiarizedQuestions}
                 examId = {examId}
                 studentId= {studentId}
                 

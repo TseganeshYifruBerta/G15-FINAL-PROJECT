@@ -2,10 +2,11 @@ import React, { ReactNode } from "react";
 
 interface ButtonPrimaryProps {
   children: ReactNode;
-  addClass?: string; // Marked as optional since you might not always want to add extra classes
+  addClass?: string; 
+  onClick?: () => void;// Marked as optional since you might not always want to add extra classes
 }
 
-const ButtonPrimary: React.FC<ButtonPrimaryProps> = ({ children, addClass = "" }) => {
+const ButtonPrimary: React.FC<ButtonPrimaryProps> = ({ children, addClass = "", onClick }) => {
   return (
     <button
       className={

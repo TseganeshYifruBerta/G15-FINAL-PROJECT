@@ -19,19 +19,19 @@ export type Teacher = {
   interface TeacherApiResponse {
     user: Teacher[];
   }
-  
+
   interface UpdateTeacherParams {
     id: number;
     updateData: Partial<Teacher>;
   }
- 
+
   interface AddSectionsParams{
     userId?: string;
     sections: string;
   }
 
 
-  
+
   export const fetchAllTeachers = async (token: string | null): Promise<TeacherApiResponse> => {
     try {
       const response = await fetch(
@@ -56,9 +56,9 @@ export type Teacher = {
       throw error;
     }
   };
-  
+
   export const updateTeacher = async (token: string | null,{ id, updateData}: UpdateTeacherParams):Promise<any> => {
-   
+
     try {
       console.log('Sending update payload to server:', JSON.stringify(updateData)); // Debugging line
       const response = await fetch(`${URL}/upload/updateUser/${id}`, {
@@ -69,11 +69,11 @@ export type Teacher = {
         },
         body: JSON.stringify(updateData),
       });
- 
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
- 
+
       const data = await response.json();
       return data;
     } catch (error) {
@@ -81,13 +81,13 @@ export type Teacher = {
       throw error;
     }
   };
- 
+
   export const addSections = async (token: string | null,{ userId, sections }: { userId: string, sections: string }): Promise<any> => {
     try {
       console.log("Sending payload to server:", JSON.stringify({ userId, sections }));
 
 
- 
+
       const response = await fetch(`${URL}/upload/AddSections`, {
         method: "POST",
         headers: {
@@ -106,7 +106,7 @@ export type Teacher = {
       throw error;
     }
   };
- 
+
   export const deleteSection = async (token: string | null,sectionId: number): Promise<any> => {
     try {
       const response = await fetch(
@@ -128,10 +128,10 @@ export type Teacher = {
       throw error;
     }
   };
- 
+
   export const deleteUser = async (token: string | null, id: number): Promise<any> => {
     try {
-     
+
       const response = await fetch(`${URL}/upload/deleteUser/${id}`, {
         method: "DELETE",
         headers: {
@@ -149,7 +149,3 @@ export type Teacher = {
       throw error;
     }
   };
- 
-
-
-

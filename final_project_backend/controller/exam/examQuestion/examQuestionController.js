@@ -14,6 +14,10 @@ const submitExamQuestionWithTestCaseAndSolution = async (req, res) => {
     if(!isTeacher) {
       return res.status(400).json({ message: "you are not a teacher"});
     }
+    if (!title || !difficulty || !description || !example || !testcases || !teacherId || !tag || !chapter || !plagiarismRatio ) {
+      return res.status(400).json({ message: "Please provide title , difficulty, description,example, testcases, tag,chapter,plagiarismRatio " });
+    }
+
     const newQuestion = await ExamQuestion.create({
       title,
       difficulty,

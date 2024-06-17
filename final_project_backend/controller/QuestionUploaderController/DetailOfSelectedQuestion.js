@@ -19,7 +19,7 @@ const DetailOfSelectedQuestion = async (req, res) => {
                     where: {
                         labQuestionId: questionId,
                     },
-                    attributes: ["input","output"],
+                    attributes: ["input","output","id"],
                 },
             ],
         });

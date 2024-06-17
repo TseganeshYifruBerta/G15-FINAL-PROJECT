@@ -7,7 +7,7 @@ interface UploadState {
     section?: string;
     role?: string;
     status?: string;
- 
+
 }
 
 const UploadManually = createSlice({

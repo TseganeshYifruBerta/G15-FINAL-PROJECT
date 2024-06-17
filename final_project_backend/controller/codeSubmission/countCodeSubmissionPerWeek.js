@@ -54,7 +54,7 @@ const countCodeSubmissionsForLastWeek = async (req, res) => {
     return res.status(500).json({ error: "Failed to count submissions for last week" });
   }
 };
-const countCodeSubmissionsForLastMonth = async (req, res) => {
+const countCodeSubmissionsFor5LastMonth = async (req, res) => {
   try {
     const { userId } = req.params;
     const { initialDateString } = req.params;
@@ -66,7 +66,7 @@ const countCodeSubmissionsForLastMonth = async (req, res) => {
       const lastMonth = [];
 
       // Collect dates for the last month
-      for (let i = 29; i >= 0; i--) {
+      for (let i = 150; i >= 0; i--) {
         const date = new Date();
         date.setDate(initialDate.getDate() - i);
         lastMonth.push(date.toISOString().split('T')[0]); // Format as 'YYYY-MM-DD'
@@ -77,7 +77,7 @@ const countCodeSubmissionsForLastMonth = async (req, res) => {
           where: {
             userId: userId ,
             createdAt: {
-              [Sequelize.Op.between]: [new Date(date), new Date(date - 'T23:59:59')]
+              [Sequelize.Op.between]: [new Date(date), new Date(date + 'T23:59:59')]
             }
           }
         });
@@ -93,4 +93,4 @@ const countCodeSubmissionsForLastMonth = async (req, res) => {
     }   
 }
 
-module.exports = { countCodeSubmissionsForLastWeek, countCodeSubmissionsForLastMonth };
+module.exports = { countCodeSubmissionsForLastWeek, countCodeSubmissionsFor5LastMonth };

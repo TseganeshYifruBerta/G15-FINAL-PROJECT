@@ -2,7 +2,10 @@ import { Metadata } from "next";
 import { useEffect, useState } from "react";
 import SelectDifficultyGroup from "../components/SelectGroup/SelectDifficultyGroup";
 import { showToast } from "../popup";
-import { ExamQuestionUploadFormData, uploadexamquestion } from "@/store/exam/upload-exam-question-api";
+import {
+  ExamQuestionUploadFormData,
+  uploadexamquestion,
+} from "@/store/exam/upload-exam-question-api";
 import { useRouter } from "next/router";
 const jwt = require("jsonwebtoken");
 
@@ -15,7 +18,7 @@ export const metadata: Metadata = {
 const ExamForm = () => {
   const router = useRouter();
   const [questionTitle, setQuestionTitle] = useState("");
-    const [functionName, setFunctionName] = useState("");
+  const [functionName, setFunctionName] = useState("");
 
   const [questionDifficulty, setQuestionDifficulty] = useState("");
   const [questionDescription, setQuestionDescription] = useState("");
@@ -27,8 +30,8 @@ const ExamForm = () => {
   const [chapter, setChapter] = useState("");
   const [currentStep, setCurrentStep] = useState(1);
   const [errors, setErrors] = useState<any>({});
-      const [loading, setLoading] = useState(false);
-
+  const [loading, setLoading] = useState(false);
+  const [plagiarismRatio, setPlagiarismRatio] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -51,6 +54,8 @@ const ExamForm = () => {
     solutions: solutions,
     chapter: chapter,
     tag: selectedTag,
+    plagiarismRatio: plagiarismRatio,
+    gradeValue: "0",
   };
 
   const handleAddTestCase = () => {
@@ -99,6 +104,7 @@ const ExamForm = () => {
   const onSubmit = async (event: any) => {
     event.preventDefault();
     setLoading(true); // Set loading to true when the form is submitted
+    console.log("Upload successful", values);
 
     try {
       const data = await uploadexamquestion(
@@ -188,6 +194,29 @@ const ExamForm = () => {
                 </select>
                 {errors.selectedTag && (
                   <span className="text-red-500">Tag is required</span>
+                )}
+              </div>
+
+              <div className="w-2/5 mr-2 mb-4">
+                <label className="block mb-2 font-medium">
+                  Plagiarism Ratio
+                </label>
+                <label className="block mb-2 text-sm text-gray-700">
+                  Enter the plagiarism ratio for the question
+                </label>
+                <input
+                  type="number"
+                  placeholder="Plagiarism Ratio"
+                  required
+                  min="1"
+                  value={plagiarismRatio}
+                  onChange={(e) => setPlagiarismRatio(e.target.value)}
+                  className={`w-full rounded-lg border-2 focus:border px-4 py-2 focus:border-primary ${
+                    errors.plagiarism ? "border-red-800" : "border-gray-300"
+                  } focus:outline-none focus:ring-1 focus:ring-primary`}
+                />
+                {errors.plagiarism && (
+                  <span className="text-red-500">Chapter is required</span>
                 )}
               </div>
               <div className="mb-4">

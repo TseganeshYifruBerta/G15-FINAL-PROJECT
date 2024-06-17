@@ -41,6 +41,18 @@ export const getAllExamsApi = createApi({
         };
       },
     }),
+    getAllExamListStudent: builder.query({
+      query: (params) => {
+        const token = localStorage.getItem("token");
+        const userId = jwt.decode(token).id;
+        let url = `${URL}/exam/getAllExamsByStudentId/${userId}`;
+
+        return {
+          url: url,
+          method: "GET",
+        };
+      },
+    }),
     updateExamQuestion: builder.mutation({
       query: (question) => {
         const token = localStorage.getItem("token");
@@ -68,7 +80,7 @@ export const getAllExamsApi = createApi({
       query: (question) => {
         const token = localStorage.getItem("token");
         const userId = jwt.decode(token).id;
-        const examId = question.examId
+        const examId = question.examId;
         return {
           url: `${URL}/exam/updateExam/${userId}/${examId}`, // Assuming the question object has an 'id' property
           method: "PUT",
@@ -91,4 +103,12 @@ export const getAllExamsApi = createApi({
   }),
 });
 
-export const { useGetAllExamsQuery, useGetAllExamListQuery, useDeleteExamQuestionMutation, useUpdateExamQuestionMutation, useDeleteExamMutation, useUpdateExamMutation } = getAllExamsApi;
+export const {
+  useGetAllExamsQuery,
+  useGetAllExamListQuery,
+  useDeleteExamQuestionMutation,
+  useUpdateExamQuestionMutation,
+  useDeleteExamMutation,
+  useUpdateExamMutation,
+  useGetAllExamListStudentQuery,
+} = getAllExamsApi;

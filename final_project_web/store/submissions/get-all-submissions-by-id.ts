@@ -63,7 +63,7 @@ export const getAllSubmissionsByIdApi = createApi({
         const decodedToken: { id: number } = jwt.decode(token) as { id: number };
         const userId = decodedToken.id;
         let url =
-          `${URL}/codeSubmission/fetchingAllAcceptedSubmittedQuestionsPerUser`;
+          `${URL}/codeSubmission/fetchingAllSubmittedQuestionsPerUser`;
         return {
           url: `${url}/${userId}`,
           method: "GET",

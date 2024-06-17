@@ -111,8 +111,8 @@ export const EditTeacherPopup: React.FC<FormProps> = (props) => {
     dispatch(reset("editteacher")); // Dispatch the reset action with your form name
     onClose(); // Then call the onClose prop to close the popup
   };
-  
- 
+
+
   useEffect(() => {
     initialize({ ...teacher, SectionsOfUser: teacher.SectionsOfUser ?? [],NewSections: []  });
   }, [teacher, initialize]);
@@ -127,7 +127,7 @@ export const EditTeacherPopup: React.FC<FormProps> = (props) => {
       showToast(`Section deleted successfully`, "success");
       const updatedSections = sections.filter(sec => sec.id !== sectionId);
       setSections(updatedSections);
-     
+
     initialize({ ...teacher, SectionsOfUser: updatedSections });
     onSave(response)
     } catch (error) {
@@ -135,7 +135,7 @@ export const EditTeacherPopup: React.FC<FormProps> = (props) => {
       console.error("Error deleting section:", error);
     }
   };
- 
+
 
 
   const handleAddSection = async (sectionInput: { section: string }) => {
@@ -148,7 +148,7 @@ export const EditTeacherPopup: React.FC<FormProps> = (props) => {
       const userId = teacher.id.toString();
       console.log("hdbchisvbcyvsiyc", section);
       console.log("hdbchisvbcy", userId);
- 
+
       try {
         console.log("Adding section:", section);  // Debug: Log the section being added
         const response = await addSections(token, { userId, sections: section });
@@ -157,14 +157,14 @@ export const EditTeacherPopup: React.FC<FormProps> = (props) => {
         // Check if 'sections' is present and has at least one item
         if (response && response.sections && response.sections.length > 0) {
           console.log("Response section:", response.sections);  // Debug: Log the response section
-    
+
           const newSections = [...sections, ...response.sections];
           setSections(newSections);  // Update the state to reflect the newly added sections
           console.log('Updated sections:', newSections);  // Debug: Log the new sections array
-    
+
           initialize({ ...teacher, SectionsOfUser: newSections });
           onSave(response);  // Update the local state to reflect the changes
-          
+
         } else {
           console.error("No sections in response or empty sections array:", response);  // Error handling: Log if no sections
         }
@@ -186,14 +186,14 @@ export const EditTeacherPopup: React.FC<FormProps> = (props) => {
           <button type="button" className="p-3 text-green-600 bg-green-50 hover:bg-green-100 rounded-full">
             <TiTick onClick={() => handleAddSection(fields.get(index))} />
           </button>
-         
+
         </div>
       ))}
     </>
   );
   const RenderSections2: React.FC<any> = ({ fields, meta: { error, submitFailed } }) => (
     <>
-     
+
       {fields.map((section:string, index:number) => (
         <div key={index} className="flex items-center space-x-2">
            <Field name={`${section}.section`} type="number" parse={(value: string) => Number(value)} component="input" placeholder="Section" className="p-2 border rounded" readOnly />
@@ -206,17 +206,17 @@ export const EditTeacherPopup: React.FC<FormProps> = (props) => {
   );
   const RenderSections3: React.FC<any> = ({ fields, meta: { error, submitFailed } }) => (
     <>
-     
+
       {fields.map((section:string, index:number) => (
         <div key={index} className="flex items-center space-x-2">
            <Field name={`${section}.section`} type="number" component="input" placeholder="Section" className="p-2 border rounded" />
-         
+
         </div>
       ))}
     </>
   );
 
- 
+
 
   // Define onSubmit within the component to use closure variables
   const onSubmit = async (formValues:FormTeacher) => {
@@ -233,7 +233,7 @@ export const EditTeacherPopup: React.FC<FormProps> = (props) => {
     }));
 
     const finalPayload = {
-       
+
       fullName: teacherData.fullName,
       email: teacherData.email,
       userId: teacherData.userId,
@@ -246,7 +246,7 @@ export const EditTeacherPopup: React.FC<FormProps> = (props) => {
 
 
   try {
-      
+
       const response = await updateTeacher(token,{ id: teacherData.id, updateData: finalPayload });
 
       console.log("Update response:", response);
@@ -261,7 +261,7 @@ export const EditTeacherPopup: React.FC<FormProps> = (props) => {
 
 
 
-  
+
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-md flex justify-center items-center"
@@ -280,9 +280,9 @@ export const EditTeacherPopup: React.FC<FormProps> = (props) => {
             </button>
         <div className="flex flex-row gap-10">
 
-        
-        <form onSubmit={handleSubmit(onSubmit)} className="w-1/2">
-          <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">
+
+        <form onSubmit={handleSubmit(onSubmit)} className="w-1/2 h-[600px] overflow-y-auto scrollbar-hide">
+          <h2 className="text-2xl font-bold  text-gray-800 mb-8">
             Edit User
           </h2>
           <div className="grid grid-cols-1 gap-6">
@@ -307,7 +307,7 @@ export const EditTeacherPopup: React.FC<FormProps> = (props) => {
               placeholder={teacher.email || "User ID"}
               iconName={FaEnvelope}
             />
-             <p className="flex items-center"><FaUsers className="text-xl text-gray-700 mr-2"/>Section</p>
+             <p className="flex items-center"><FaUsers className="text-xl text-gray-700 mr-2 ml-2"/>Section</p>
             <FieldArray name="SectionsOfUser" component={RenderSections3}  />
 
             <Field
@@ -323,25 +323,25 @@ export const EditTeacherPopup: React.FC<FormProps> = (props) => {
               <option value="teacher">Teacher</option>
               <option value="student">Student</option>
             </Field>
-           
+
           </div>
           <div className="flex justify-end space-x-4">
-        
+
             <button
               type="submit"
-              className="btn bg-[#7983FB] border-2 hover:bg-[#919AF3] text-white py-2 px-4 rounded-xl font-bold"
+              className="btn bg-[#7983FB] hover:bg-[#919AF3] text-white py-2 px-4 rounded-xl font-bold"
             >
               Submit
             </button>
           </div>
         </form>
-        <div className="w-1/2  ">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6 mt-2">
+        <div className="w-1/2 h-[600px] overflow-y-auto scrollbar-hide ">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6  ">
            Add Section
           </h2>
         <FieldArray name="NewSections" component={RenderSections} props={{ sectionsToDelete, setSectionsToDelete }} />
-        <div className="mb-4">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6 mt-2">
+        <div className="mb-4 h-[600px] overflow-y-auto scrollbar-hide">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6 mt-2">
             Delete Section
           </h2>
         <FieldArray name="SectionsOfUser" component={RenderSections2} props={{ sectionsToDelete, setSectionsToDelete }} />
@@ -359,4 +359,3 @@ export default reduxForm<FormTeacher, OwnProps>({
   validate,
 
 })(EditTeacherPopup);
- 

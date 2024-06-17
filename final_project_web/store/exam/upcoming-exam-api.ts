@@ -5,9 +5,30 @@ const baseUrl = "";
 const jwt = require("jsonwebtoken");
 
 export interface UpcomingExam {
+  createdAt: string; 
+  duration: number;
+  easy_questions: number;
+  examDate: string; 
+  examTime: string; 
+  hard_questions: number;
   id: number;
+  instruction: string;
+  medium_questions: number;
+  passKey: string;
+  selectedSectionsForExam: {
+    createdAt: string; 
+    examId: number;
+    id: number;
+    sections: string;
+    updatedAt: string; 
+  };
+  start_time: string; 
+  status: string;
+  tag: string;
+  teacherId: string;
+  timeDifference: number;
   title: string;
-  date_and_time: string;
+  updatedAt: string;
 }
 
 export const upcomingExamsApi = createApi({
@@ -15,7 +36,7 @@ export const upcomingExamsApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
     prepareHeaders: (headers, { getState }) => {
-      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJVR1IvMTExMS8xMSIsImlkIjo3LCJlbWFpbCI6ImVrdWl3YzIwMjFAZ21haWwuY29tIiwicm9sZSI6InN0dWRlbnQiLCJzZWN0aW9uIjpbIjIiXSwiaWF0IjoxNzE1NjU4NjMxfQ.T6iG5QEAZP-nsZ8coqTGtF0uiNeogO-mkP50Qy0nz4k";
+      const token = localStorage.getItem("token");
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }
@@ -27,7 +48,7 @@ export const upcomingExamsApi = createApi({
     getUpcomingExams: builder.query<UpcomingExam, void>({
       query: () => {
 
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJVR1IvMTExMS8xMSIsImlkIjo3LCJlbWFpbCI6ImVrdWl3YzIwMjFAZ21haWwuY29tIiwicm9sZSI6InN0dWRlbnQiLCJzZWN0aW9uIjpbIjIiXSwiaWF0IjoxNzE1NjU4NjMxfQ.T6iG5QEAZP-nsZ8coqTGtF0uiNeogO-mkP50Qy0nz4k";
+        const token = localStorage.getItem("token");
         const decodedToken: { id: number } = jwt.decode(token) as { id: number };
         const userId = decodedToken.id;
         const url = `${URL}/exam/upcomingExam`;

@@ -21,7 +21,7 @@ export const fetchStudentsFromPlagiarismCheckedExamApi = createApi({
     fetchStudentsFromPlagiarismCheckedExam: builder.query({
       query: (params) => {
         const {  examId } = params;
-        let url = `${URL}/plagiarism/fetchStudentsFromPlagiarismCheckedExam`;
+        let url = `${URL}/plagiarism/fetchAllPlagiarizedStudents`;
         const queryParams = [];
 
         queryParams.push(`${examId}`);

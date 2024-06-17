@@ -1,210 +1,164 @@
 import React, { useEffect, useState } from 'react';
-import { Field, reduxForm, InjectedFormProps, change, WrappedFieldProps } from 'redux-form';
-import { useDispatch } from 'react-redux';
-import { createUserProfile } from '@/store/account/api_caller';
-const jwt = require("jsonwebtoken");
+import Image from 'next/image';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen, faUniversity, faPhone, faVenusMars, faBriefcase, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faLinkedin, faGithub, faTelegram } from '@fortawesome/free-brands-svg-icons';
+import { config } from '@fortawesome/fontawesome-svg-core';
+import '@fortawesome/fontawesome-svg-core/styles.css';
+import ConnectedUserProfilePage from './editprofile';
+import Modal from '@/components/modal';
+import { fetchUserProfile, UserProfile2, updateUserProfilePhoto } from '@/store/account/api_caller';
 import { showToast } from '@/components/popup';
+import { CldUploadWidget, getCldImageUrl } from 'next-cloudinary';
+const jwt = require("jsonwebtoken");
+const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 
-interface UserProfileFormInputs {
-  university: string;
-  linkedin: string;
-  github: string;
-  phoneNumber: string;
-  telegramUsername: string;
-  gender: string;
-  department: string;
-  shortBio: string;
-  photoUrl: string; // Assuming you convert File to a string URL before submitting
-}
-interface DecodedToken {
-    sub: string;  // This might vary depending on how your token is structured
-  }
-  
-interface FormValidationErrors {
-  [key: string]: string;
-}
-const validate = (values: UserProfileFormInputs) => {
-    const errors: FormValidationErrors = {};
-    if (!values.university) {
-      errors.university = 'University is required';
-    }
-    // Validate LinkedIn URL
-    if (!values.linkedin) {
-        errors.linkedin = 'LinkedIn profile URL is required';
-      } else if (!/^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_]+\/?$/.test(values.linkedin)) {
-        errors.linkedin = 'Invalid LinkedIn URL';
-      }
-    
-      // Validate GitHub URL
-      if (!values.github) {
-        errors.github = 'GitHub profile URL is required';
-      } else if (!/^(https?:\/\/)?(www\.)?github\.com\/[a-zA-Z0-9_]+\/?$/.test(values.github)) {
-        errors.github = 'Invalid GitHub URL';
-      }
-    
-      // Validate phone number
-      if (!values.phoneNumber) {
-        errors.phoneNumber = 'Phone number is required';
-      } else if (!/^\+?[1-9]\d{1,14}$/.test(values.phoneNumber)) {
-        errors.phoneNumber = 'Invalid phone number';
-      }
-    
-      // Validate Telegram username
-      if (!values.telegramUsername) {
-        errors.telegramUsername = 'Telegram username is required';
-      } else if (!/^@?[a-zA-Z0-9_]{5,32}$/.test(values.telegramUsername)) {
-        errors.telegramUsername = 'Invalid Telegram username';
-      }
-    
-      // Validate gender
-      if (!values.gender) {
-        errors.gender = 'Gender is required';
-      } else if (!['male', 'female', 'other'].includes(values.gender.toLowerCase())) {
-        errors.gender = 'Invalid gender selected';
-      }
-    
-      // Validate department
-      if (!values.department) {
-        errors.department = 'Department is required';
-      }
-    
-      // Validate short bio
-      if (!values.shortBio) {
-        errors.shortBio = 'Short bio is required';
-      } else if (values.shortBio.length > 300) {
-        errors.shortBio = 'Short bio must be less than 300 characters';
-      }
-    
-    if (!values.photoUrl) {
-      errors.photoUrl = 'Profile image is required';
-    }
-    return errors;
-  };
-  
+console.log('Cloudinary Cloud Name:', process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME);
 
- 
-  
+config.autoAddCss = false;
 
-  const renderField = ({ input, label, type, meta: { touched, error } }: any) => (
-    <div className="mb-4">
-      <label className="block text-gray-700 text-sm font-bold mb-2">{label}</label>
-      <input {...input} type={type} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-      {touched && error && <span className="text-red-500 text-xs">{error}</span>}
-    </div>
-  );
-
-  interface RenderFileInputProps extends WrappedFieldProps {
-    label: string;
-  }
-  
-
-  const renderFileInput : React.FC<RenderFileInputProps> = ({ input, label, meta: { touched, error } }) => {
-    // This handler will be triggered when the user selects a file
-    const handleChange = (event:React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files ? event.target.files[0] : null;
-      if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          // reader.result contains the base64 string representation of the file
-          input.onChange(reader.result); // Use this to update the Redux Form field
-        };
-        reader.readAsDataURL(file); // Converts the file to a base64 string
-      }
-    };
-    const imagePreview = input.value ? (
-        <img src={input.value as string} alt="Profile" className="w-full h-full object-cover rounded-full" />
-    ) : (
-        <div className="text-center text-gray-500">Select Image</div>
-    );
-
-    return (
-        <div className="mb-10">
-            <div className="w-24 h-24 mb-2 relative bg-gray-300 rounded-full overflow-hidden cursor-pointer">
-                {/* Ensure the input does not directly manage the file value */}
-                <input
-                    type="file"
-                    onChange={handleChange}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                />
-                <div className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none">
-                    {imagePreview}
-                </div>
-            </div>
-            <label className="block text-gray-700 text-sm font-bold mb-2">{label}</label>
-            {touched && error && <span className="text-red-500 text-xs">{error}</span>}
-        </div>
-    );
-  };
-
-
-const UserProfilePage: React.FC<InjectedFormProps<UserProfileFormInputs>> = ({ handleSubmit, pristine, submitting }) => {
-        
+const ProfileCard: React.FC = () => {
+  const [userProfile, setUserProfile] = useState<UserProfile2 | null>(null);
+  const [isModalOpen, setModalOpen] = useState(false);
   const [token, setToken] = useState<string | null>(null);
+  const [userId, setUserId] = useState<number | null>(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setToken(localStorage.getItem("token"));
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+      const decodedToken = jwt.decode(storedToken);
+      if (decodedToken && typeof decodedToken === 'object') {
+        setUserId(decodedToken.id);
+      }
     }
   }, []);
 
-  const id = token ? jwt.decode(token)?.id : null;
-  console.log("gdciuAVGKDSBCIULAGBLIsgh",id);
+  useEffect(() => {
+    const fetchData = async (token: string, userId: number) => {
+      try {
+        const data = await fetchUserProfile(token, userId);
+        setUserProfile(data);
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    };
 
-  const onSubmit = async (values: UserProfileFormInputs) => {
-    if (!token || !id) {
-      showToast('Authentication error: Token or user ID is missing', 'error');
-      return;
+    if (token && userId !== null) {
+      fetchData(token, userId);
     }
-            try {
-              const response = await createUserProfile(token,values,id);
-              console.log("rzdrtxzytdkuckkyf", response)
-                showToast('Profile created successfully', 'success');
-            } catch (error) {
-              console.error('Profile creating error:', error);
-              showToast('Profile creating error: ' + (error as Error).message, 'error');
-            }
-          };
-    return (
-    <form onSubmit={handleSubmit(onSubmit)} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-wrap">
-       <div className="flex flex-col items-center w-full">
-        <h2 className="text-2xl font-bold mb-6 text-left self-start w-full">Edit Profile</h2>
-        <div className="w-24 h-24 relative bg-gray-300 rounded-full overflow-hidden mb-10 cursor-pointer">
-            <Field name="photoUrl" component={renderFileInput} label="Profile Image" />
-        </div>
-        </div>
+  }, [token, userId]);
 
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
 
-        <div className='flex flex-col w-1/2 p-4'>
-      
-      <Field name="university" type="text" component={renderField} label="University" />
-      <Field name="linkedin" type="url" component={renderField} label="LinkedIn Profile" />
-      <Field name="github" type="url" component={renderField} label="GitHub Profile" />
-      <Field name="  phoneNumber" type="tel" component={renderField} label="Phone number" />
-      </div>
-      <div className='flex flex-col w-1/2 p-4 '>
-      
-      <Field name=" telegramUsername" type="text" component={renderField} label=" TelegramUsername" />
-      <Field name="gender" type="text" component={renderField} label="gender" />
-      <Field name="department" type="text" component={renderField} label="Department" />
-      <Field name="shortBio" type="text" component={renderField} label="Short bio" />
-      </div>
-      <div className="w-full flex justify-center p-4 items-center ">
-        <button
-          type="submit"
-          disabled={pristine || submitting}
-          className="bg-primary text-white hover:bg-primary hover:bg-opacity-90 px-6 py-3 flex items-center shadow-xl duration-200 rounded-full  transform transition ease-in-out hover:scale-105 hover:shadow-2xl"
+  const handlePhotoUpload = async (result: any) => {
+    if (result.event === 'success') {
+      const publicId = result.info.public_id;
+      const imageUrl = getCldImageUrl({
+        width: 144,
+        height: 144,
+        src: publicId
+      });
+
+      console.log('Image updated successfully', imageUrl); // Debug log
+
+      if (token && userId !== null) {
+        try {
+          await updateUserProfilePhoto(token, userId, imageUrl);
+          showToast('Profile photo updated successfully', 'success');
+          window.location.reload();
+        } catch (error) {
+          console.error('Error updating profile photo:', error);
+        }
+      }
+    }
+  };
+  return (
+    <div className="flex items-center justify-center h-[600px]">
+      <div className="relative max-w-5xl w-full bg-white rounded-3xl shadow-lg">
+        <div className="relative h-40 rounded-t-3xl overflow-hidden">
+          <Image
+            src="/assets/3168310.jpg"
+            alt="Background Image"
+            layout="fill"
+            objectFit="cover"
+          />
+        </div>
+        <div className="relative flex items-center p-8">
+          <div className="relative -mt-20">
+            <div className="relative">
+              <Image
+                className="w-36 h-36 rounded-full border-4 border-white bg-white shadow-md"
+                src={userProfile?.photoUrl || "/assets/pro2.png"}
+                alt="Profile Image"
+                width={144}
+                height={144}
+              />
+              <CldUploadWidget uploadPreset="u06vgrf1" onUpload={handlePhotoUpload}>
+                {({ open }) => (
+                  <button
+                    className="absolute bottom-0 right-0 text-primary text-xl py-1 px-2 bg-white rounded-full drop-shadow-md"
+                    onClick={() => open()}
+                  >
+                    <FontAwesomeIcon icon={faPlus} />
+                  </button>
+                )}
+              </CldUploadWidget>
+            </div>
+          </div>
+          <div className="ml-8 relative -mt-8">
+            <h3 className="text-3xl font-bold text-primary drop-shadow-md">{userProfile?.fullName || "Name"}</h3>
+            <p className="text-lg font-medium text-gray-800 drop-shadow-md">{userProfile?.role || "Role"}</p>
+            <div className="text-gray-600 mt-1">
+              <span className="text-2xs drop-shadow-md">{userProfile?.shortBio || "Enter a bio..."}</span>
+            </div>
+          </div>
+        </div>
+        <div className="px-8 pb-8">
+          <div className="mt-6 flex flex-row">
+            <div className='w-1/2'>
+              <div className="flex items-center text-gray-600 mb-2">
+                <FontAwesomeIcon icon={faUniversity} className="h-5 w-5 text-red-800" />
+                <span className="ml-3 drop-shadow-md">{userProfile?.university || "University"}</span>
+              </div>
+              <div className="flex items-center text-gray-600 mb-2">
+                <FontAwesomeIcon icon={faLinkedin} className="h-5 w-5 text-blue-500" />
+                <a href={userProfile?.linkedin || "https://www.linkedin.com/"} className="ml-3 drop-shadow-md">Linkedin</a>
+              </div>
+              <div className="flex items-center text-gray-600 mb-2">
+                <FontAwesomeIcon icon={faGithub} className="h-5 w-5 text-gray-800" />
+                <a href={userProfile?.github || "https://github.com/"} className="ml-3">Github</a>
+              </div>
+              <div className="flex items-center text-gray-600 mb-2">
+                <FontAwesomeIcon icon={faPhone} className="h-5 w-5 text-green-500" />
+                <span className="ml-3 drop-shadow-md">{userProfile?.phoneNumber || "Phone Number"}</span>
+              </div>
+            </div>
+            <div className='w-1/2'>
+              <div className="flex items-center text-gray-600 mb-2">
+                <FontAwesomeIcon icon={faVenusMars} className="h-5 w-5 text-primary" />
+                <span className="ml-3 drop-shadow-md">{userProfile?.gender || "Gender"}</span>
+              </div>
+              <div className="flex items-center text-gray-600 mb-2">
+                <FontAwesomeIcon icon={faBriefcase} className="h-5 w-5 text-yellow-800" />
+                <span className="ml-3 drop-shadow-md">{userProfile?.department || "Department"}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="absolute top-4 right-4 bg-white rounded-full p-2 shadow-md cursor-pointer hover:bg-gray-300"
+          onClick={openModal}
         >
-          Submit
-        </button>
+          <FontAwesomeIcon icon={faPen} className="h-6 w-6 text-gray-500" />
+        </div>
       </div>
-    </form>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <ConnectedUserProfilePage />
+      </Modal>
+    </div>
   );
 };
 
-
-const ConnectedUserProfilePage = reduxForm<UserProfileFormInputs>({
-    form: 'userProfile',
-    validate,
-  })(UserProfilePage);
-  
-  export default ConnectedUserProfilePage;
+export default ProfileCard;

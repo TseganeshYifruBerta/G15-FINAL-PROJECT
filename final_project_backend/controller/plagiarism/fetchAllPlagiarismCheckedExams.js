@@ -5,10 +5,13 @@ const sequelize = require('../../database/sequelize')
 const fetchAllPlagiarismCheckedExams = async (req, res) => {
     try {
 
-        const checkedExams = await sequelize.query("SELECT DISTINCT `examId` FROM `Allplagiarisms`", {
+        const checkedExams = await sequelize.query("SELECT DISTINCT `examId` FROM `allPlagiarisms`", {
             model: Allplagiarism,
             mapToModel: true 
         });
+        if(!checkedExams){
+            return res.status(400).json({ message: 'No plagiarism checked exams found' });
+        }
 
         let exams = [];
         // let examData 

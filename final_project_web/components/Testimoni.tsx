@@ -33,14 +33,14 @@ const Testimoni: React.FC<TestimoniProps> = ({
     {
       name: "Plagiarism",
       image: "/assets/Premium.png",
-     
+
       testimoni:
         "Transform Your Operations and Boost Productivity with Our Automated Workflow Solutions, Allowing You to Streamline Processes, Eliminate Redundancy, and Focus on What Truly Matters.",
     },
     {
       name: "Code Execution",
       image: "/assets/Premium.png",
-    
+
       testimoni:
         "Dive into Our Dynamic Forum Community, Where Enriching Discussions, Insightful Exchanges, and Collaborative Learning Opportunities Await, Empowering You to Engage, Learn, and Grow Together.",
     },
@@ -84,7 +84,7 @@ const Testimoni: React.FC<TestimoniProps> = ({
       },
     ],
   };
-  
+
   const sliderRef = useRef<Slider>(null); 
   const scrollAnimation = useMemo(() => getScrollAnimation(), []);
   return (
@@ -110,11 +110,11 @@ const Testimoni: React.FC<TestimoniProps> = ({
                     <p className="text-lg font-bold text-black-600 capitalize">
                       {listTestimonis.name}
                     </p>
-                    
+
                   </div>
                 </div>
                 <div className="flex flex-none items-center ml-auto order-1 xl:order-2">
-                 
+
                   <span className="flex ml-4">
                     <Stars className="h-4 w-4" />
                   </span>
