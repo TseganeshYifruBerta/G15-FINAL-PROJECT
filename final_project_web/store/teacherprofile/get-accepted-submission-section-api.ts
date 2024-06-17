@@ -2,11 +2,10 @@ const jwt = require("jsonwebtoken");
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { URL } from "../host";
 
-const baseUrl = "";
+const baseUrl = `${URL}`;
 
-export const getTopSolvedQuestionsApi = createApi({
-  
-  reducerPath: "getTopSolvedQuestionsApi",
+export const acceptedApi = createApi({
+  reducerPath: "acceptedApi",
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
     prepareHeaders: (headers, { getState }) => {
@@ -21,27 +20,18 @@ export const getTopSolvedQuestionsApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getTopSolvedQuestions: builder.query({
-      query: () => {
-        let url = `${URL}/codeSubmission/fetchTopSolvedQuestions`;
+    getAccepted: builder.query({
+      query: (params) => {
 
-        return {
-          url: url,
-          method: "GET",
-        };
-      },
-    }),
-
-    getSpecificQuestionSubmissionDetail: builder.query({
-      query: (param) => {
+        let url = `${URL}/codeSubmission/CountingAllAcceptedSubmittedQuestionsPerSection`;
+        const queryParams = [];
         const token = localStorage.getItem("token");
         const decodedToken = jwt.decode(token);
-        const studentId = decodedToken?.id || null;
-        const questionId = param.questionId;
-        let url = `${URL}/codeSubmission/submissionPerStudentOnSpecificQuestion/${questionId}/${studentId}`;
+        const userId = decodedToken?.id || null;
+        queryParams.push(`${userId}`);
 
         return {
-          url: url,
+          url: queryParams.length > 0 ? `${url}/${queryParams.join("/")}` : url,
           method: "GET",
         };
       },
@@ -50,6 +40,5 @@ export const getTopSolvedQuestionsApi = createApi({
 });
 
 export const {
-  useGetTopSolvedQuestionsQuery,
-  useGetSpecificQuestionSubmissionDetailQuery,
-} = getTopSolvedQuestionsApi;
+  useGetAcceptedQuery
+} = acceptedApi;

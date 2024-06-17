@@ -7,7 +7,7 @@ interface SubmissionsProps {
 }
 export interface statusProps {
   id: number;
-  status: string;
+  Status: any;
   userId: string;
   questionId: string;
   createdAt: string,
@@ -40,16 +40,30 @@ const Submissions: React.FC<SubmissionsProps> = ({ submissions}) => {
 
  // Calculate total number of pages
  const totalPages = Math.ceil(totalItems / itemsPerPage);
-
  return (
    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
+     <div className="text-md bg-primary bg-opacity-5 py-1 px-2">
+       <div className="flex mb-2">
+         <div className="w-1/2">
+           {" "}
+           <h1
+             className={`font-bold`}
+           >
+             Status
+           </h1>
+         </div>
+         <div className="w-1/2 justify-center flex">
+           <h1 className="">Date</h1>
+         </div>
+       </div>
+     </div>
      <div>
        {submissionsToDisplay.map((submission, index) => (
          <div key={index}>
            <Submission
              createdAt={submission.createdAt}
-             status={submission.status}
-             id={0} // Assuming you need to pass these props to Submission component
+             Status={submission.Status[0].status}
+             id={submission.id} // Assuming you need to pass these props to Submission component
              userId={""}
              questionId={""}
              updatedAt={""}

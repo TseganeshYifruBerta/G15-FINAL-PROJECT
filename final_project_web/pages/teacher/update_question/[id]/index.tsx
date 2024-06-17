@@ -14,7 +14,7 @@ function UpdateQuestion() {
   const {
     data: questiondetail,
     isLoading,
-    isError,
+    isError
   } = useGetQuestionDetailEditQuery({
     questionId: questionId,
   });

@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import UseQuestionsTable from "./UseQuestionsTable";
 import TopSovedQuestions from "../Chat/TopSolvedCard";
 import { useGetAllExamsQuery } from "@/store/exam/get-all-exam-api";
@@ -86,15 +86,20 @@ const QuestionTable: React.FC = () => {
     data: allexams,
     isLoading,
     isError,
-    refetch,
+    refetch: refetchExam,
   } = useGetAllExamsQuery("");
 
   const {
     data: questions,
     isLoading: isLoadingQuestion,
     isError: isErrorQuestion,
+    refetch: refetchQuestion,
   } = useGetAllQuestionsQuery("");
 
+  useEffect(() => {
+    refetchExam()
+    refetchQuestion()
+  }, [refetchExam, refetchQuestion]);
   useEffect(() => {
     if (questions && questions.questionWithTestcase) {
       const easyCount = countQuestionsByDifficulty("easy");
@@ -295,7 +300,7 @@ const QuestionTable: React.FC = () => {
               <UseQuestionsTable
                 questions={filteredAndSortedQuestions}
                 teacherId={currentTeacherId}
-                deletequestion={refetch}
+                deletequestion={refetchQuestion}
               />
             </div>
             <div className="w-2/6 ml-6 mr-4">
@@ -361,7 +366,7 @@ const QuestionTable: React.FC = () => {
               <UseExamsTable
                 exam={filteredAndSortedExamQuestions}
                 teacherId={currentTeacherId}
-                deleteexam={refetch}
+                deleteexam={refetchExam}
               />
             </div>
             <div className="w-2/6 ml-6 mr-4">

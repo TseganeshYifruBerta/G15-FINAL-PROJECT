@@ -8,6 +8,7 @@ import { FiSearch } from "react-icons/fi";
 interface ExamsProps {
   exams: any;
   deleteexam: any;
+  refetchexam:any
 }
 interface CreateExamButtonProps {
   onClick: () => void;
@@ -26,7 +27,7 @@ const CreateExamButton: React.FC<CreateExamButtonProps> = ({ onClick }) => {
   );
 };
 
-const ExamTable: React.FC<ExamsProps> = ({ exams, deleteexam }) => {
+const ExamTable: React.FC<ExamsProps> = ({ exams, deleteexam , refetchexam}) => {
   const [selectedExaxmId, setSelectedExamId] = useState(null);
 
   const [examfilter, setExamFilter] = useState("");
@@ -126,7 +127,7 @@ const ExamTable: React.FC<ExamsProps> = ({ exams, deleteexam }) => {
       </div>
       <div className="flex">
         <div className="w-full">
-          <ListOfExam allexamlist={filteredAndSortedExamQuestions} />
+          <ListOfExam allexamlist={filteredAndSortedExamQuestions} refetchexam={refetchexam} />
         </div>
       </div>
     </div>

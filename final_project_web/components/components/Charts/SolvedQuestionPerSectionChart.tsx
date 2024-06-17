@@ -50,11 +50,15 @@ const options: ApexOptions = {
     },
   ],
 };
-
-const SolvedQuestionPerSectionChart: React.FC = () => {
+interface SolvedQuestionPerSectionChartProps {
+  sections: any[];
+  countSubmitted: any[];
+}
+const SolvedQuestionPerSectionChart: React.FC<SolvedQuestionPerSectionChartProps> = ({sections, countSubmitted}) => {
   // const
+  
   const [state, setState] = useState<ChartThreeState>({
-    series: [5, 2, 1, 3],
+    series: countSubmitted,
   });
 
   const handleReset = () => {
@@ -64,9 +68,9 @@ const SolvedQuestionPerSectionChart: React.FC = () => {
     }));
   };
   handleReset;
-const sections = [1, 2, 3, 10, 6];
   const isOdd = sections.length % 2 !== 0;
-
+console.log(sections, "sections");
+console.log(countSubmitted, "countSubmitted");
   return (
     <div className="h-[420px] col-span-12 rounded-xl bg-primary bg-opacity-5 px-5 pb-5 pt-7.5 shadow-lg dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-5">
       <div className="mb-3 justify-between gap-4 sm:flex">

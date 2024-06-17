@@ -115,7 +115,7 @@ interface ReportsProps {
 const WeeklyReportChart: React.FC<ReportsProps> = ({ reports }) => {
   let reportss: any[] = [0, 0, 0, 0, 0, 0, 0];
   let date: any[] = [];
-  for (var i = 0; i < reports.length; i++) {
+  for (var i = 0; i < reports?.length; i++) {
     reportss[i] = reports[i].count;
     let curdate = new Date(reports[i].date);
     let dayName = curdate.toLocaleDateString("en-US", { weekday: "long" });
