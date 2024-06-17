@@ -9,7 +9,6 @@ function SubmissionDetailById() {
   const { id: queryId } = router.query; 
   const submitId = queryId ? queryId.toString() : '';
   const { data: submissionDetail, isLoading, isError } = useGetSubmissionDetailQuery({ submitId });
-  console.log(submissionDetail)
   const [timeAgo, setTimeAgo] = useState<string>("");
 
   useEffect(() => {
@@ -18,8 +17,16 @@ function SubmissionDetailById() {
       const updatedAtTimestamp = new Date(submissionDetail.questionStatus.updatedAt);
       const timeDifference = currentDate.getTime() - updatedAtTimestamp.getTime();
       const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-
-      if (daysAgo < 7) {
+    
+      if (daysAgo < 1) {
+        const hoursAgo = Math.floor(timeDifference / (1000 * 60 * 60));
+        if (hoursAgo < 1) {
+          const minutesAgo = Math.floor(timeDifference / (1000 * 60));
+          setTimeAgo(`${minutesAgo} minutes ago`);
+        } else {
+          setTimeAgo(`${hoursAgo} hours ago`);
+        }
+      } else if (daysAgo < 7) {
         setTimeAgo(`${daysAgo} days ago`);
       } else if (daysAgo <= 30) {
         const weeksAgo = Math.floor(daysAgo / 7);
@@ -32,6 +39,7 @@ function SubmissionDetailById() {
         setTimeAgo(`${yearsAgo} years ago`);
       }
     }
+    
   }, [submissionDetail]);
 
   if (!queryId) {
