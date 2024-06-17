@@ -5,9 +5,30 @@ const baseUrl = "";
 const jwt = require("jsonwebtoken");
 
 export interface UpcomingExam {
+  createdAt: string; 
+  duration: number;
+  easy_questions: number;
+  examDate: string; 
+  examTime: string; 
+  hard_questions: number;
   id: number;
+  instruction: string;
+  medium_questions: number;
+  passKey: string;
+  selectedSectionsForExam: {
+    createdAt: string; 
+    examId: number;
+    id: number;
+    sections: string;
+    updatedAt: string; 
+  };
+  start_time: string; 
+  status: string;
+  tag: string;
+  teacherId: string;
+  timeDifference: number;
   title: string;
-  date_and_time: string;
+  updatedAt: string;
 }
 
 export const upcomingExamsApi = createApi({

@@ -15,7 +15,7 @@ const SubmissionList: React.FC = () => {
     return (
         <div>
             {latestSubmissions?.length === 0 ? (
-                <div className="col-span-12 rounded-lg px-5 pb-5 pt-7.5 dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
+                <div className="col-span-12 rounded-lg px-5 pb-5 pt-7.5 dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8 bg-white">
                     <div className="flex flex-col items-center justify-center text-center">
                         <Image
                             src="/images/nodata.svg"
