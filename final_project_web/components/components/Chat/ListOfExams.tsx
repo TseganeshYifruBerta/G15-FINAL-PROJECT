@@ -10,11 +10,13 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Loading from "@/components/common/Loading";
 import { useStartExamByIdQuery } from "@/store/exam/get-all-exam-by-id";
+import { showToast } from "@/components/popup";
 
 interface ExamsProps {
   allexamlist: any;
+  refetchexam:any
 }
-const ListOfExam: React.FC<ExamsProps> = ({ allexamlist }) => {
+const ListOfExam: React.FC<ExamsProps> = ({ allexamlist, refetchexam }) => {
   const router = useRouter();
   const [teacherId, setTeacherId] = useState("");
   const [chapterStrings, setChapterStrings] = useState("");
@@ -23,7 +25,7 @@ const ListOfExam: React.FC<ExamsProps> = ({ allexamlist }) => {
    examId: string;
  } | null>(null);
 
-const { data, error, isFetching } = useStartExamByIdQuery(submitParams, {
+const { data, error, refetch } = useStartExamByIdQuery(submitParams, {
   skip: !submitParams, // Skip the query if submitParams is null
 });
   useEffect(() => {
@@ -36,7 +38,9 @@ const { data, error, isFetching } = useStartExamByIdQuery(submitParams, {
       router.push("/");
     }
   }, []);
-
+  // useEffect(() => {
+  //   refetchexam()
+  // }, [refetchexam]);
   // Mutation hook for deleting a question
   const [deleteExam, { isLoading: isDeleting }] = useDeleteExamMutation();
   const handleDeleteExam = async (questionId: any, event: any) => {
@@ -100,7 +104,16 @@ const { data, error, isFetching } = useStartExamByIdQuery(submitParams, {
    
     setIsLoading(true); // Replace with actual exam ID
     setSubmitParams({ examId });
+
+    if (data?.message == "Exam started successfully") {
+      refetch();
+      showToast("Exam Started", "success");
+    }
+    else{
+      showToast("Restrict for ended and running exam", "error");
+    }
   };
+
   return (
     <div className="col-span-12 rounded-sm  bg-primary bg-opacity-5 shadow-md xl:col-span-4 ">
       {allexamlist?.length == undefined || allexamlist?.length == 0 ? (
@@ -151,6 +164,9 @@ const { data, error, isFetching } = useStartExamByIdQuery(submitParams, {
                 </div>
                 <div className="w-1/2">
                   <p className="text-sm  dark:text-white">Actions</p>
+                </div>
+                <div className="w-1/2">
+                  <p className="text-sm  dark:text-white">Status</p>
                 </div>
                 <div className="w-1/2">
                   <p className="text-sm  dark:text-white">Start Exam</p>
@@ -296,8 +312,19 @@ const { data, error, isFetching } = useStartExamByIdQuery(submitParams, {
                     </div>
                   )}
                   <div className="w-1/2">
+                    <p
+                      className={`${
+                        exam.status == "running" ? "text-green-500" : ""
+                      } ${exam.status == "ended" ? "text-red-500" : ""} ${
+                        exam.status == "upcomming" ? "text-yello-700" : ""
+                      } text-gray-500 dark:text-white`}
+                    >
+                      {exam.status}
+                    </p>
+                  </div>
+                  <div className="w-1/2">
                     <button
-                      onClick={(e:any) => handleSubmit(e, exam.id)}
+                      onClick={(e: any) => handleSubmit(e, exam.id)}
                       className="rounded-lg bg-primary px-2 py-2 text-white"
                     >
                       Start

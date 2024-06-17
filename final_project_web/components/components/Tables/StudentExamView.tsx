@@ -154,7 +154,7 @@ const StudentExamView = () => {
             </div>
 
             <div className="w-1/5 flex items-center">
-              <p className="text-sm text-meta-3">{exam.status}</p>
+              <p className={`${exam.status == "end" ? "text-red-500":""} ${exam.status == "running" ? "text-green-500":""} ${exam.status == "upcoming" ? "text-yellow-700":""} text-sm`}>{exam.status}</p>
             </div>
             <div className="w-1/5 flex items-center">
               <button
@@ -164,9 +164,15 @@ const StudentExamView = () => {
                 View
               </button>{" "}
             </div>
-            <div>
-              <PassKeyPopup examId={exam.id} />
-            </div>
+            {exam.status === "running" ? (
+              <div>
+                <PassKeyPopup examId={exam.id} disable={false} color="bg-primary"/>
+              </div>
+            ) : (
+              <div>
+                <PassKeyPopup examId={exam.id} disable={true} color="bg-gray-500"/>
+              </div>
+            )}
           </div>
         ))}
       </div>
