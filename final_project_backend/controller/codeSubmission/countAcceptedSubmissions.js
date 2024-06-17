@@ -207,15 +207,22 @@ const countAcceptedSubmissionperDifficulty = async (req, res) => {
       ],
     });
 
+
     let easyCount = 0;
     let mediumCount = 0;
     let hardCount = 0;
+    const  countedQuestionId = new Set();
     for (const submission of acceptedSubmissions) {
       const question = await Question.findOne({
         where: {
           id: submission.questionId,
         },
       });
+      if (!countedQuestionId.has(question.id)) {
+        countedQuestionId.add(submission.questionId);
+
+
+      
       if (question.difficulty === 'easy') {
         easyCount++;
       }
@@ -227,14 +234,30 @@ const countAcceptedSubmissionperDifficulty = async (req, res) => {
       }
     }
     return res.status(200).json({ easyCount, mediumCount, hardCount });
-  }
+  }}
     catch (error) {
       console.log(error);
       return res.status(500).json({ error: "Internal Server Error" });
     }
   }
-
+  const submissionPerStudentOnSpecificQuestion = async (req, res) => {
+    const { questionId ,studentId} = req.params;
+    try {
+      const submission = await codeSubmision.findAll({
+        where: {
+          questionId: questionId,
+          userId: studentId
+        },
+      });
+      return res.status(200).json(submission);
+    } catch (error) {
+      console.log(error);
+      throw new Error("Failed to count submissions for date");
+    }
+  }
     
+
+
 
 
 
@@ -244,6 +267,8 @@ module.exports = {
   fetchingDetailForAcceptedSubmittedQuestion,
   countAcceptedSubmissionsPerUser,
   countAcceptedSubmissionsOfUserBySection,
-  fetchStatusForSpecificQuestion
+  fetchStatusForSpecificQuestion,
+  submissionPerStudentOnSpecificQuestion
+
 };
 

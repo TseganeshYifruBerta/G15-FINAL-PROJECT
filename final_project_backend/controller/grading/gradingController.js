@@ -97,7 +97,12 @@ const gradeResults  = async (req, res) =>  {
             //     studentId: id,
             //     teacherId: teacherId
             // }
-            const finalGradedData = FLOAT(response.data.finalGrade.score) * (criteria.gradevalue / 10)
+            const finalGradedData = response.data.finalGrade.score * (criteria.gradevalue / 10).toFixed(2);
+            console.log("***nnnnnnnnnnnnn****",finalGradedData)
+            console.log("****nnnnnnnn******",response.data.finalGrade.score)
+            console.log("****nnnnnnnnnnnnn******",String(response.data.finalGrade.score))
+            console.log("****nnnnnnnnnnnnnnnn******",String(finalGradedData))
+
     
             
             const data = await gradeResult.create({
@@ -111,7 +116,7 @@ const gradeResults  = async (req, res) =>  {
                 codeCommentDescription: response.data.documentation.description,
                 codeCorrectnessValue: response.data.correctness.score,
                 codeCorrectnessDescription: response.data.correctness.description,
-                finalGrade: String(finalGradedData),
+                finalGrade: String(response.data.finalGrade.score),
                 studentId: id,
                 teacherId: teacherId
               }, { transaction });

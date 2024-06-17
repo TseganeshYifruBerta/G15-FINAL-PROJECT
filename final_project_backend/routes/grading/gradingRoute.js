@@ -11,6 +11,7 @@ const getAllEndedExams = require('../../controller/grading/fetchAllEndedExams')
 const fetchAllGradedStudents = require('../../controller/grading/fetchAllGradedStudents')
 const fetchListOfGradedQuestionsByExamId = require('../../controller/grading/fetchListOfGradedQuestionsByExamId')
 const fetchGradedResult = require('../../controller/grading/fetchGradeResult')
+const fetchGradeResultByStudentId = require('../../controller/grading/getGradeResultByStudentId')
 
             // managing criteria
 gradingRouter.post('/addCriteria', addCriteria);
@@ -35,5 +36,6 @@ gradingRouter.get('/getAllEndedExams/:teacherId', getAllEndedExams);
 gradingRouter.get('/fetchAllGradedStudents/:examId', fetchAllGradedStudents);
 gradingRouter.get('/fetchListOfGradedQuestionsByExamId/:examId/:studentId', fetchListOfGradedQuestionsByExamId);
 gradingRouter.get('/fetchGradedResult/:examId/:studentId/:questionId', fetchGradedResult);
+gradingRouter.get('/fetchGradeResultByStudentId/:examId/:studentId', fetchGradeResultByStudentId);
 
 module.exports = gradingRouter;
