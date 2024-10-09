@@ -1,0 +1,59 @@
+2024-06-29T17:02:03.949Z [31merror[39m: Python process stderr: Traceback (most recent call last):
+  File "C:\Users\t5691\Desktop\rideshare\hulu\G15-FINAL-PROJECT\final_project_backend\controller\codeSubmission\tempkol.py", line 8, in <module>
+
+2024-06-29T17:02:03.951Z [31merror[39m: Python process stderr:     sys.stdout.write(str(two_sum(1, 2)))
+  File "C:\Users\t5691\Desktop\rideshare\hulu\G15-FINAL-PROJECT\final_project_backend\controller\codeSubmission\tempkol.py", line 3, in two_sum
+    sys.stderr.write(a)
+TypeError: write() argument must be str, not int
+
+2024-06-29T17:02:25.751Z [31merror[39m: Python process stderr: Traceback (most recent call last):
+  File "C:\Users\t5691\Desktop\rideshare\hulu\G15-FINAL-PROJECT\final_project_backend\controller\codeSubmission\tempkol.py", line 9, in <module>
+
+2024-06-29T17:02:25.753Z [31merror[39m: Python process stderr:     sys.stdout.write(str(two_sum(1, 2)))
+  File "C:\Users\t5691\Desktop\rideshare\hulu\G15-FINAL-PROJECT\final_project_backend\controller\codeSubmission\tempkol.py", line 3, in two_sum
+    sys.stderr.write(a)
+TypeError: write() argument must be str, not int
+
+2024-06-29T17:03:11.729Z [31merror[39m: Python process stderr: Traceback (most recent call last):
+  File "C:\Users\t5691\Desktop\rideshare\hulu\G15-FINAL-PROJECT\final_project_backend\controller\codeSubmission\tempkol.py", line 9, in <module>
+
+2024-06-29T17:03:11.730Z [31merror[39m: Python process stderr:     sys.stdout.write(str(two_sum(1, 2)))
+  File "C:\Users\t5691\Desktop\rideshare\hulu\G15-FINAL-PROJECT\final_project_backend\controller\codeSubmission\tempkol.py", line 3, in two_sum
+    sys.stderr.write(a)
+TypeError: write() argument must be str, not int
+
+2024-06-29T17:04:40.067Z [31merror[39m: Python process stderr: Traceback (most recent call last):
+  File "C:\Users\t5691\Desktop\rideshare\hulu\G15-FINAL-PROJECT\final_project_backend\controller\codeSubmission\tempkol.py", line 9, in <module>
+
+2024-06-29T17:04:40.068Z [31merror[39m: Python process stderr:     sys.stdout.write(str(two_sum(1, 2)))
+  File "C:\Users\t5691\Desktop\rideshare\hulu\G15-FINAL-PROJECT\final_project_backend\controller\codeSubmission\tempkol.py", line 3, in two_sum
+    sys.stderr.write(a)
+TypeError: write() argument must be str, not int
+
+2024-06-29T17:05:11.568Z [31merror[39m: Python process stderr: Traceback (most recent call last):
+  File "C:\Users\t5691\Desktop\rideshare\hulu\G15-FINAL-PROJECT\final_project_backend\controller\codeSubmission\tempkol.py", line 7, in <module>
+
+2024-06-29T17:05:11.569Z [31merror[39m: Python process stderr:     sys.stdout.write(str(two_sum(1, 2)))
+  File "C:\Users\t5691\Desktop\rideshare\hulu\G15-FINAL-PROJECT\final_project_backend\controller\codeSubmission\tempkol.py", line 2, in two_sum
+    sys.stderr.write(b)
+TypeError: write() argument must be str, not int
+
+2024-06-29T17:05:39.407Z [31merror[39m: Python process stderr: Traceback (most recent call last):
+  File "C:\Users\t5691\Desktop\rideshare\hulu\G15-FINAL-PROJECT\final_project_backend\controller\codeExecution\tempkol.py", line 7, in <module>
+    sys.stdout.write(str(two_sum(1, 2)))
+  File "C:\Users\t5691\Desktop\rideshare\hulu\G15-FINAL-PROJECT\final_project_backend\controller\codeExecution\tempkol.py", line 2, in two_sum
+
+2024-06-29T17:05:39.409Z [31merror[39m: Python process stderr:     sys.stderr.write(b)
+TypeError: write() argument must be str, not int
+
+2024-06-29T17:05:39.414Z [31merror[39m: An error occurred during code execution: Python process exited with code 1. Error: Traceback (most recent call last):
+  File "C:\Users\t5691\Desktop\rideshare\hulu\G15-FINAL-PROJECT\final_project_backend\controller\codeExecution\tempkol.py", line 7, in <module>
+    sys.stdout.write(str(two_sum(1, 2)))
+  File "C:\Users\t5691\Desktop\rideshare\hulu\G15-FINAL-PROJECT\final_project_backend\controller\codeExecution\tempkol.py", line 2, in two_sum
+    sys.stderr.write(b)
+TypeError: write() argument must be str, not int
+2024-06-29T19:45:32.006Z [31merror[39m: Python process stderr:   File "C:\Users\t5691\Desktop\rideshare\hulu\G15-FINAL-PROJECT\final_project_backend\controller\codeSubmission\tempkol.py", line 8
+    returb a + b
+           ^
+SyntaxError: invalid syntax
+

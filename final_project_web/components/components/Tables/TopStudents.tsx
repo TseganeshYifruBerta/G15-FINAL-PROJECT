@@ -54,12 +54,12 @@ const TopStudents: React.FC<TopStudentsProps> = ({ topstudents }) => {
             >
               <div className="flex items-center gap-3 p-2.5 xl:p-5">
                 <p className="hidden sm:block">
-                  {student.Userinformation.fullName}
+                  {student.Userinformation?.fullName}
                 </p>
               </div>
 
               <div className="flex items-center justify-center p-2.5 xl:p-5">
-                <p className="">{student.Userinformation.userId}</p>
+                <p className="">{student.Userinformation?.userId}</p>
               </div>
 
               <div className="flex items-center justify-center p-2.5 xl:p-5">
